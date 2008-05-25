@@ -1,0 +1,9 @@
+Aggiunte alcune funzioni: scanf (non completa) in stdio.c, mentre in string.c ci sono strncpy, strchr, strstr, strtok e strncat
+--Questa linea, e quelle sotto di essa, saranno ignorate--
+
+M    include/libc/stdio.h
+M    include/libc/string.h
+M    kernel.c
+M    libc/stdio.c
+M    libc/string.c
+M    drivers/keyboard.c

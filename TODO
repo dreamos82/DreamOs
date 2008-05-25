@@ -1,0 +1,20 @@
+Dreamos Rebuild:
+
+PROGETTI IMMEDIATI
+- Revisionare stampa esadecimale. Funzione _kprinthex
+- Implementare syscall handler
+- Routine asm per individuare quantita' ram
+- Le routine di gestione degli irq, devono controllare se effettivamente esiste un IRQ per il device che controllano, in caso affermativo proseguono, in caso negativo si fermano.
+- Logo dreamos in ASCII ART :D
+- Inserire gestore PIT (timer)
+- MMU
+- Funzioni sullo stato registri EFLAGS e CR*
+- RIVEDERE PRINTF - Forse non stampa i numeri troppo lunghi - problema degli unsigned int.
+- Todo rivedere quali sono le eccezioni che hanno un error code e sostituire le relative EXCEPTION(xx) con EXCEPTION_EC(xx)
+- Eliminare _prova come definizione e come add_IRQ in init_IRQ.
+- Fare una mega pulizia del codice
+- Eliminare il maggior numero di messaggi di errore dalla compilazione
+
+PROGETTI A LUNGO TERMINE:
+- Supporto per il MultiBoot (avvio con Grub)
+- Implementazione di un migliore scrolling
