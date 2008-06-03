@@ -39,6 +39,8 @@
 
 #define GET_IRR_STATUS 0x0b
 
+#define EOI 0x20
+
 
 typedef enum irq_types{
     TIMER,

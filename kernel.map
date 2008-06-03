@@ -29,238 +29,239 @@ Linker script and memory map
 
                 0x0000000000100000                . = 0x100000
 
-.text           0x0000000000100000     0x3ca9
+.text           0x0000000000100000     0x3cce
  *(.text)
  .text          0x0000000000100000       0x1d bl.img
                 0x0000000000100000                mboot
                 0x0000000000100014                start
  *fill*         0x000000000010001d        0x3 00
- .text          0x0000000000100020      0x2ad kernel.o
+ .text          0x0000000000100020      0x2b2 kernel.o
                 0x000000000010002a                main_loop
                 0x0000000000100020                _start
- *fill*         0x00000000001002cd        0x3 00
- .text          0x00000000001002d0      0x9af io/video.o
-                0x0000000000100c04                _kscrolldown
-                0x00000000001002d0                _kputc
-                0x0000000000100312                _kputs
-                0x00000000001003ac                _kbackspace
-                0x0000000000100adb                _krotate_buffer
-                0x00000000001004e9                _ksetcursauto
-                0x0000000000100396                _kcolor
-                0x00000000001005f9                _kdecbin
-                0x00000000001004b8                _ksetcursor
-                0x000000000010054b                _kprintOK
-                0x00000000001003c2                _ktab
-                0x00000000001003d0                _kgoto
-                0x0000000000100466                _knewline
-                0x0000000000100b5a                _kscrollup
-                0x00000000001003ff                _kclear
-                0x00000000001005bf                _kgetline
-                0x0000000000100929                _kntos
-                0x0000000000100575                _kgetcolumn
-                0x00000000001006d0                _kntohex
-                0x0000000000100a0c                _kshiftAll
- *fill*         0x0000000000100c7f        0x1 00
- .text          0x0000000000100c80      0x5b7 drivers/keyboard.o
-                0x00000000001010b3                _ksetleds
-                0x00000000001011df                _kgetch
-                0x00000000001011c6                keyboard_disable
-                0x00000000001011ad                keyboard_enable
-                0x0000000000100c80                keyboard_isr
- *fill*         0x0000000000101237        0x1 00
- .text          0x0000000000101238      0x19a libc/ctype.o
-                0x0000000000101308                islower
-                0x0000000000101358                tolower
-                0x00000000001012d0                isxdigit
-                0x0000000000101330                isupper
-                0x0000000000101260                isalpha
-                0x0000000000101296                isalnum
-                0x0000000000101238                isdigit
-                0x0000000000101395                toupper
- *fill*         0x00000000001013d2        0x2 00
- .text          0x00000000001013d4      0x2ea libc/string.o
-                0x0000000000101551                strstr
-                0x00000000001013d4                strncpy
-                0x00000000001015cb                strtok
-                0x0000000000101654                strncat
-                0x00000000001014e0                strdup
-                0x00000000001014a8                memset
-                0x0000000000101434                _kstrncmp
-                0x000000000010140d                strlen
-                0x0000000000101530                strchr
- *fill*         0x00000000001016be        0x2 00
- .text          0x00000000001016c0       0x24 io/io.o
-                0x00000000001016c0                inportb
-                0x00000000001016da                outportb
- .text          0x00000000001016e4      0x634 libc/stdio.o
-                0x00000000001016e4                putchar
-                0x00000000001017ee                printf
-                0x0000000000101bc2                gets
-                0x0000000000101ba7                getchar
-                0x0000000000101c35                scanf
-                0x00000000001016fe                atoi
- .text          0x0000000000101d18      0x19b hardware/cpuid.o
-                0x0000000000101d18                get_cpuid
- *fill*         0x0000000000101eb3        0x1 00
- .text          0x0000000000101eb4       0x67 hardware/keyboard.o
-                0x0000000000101eb4                keyboard_irq
- *fill*         0x0000000000101f1b        0x1 00
- .text          0x0000000000101f1c      0x1d0 processore/gdt.o
-                0x0000000000101ff8                add_GDTseg
-                0x0000000000101f1c                init_gdt
-                0x00000000001020a3                set_gdtr
- .text          0x00000000001020ec      0x65d processore/idt.o
-                0x00000000001026ad                add_IDTseg
-                0x0000000000102421                init_idt
-                0x0000000000102721                set_idtr
- *fill*         0x0000000000102749        0x3 00
- .text          0x000000000010274c      0x39e processore/handlers.o
-                0x000000000010274c                init_funcTable
-                0x0000000000102a43                _irqinterrupt
-                0x00000000001027cd                _globalException
-                0x00000000001027bd                add_Interrupt
-                0x0000000000102ad5                _int_rsv
- *fill*         0x0000000000102aea        0x2 00
- .text          0x0000000000102aec      0x73e hardware/pic8259.o
-                0x0000000000102d1d                init_IRQ
-                0x0000000000102e58                setup_IRQ
-                0x000000000010308b                disable_IRQ
-                0x000000000010316b                add_IRQ_handler
-                0x0000000000102fbf                enable_IRQ
-                0x000000000010313d                get_current_irq
- *fill*         0x000000000010322a        0x2 00
- .text          0x000000000010322c      0x628 mem/fismem.o
-                0x000000000010322c                init_mem
-                0x00000000001032f0                request_pages
-                0x00000000001036b0                add_memarea_element
-                0x00000000001037c6                get_numpages
-                0x00000000001037c0                get_memsize
-                0x00000000001037ec                malloc
-                0x00000000001037d9                get_bmpelements
-                0x000000000010344b                release_pages
-                0x00000000001037a4                calcola_memoria
-                0x000000000010382a                free
- .text          0x0000000000103854      0x2c6 mem/paging.o
-                0x0000000000103964                create_pageTable
-                0x0000000000103854                init_paging
-                0x0000000000103a8d                get_pagedir_entry
-                0x000000000010394e                create_pageDir
-                0x0000000000103ad4                load_pdbr
-                0x0000000000103a3d                set_pagetable_entry_ric
-                0x0000000000103aaa                get_pagetable_entry
-                0x000000000010397a                set_pagedir_entry
-                0x00000000001039ba                set_pagedir_entry_ric
-                0x00000000001039fd                set_pagetable_entry
- *fill*         0x0000000000103b1a        0x2 00
- .text          0x0000000000103b1c       0xa8 system/syscall.o
-                0x0000000000103b1c                sysputch
-                0x0000000000103b42                syscall_handler
- .text          0x0000000000103bc4       0xe5 hardware/8253.o
-                0x0000000000103c7a                sleep
-                0x0000000000103bc4                PIT_handler
-                0x0000000000103c1e                configure_PIT
+ *fill*         0x00000000001002d2        0x2 00
+ .text          0x00000000001002d4      0x9ae io/video.o
+                0x0000000000100c07                _kscrolldown
+                0x00000000001002d4                _kputc
+                0x0000000000100316                _kputs
+                0x00000000001003b0                _kbackspace
+                0x0000000000100ade                _krotate_buffer
+                0x00000000001004ed                _ksetcursauto
+                0x000000000010039a                _kcolor
+                0x00000000001005fd                _kdecbin
+                0x00000000001004bc                _ksetcursor
+                0x000000000010054f                _kprintOK
+                0x00000000001003c6                _ktab
+                0x00000000001003d4                _kgoto
+                0x000000000010046a                _knewline
+                0x0000000000100b5d                _kscrollup
+                0x0000000000100403                _kclear
+                0x00000000001005c3                _kgetline
+                0x000000000010092d                _kntos
+                0x0000000000100579                _kgetcolumn
+                0x00000000001006d4                _kntohex
+                0x0000000000100a10                _kshiftAll
+ *fill*         0x0000000000100c82        0x2 00
+ .text          0x0000000000100c84      0x5b7 drivers/keyboard.o
+                0x00000000001010b7                _ksetleds
+                0x00000000001011e3                _kgetch
+                0x00000000001011ca                keyboard_disable
+                0x00000000001011b1                keyboard_enable
+                0x0000000000100c84                keyboard_isr
+ *fill*         0x000000000010123b        0x1 00
+ .text          0x000000000010123c      0x19a libc/ctype.o
+                0x000000000010130c                islower
+                0x000000000010135c                tolower
+                0x00000000001012d4                isxdigit
+                0x0000000000101334                isupper
+                0x0000000000101264                isalpha
+                0x000000000010129a                isalnum
+                0x000000000010123c                isdigit
+                0x0000000000101399                toupper
+ *fill*         0x00000000001013d6        0x2 00
+ .text          0x00000000001013d8      0x2ea libc/string.o
+                0x0000000000101555                strstr
+                0x00000000001013d8                strncpy
+                0x00000000001015cf                strtok
+                0x0000000000101658                strncat
+                0x00000000001014e4                strdup
+                0x00000000001014ac                memset
+                0x0000000000101438                _kstrncmp
+                0x0000000000101411                strlen
+                0x0000000000101534                strchr
+ *fill*         0x00000000001016c2        0x2 00
+ .text          0x00000000001016c4       0x24 io/io.o
+                0x00000000001016c4                inportb
+                0x00000000001016de                outportb
+ .text          0x00000000001016e8      0x634 libc/stdio.o
+                0x00000000001016e8                putchar
+                0x00000000001017f2                printf
+                0x0000000000101bc6                gets
+                0x0000000000101bab                getchar
+                0x0000000000101c39                scanf
+                0x0000000000101702                atoi
+ .text          0x0000000000101d1c      0x19b hardware/cpuid.o
+                0x0000000000101d1c                get_cpuid
+ *fill*         0x0000000000101eb7        0x1 00
+ .text          0x0000000000101eb8       0x67 hardware/keyboard.o
+                0x0000000000101eb8                keyboard_irq
+ *fill*         0x0000000000101f1f        0x1 00
+ .text          0x0000000000101f20      0x1d0 processore/gdt.o
+                0x0000000000101ffc                add_GDTseg
+                0x0000000000101f20                init_gdt
+                0x00000000001020a7                set_gdtr
+ .text          0x00000000001020f0      0x65d processore/idt.o
+                0x00000000001026b1                add_IDTseg
+                0x0000000000102425                init_idt
+                0x0000000000102725                set_idtr
+ *fill*         0x000000000010274d        0x3 00
+ .text          0x0000000000102750      0x39e processore/handlers.o
+                0x0000000000102750                init_funcTable
+                0x0000000000102a47                _irqinterrupt
+                0x00000000001027d1                _globalException
+                0x00000000001027c1                add_Interrupt
+                0x0000000000102ad9                _int_rsv
+ *fill*         0x0000000000102aee        0x2 00
+ .text          0x0000000000102af0      0x73e hardware/pic8259.o
+                0x0000000000102d21                init_IRQ
+                0x0000000000102e5c                setup_IRQ
+                0x000000000010308f                disable_IRQ
+                0x000000000010316f                add_IRQ_handler
+                0x0000000000102fc3                enable_IRQ
+                0x0000000000103141                get_current_irq
+ *fill*         0x000000000010322e        0x2 00
+ .text          0x0000000000103230      0x628 mem/fismem.o
+                0x0000000000103230                init_mem
+                0x00000000001032f4                request_pages
+                0x00000000001036b4                add_memarea_element
+                0x00000000001037ca                get_numpages
+                0x00000000001037c4                get_memsize
+                0x00000000001037f0                malloc
+                0x00000000001037dd                get_bmpelements
+                0x000000000010344f                release_pages
+                0x00000000001037a8                calcola_memoria
+                0x000000000010382e                free
+ .text          0x0000000000103858      0x2c6 mem/paging.o
+                0x0000000000103968                create_pageTable
+                0x0000000000103858                init_paging
+                0x0000000000103a91                get_pagedir_entry
+                0x0000000000103952                create_pageDir
+                0x0000000000103ad8                load_pdbr
+                0x0000000000103a41                set_pagetable_entry_ric
+                0x0000000000103aae                get_pagetable_entry
+                0x000000000010397e                set_pagedir_entry
+                0x00000000001039be                set_pagedir_entry_ric
+                0x0000000000103a01                set_pagetable_entry
+ *fill*         0x0000000000103b1e        0x2 00
+ .text          0x0000000000103b20       0xa8 system/syscall.o
+                0x0000000000103b20                sysputch
+                0x0000000000103b46                syscall_handler
+ .text          0x0000000000103bc8      0x106 hardware/8253.o
+                0x0000000000103c9f                sleep
+                0x0000000000103bc8                PIT_handler
+                0x0000000000103c43                configure_PIT
 
-.rodata         0x0000000000103cac      0x558
+.rodata         0x0000000000103cd0      0x55d
  *(.rodata)
- .rodata        0x0000000000103cac      0x151 kernel.o
- .rodata        0x0000000000103dfd       0x70 io/video.o
- .rodata        0x0000000000103e6d       0x10 drivers/keyboard.o
- .rodata        0x0000000000103e7d        0x2 libc/stdio.o
- .rodata        0x0000000000103e7f       0x3e hardware/cpuid.o
- .rodata        0x0000000000103ebd       0x1d hardware/keyboard.o
- *fill*         0x0000000000103eda        0x2 00
- .rodata        0x0000000000103edc      0x269 processore/handlers.o
- *fill*         0x0000000000104145        0x3 00
- .rodata        0x0000000000104148       0x8a mem/fismem.o
- *fill*         0x00000000001041d2        0x2 00
- .rodata        0x00000000001041d4       0x23 mem/paging.o
- *fill*         0x00000000001041f7        0x1 00
- .rodata        0x00000000001041f8        0xc system/syscall.o
+ .rodata        0x0000000000103cd0      0x151 kernel.o
+ .rodata        0x0000000000103e21       0x70 io/video.o
+ .rodata        0x0000000000103e91       0x10 drivers/keyboard.o
+ .rodata        0x0000000000103ea1        0x2 libc/stdio.o
+ .rodata        0x0000000000103ea3       0x3e hardware/cpuid.o
+ .rodata        0x0000000000103ee1       0x1d hardware/keyboard.o
+ *fill*         0x0000000000103efe        0x2 00
+ .rodata        0x0000000000103f00      0x269 processore/handlers.o
+ *fill*         0x0000000000104169        0x3 00
+ .rodata        0x000000000010416c       0x8a mem/fismem.o
+ *fill*         0x00000000001041f6        0x2 00
+ .rodata        0x00000000001041f8       0x23 mem/paging.o
+ *fill*         0x000000000010421b        0x1 00
+ .rodata        0x000000000010421c        0xc system/syscall.o
+ .rodata        0x0000000000104228        0x5 hardware/8253.o
 
-.rel.dyn        0x0000000000104204        0x0
+.rel.dyn        0x0000000000104230        0x0 load address 0x000000000010422d
  .rel.text      0x0000000000000000        0x0 bl.img
 
-.data           0x0000000000104220    0x3376c
+.data           0x0000000000104240    0x3376c
  *(.data)
- .data          0x0000000000104220        0x0 kernel.o
- .data          0x0000000000104220        0x9 io/video.o
-                0x0000000000104224                VIDEO_PTR
-                0x0000000000104228                VIDEO_CLR
-                0x0000000000104220                VIDEO_MEM
- *fill*         0x0000000000104229       0x17 00
- .data          0x0000000000104240      0x2f8 drivers/keyboard.o
- .data          0x0000000000104538        0x0 libc/ctype.o
- .data          0x0000000000104538        0x0 libc/string.o
- .data          0x0000000000104538        0x0 io/io.o
- .data          0x0000000000104538        0x0 libc/stdio.o
- .data          0x0000000000104538        0x0 hardware/cpuid.o
- .data          0x0000000000104538        0x0 hardware/keyboard.o
- .data          0x0000000000104538        0x0 processore/gdt.o
- .data          0x0000000000104538        0x0 processore/idt.o
- .data          0x0000000000104538        0x0 processore/handlers.o
- .data          0x0000000000104538        0x0 hardware/pic8259.o
- .data          0x0000000000104538        0xc mem/fismem.o
-                0x0000000000104538                prova2
-                0x000000000010453c                mem_info_root
-                0x0000000000104540                mem_info
- .data          0x0000000000104544        0x0 mem/paging.o
- .data          0x0000000000104544        0x4 system/syscall.o
-                0x0000000000104544                syscall_table
- .data          0x0000000000104548        0x0 hardware/8253.o
+ .data          0x0000000000104240        0x0 kernel.o
+ .data          0x0000000000104240        0x9 io/video.o
+                0x0000000000104244                VIDEO_PTR
+                0x0000000000104248                VIDEO_CLR
+                0x0000000000104240                VIDEO_MEM
+ *fill*         0x0000000000104249       0x17 00
+ .data          0x0000000000104260      0x2f8 drivers/keyboard.o
+ .data          0x0000000000104558        0x0 libc/ctype.o
+ .data          0x0000000000104558        0x0 libc/string.o
+ .data          0x0000000000104558        0x0 io/io.o
+ .data          0x0000000000104558        0x0 libc/stdio.o
+ .data          0x0000000000104558        0x0 hardware/cpuid.o
+ .data          0x0000000000104558        0x0 hardware/keyboard.o
+ .data          0x0000000000104558        0x0 processore/gdt.o
+ .data          0x0000000000104558        0x0 processore/idt.o
+ .data          0x0000000000104558        0x0 processore/handlers.o
+ .data          0x0000000000104558        0x0 hardware/pic8259.o
+ .data          0x0000000000104558        0xc mem/fismem.o
+                0x0000000000104558                prova2
+                0x000000000010455c                mem_info_root
+                0x0000000000104560                mem_info
+ .data          0x0000000000104564        0x0 mem/paging.o
+ .data          0x0000000000104564        0x4 system/syscall.o
+                0x0000000000104564                syscall_table
+ .data          0x0000000000104568        0x0 hardware/8253.o
  *(.bss)
- .bss           0x0000000000104548        0x0 kernel.o
- .bss           0x0000000000104548       0x10 io/video.o
-                0x000000000010454c                is_shifted_once
-                0x0000000000104548                is_scrolled
-                0x0000000000104554                resulthex
-                0x0000000000104550                binlen
- *fill*         0x0000000000104558        0x8 00
- .bss           0x0000000000104560      0x434 drivers/keyboard.o
- .bss           0x0000000000104994        0x0 libc/ctype.o
- .bss           0x0000000000104994        0x4 libc/string.o
- .bss           0x0000000000104998        0x0 io/io.o
- .bss           0x0000000000104998        0x0 libc/stdio.o
- .bss           0x0000000000104998        0x0 hardware/cpuid.o
- .bss           0x0000000000104998        0x0 hardware/keyboard.o
- .bss           0x0000000000104998        0x0 processore/gdt.o
- .bss           0x0000000000104998        0x0 processore/idt.o
- .bss           0x0000000000104998        0x0 processore/handlers.o
- .bss           0x0000000000104998        0x0 hardware/pic8259.o
- .bss           0x0000000000104998        0x4 mem/fismem.o
-                0x0000000000104998                num_pages
- .bss           0x000000000010499c        0x0 mem/paging.o
- .bss           0x000000000010499c        0x0 system/syscall.o
- .bss           0x000000000010499c        0x8 hardware/8253.o
+ .bss           0x0000000000104568        0x0 kernel.o
+ .bss           0x0000000000104568       0x10 io/video.o
+                0x000000000010456c                is_shifted_once
+                0x0000000000104568                is_scrolled
+                0x0000000000104574                resulthex
+                0x0000000000104570                binlen
+ *fill*         0x0000000000104578        0x8 00
+ .bss           0x0000000000104580      0x434 drivers/keyboard.o
+ .bss           0x00000000001049b4        0x0 libc/ctype.o
+ .bss           0x00000000001049b4        0x4 libc/string.o
+ .bss           0x00000000001049b8        0x0 io/io.o
+ .bss           0x00000000001049b8        0x0 libc/stdio.o
+ .bss           0x00000000001049b8        0x0 hardware/cpuid.o
+ .bss           0x00000000001049b8        0x0 hardware/keyboard.o
+ .bss           0x00000000001049b8        0x0 processore/gdt.o
+ .bss           0x00000000001049b8        0x0 processore/idt.o
+ .bss           0x00000000001049b8        0x0 processore/handlers.o
+ .bss           0x00000000001049b8        0x0 hardware/pic8259.o
+ .bss           0x00000000001049b8        0x4 mem/fismem.o
+                0x00000000001049b8                num_pages
+ .bss           0x00000000001049bc        0x0 mem/paging.o
+ .bss           0x00000000001049bc        0x0 system/syscall.o
+ .bss           0x00000000001049bc        0x8 hardware/8253.o
  *(COMMON)
- COMMON         0x00000000001049a4       0x14 kernel.o
-                0x00000000001049a4                cpu_vendor
-                0x00000000001049b0                boot_informations
-                0x00000000001049b4                current_page_table
- *fill*         0x00000000001049b8        0x8 00
- COMMON         0x00000000001049c0     0x233c io/video.o
-                0x00000000001049c0                downbuffer
-                0x0000000000105960                upbuffer
-                0x0000000000106900                binvp
- *fill*         0x0000000000106cfc        0x4 00
- COMMON         0x0000000000106d00    0x10004 processore/gdt.o
-                0x0000000000106d00                Gdt_Table
-                0x0000000000116d00                current_pos
- *fill*         0x0000000000116d04       0x1c 00
- COMMON         0x0000000000116d20      0xc00 processore/idt.o
-                0x0000000000116d20                IntTable
-                0x0000000000117120                IDT_Table
- COMMON         0x0000000000117920       0x40 processore/handlers.o
-                0x0000000000117920                shareHandler
- COMMON         0x0000000000117960        0x2 hardware/pic8259.o
-                0x0000000000117960                slave_cur_mask
-                0x0000000000117961                master_cur_mask
- *fill*         0x0000000000117962       0x1e 00
- COMMON         0x0000000000117980    0x20008 mem/fismem.o
-                0x0000000000117980                mem_bitmap
-                0x0000000000137980                tot_mem
-                0x0000000000137984                bmp_elements
- COMMON         0x0000000000137988        0x4 mem/paging.o
-                0x0000000000137988                current_page_dir
+ COMMON         0x00000000001049c4       0x14 kernel.o
+                0x00000000001049c4                cpu_vendor
+                0x00000000001049d0                boot_informations
+                0x00000000001049d4                current_page_table
+ *fill*         0x00000000001049d8        0x8 00
+ COMMON         0x00000000001049e0     0x233c io/video.o
+                0x00000000001049e0                downbuffer
+                0x0000000000105980                upbuffer
+                0x0000000000106920                binvp
+ *fill*         0x0000000000106d1c        0x4 00
+ COMMON         0x0000000000106d20    0x10004 processore/gdt.o
+                0x0000000000106d20                Gdt_Table
+                0x0000000000116d20                current_pos
+ *fill*         0x0000000000116d24       0x1c 00
+ COMMON         0x0000000000116d40      0xc00 processore/idt.o
+                0x0000000000116d40                IntTable
+                0x0000000000117140                IDT_Table
+ COMMON         0x0000000000117940       0x40 processore/handlers.o
+                0x0000000000117940                shareHandler
+ COMMON         0x0000000000117980        0x2 hardware/pic8259.o
+                0x0000000000117980                slave_cur_mask
+                0x0000000000117981                master_cur_mask
+ *fill*         0x0000000000117982       0x1e 00
+ COMMON         0x00000000001179a0    0x20008 mem/fismem.o
+                0x00000000001179a0                mem_bitmap
+                0x00000000001379a0                tot_mem
+                0x00000000001379a4                bmp_elements
+ COMMON         0x00000000001379a8        0x4 mem/paging.o
+                0x00000000001379a8                current_page_dir
 LOAD bl.img
 LOAD kernel.o
 LOAD io/video.o

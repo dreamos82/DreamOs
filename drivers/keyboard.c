@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <io.h>
+#include <pic8259.h>
 
 #define LSHIFT_BREAK 0x10E
 #define RSHIFT_BREAK 0x11A
@@ -197,7 +198,7 @@ void keyboard_isr (void)
 
 end:
     /* Send acknowledge */
-    outportb (0x20, 0x20);
+    outportb (EOI, MASTER_PORT);
     return;
 }
 
