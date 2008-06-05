@@ -38,6 +38,7 @@
 #include <keyboard.h>
 #include <paging.h>
 #include <use.h>
+#include <shell.h>
 
 unsigned int *current_page_table;
 multiboot_info_t *boot_informations;
@@ -79,22 +80,6 @@ int main_loop()
     init_paging();
 
     get_cpuid();
-    _kputs (LNG_CPU);
-    _kcolor (4);
-    _kgoto (61, _kgetline());
-    _kputs (cpu_vendor);
-    _kputs ("\n\n");
-    _kcolor(7);    
-    printf(LNG_FREERAM);
-    _kgoto(60, _kgetline());
-    printf(" %d kb\n", get_memsize()/1024);
-    printf(LNG_FREEPAGE);
-    _kgoto(60, _kgetline());
-    printf(" %d\n", get_numpages());
-    printf(LNG_BITMAP);
-    _kgoto(60, _kgetline());
-    printf(" %d\n", get_bmpelements());
-    printf("Size of mem_area: %d\n", sizeof(mem_area));
     init_mem();
     asm ("movl $0, %eax\n"
 	 "movl $35, %ebx\n"
@@ -102,11 +87,14 @@ int main_loop()
 
     configure_PIT ();
 
-
     printf("\n");
-    printf("Page Dir Entry n.0 is: %d\n", get_pagedir_entry(0));
-    printf("Page Table Entry n.4 in Page dir 0 is: %d\n", get_pagetable_entry(0,4));
     printf("----\n");
+    printf("Loading the shell..\n");
+    printf("[+] Loading compleate!!\n\n");
 
-    while(1);
+    shell();
+    
+/*    if ( (shell()) != NULL)
+    {	printf("[+] Loading compleate!!\n\n\n");	}
+*/
 }
