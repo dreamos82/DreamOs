@@ -1,0 +1,107 @@
+/* 
+  Shell Coded by
+	Osiris 
+*/
+
+#include <multiboot.h>
+#include <kernel.h>
+#include <stddef.h>
+#include <video.h>
+#include <pic8259.h>
+#include <8253.h>
+#include <gdt.h>
+#include <idt.h>
+#include <cpuid.h>
+#include <stdio.h>
+#include <string.h>
+#include <fismem.h>
+#include <io.h>
+#include <keyboard.h>
+#include <paging.h>
+#include <use.h>
+#include <shell.h>
+
+void logo()
+{
+	printf("\t-------------------------- \n"
+	       "\tThe Dream Operation System \n"
+	       "\t      v0.01 pre-alpha      \n"
+	       "\t-------------------------- \n");
+	printf("\n\n\n");
+}
+
+void help()
+{
+	printf("help     - See the 'help' list to learn the DreamOS command now avaible\n"
+	       "poweroff - Turn off the machine\n"
+	       "info     - See the system info about Memory and other staffs like that\n"
+		);
+}
+
+void poweroff()
+{
+	asm(	"movl %0, %%eax\n"
+		"int $0xff\n"
+		: : "g"(1)); // valore di enum
+}
+
+void info()
+{
+	printf(":==========: System info: :==========:\n\n");
+        printf("Memory RAM: %d Mb", get_bmpelements());
+        _kputs (LNG_CPU);
+        _kcolor (4);
+        _kgoto (61, _kgetline());
+        _kputs (cpu_vendor);
+        _kcolor(7);  
+	printf("\n");  
+        printf(LNG_FREERAM);
+        _kgoto(60, _kgetline());
+        printf(" %d kb\n", get_memsize()/1024);
+        printf(LNG_FREEPAGE);
+        _kgoto(60, _kgetline());
+        printf(" %d\n", get_numpages());
+        printf(LNG_BITMAP);
+	_kgoto(60, _kgetline());
+	printf(" %d", get_bmpelements());
+        _kgoto(60, _kgetline());
+        printf("\nSize of mem_area: %d\n", sizeof(mem_area));
+        printf("Page Dir Entry n.0 is: %d\n", get_pagedir_entry(0));
+        printf("Page Table Entry n.4 in Page dir 0 is: %d\n", get_pagetable_entry(0,4));
+	printf(":==========: :==========: :==========:\n");
+}
+
+void shell(void)
+{
+	unsigned char cmd[256];
+	//char *cmd=malloc(256); Dio maiale, Page Fault con il puntatore...
+	int a = 1;
+	logo();
+	for (;;)
+	{
+		_kputs("root~# ");
+	        scanf("%s",cmd);
+		if (!(_kstrncmp(cmd,"help",4) ) )
+		{
+			printf("Avaible command: \n");
+			help();
+			cmd[a]=NULL;
+		}
+
+		else if (!(_kstrncmp(cmd,"poweroff",8)))
+		{
+			printf("Poweroff..\n");
+			poweroff();
+			cmd[a]=NULL;
+		}
+		
+		else if (!(_kstrncmp(cmd,"info",4)))
+		{
+			info();
+			cmd[a]=NULL;
+		}
+		
+	}
+
+}
+
