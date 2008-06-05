@@ -1,5 +1,5 @@
-CFLAGS = -nostdlib -fomit-frame-pointer -fno-builtin -Wall -march=i386 -I./include -I./include/io -I./include/drivers -I./include/libc -I./include/processore -I./include/hardware -I./include/mem -I./include/system
-OBJ = kernel.o io/video.o drivers/keyboard.o libc/ctype.o libc/string.o io/io.o libc/stdio.o hardware/cpuid.o hardware/keyboard.o processore/gdt.o processore/idt.o processore/handlers.o hardware/pic8259.o mem/fismem.o mem/paging.o system/syscall.o hardware/8253.o
+CFLAGS = -nostdlib -fomit-frame-pointer -fno-builtin -Wall -march=i386 -I./include -I./include/io -I./include/drivers -I./include/libc -I./include/processore -I./include/hardware -I./include/mem -I./include/system -I./include/shell
+OBJ = kernel.o io/video.o drivers/keyboard.o libc/ctype.o libc/string.o io/io.o libc/stdio.o hardware/cpuid.o hardware/keyboard.o processore/gdt.o processore/idt.o processore/handlers.o hardware/pic8259.o mem/fismem.o mem/paging.o system/syscall.o hardware/8253.o shell/shell.o
 
 dreamos.img: bl.img kernel.bin
 	mv kernel.bin dreamos.img
@@ -28,6 +28,12 @@ drivers/keyboard.o : drivers/keyboard.c
 system/syscall.o : system/syscall.c
 hardware/8253.o : hardware/8253.c
 
+# Autonomatizzazione aggiornamento file immagine distro
+# Only root
+img:
+	mount -o loop boot/grub.img boot/os
+	cp dreamos.img boot/os/boot/grub/
+	umount boot/os
 
 .PHONY: clean install qemu
 
