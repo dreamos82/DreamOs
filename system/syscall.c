@@ -58,6 +58,7 @@ void syscall_handler()
      arguments[1] = ecx;
      arguments[2] = edx;
      
-     (*syscall_table[eax])(arguments);
+//      (*syscall_table[eax])(arguments);
+    sysputch(arguments);
 }
 
