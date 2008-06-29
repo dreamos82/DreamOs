@@ -41,6 +41,7 @@
 #include <shell.h>
 
 unsigned int *current_page_table;
+extern unsigned int end;
 // multiboot_info_t *boot_informations;
 asmlinkage void _start(struct multiboot_info *boot_info){
 //     boot_informations = boot_info;    
@@ -87,10 +88,10 @@ int main_loop(struct multiboot_info *boot_info)
      "movl $35, %ebx\n"
      "int $80");
     printf("\n");
+    printf("\nMemory (upper) amount-> %d kb \n", boot_info->mem_upper);
     printf("----\n");
     printf("Loading the shell..\n");
-    printf("[+] Loading complete!!\n\n");
-    printf("Boot info->mem_upper: %d\n", boot_info->mem_upper);
+    printf("[+] Loading complete!!\n\n");    
     shell();
     
 /*    if ( (shell()) != NULL)

@@ -28,7 +28,7 @@ Linker script and memory map
 
                 0x0000000000100000                . = 0x100000
 
-.text           0x0000000000100000     0x3edb
+.text           0x0000000000100000     0x3ee9
  *(.text)
  .text          0x0000000000100000       0x1d bl.img
                 0x0000000000100000                mboot
@@ -161,116 +161,116 @@ Linker script and memory map
                 0x0000000000103afc                PIT_handler
                 0x0000000000103b67                configure_PIT
  *fill*         0x0000000000103bf6        0x2 00
- .text          0x0000000000103bf8      0x2e3 shell/shell.o
-                0x0000000000103c3e                info
-                0x0000000000103dec                shell
+ .text          0x0000000000103bf8      0x2f1 shell/shell.o
+                0x0000000000103c4c                info
+                0x0000000000103dfa                shell
                 0x0000000000103c36                poweroff
                 0x0000000000103c1f                help
                 0x0000000000103bf8                logo
 
-.rodata         0x0000000000103edc      0x759
+.rodata         0x0000000000103eec      0x789
  *(.rodata)
- .rodata        0x0000000000103edc       0xd0 kernel.o
- .rodata        0x0000000000103fac       0x70 io/video.o
- .rodata        0x000000000010401c       0x10 drivers/keyboard.o
- .rodata        0x000000000010402c        0x2 libc/stdio.o
- .rodata        0x000000000010402e       0x3e hardware/cpuid.o
- .rodata        0x000000000010406c       0x1d hardware/keyboard.o
- *fill*         0x0000000000104089        0x3 00
- .rodata        0x000000000010408c      0x269 processore/handlers.o
- *fill*         0x00000000001042f5        0x3 00
- .rodata        0x00000000001042f8       0x8a mem/fismem.o
- *fill*         0x0000000000104382        0x2 00
- .rodata        0x0000000000104384       0x23 mem/paging.o
- *fill*         0x00000000001043a7        0x1 00
- .rodata        0x00000000001043a8        0xc system/syscall.o
- .rodata        0x00000000001043b4      0x281 shell/shell.o
+ .rodata        0x0000000000103eec       0xd9 kernel.o
+ .rodata        0x0000000000103fc5       0x70 io/video.o
+ .rodata        0x0000000000104035       0x10 drivers/keyboard.o
+ .rodata        0x0000000000104045        0x2 libc/stdio.o
+ .rodata        0x0000000000104047       0x3e hardware/cpuid.o
+ .rodata        0x0000000000104085       0x1d hardware/keyboard.o
+ *fill*         0x00000000001040a2        0x2 00
+ .rodata        0x00000000001040a4      0x269 processore/handlers.o
+ *fill*         0x000000000010430d        0x3 00
+ .rodata        0x0000000000104310       0x8a mem/fismem.o
+ *fill*         0x000000000010439a        0x2 00
+ .rodata        0x000000000010439c       0x23 mem/paging.o
+ *fill*         0x00000000001043bf        0x1 00
+ .rodata        0x00000000001043c0        0xc system/syscall.o
+ .rodata        0x00000000001043cc      0x2a9 shell/shell.o
 
-.rel.dyn        0x0000000000104638        0x0 load address 0x0000000000104635
+.rel.dyn        0x0000000000104678        0x0 load address 0x0000000000104675
  .rel.text      0x0000000000000000        0x0 bl.img
 
-.data           0x0000000000104640    0x3376c
+.data           0x0000000000104680    0x3376c
  *(.data)
- .data          0x0000000000104640        0x0 kernel.o
- .data          0x0000000000104640        0x9 io/video.o
-                0x0000000000104644                VIDEO_PTR
-                0x0000000000104648                VIDEO_CLR
-                0x0000000000104640                VIDEO_MEM
- *fill*         0x0000000000104649       0x17 00
- .data          0x0000000000104660      0x2f8 drivers/keyboard.o
- .data          0x0000000000104958        0x0 libc/ctype.o
- .data          0x0000000000104958        0x0 libc/string.o
- .data          0x0000000000104958        0x0 io/io.o
- .data          0x0000000000104958        0x0 libc/stdio.o
- .data          0x0000000000104958        0x0 hardware/cpuid.o
- .data          0x0000000000104958        0x0 hardware/keyboard.o
- .data          0x0000000000104958        0x0 processore/gdt.o
- .data          0x0000000000104958        0x0 processore/idt.o
- .data          0x0000000000104958        0x0 processore/handlers.o
- .data          0x0000000000104958        0x0 hardware/pic8259.o
- .data          0x0000000000104958        0xc mem/fismem.o
-                0x0000000000104958                prova2
-                0x000000000010495c                mem_info_root
-                0x0000000000104960                mem_info
- .data          0x0000000000104964        0x0 mem/paging.o
- .data          0x0000000000104964        0x4 system/syscall.o
-                0x0000000000104964                syscall_table
- .data          0x0000000000104968        0x0 hardware/8253.o
- .data          0x0000000000104968        0x0 shell/shell.o
+ .data          0x0000000000104680        0x0 kernel.o
+ .data          0x0000000000104680        0x9 io/video.o
+                0x0000000000104684                VIDEO_PTR
+                0x0000000000104688                VIDEO_CLR
+                0x0000000000104680                VIDEO_MEM
+ *fill*         0x0000000000104689       0x17 00
+ .data          0x00000000001046a0      0x2f8 drivers/keyboard.o
+ .data          0x0000000000104998        0x0 libc/ctype.o
+ .data          0x0000000000104998        0x0 libc/string.o
+ .data          0x0000000000104998        0x0 io/io.o
+ .data          0x0000000000104998        0x0 libc/stdio.o
+ .data          0x0000000000104998        0x0 hardware/cpuid.o
+ .data          0x0000000000104998        0x0 hardware/keyboard.o
+ .data          0x0000000000104998        0x0 processore/gdt.o
+ .data          0x0000000000104998        0x0 processore/idt.o
+ .data          0x0000000000104998        0x0 processore/handlers.o
+ .data          0x0000000000104998        0x0 hardware/pic8259.o
+ .data          0x0000000000104998        0xc mem/fismem.o
+                0x0000000000104998                prova2
+                0x000000000010499c                mem_info_root
+                0x00000000001049a0                mem_info
+ .data          0x00000000001049a4        0x0 mem/paging.o
+ .data          0x00000000001049a4        0x4 system/syscall.o
+                0x00000000001049a4                syscall_table
+ .data          0x00000000001049a8        0x0 hardware/8253.o
+ .data          0x00000000001049a8        0x0 shell/shell.o
  *(.bss)
- .bss           0x0000000000104968        0x0 kernel.o
- .bss           0x0000000000104968       0x10 io/video.o
-                0x000000000010496c                is_shifted_once
-                0x0000000000104968                is_scrolled
-                0x0000000000104974                resulthex
-                0x0000000000104970                binlen
- *fill*         0x0000000000104978        0x8 00
- .bss           0x0000000000104980      0x434 drivers/keyboard.o
- .bss           0x0000000000104db4        0x0 libc/ctype.o
- .bss           0x0000000000104db4        0x4 libc/string.o
- .bss           0x0000000000104db8        0x0 io/io.o
- .bss           0x0000000000104db8        0x0 libc/stdio.o
- .bss           0x0000000000104db8        0x0 hardware/cpuid.o
- .bss           0x0000000000104db8        0x0 hardware/keyboard.o
- .bss           0x0000000000104db8        0x0 processore/gdt.o
- .bss           0x0000000000104db8        0x0 processore/idt.o
- .bss           0x0000000000104db8        0x0 processore/handlers.o
- .bss           0x0000000000104db8        0x0 hardware/pic8259.o
- .bss           0x0000000000104db8        0x4 mem/fismem.o
-                0x0000000000104db8                num_pages
- .bss           0x0000000000104dbc        0x0 mem/paging.o
- .bss           0x0000000000104dbc        0x0 system/syscall.o
- .bss           0x0000000000104dbc        0x8 hardware/8253.o
- .bss           0x0000000000104dc4        0x0 shell/shell.o
+ .bss           0x00000000001049a8        0x0 kernel.o
+ .bss           0x00000000001049a8       0x10 io/video.o
+                0x00000000001049ac                is_shifted_once
+                0x00000000001049a8                is_scrolled
+                0x00000000001049b4                resulthex
+                0x00000000001049b0                binlen
+ *fill*         0x00000000001049b8        0x8 00
+ .bss           0x00000000001049c0      0x434 drivers/keyboard.o
+ .bss           0x0000000000104df4        0x0 libc/ctype.o
+ .bss           0x0000000000104df4        0x4 libc/string.o
+ .bss           0x0000000000104df8        0x0 io/io.o
+ .bss           0x0000000000104df8        0x0 libc/stdio.o
+ .bss           0x0000000000104df8        0x0 hardware/cpuid.o
+ .bss           0x0000000000104df8        0x0 hardware/keyboard.o
+ .bss           0x0000000000104df8        0x0 processore/gdt.o
+ .bss           0x0000000000104df8        0x0 processore/idt.o
+ .bss           0x0000000000104df8        0x0 processore/handlers.o
+ .bss           0x0000000000104df8        0x0 hardware/pic8259.o
+ .bss           0x0000000000104df8        0x4 mem/fismem.o
+                0x0000000000104df8                num_pages
+ .bss           0x0000000000104dfc        0x0 mem/paging.o
+ .bss           0x0000000000104dfc        0x0 system/syscall.o
+ .bss           0x0000000000104dfc        0x8 hardware/8253.o
+ .bss           0x0000000000104e04        0x0 shell/shell.o
  *(COMMON)
- COMMON         0x0000000000104dc4       0x10 kernel.o
-                0x0000000000104dc4                cpu_vendor
-                0x0000000000104dd0                current_page_table
- *fill*         0x0000000000104dd4        0xc 00
- COMMON         0x0000000000104de0     0x233c io/video.o
-                0x0000000000104de0                downbuffer
-                0x0000000000105d80                upbuffer
-                0x0000000000106d20                binvp
- *fill*         0x000000000010711c        0x4 00
- COMMON         0x0000000000107120    0x10004 processore/gdt.o
-                0x0000000000107120                Gdt_Table
-                0x0000000000117120                current_pos
- *fill*         0x0000000000117124       0x1c 00
- COMMON         0x0000000000117140      0xc00 processore/idt.o
-                0x0000000000117140                IntTable
-                0x0000000000117540                IDT_Table
- COMMON         0x0000000000117d40       0x40 processore/handlers.o
-                0x0000000000117d40                shareHandler
- COMMON         0x0000000000117d80        0x2 hardware/pic8259.o
-                0x0000000000117d80                slave_cur_mask
-                0x0000000000117d81                master_cur_mask
- *fill*         0x0000000000117d82       0x1e 00
- COMMON         0x0000000000117da0    0x20008 mem/fismem.o
-                0x0000000000117da0                mem_bitmap
-                0x0000000000137da0                tot_mem
-                0x0000000000137da4                bmp_elements
- COMMON         0x0000000000137da8        0x4 mem/paging.o
-                0x0000000000137da8                current_page_dir
+ COMMON         0x0000000000104e04       0x10 kernel.o
+                0x0000000000104e04                cpu_vendor
+                0x0000000000104e10                current_page_table
+ *fill*         0x0000000000104e14        0xc 00
+ COMMON         0x0000000000104e20     0x233c io/video.o
+                0x0000000000104e20                downbuffer
+                0x0000000000105dc0                upbuffer
+                0x0000000000106d60                binvp
+ *fill*         0x000000000010715c        0x4 00
+ COMMON         0x0000000000107160    0x10004 processore/gdt.o
+                0x0000000000107160                Gdt_Table
+                0x0000000000117160                current_pos
+ *fill*         0x0000000000117164       0x1c 00
+ COMMON         0x0000000000117180      0xc00 processore/idt.o
+                0x0000000000117180                IntTable
+                0x0000000000117580                IDT_Table
+ COMMON         0x0000000000117d80       0x40 processore/handlers.o
+                0x0000000000117d80                shareHandler
+ COMMON         0x0000000000117dc0        0x2 hardware/pic8259.o
+                0x0000000000117dc0                slave_cur_mask
+                0x0000000000117dc1                master_cur_mask
+ *fill*         0x0000000000117dc2       0x1e 00
+ COMMON         0x0000000000117de0    0x20008 mem/fismem.o
+                0x0000000000117de0                mem_bitmap
+                0x0000000000137de0                tot_mem
+                0x0000000000137de4                bmp_elements
+ COMMON         0x0000000000137de8        0x4 mem/paging.o
+                0x0000000000137de8                current_page_dir
 LOAD bl.img
 LOAD kernel.o
 LOAD io/video.o

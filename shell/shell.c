@@ -55,9 +55,12 @@ void help()
 
 void poweroff()
 {
-	asm(	"movl %0, %%eax\n"
+	/*asm(	"movl %0, %%eax\n"
 		"int $0xff\n"
-		: : "g"(1)); // valore di enum
+		: : "g"(1)); // valore di enum*/
+    asm("hlt");
+    printf("E' ora possibile spegnere il computer\n");
+    while(1);
 }
 
 void info()
