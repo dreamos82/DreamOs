@@ -39,7 +39,7 @@
 void logo()
 {
 	printf("\t-------------------------- \n"
-	       "\tThe Dream Operation System \n"
+	       "\tThe Dream Operating System \n"
 	       "\t      v0.01 pre-alpha      \n"
 	       "\t-------------------------- \n");
 	printf("\n\n\n");

@@ -26,10 +26,10 @@
 #define _KERNEL_H
 
 #define asmlinkage __attribute__((regparm(0)))
-asmlinkage void _start();
-int main_loop();
+asmlinkage void _start(struct multiboot_info*);
+int main_loop(struct multiboot_info*);
 
 #define DREAMOS_VER "DreamOS ver 0.1 - Rebuild"
-#define SITEURL "dreamos.altervista.org"
+#define SITEURL "www.dreamos.org"
 
 #endif

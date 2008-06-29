@@ -41,15 +41,16 @@
 #include <shell.h>
 
 unsigned int *current_page_table;
-multiboot_info_t *boot_informations;
-asmlinkage void _start(){
+// multiboot_info_t *boot_informations;
+asmlinkage void _start(struct multiboot_info *boot_info){
 //     boot_informations = boot_info;    
-	main_loop();
+	main_loop(boot_info);
 	while(1);
 }
 
-int main_loop()
+int main_loop(struct multiboot_info *boot_info)
 {
+    int a;
     _kclear();
 
     _kcolor('\012');
@@ -60,8 +61,7 @@ int main_loop()
     _kputs(SITEURL);
     _kputs("\n");
     _kcolor('\007');
-    _kputs("\n");
-
+    _kputs("\n");    
     _kputs(LNG_GDT);
     init_gdt();
     _kprintOK();
@@ -76,22 +76,21 @@ int main_loop()
     _kputs(LNG_PIC8259);
     init_IRQ();
     asm("sti");
-    _kprintOK();
-    init_paging();
-
+    _kprintOK();   
+    init_paging();    
     get_cpuid();
     init_mem();
+    printf(LNG_PIT8253);
+    configure_PIT ();    
+    _kprintOK();
     asm ("movl $0, %eax\n"
-	 "movl $35, %ebx\n"
-	 "int $80");
-
-    configure_PIT ();
-
+     "movl $35, %ebx\n"
+     "int $80");
     printf("\n");
     printf("----\n");
     printf("Loading the shell..\n");
-    printf("[+] Loading compleate!!\n\n");
-
+    printf("[+] Loading complete!!\n\n");
+    printf("Boot info->mem_upper: %d\n", boot_info->mem_upper);
     shell();
     
 /*    if ( (shell()) != NULL)

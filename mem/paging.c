@@ -183,6 +183,13 @@ unsigned int get_pagetable_entry(int dir_num, int tab_num){
     return (unsigned int) (*mod_address);
 }
 
+/**
+  * Carica il registro pdbr con la nuova pagedir
+  * @author Ivan Gualandri
+  * @version 1.0
+  * @param pdbase Indirizzo base della page_dir
+  * @return none
+  */
 void load_pdbr(unsigned int pdbase){
     volatile unsigned int cr0, pdbr, tmp;
     cr0=0;

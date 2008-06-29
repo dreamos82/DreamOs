@@ -27,12 +27,12 @@ mboot:
   dd  start                     ; Kernel start point
 
 [GLOBAL start]
-[EXTERN _start]                   ; The start point of our C code
+[EXTERN main_loop]                   ; The start point of our C code
 
 start:
   push    ebx                   ; Load multiboot header
 
 ; Real execution
   cli                         ; Disable interrupts.  x11-pc-it.map 
-  call _start                   ; main() procedure, located in kernel.c
+  call main_loop                   ; main() procedure, located in kernel.c
   jmp $                       ; Enter an infinite loop to "freeze" the OS after the boot
