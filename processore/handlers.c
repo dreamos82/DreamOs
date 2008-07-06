@@ -30,6 +30,7 @@
 #include <keyboard.h>
 #include <video.h>
 
+// #define DEBUG 1
 void (*IntTable[IDT_SIZE])();
 IRQ_s *shareHandler[16];
 // IRQ_s *tmpHandler;
@@ -101,13 +102,13 @@ void _globalException(int n, int error){
 
 void _irqinterrupt(){
     int irqn;
-    irqn = get_current_irq();
-    IRQ_s* tmpHandler;
-    tmpHandler = shareHandler[irqn-1];
+    irqn = get_current_irq();  
+    IRQ_s* tmpHandler; 
     #ifdef DEBUG
     printf("Next shareHandler: %d\n", tmpHandler->next);
     #endif
     if(irqn>0) {
+        tmpHandler = shareHandler[irqn-1];
         tmpHandler->IRQ_func();
         #ifdef DEBUG
         printf("2 - IRQ_func: %d, %d\n", tmpHandler->IRQ_func, tmpHandler);
@@ -119,7 +120,8 @@ void _irqinterrupt(){
             #endif
             tmpHandler->IRQ_func();
         }
-    } else _kputs("E' arrivato qualcosa che non so gestire");
+    }
+//  else printf("IRQ N: %d E' arrivato qualcosa che non so gestire ", irqn);
     if(irqn<=8) outportb(0x20, MASTER_PORT);
     else if(irqn<=16)outportb(0x20, SLAVE_PORT);
 }

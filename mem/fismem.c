@@ -31,8 +31,8 @@
 size_t tot_mem;
 size_t num_pages=0;
 size_t bmp_elements;
-byte master_cur_mask;
-byte slave_cur_mask;
+// byte master_cur_mask;
+// byte slave_cur_mask;
 mem_struct mem_bitmap;
 int prova2 = 35;
 

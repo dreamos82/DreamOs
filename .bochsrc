@@ -428,7 +428,7 @@ debugger_log: debugger.out
 #   parport2: enabled=1, file="/dev/lp0"
 #   parport1: enabled=0
 #=======================================================================
-parport1: enabled=1, file="parport.out"
+#parport1: enabled=1, file="parport.out"
 
 #=======================================================================
 # SB16:
@@ -490,7 +490,7 @@ vga_update_interval: 300000
 # Examples:
 #   keyboard_serial_delay: 200
 #=======================================================================
-keyboard_serial_delay: 250
+keyboard_serial_delay: 200
 
 #=======================================================================
 # KEYBOARD_PASTE_DELAY:

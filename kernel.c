@@ -74,13 +74,14 @@ int main_loop(struct multiboot_info *boot_info)
     init_idt();
     _kprintOK();
     calcola_memoria();
+    init_mem();
     _kputs(LNG_PIC8259);
     init_IRQ();
     asm("sti");
     _kprintOK();   
     init_paging();    
     get_cpuid();
-    init_mem();
+//     init_mem();
     printf(LNG_PIT8253);
     configure_PIT ();    
     _kprintOK();
@@ -92,6 +93,7 @@ int main_loop(struct multiboot_info *boot_info)
     printf("----\n");
     printf("Loading the shell..\n");
     printf("[+] Loading complete!!\n\n");    
+    printf("End: %d\n", end);
     shell();
     
 /*    if ( (shell()) != NULL)

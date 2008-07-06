@@ -83,8 +83,7 @@ static int is_scroll_pressed;
 void keyboard_isr (void)
 {
     int control;
-    sc = inportb (0x60); // take scancode from the port
-
+    sc = inportb (0x60); // take scancode from the port    
     /* error handling */
     if (sc == 0x00 || sc == 0xFF) {
 	_kputs ("Keyboard error\n");
@@ -102,8 +101,11 @@ void keyboard_isr (void)
 	curmap = key_it_map;
 
     /* In case of useless break codes, switch controls...*/
-    if (sc > CODE_BREAK && sc != (KEY_LSHIFT|CODE_BREAK) && sc != (KEY_RSHIFT|CODE_BREAK))
-	goto end;
+    if (sc > CODE_BREAK && sc != (KEY_LSHIFT|CODE_BREAK) && sc != (KEY_RSHIFT|CODE_BREAK)){
+        if (sc==KEY_ENTER+128)
+            outportb(EOI,MASTER_PORT);
+	    goto end;
+        }
 
     switch (sc) {
     case KEY_LSHIFT:
@@ -170,6 +172,7 @@ void keyboard_isr (void)
 	buf_w = STEP(buf_w);
 	_knewline();
 	_ksetcursauto();
+    outportb(EOI, MASTER_PORT);
 	break;
 
     /*case KEY_PGUP:

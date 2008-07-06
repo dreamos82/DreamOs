@@ -78,10 +78,11 @@ void init_IRQ(){
 
     outportb(0xFF,MASTER_PORT_1);
     enable_IRQ(KEYBOARD);
+    enable_IRQ(TIMER);
     outportb(0xFF,SLAVE_PORT_1);
 
     outportb (0xFC, MASTER_PORT_1);
-    enable_IRQ (0);
+ //     enable_IRQ (0);
 
     setup_IRQ();
     asm("sti");
@@ -177,7 +178,7 @@ int get_current_irq(){
     int cur_irq;
     outportb(GET_IRR_STATUS, MASTER_PORT);
     cur_irq = inportb(MASTER_PORT);
-//     printf("%d\n", cur_irq);
+//     if(cur_irq!=1) printf("%d\n", cur_irq);
     return cur_irq;
 }
 

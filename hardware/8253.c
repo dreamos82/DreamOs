@@ -27,9 +27,8 @@ void PIT_handler ()
 {
     if (++ticks % 100 == 0) {
 	ticks = 0;
-	if (++seconds > 86400)
-	  seconds = 0;
-      //printf("buh\n");
+	if (++seconds > 864000)
+	  seconds = 0;     
     }
     
     outportb(EOI, MASTER_PORT);
@@ -41,7 +40,7 @@ void configure_PIT ()
 
     asm ("cli");
     ticks = seconds = 0;
-    outportb (0x36, PIT_COMREG);
+    outportb (0x37, PIT_COMREG);
     outportb (divisor & 0xFF, PIT_DATAREG0);
     outportb (divisor >> 8, PIT_DATAREG0);
     asm ("sti");
