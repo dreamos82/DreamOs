@@ -87,9 +87,9 @@ romimage: file=/usr/share/bochs/BIOS-bochs-latest
 #=======================================================================
 #megs: 256
 #megs: 128
-#megs: 64
+megs: 64
 #megs: 32
-megs: 16
+#megs: 16
 #megs: 8
 
 #=======================================================================
@@ -428,7 +428,7 @@ debugger_log: debugger.out
 #   parport2: enabled=1, file="/dev/lp0"
 #   parport1: enabled=0
 #=======================================================================
-#parport1: enabled=1, file="parport.out"
+parport1: enabled=1, file="parport.out"
 
 #=======================================================================
 # SB16:

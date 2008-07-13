@@ -27,7 +27,7 @@ void PIT_handler ()
 {
     if (++ticks % 100 == 0) {
 	ticks = 0;
-	if (++seconds > 864000)
+	if (++seconds > 86400)
 	  seconds = 0;     
     }
     

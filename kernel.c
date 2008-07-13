@@ -50,8 +50,8 @@ asmlinkage void _start(struct multiboot_info *boot_info){
 }
 
 int main_loop(struct multiboot_info *boot_info)
-{
-    int a;
+{    
+
     _kclear();
 
     _kcolor('\012');
@@ -70,32 +70,37 @@ int main_loop(struct multiboot_info *boot_info)
     outportb(0xFF, MASTER_PORT_1);
     outportb(0xFF, SLAVE_PORT_1);
     _kputs(LNG_IDT);
+
     asm("cli");   
     init_idt();
     _kprintOK();
-    calcola_memoria();
-    init_mem();
+    
+    calcola_memoria();    
+    init_mem();    
     _kputs(LNG_PIC8259);
     init_IRQ();
     asm("sti");
     _kprintOK();   
+    printf("End: %d\n", end);
     init_paging();    
-    get_cpuid();
-//     init_mem();
+
     printf(LNG_PIT8253);
     configure_PIT ();    
     _kprintOK();
+
     asm ("movl $0, %eax\n"
      "movl $35, %ebx\n"
      "int $80");
-    printf("\n");
     printf("\nMemory (upper) amount-> %d kb \n", boot_info->mem_upper);
+    get_cpuid();    
+    printf("\n");    
     printf("----\n");
     printf("Loading the shell..\n");
     printf("[+] Loading complete!!\n\n");    
-    printf("End: %d\n", end);
+    printf("End: %d Address: 0x%x\n", end, &end);
+
     shell();
-    
+
 /*    if ( (shell()) != NULL)
     {	printf("[+] Loading compleate!!\n\n\n");	}
 */

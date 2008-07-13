@@ -17,6 +17,9 @@ MBOOT_CHECKSUM      equ -(MBOOT_HEADER_MAGIC + MBOOT_HEADER_FLAGS)
 [BITS 32]
 
 [GLOBAL mboot]
+[EXTERN code]                   ; Start of the '.text' section.
+[EXTERN bss]                    ; Start of the .bss section.
+[EXTERN end]                    ; End of the last loadable section.
 
 mboot:
   dd  MBOOT_HEADER_MAGIC
@@ -24,6 +27,9 @@ mboot:
   dd  MBOOT_CHECKSUM            ; Check the other values
    
   dd  mboot
+  dd  code                    ; Start of kernel '.text' (code) section.
+  dd  bss                     ; End of kernel '.data' section.
+  dd  end                     ; End of kernel.
   dd  start                     ; Kernel start point
 
 [GLOBAL start]

@@ -1,5 +1,5 @@
 CFLAGS = -nostdlib -fomit-frame-pointer -fno-builtin -fno-stack-protector -Wall -march=i386 -I./include -I./include/io -I./include/drivers -I./include/libc -I./include/processore -I./include/hardware -I./include/mem -I./include/system -I./include/shell
-OBJ = kernel.o io/video.o drivers/keyboard.o libc/ctype.o libc/string.o io/io.o libc/stdio.o hardware/cpuid.o hardware/keyboard.o processore/gdt.o processore/idt.o processore/handlers.o hardware/pic8259.o mem/fismem.o mem/paging.o system/syscall.o hardware/8253.o shell/shell.o
+OBJ = kernel.o io/video.o drivers/keyboard.o libc/ctype.o libc/string.o io/io.o libc/stdio.o hardware/cpuid.o hardware/keyboard.o processore/gdt.o processore/idt.o processore/handlers.o hardware/pic8259.o mem/fismem.o mem/paging.o mem/kheap.o system/syscall.o hardware/8253.o shell/shell.o
 
 dreamos.img: bl.img kernel.bin
 	mv kernel.bin dreamos.img
@@ -24,6 +24,7 @@ libc/ctype.o : libc/ctype.c
 libc/string.o : libc/string.c
 mem/fismem.o : mem/fismem.c
 mem/paging.o : mem/paging.c
+mem/kheap.o : mem/kheap.c
 drivers/keyboard.o : drivers/keyboard.c
 system/syscall.o : system/syscall.c
 hardware/8253.o : hardware/8253.c
