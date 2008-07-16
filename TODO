@@ -12,6 +12,9 @@ PROGETTI IMMEDIATI
 - Todo rivedere quali sono le eccezioni che hanno un error code e sostituire le relative EXCEPTION(xx) con EXCEPTION_EC(xx)
 - Fare una mega pulizia del codice
 - Eliminare il maggior numero di messaggi di errore dalla compilazione
+-Script che memorizza nei sorci il numero di revisione (genera un file header)
+- fare in modo che quando stampa "root#~" se premo backspace non cancelli quella scritta.
+- Comandi: echo - clear
 
 PROGETTI A LUNGO TERMINE:
 - Implementazione di un migliore scrolling

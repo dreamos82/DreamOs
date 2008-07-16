@@ -26,8 +26,13 @@
 #include <kheap.h>
 #include <paging.h>
 
-unsigned int address_cur;
+extern unsigned int end;
+unsigned int address_cur = (unsigned int) &end;
 
-unsigned int _kmalloc(int size){
+unsigned int kmalloc(int size){
+    int temp;
+    
+    temp = address_cur;
     address_cur+=size;
+    return temp;
 }

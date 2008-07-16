@@ -27,6 +27,6 @@
 
 extern unsigned int address_cur;
 
-unsigned int _kmalloc(int);
+unsigned int kmalloc(int);
 
 #endif

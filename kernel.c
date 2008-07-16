@@ -53,7 +53,7 @@ int main_loop(struct multiboot_info *boot_info)
 {    
 
     _kclear();
-
+    syscall_init();
     _kcolor('\012');
     _kputs(DREAMOS_VER);
     _kcolor('\007');
@@ -89,7 +89,7 @@ int main_loop(struct multiboot_info *boot_info)
     _kprintOK();
 
     asm ("movl $0, %eax\n"
-     "movl $35, %ebx\n"
+     "movl $37, %ebx\n"
      "int $80");
     printf("\nMemory (upper) amount-> %d kb \n", boot_info->mem_upper);
     get_cpuid();    
@@ -100,8 +100,4 @@ int main_loop(struct multiboot_info *boot_info)
     printf("End: %d Address: 0x%x\n", end, &end);
 
     shell();
-
-/*    if ( (shell()) != NULL)
-    {	printf("[+] Loading compleate!!\n\n\n");	}
-*/
 }

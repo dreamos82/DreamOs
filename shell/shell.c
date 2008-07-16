@@ -35,6 +35,7 @@
 #include <paging.h>
 #include <use.h>
 #include <shell.h>
+#include <kheap.h>
 
 void logo()
 {
@@ -50,6 +51,7 @@ void help()
 	printf("help     - See the 'help' list to learn the DreamOS command now avaible\n"
 	       "poweroff - Turn off the machine\n"
 	       "info     - See the system info about Memory and other staffs like that\n"
+           "kmalloc  - Test a basic kmalloc function\n"
 		);
 }
 
@@ -101,7 +103,7 @@ void shell(void)
 	        scanf("%s",cmd);
 		if (!(_kstrncmp(cmd,"help",4) ) )
 		{
-			printf("Avaible command: \n");
+			printf("Available command: \n");
 			help();
 			cmd[a]=NULL;
 		}
@@ -118,7 +120,28 @@ void shell(void)
 			info();
 			cmd[a]=NULL;
 		}
-		
+		else if (!(_kstrncmp(cmd,"answer",4)))
+        {
+            printf("42\n");
+            cmd[a]=NULL;
+        }
+        else if (!(_kstrncmp(cmd,"kmalloc",4)))
+        {
+            printf("kmalloc try: ...\n");
+            int *a;
+            a = kmalloc(10*sizeof(int));
+            int i = 0;
+            while(i<10){
+                a[i] = i*2;
+                i++;
+            }
+            i=0;
+            while(i<10) {
+                printf("a[%d] = %d\n",i, a[i]);
+                i++;
+            }
+            printf("Address of a: %d\n", a);
+        }
 	}
 
 }

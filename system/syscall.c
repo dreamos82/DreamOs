@@ -38,9 +38,17 @@ void sysputch(int *args)
     _kputs (s);
 }
 
+void syscall_init(){
+    int i=0;
+    while(i<SYSCALL_NUMBER){
+        syscall_table[i]=0;
+        i++;
+    }
+    syscall_table[0] = sysputch;
+}
+
 /*
  * Gestore principale
- * DA CORREGGERE: Non riesco a pushare i registri perchè mi sballa i valori
  */
 void syscall_handler()
 {
@@ -57,8 +65,7 @@ void syscall_handler()
      arguments[0] = ebx;
      arguments[1] = ecx;
      arguments[2] = edx;
-     
-//      (*syscall_table[eax])(arguments);
-    sysputch(arguments);
+         
+     (*syscall_table[eax])(arguments);
 }
 
