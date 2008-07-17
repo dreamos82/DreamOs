@@ -1,6 +1,6 @@
 /*  DreamOS
     shell.c
-    This file is part of Foobar.
+    This file is part of DreamOSr.
     Foobar is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -52,6 +52,7 @@ void help()
 	       "poweroff - Turn off the machine\n"
 	       "info     - See the system info about Memory and other staffs like that\n"
            "kmalloc  - Test a basic kmalloc function\n"
+           "do_fault - Test a page_fault (WARNING: This hang the OS)\n"
 		);
 }
 
@@ -120,27 +121,34 @@ void shell(void)
 			info();
 			cmd[a]=NULL;
 		}
-		else if (!(_kstrncmp(cmd,"answer",4)))
+		else if (!(_kstrncmp(cmd,"answer",6)))
         {
             printf("42\n");
             cmd[a]=NULL;
         }
-        else if (!(_kstrncmp(cmd,"kmalloc",4)))
+        else if (!(_kstrncmp(cmd,"kmalloc",7)))
         {
             printf("kmalloc try: ...\n");
-            int *a;
-            a = kmalloc(10*sizeof(int));
+            int *b;
+            b = (int) kmalloc(10*sizeof(int));
             int i = 0;
             while(i<10){
-                a[i] = i*2;
+                b[i] = i*2;
                 i++;
             }
             i=0;
             while(i<10) {
-                printf("a[%d] = %d\n",i, a[i]);
+                printf("b[%d] = %d\n",i, b[i]);
                 i++;
             }
-            printf("Address of a: %d\n", a);
+            printf("Address of a: %d\n", b);
+            cmd[a]=NULL;
+        }
+        else if (!(_kstrncmp(cmd,"do_fault",8))){  
+            char *prova;
+            prova = 0xa0000000;
+            *prova = 10;
+cmd[a]=NULL;
         }
 	}
 

@@ -22,14 +22,13 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <kernel.h>
 #include <kheap.h>
 #include <paging.h>
 
 extern unsigned int end;
 unsigned int address_cur = (unsigned int) &end;
 
-unsigned int kmalloc(int size){
+void* kmalloc(unsigned int size){
     int temp;
     
     temp = address_cur;

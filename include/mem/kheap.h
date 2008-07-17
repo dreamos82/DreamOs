@@ -27,6 +27,22 @@
 
 extern unsigned int address_cur;
 
-unsigned int kmalloc(int);
+typedef struct{
+    unsigned int magic;
+    unsigned int hole;
+    unsigned int size;
+} header_t;
+
+typedef struct{
+    unsigned int magic;
+    unsigned int *header;
+} footer_t;
+
+void* kmalloc(unsigned int);
+void kfree(unsigned int);
+
+void *alloc(unsigned int);
+// void free(unsigned int);
+
 
 #endif

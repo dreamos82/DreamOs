@@ -148,27 +148,27 @@ Linker script and memory map
                 0x0000000000103c70                set_pagedir_entry_ric
                 0x0000000000103cb5                set_pagetable_entry
  *fill*         0x0000000000103dd5        0x3 00
- .text          0x0000000000103dd8       0x26 mem/kheap.o
+ .text          0x0000000000103dd8       0x22 mem/kheap.o
                 0x0000000000103dd8                kmalloc
- *fill*         0x0000000000103dfe        0x2 00
- .text          0x0000000000103e00       0xdd system/syscall.o
-                0x0000000000103e22                syscall_init
-                0x0000000000103e00                sysputch
-                0x0000000000103e58                syscall_handler
- *fill*         0x0000000000103edd        0x3 00
- .text          0x0000000000103ee0      0x11e hardware/8253.o
-                0x0000000000103fcf                sleep
-                0x0000000000103ee0                PIT_handler
-                0x0000000000103f66                configure_PIT
- *fill*         0x0000000000103ffe        0x2 00
- .text          0x0000000000104000      0x3ea shell/shell.o
-                0x0000000000104044                info
-                0x00000000001041d7                shell
-                0x0000000000104032                poweroff
-                0x000000000010401f                help
-                0x0000000000104000                logo
+ *fill*         0x0000000000103dfa        0x2 00
+ .text          0x0000000000103dfc       0xdd system/syscall.o
+                0x0000000000103e1e                syscall_init
+                0x0000000000103dfc                sysputch
+                0x0000000000103e54                syscall_handler
+ *fill*         0x0000000000103ed9        0x3 00
+ .text          0x0000000000103edc      0x11e hardware/8253.o
+                0x0000000000103fcb                sleep
+                0x0000000000103edc                PIT_handler
+                0x0000000000103f62                configure_PIT
+ *fill*         0x0000000000103ffa        0x2 00
+ .text          0x0000000000103ffc      0x440 shell/shell.o
+                0x0000000000104040                info
+                0x00000000001041d3                shell
+                0x000000000010402e                poweroff
+                0x000000000010401b                help
+                0x0000000000103ffc                logo
                 0x0000000000105000                . = ALIGN (0x1000)
- *fill*         0x00000000001043ea      0xc16 00
+ *fill*         0x000000000010443c      0xbc4 00
 
 .rel.dyn        0x0000000000105000        0x0
  .rel.text      0x0000000000000000        0x0 bl.img
@@ -220,9 +220,9 @@ Linker script and memory map
  *fill*         0x00000000001057ba        0x2 00
  .rodata        0x00000000001057bc       0x23 mem/paging.o
  *fill*         0x00000000001057df        0x1 00
- .rodata        0x00000000001057e0      0x31a shell/shell.o
+ .rodata        0x00000000001057e0      0x35b shell/shell.o
                 0x0000000000106000                . = ALIGN (0x1000)
- *fill*         0x0000000000105afa      0x506 00
+ *fill*         0x0000000000105b3b      0x4c5 00
 
 .bss            0x0000000000106000    0x33fec
                 0x0000000000106000                bss = .
