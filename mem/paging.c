@@ -27,10 +27,12 @@
 #include <stdio.h>
 #include <video.h>
 #include <stddef.h>
+#include <kheap.h>
 // #define DEBUG 1
+
 unsigned int *current_page_dir;
 unsigned int *current_page_table;
-
+extern heap_t *kheap;
 void init_paging(){
     int i;
     printf("Abilito Paging: In lavorazione....");
@@ -61,10 +63,11 @@ void init_paging(){
         i++;
     }        
     load_pdbr((unsigned int)current_page_dir);
+    kheap = make_heap(10,10,10);
 }
 
 /**
-  * Crea una nuova page_dir
+  * Crea una nuova page_dir in modalita' lineare (non paginata)
   * @author Ivan Gualandri
   * @version 1.0
   * @return page_dir address

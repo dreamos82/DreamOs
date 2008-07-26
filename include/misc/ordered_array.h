@@ -1,5 +1,5 @@
 /***************************************************************************
- *            kheap.h
+ *            ordered_array.h
  *
  *  Sun 18 07 08 07:47:17 2007
  *  Copyright  2008  Ivan Gualandri
@@ -22,39 +22,23 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef KHEAP_H
-#define KHEAP_H
+#ifndef ORDERED_ARRAY_H
+#define ORDERED_ARRAY_H
 
 #include <ordered_array.h>
-extern unsigned int address_cur;
 
-typedef struct{
-    unsigned int magic;
-    unsigned int hole;
-    unsigned int size;
-} header_t;
+typedef void* void_t;
 
-typedef struct{
-    unsigned int magic;
-    unsigned int *header;
-} footer_t;
-
-/*!  \struct heap_t
-     \brief Struttura dati che mantiene le informazioni su un singolo heap
+/*!  \struct ordered_array_t
+     \brief Struttura dati che un vettore ordinato.
  */
-typedef struct{
-    ordered_array_t hole_index; /**< La lista degli holes controllare il tipo*/
-    unsigned int start_address; /**< L'indirizzo di partenza dell'heap*/
-    unsigned int end_address; /**< Fino a dove arriva l'heap attualmente*/
-    unsigned int max_size; /**< quanto massimo si puo' espandere*/
-} heap_t;
+typedef struct {
+    void_t *array; /**< Il vettore che sara' ordinato*/
+    unsigned int size; /**< La dimensione attuale*/
+    unsigned int size_max; /**< La dimensione massima*/
+}ordered_array_t;
 
-heap_t* make_heap(unsigned int, unsigned int, unsigned int); //Rivedere il return value
-void* kmalloc(unsigned int);
-void kfree(unsigned int);
-
-void* alloc(unsigned int);
-
-
+ordered_array_t new_array(void_t, unsigned int, unsigned int);
+void insert_array(void_t, ordered_array_t*);
 
 #endif

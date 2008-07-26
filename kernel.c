@@ -88,10 +88,10 @@ int main_loop(struct multiboot_info *boot_info)
     configure_PIT ();    
     _kprintOK();
 
-    asm ("movl $0, %eax\n"
+    /*asm ("movl $0, %eax\n"
      "movl $37, %ebx\n"
-     "int $80");
-    printf("\nMemory (upper) amount-> %d kb \n", boot_info->mem_upper);
+     "int $80");    */
+    printf("Memory (upper) amount-> %d kb \n", boot_info->mem_upper);
     get_cpuid();    
     printf("\n");    
     printf("----\n");

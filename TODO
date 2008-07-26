@@ -16,7 +16,9 @@ PROGETTI IMMEDIATI
 - fare in modo che quando stampa "root#~" se premo backspace non cancelli quella scritta.
 - Comandi: echo - clear
 - bitmasks per interpretare errori del pagefault.
-- Makefile -m32 da aggiungere?
+- Rivedere il comando info della shell, probabilmente stampa alcune informazioni sbagliate
+- Script per generare automaticamente il file immagine grub.img
+
 
 PROGETTI A LUNGO TERMINE:
 - Implementazione di un migliore scrolling
