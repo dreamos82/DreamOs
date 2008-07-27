@@ -28,11 +28,14 @@
 #include <video.h>
 #include <stddef.h>
 #include <kheap.h>
+#include <buddy.h>
 // #define DEBUG 1
 
 unsigned int *current_page_dir;
 unsigned int *current_page_table;
 extern heap_t *kheap;
+extern buddy_t *kbuddy;
+
 void init_paging(){
     int i;
     printf("Abilito Paging: In lavorazione....");
@@ -64,6 +67,7 @@ void init_paging(){
     }        
     load_pdbr((unsigned int)current_page_dir);
     kheap = make_heap(10,10,10);
+    kbuddy = new_buddy();
 }
 
 /**

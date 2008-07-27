@@ -9,6 +9,7 @@ upbuffer            0xfa0             io/video.o
 IDT_Table           0x800             processore/idt.o
 cpu_vendor          0xc               kernel.o
 shell_mess          0x2               kernel.o
+kbuddy              0x4               mem/buddy.o
 tot_mem             0x4               mem/fismem.o
 slave_cur_mask      0x1               hardware/pic8259.o
 current_page_dir    0x4               mem/paging.o
@@ -138,44 +139,46 @@ Linker script and memory map
                 0x00000000001036fd                release_pages
                 0x0000000000103a36                calcola_memoria
                 0x0000000000103ac1                free
- .text          0x0000000000103ae4      0x31e mem/paging.o
-                0x0000000000103c41                create_pageTable
+ .text          0x0000000000103ae4      0x328 mem/paging.o
+                0x0000000000103c4b                create_pageTable
                 0x0000000000103ae4                init_paging
-                0x0000000000103d75                get_pagedir_entry
-                0x0000000000103c26                create_pageDir
-                0x0000000000103dbc                load_pdbr
-                0x0000000000103d23                set_pagetable_entry_ric
-                0x0000000000103d92                get_pagetable_entry
-                0x0000000000103c5c                set_pagedir_entry
-                0x0000000000103c9d                set_pagedir_entry_ric
-                0x0000000000103ce2                set_pagetable_entry
- *fill*         0x0000000000103e02        0x2 00
- .text          0x0000000000103e04       0x9f mem/kheap.o
-                0x0000000000103e04                kmalloc
-                0x0000000000103e26                make_heap
- *fill*         0x0000000000103ea3        0x1 00
- .text          0x0000000000103ea4       0xcc misc/ordered_array.o
-                0x0000000000103f22                insert_array
-                0x0000000000103ea4                new_array
- .text          0x0000000000103f70       0xdd system/syscall.o
-                0x0000000000103f92                syscall_init
-                0x0000000000103f70                sysputch
-                0x0000000000103fc8                syscall_handler
- *fill*         0x000000000010404d        0x3 00
- .text          0x0000000000104050      0x11e hardware/8253.o
-                0x000000000010413f                sleep
-                0x0000000000104050                PIT_handler
-                0x00000000001040d6                configure_PIT
- *fill*         0x000000000010416e        0x2 00
- .text          0x0000000000104170      0x4b6 shell/shell.o
-                0x00000000001041b4                info
-                0x0000000000104347                shell
-                0x00000000001045e3                aalogo
-                0x00000000001041a2                poweroff
-                0x000000000010418f                help
-                0x0000000000104170                logo
+                0x0000000000103d7f                get_pagedir_entry
+                0x0000000000103c30                create_pageDir
+                0x0000000000103dc6                load_pdbr
+                0x0000000000103d2d                set_pagetable_entry_ric
+                0x0000000000103d9c                get_pagetable_entry
+                0x0000000000103c66                set_pagedir_entry
+                0x0000000000103ca7                set_pagedir_entry_ric
+                0x0000000000103cec                set_pagetable_entry
+ .text          0x0000000000103e0c       0x9f mem/kheap.o
+                0x0000000000103e0c                kmalloc
+                0x0000000000103e2e                make_heap
+ *fill*         0x0000000000103eab        0x1 00
+ .text          0x0000000000103eac       0x65 mem/buddy.o
+                0x0000000000103eac                new_buddy
+ *fill*         0x0000000000103f11        0x3 00
+ .text          0x0000000000103f14       0xcc misc/ordered_array.o
+                0x0000000000103f92                insert_array
+                0x0000000000103f14                new_array
+ .text          0x0000000000103fe0       0xdd system/syscall.o
+                0x0000000000104002                syscall_init
+                0x0000000000103fe0                sysputch
+                0x0000000000104038                syscall_handler
+ *fill*         0x00000000001040bd        0x3 00
+ .text          0x00000000001040c0      0x11e hardware/8253.o
+                0x00000000001041af                sleep
+                0x00000000001040c0                PIT_handler
+                0x0000000000104146                configure_PIT
+ *fill*         0x00000000001041de        0x2 00
+ .text          0x00000000001041e0      0x4b6 shell/shell.o
+                0x0000000000104224                info
+                0x00000000001043b7                shell
+                0x0000000000104653                aalogo
+                0x0000000000104212                poweroff
+                0x00000000001041ff                help
+                0x00000000001041e0                logo
                 0x0000000000105000                . = ALIGN (0x1000)
- *fill*         0x0000000000104626      0x9da 00
+ *fill*         0x0000000000104696      0x96a 00
 
 .rel.dyn        0x0000000000105000        0x0
  .rel.text      0x0000000000000000        0x0 bl.img
@@ -210,6 +213,7 @@ Linker script and memory map
  .data          0x0000000000105324        0x0 mem/paging.o
  .data          0x0000000000105324        0x4 mem/kheap.o
                 0x0000000000105324                address_cur
+ .data          0x0000000000105328        0x0 mem/buddy.o
  .data          0x0000000000105328        0x0 misc/ordered_array.o
  .data          0x0000000000105328        0x4 system/syscall.o
                 0x0000000000105328                syscall_table
@@ -228,13 +232,13 @@ Linker script and memory map
  .rodata        0x0000000000105730       0x8a mem/fismem.o
  *fill*         0x00000000001057ba        0x2 00
  .rodata        0x00000000001057bc       0x23 mem/paging.o
- .rodata        0x00000000001057df       0x1e misc/ordered_array.o
- *fill*         0x00000000001057fd        0x3 00
- .rodata        0x0000000000105800      0x42f shell/shell.o
+ .rodata        0x00000000001057df       0x1b mem/buddy.o
+ .rodata        0x00000000001057fa       0x1e misc/ordered_array.o
+ .rodata        0x0000000000105818      0x42f shell/shell.o
                 0x0000000000106000                . = ALIGN (0x1000)
- *fill*         0x0000000000105c2f      0x3d1 00
+ *fill*         0x0000000000105c47      0x3b9 00
 
-.bss            0x0000000000106000    0x33fec
+.bss            0x0000000000106000    0x33ff0
                 0x0000000000106000                bss = .
                 0x0000000000106000                _bss = .
                 0x0000000000106000                __bss = .
@@ -262,6 +266,7 @@ Linker script and memory map
  .bss           0x000000000010645c        0x0 mem/paging.o
  .bss           0x000000000010645c        0x4 mem/kheap.o
                 0x000000000010645c                kheap
+ .bss           0x0000000000106460        0x0 mem/buddy.o
  .bss           0x0000000000106460        0x0 misc/ordered_array.o
  .bss           0x0000000000106460        0x0 system/syscall.o
  .bss           0x0000000000106460        0x8 hardware/8253.o
@@ -297,9 +302,11 @@ Linker script and memory map
                 0x0000000000139fe4                bmp_elements
  COMMON         0x0000000000139fe8        0x4 mem/paging.o
                 0x0000000000139fe8                current_page_dir
-                0x0000000000139fec                end = .
-                0x0000000000139fec                _end = .
-                0x0000000000139fec                __end = .
+ COMMON         0x0000000000139fec        0x4 mem/buddy.o
+                0x0000000000139fec                kbuddy
+                0x0000000000139ff0                end = .
+                0x0000000000139ff0                _end = .
+                0x0000000000139ff0                __end = .
 LOAD bl.img
 LOAD kernel.o
 LOAD io/video.o
@@ -317,6 +324,7 @@ LOAD hardware/pic8259.o
 LOAD mem/fismem.o
 LOAD mem/paging.o
 LOAD mem/kheap.o
+LOAD mem/buddy.o
 LOAD misc/ordered_array.o
 LOAD system/syscall.o
 LOAD hardware/8253.o
@@ -324,7 +332,7 @@ LOAD shell/shell.o
 Address of section .text set to 0x100000
 OUTPUT(kernel.bin elf32-i386)
 
-.comment        0x0000000000000000      0x263
+.comment        0x0000000000000000      0x280
  .comment       0x0000000000000000       0x1f bl.img
  .comment       0x000000000000001f       0x1d kernel.o
  .comment       0x000000000000003c       0x1d io/video.o
@@ -342,10 +350,11 @@ OUTPUT(kernel.bin elf32-i386)
  .comment       0x0000000000000198       0x1d mem/fismem.o
  .comment       0x00000000000001b5       0x1d mem/paging.o
  .comment       0x00000000000001d2       0x1d mem/kheap.o
- .comment       0x00000000000001ef       0x1d misc/ordered_array.o
- .comment       0x000000000000020c       0x1d system/syscall.o
- .comment       0x0000000000000229       0x1d hardware/8253.o
- .comment       0x0000000000000246       0x1d shell/shell.o
+ .comment       0x00000000000001ef       0x1d mem/buddy.o
+ .comment       0x000000000000020c       0x1d misc/ordered_array.o
+ .comment       0x0000000000000229       0x1d system/syscall.o
+ .comment       0x0000000000000246       0x1d hardware/8253.o
+ .comment       0x0000000000000263       0x1d shell/shell.o
 
 .note.GNU-stack
                 0x0000000000000000        0x0
@@ -381,6 +390,8 @@ OUTPUT(kernel.bin elf32-i386)
                 0x0000000000000000        0x0 mem/paging.o
  .note.GNU-stack
                 0x0000000000000000        0x0 mem/kheap.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 mem/buddy.o
  .note.GNU-stack
                 0x0000000000000000        0x0 misc/ordered_array.o
  .note.GNU-stack
