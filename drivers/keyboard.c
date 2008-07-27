@@ -201,6 +201,7 @@ void keyboard_isr (void)
 
 end:
     /* Send acknowledge */
+    //printf ("Prego");
     outportb (EOI, MASTER_PORT);
     return;
 }

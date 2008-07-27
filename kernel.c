@@ -85,7 +85,7 @@ int main_loop(struct multiboot_info *boot_info)
     init_paging();    
 
     printf(LNG_PIT8253);
-    configure_PIT ();    
+    //configure_PIT ();
     _kprintOK();
 
     /*asm ("movl $0, %eax\n"

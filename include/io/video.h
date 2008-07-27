@@ -51,5 +51,7 @@ void _kscrolldown();
 void _kntohex (unsigned int);
 void _kdecbin (int);
 
+unsigned short shell_mess;
+
 
 #endif /* _VIDEO_H */

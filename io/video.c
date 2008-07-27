@@ -85,8 +85,10 @@ void _kcolor(char color)
  */
 void _kbackspace()
 {
-  VIDEO_PTR -= 2;
-  *VIDEO_PTR = 0x20; // delete the character
+    if (_kgetcolumn() > shell_mess) {
+      VIDEO_PTR -= 2;
+      *VIDEO_PTR = 0x20; // delete the character
+    }
 }
 
 /*

@@ -82,7 +82,11 @@ void init_IRQ(){
     outportb(0xFF,SLAVE_PORT_1);
 
     outportb (0xFC, MASTER_PORT_1);
+//<<<<<<< .mine
+    //enable_IRQ (0);
+//=======
  //     enable_IRQ (0);
+//>>>>>>> .r13
 
     setup_IRQ();
     asm("sti");

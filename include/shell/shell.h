@@ -23,5 +23,7 @@
 #define __SHELL_H
 
 void shell();
+void logo();
+void aalogo();
 
 #endif

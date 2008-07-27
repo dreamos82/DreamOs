@@ -50,9 +50,10 @@ void help()
 {
 	printf("help     - See the 'help' list to learn the DreamOS command now avaible\n"
 	       "poweroff - Turn off the machine\n"
-	       "info     - See the system info about Memory and other staffs like that\n"
+	       "info     - See the system info about Memory and other stuffs like that\n"
            "kmalloc  - Test a basic kmalloc function\n"
            "do_fault - Test a page_fault (WARNING: This hang the OS)\n"
+           "aalogo - Show an ascii art logo\n"
 		);
 }
 
@@ -98,6 +99,8 @@ void shell(void)
 	//char *cmd=malloc(256); Dio maiale, Page Fault con il puntatore...
 	int a = 1;
 	logo();
+
+        shell_mess = 7;
 	for (;;)
 	{
 		_kputs("root~# ");
@@ -148,9 +151,17 @@ void shell(void)
             char *prova;
             prova = 0xa0000000;
             *prova = 10;
-cmd[a]=NULL;
+            cmd[a]=NULL;
         }
+        else if (!(_kstrncmp(cmd,"aalogo",6))) aalogo();        
 	}
 
 }
 
+void aalogo() {
+printf("\t____                     _____ _____\n");
+printf("\t|    \\ ___ ___ ___ _____|     |   __|\n");
+printf("\t|  |  |  _| -_| = |     |  |  |__   |\n");
+printf("\t|____/|_| |___|__||_|_|_|_____|_____|\n");
+printf("\t Rev15\n\n\n");
+}
