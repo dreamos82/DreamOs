@@ -274,10 +274,10 @@ size_t get_bmpelements(){
 }
 
 /*Da spostare appena termintao il gestore della memoria*/
-void *malloc(const size_t size){
+void *fis_malloc(const size_t size){
     return request_pages(size % 4096 ? size / 4096 + 1 : size / 4096, ADD_LIST);
 }
 
-void free(void *address){
+void fis_free(void *address){
     if(release_pages(address)!=0) printf("Error\n");
 }

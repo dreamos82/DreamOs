@@ -18,6 +18,7 @@ PROGETTI IMMEDIATI
 - bitmasks per interpretare errori del pagefault.
 - Rivedere il comando info della shell, probabilmente stampa alcune informazioni sbagliate
 - Script per generare automaticamente il file immagine grub.img
+- Quando il comando non esiste stmapre "nome-comando not-found" 
 
 
 PROGETTI A LUNGO TERMINE:

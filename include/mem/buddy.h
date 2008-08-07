@@ -25,16 +25,20 @@
 #ifndef BUDDY_H
 #define BUDDY_H
 
+#define BUDDY_BUSY 1
+#define BUDDY_FREE 0
 /*!  \struct buddy_t
      \brief Struttura dati che mantiene le informazioni su un singolo buddy
  */
 typedef struct {
     unsigned int start_address; /**< Indirizzo di inizio del buddy*/
     unsigned int size; /**< Dimensione della memoria da gestire*/
+    short int status; /**< Indica se il nodo e' occupato o meno*/
     struct buddy_t* left; /**< Figlio sinistro*/
     struct buddy_t* right; /**< Figlio destro*/
 } buddy_t;
 
 buddy_t* new_buddy();
-
+buddy_t* create_buddy(int);
+unsigned int alloc_buddy(int, buddy_t*);
 #endif

@@ -36,7 +36,9 @@
 #include <use.h>
 #include <shell.h>
 #include <kheap.h>
+#include <buddy.h>
 
+extern buddy_t* kbuddy;
 void logo()
 {
 	printf("\t-------------------------- \n"
@@ -54,6 +56,7 @@ void help()
            "kmalloc  - Test a basic kmalloc function\n"
            "do_fault - Test a page_fault (WARNING: This hang the OS)\n"
            "aalogo - Show an ascii art logo\n"
+           "try_buddy - Try buddy mmu\n"
 		);
 }
 
@@ -98,7 +101,7 @@ void shell(void)
 	unsigned char cmd[256];
 	//char *cmd=malloc(256); Dio maiale, Page Fault con il puntatore...
 	int a = 1;
-	logo();
+	aalogo();
 
         shell_mess = 7;
 	for (;;)
@@ -153,7 +156,14 @@ void shell(void)
             *prova = 10;
             cmd[a]=NULL;
         }
+        else if (!(_kstrncmp(cmd,"try_buddy",9))){
+             printf("L'indirizzo di kbuddy e': 0x%x\n", kbuddy);
+             alloc_buddy(16, kbuddy);
+             printf("New allocation\n\n");
+             alloc_buddy(8, kbuddy);
+        }
         else if (!(_kstrncmp(cmd,"aalogo",6))) aalogo();        
+        cmd[a]=NULL;
 	}
 
 }
@@ -163,5 +173,5 @@ printf("\t____                     _____ _____\n");
 printf("\t|    \\ ___ ___ ___ _____|     |   __|\n");
 printf("\t|  |  |  _| -_| = |     |  |  |__   |\n");
 printf("\t|____/|_| |___|__||_|_|_|_____|_____|\n");
-printf("\t Rev16\n\n\n");
+printf("\t Rev17\n");
 }

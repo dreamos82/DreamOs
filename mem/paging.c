@@ -67,7 +67,7 @@ void init_paging(){
     }        
     load_pdbr((unsigned int)current_page_dir);
     kheap = make_heap(10,10,10);
-    kbuddy = new_buddy();
+    kbuddy = new_buddy();    
 }
 
 /**
