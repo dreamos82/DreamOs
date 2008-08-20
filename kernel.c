@@ -51,7 +51,7 @@ asmlinkage void _start(struct multiboot_info *boot_info){
 
 int main_loop(struct multiboot_info *boot_info)
 {    
-
+    unsigned int* provatore;
     _kclear();
     syscall_init();
     _kcolor('\012');
@@ -65,25 +65,22 @@ int main_loop(struct multiboot_info *boot_info)
     _kputs("\n");    
     _kputs(LNG_GDT);
     init_gdt();
-    _kprintOK();
-
+    _kprintOK();    
     outportb(0xFF, MASTER_PORT_1);
     outportb(0xFF, SLAVE_PORT_1);
     _kputs(LNG_IDT);
 
     asm("cli");   
     init_idt();
-    _kprintOK();
-    
-    calcola_memoria();    
+    _kprintOK();    
+//     calcola_memoria();    
+    set_memorysize((boot_info->mem_upper+boot_info->mem_lower)*1024);
     init_mem();    
     _kputs(LNG_PIC8259);
     init_IRQ();
     asm("sti");
     _kprintOK();   
-    printf("End: %d\n", end);
-    init_paging();    
-
+    printf("End: %d\n", end);    
     printf(LNG_PIT8253);
     //configure_PIT ();
     _kprintOK();
@@ -92,6 +89,7 @@ int main_loop(struct multiboot_info *boot_info)
      "movl $37, %ebx\n"
      "int $80");    */
     printf("Memory (upper) amount-> %d kb \n", boot_info->mem_upper);
+    printf("Memory (lower) amount-> %d kb end \n", boot_info->mem_lower);    
     get_cpuid();    
     printf("\n");    
     printf("----\n");

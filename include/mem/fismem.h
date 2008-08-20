@@ -69,6 +69,7 @@ size_t get_memsize();
 size_t get_numpages();
 size_t get_bmpelements();
 int add_memarea_element(size_t, int);
+void set_memorysize(unsigned int);
 
 void *fis_malloc(const size_t);
 void fis_free(void *);

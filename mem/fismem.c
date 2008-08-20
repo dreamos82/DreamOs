@@ -41,14 +41,16 @@ mem_area_pointer mem_info = (mem_area_pointer)0x110000;
 
 void init_mem(){
     int i=0;
+    int remainder=0;
     mem_info = mem_info_root;
     while(i<BITMAP_SIZE){
         if(i<16)mem_bitmap.mem_map[i] = 0xFFFFFFFF;
         else mem_bitmap.mem_map[i] = 0x00000000;
         i++;
     }
-    i=0;
-
+    i=0;    
+    bmp_elements = (tot_mem/4096)/32;    
+    //     printf("bmp_elements: %d\n", bmp_elements);
     //Ho allocato il primo elemento di mem_info, spazio dedicato al kernel
     mem_info->pages_info[0].inizio= 0x00000000;
     mem_info->pages_info[0].num_pagine = 512;
@@ -280,4 +282,16 @@ void *fis_malloc(const size_t size){
 
 void fis_free(void *address){
     if(release_pages(address)!=0) printf("Error\n");
+}
+
+
+/**
+  * Configura una nuova dimensione per la memoria fisica, va chiamata prima di init_mem
+  * @author Ivan Gualandri
+  * @version 1.0
+  * @param new_size La nuova dimensione per la memoria.
+  * @return void. 
+  */
+void set_memorysize(unsigned int new_size){
+    tot_mem = new_size;
 }
