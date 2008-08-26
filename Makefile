@@ -1,4 +1,5 @@
 CFLAGS = -nostdlib -fomit-frame-pointer -fno-builtin -fno-stack-protector -Wall -march=i686 -m32 -I./include -I./include/io -I./include/drivers -I./include/libc -I./include/processore -I./include/hardware -I./include/mem -I./include/system -I./include/shell -I./include/misc
+
 OBJ = kernel.o io/video.o drivers/keyboard.o libc/ctype.o libc/string.o io/io.o libc/stdio.o hardware/cpuid.o hardware/keyboard.o processore/gdt.o processore/idt.o processore/handlers.o hardware/pic8259.o mem/fismem.o mem/paging.o mem/kheap.o mem/buddy.o misc/ordered_array.o system/syscall.o hardware/8253.o shell/shell.o
 
 dreamos.img: bl.img kernel.bin
@@ -38,6 +39,13 @@ img:
 	mount -o loop boot/grub.img boot/os
 	cp dreamos.img boot/os/boot/grub/
 	umount boot/os
+# End :)
+
+vers: 
+	 #sed -i -e "14d" include/version.h
+	 #echo "#define REV_NUM \"-r`cat .svn/entries | head -n 4 | tail -n 1`"\" >> include/version.h
+	 #echo "-r`cat .svn/entries | head -n 4 | tail -n 1`" > vers.txt
+	 sed -i -e "/^#define REV_NUM/s/\".*\"/\""-r`cat .svn/entries | head -n 4 | tail -n 1`"\"/" include/version.h
 
 .PHONY: clean install qemu
 

@@ -37,27 +37,29 @@
 #include <shell.h>
 #include <kheap.h>
 #include <buddy.h>
+#include <version.h>
+
+
 
 extern buddy_t* kbuddy;
 void logo()
 {
-	printf("\t-------------------------- \n"
-	       "\tThe Dream Operating System \n"
-	       "\t      v0.01 pre-alpha      \n"
-	       "\t-------------------------- \n");
-	printf("\n\n\n");
+	printf("\n\n\t\t-------------------------- \n"
+	       "\t\tThe Dream Operating System \n"
+	       "\t\t      v0.01 pre-alpha      \n"
+	       "\t\t-------------------------- \n");
+	printf("\n\n\n\n\n\n");
 }
 
 void help()
 {
-	printf("help     - See the 'help' list to learn the DreamOS command now avaible\n"
-	       "poweroff - Turn off the machine\n"
-	       "info     - See the system info about Memory and other stuffs like that\n"
-           "kmalloc  - Test a basic kmalloc function\n"
-           "do_fault - Test a page_fault (WARNING: This hang the OS)\n"
-           "aalogo - Show an ascii art logo\n"
-           "try_buddy - Try buddy mmu\n"
-		);
+	printf("help      - See the 'help' list to learn the DreamOS command now avaible\n"
+	       "poweroff  - Turn off the machine\n"
+	       "info      - See the system info about Memory and other stuffs like that\n"
+               "kmalloc   - Test a basic kmalloc function\n"
+               "do_fault  - Test a page_fault (WARNING: This hang the OS)\n"
+               "aalogo    - Show an ascii art logo\n"
+               "try_buddy - Try buddy mmu\n");
 }
 
 void poweroff()
@@ -66,7 +68,7 @@ void poweroff()
 		"int $0xff\n"
 		: : "g"(1)); // valore di enum*/
     asm("hlt");
-    printf("E' ora possibile spegnere il computer\n");
+    printf("E' ora possibile spegnere il computer.\n");
     while(1);
 }
 
@@ -98,8 +100,9 @@ void info()
 
 void shell(void)
 {
-	unsigned char cmd[256];
+	//unsigned char cmd[256];
 	//char *cmd=malloc(256); Dio maiale, Page Fault con il puntatore...
+	char *cmd;
 	int a = 1;
 	aalogo();
 
@@ -107,7 +110,9 @@ void shell(void)
 	for (;;)
 	{
 		_kputs("root~# ");
-	        scanf("%s",cmd);
+	        //scanf("%s",cmd);	// scanf non va bene per gli argomenti..
+		gets(cmd); //vulnerabile, da correggere, poi prevvedo na cosa alla volta :P 
+
 		if (!(_kstrncmp(cmd,"help",4) ) )
 		{
 			printf("Available command: \n");
@@ -122,6 +127,12 @@ void shell(void)
 			cmd[a]=NULL;
 		}
 		
+		else if (!(_kstrncmp(cmd, "uname",5)))
+		{
+			printf("%s %s.%s.%s%s #1 beta CEST 2008 %s\n",NAME,VERSION,PATCHLEVEL,REV_NUM,EXTRAVERSION,cpu_vendor);
+
+		}
+
 		else if (!(_kstrncmp(cmd,"info",4)))
 		{
 			info();
@@ -169,9 +180,12 @@ void shell(void)
 }
 
 void aalogo() {
+//printf("\n\n");
 printf("\t____                     _____ _____\n");
 printf("\t|    \\ ___ ___ ___ _____|     |   __|\n");
 printf("\t|  |  |  _| -_| = |     |  |  |__   |\n");
 printf("\t|____/|_| |___|__||_|_|_|_____|_____|\n");
-printf("\t Rev17\n");
+printf("\t|------rev: \"%s\"|\n",REV_NUM);
+printf("\t|:::::::::::......|\n");
+logo();
 }

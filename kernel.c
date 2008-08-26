@@ -40,6 +40,7 @@
 #include <use.h>
 #include <shell.h>
 
+
 unsigned int *current_page_table;
 extern unsigned int end;
 // multiboot_info_t *boot_informations;
@@ -79,7 +80,8 @@ int main_loop(struct multiboot_info *boot_info)
     _kputs(LNG_PIC8259);
     init_IRQ();
     asm("sti");
-    _kprintOK();   
+    _kprintOK();
+    init_paging();   
     printf("End: %d\n", end);    
     printf(LNG_PIT8253);
     //configure_PIT ();
@@ -88,14 +90,34 @@ int main_loop(struct multiboot_info *boot_info)
     /*asm ("movl $0, %eax\n"
      "movl $37, %ebx\n"
      "int $80");    */
+
     printf("Memory (upper) amount-> %d kb \n", boot_info->mem_upper);
     printf("Memory (lower) amount-> %d kb end \n", boot_info->mem_lower);    
     get_cpuid();    
     printf("\n");    
-    printf("----\n");
-    printf("Loading the shell..\n");
-    printf("[+] Loading complete!!\n\n");    
-    printf("End: %d Address: 0x%x\n", end, &end);
 
-    shell();
+    printf("\n\n[+] It's TODO ok ------------------------------------------>");
+    _kprintOK();
+    printf("Now you can try the OS with the Shell\n\n");
+    printf(" [?] Would you like to load the shell ? [Y/n] ");
+    char choise[16];
+    scanf("%s",choise);
+	if (!(_kstrncmp(choise,"Y",1) ) || !(_kstrncmp(choise,"y",1)))
+   	{
+		printf("\n----\n");
+    		printf("Loading the shell..\n");
+		printf("[+] End: %d \n"
+		       "[+] Address: 0x%x\n", end, &end);
+		printf("[+] Loading complete!!");   
+   	        _kprintOK();
+		printf("\n\n");
+		shell();
+	 }
+		else {
+			printf("\n\n[-] Mmh.. fuck.\n\n");
+			poweroff();
+			
+	        }
+
 }
+
