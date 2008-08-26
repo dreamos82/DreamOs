@@ -33,18 +33,12 @@ system/syscall.o: system/syscall.c
 hardware/8253.o: hardware/8253.c
 shell/shell.o: shell/shell.c
 
-# Autonomatizzazione aggiornamento file immagine distro
-# Only root
 img:
 	mount -o loop boot/grub.img boot/os
 	cp dreamos.img boot/os/boot/grub/
 	umount boot/os
-# End :)
 
 vers: 
-	 #sed -i -e "14d" include/version.h
-	 #echo "#define REV_NUM \"-r`cat .svn/entries | head -n 4 | tail -n 1`"\" >> include/version.h
-	 #echo "-r`cat .svn/entries | head -n 4 | tail -n 1`" > vers.txt
 	 sed -i -e "/^#define REV_NUM/s/\".*\"/\""-r`cat .svn/entries | head -n 4 | tail -n 1`"\"/" include/version.h
 
 .PHONY: clean install qemu

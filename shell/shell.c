@@ -100,9 +100,9 @@ void info()
 
 void shell(void)
 {
-	//unsigned char cmd[256];
-	//char *cmd=malloc(256); Dio maiale, Page Fault con il puntatore...
-	char *cmd;
+	unsigned char cmd[256];
+	//char *cmd=malloc(256); //Dio maiale, Page Fault con il puntatore...
+	//char *cmd;
 	int a = 1;
 	aalogo();
 
@@ -188,3 +188,5 @@ printf("\t|------rev: \"%s\"|\n",REV_NUM);
 printf("\t|:::::::::::......|\n");
 logo();
 }
+
+
