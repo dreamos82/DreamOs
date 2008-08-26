@@ -110,8 +110,7 @@ void shell(void)
 	for (;;)
 	{
 		_kputs("root~# ");
-	        //scanf("%s",cmd);	// scanf non va bene per gli argomenti..
-		gets(cmd); //vulnerabile, da correggere, poi prevvedo na cosa alla volta :P 
+	        scanf("%s",cmd);	// scanf non va bene per gli argomenti..
 
 		if (!(_kstrncmp(cmd,"help",4) ) )
 		{
