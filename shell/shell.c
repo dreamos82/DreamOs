@@ -59,6 +59,7 @@ void help()
                "kmalloc   - Test a basic kmalloc function\n"
                "do_fault  - Test a page_fault (WARNING: This hang the OS)\n"
                "aalogo    - Show an ascii art logo\n"
+               "uname     - Print kernel version\n"
                "try_buddy - Try buddy mmu\n");
 }
 
@@ -106,7 +107,7 @@ void shell(void)
 	int a = 1;
 	aalogo();
 
-        shell_mess = 7;
+    shell_mess = 7;
 	for (;;)
 	{
 		_kputs("root~# ");
@@ -171,8 +172,10 @@ void shell(void)
              alloc_buddy(16, kbuddy);
              printf("New allocation\n\n");
              alloc_buddy(8, kbuddy);
+            cmd[a] = NULL;
         }
         else if (!(_kstrncmp(cmd,"aalogo",6))) aalogo();        
+        else printf("Error %s\n", cmd);
         cmd[a]=NULL;
 	}
 

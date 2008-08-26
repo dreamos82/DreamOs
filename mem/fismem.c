@@ -31,10 +31,9 @@
 size_t tot_mem;
 size_t num_pages=0;
 size_t bmp_elements;
-// byte master_cur_mask;
-// byte slave_cur_mask;
+
 mem_struct mem_bitmap;
-int prova2 = 35;
+
 
 mem_area_pointer mem_info_root = (mem_area_pointer)0x110000;
 mem_area_pointer mem_info = (mem_area_pointer)0x110000;

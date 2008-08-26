@@ -22,10 +22,14 @@
  */
 
 #include <kheap.h>
+#include <fismem.h>
 #include <paging.h>
 #include <ordered_array.h>
+#include <stddef.h>
+#include <stdio.h>
 
 extern unsigned int end;
+extern size_t tot_mem;
 heap_t *kheap = 0;
 unsigned int address_cur = (unsigned int) &end;
 
@@ -36,8 +40,9 @@ void* kmalloc(unsigned int size){
     address_cur+=size;
     return (void *) temp;
 }
+
 /**
-  * Crea un nuov heap
+  * Build a new heap
   * @author Ivan Gualandri
   * @version 1.0
   * @param start Indirizzo di inizio del nostro heap
@@ -47,10 +52,18 @@ void* kmalloc(unsigned int size){
   */
 heap_t* make_heap(unsigned int start, unsigned int end, unsigned int size){
     heap_t* new_heap;
+    heap_node_t* first_node;
     new_heap = (heap_t*)kmalloc(sizeof(heap_t));
-    new_heap->hole_index = new_array(10,10,10); //decidere i valori
-    new_heap->start_address = start;
-    new_heap->end_address = end;
-    new_heap->max_size = size;
+    first_node = (heap_node_t*)kmalloc(sizeof(heap_node_t));
+    first_node->start_address = (unsigned int)&end;
+    first_node->size = size;
+    new_heap->max_size = tot_mem-(unsigned int) &end;
+    new_heap->free_list = first_node;
+    new_heap->used_list = NULL;
+    printf("First heap created...\n");   
+    printf("Size: %d - Tot mem: %d\n", first_node->size, tot_mem);
     return (heap_t*) new_heap;
+}
+
+void* alloc(unsigned int size){
 }

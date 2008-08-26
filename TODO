@@ -2,10 +2,8 @@ Dreamos Rebuild:
 
 PROGETTI IMMEDIATI
 - Revisionare stampa esadecimale. Funzione _kprinthex
-- Implementare syscall handler
-- Routine asm per individuare quantita' ram
+- Implementare syscall handler (controllare/terminare)
 - Le routine di gestione degli irq, devono controllare se effettivamente esiste un IRQ per il device che controllano, in caso affermativo proseguono, in caso negativo si fermano.
-- Logo dreamos in ASCII ART :D
 - MMU
 - Funzioni sullo stato registri EFLAGS e CR*
 - RIVEDERE PRINTF - Forse non stampa i numeri troppo lunghi - problema degli unsigned int.
@@ -13,7 +11,6 @@ PROGETTI IMMEDIATI
 - Fare una mega pulizia del codice
 - Eliminare il maggior numero di messaggi di errore dalla compilazione
 - Script che memorizza nei sorci il numero di revisione (genera un file header)
-- fare in modo che quando stampa "root#~" se premo backspace non cancelli quella scritta.
 - Comandi: echo - clear
 - bitmasks per interpretare errori del pagefault.
 - Rivedere il comando info della shell, probabilmente stampa alcune informazioni sbagliate

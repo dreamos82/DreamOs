@@ -33,6 +33,8 @@
 
 unsigned int *current_page_dir;
 unsigned int *current_page_table;
+extern size_t tot_mem;
+extern unsigned int end;
 extern heap_t *kheap;
 extern buddy_t *kbuddy;
 
@@ -66,7 +68,7 @@ void init_paging(){
         i++;
     }        
     load_pdbr((unsigned int)current_page_dir);
-    kheap = make_heap(10,10,10);
+    kheap = make_heap(10,10,tot_mem - ((unsigned int) &end));
     kbuddy = new_buddy();    
 }
 

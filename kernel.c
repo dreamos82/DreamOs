@@ -82,9 +82,9 @@ int main_loop(struct multiboot_info *boot_info)
     asm("sti");
     _kprintOK();
     init_paging();   
-    printf("End: %d\n", end);    
+    printf("End: %x\n", end);    
     printf(LNG_PIT8253);
-    //configure_PIT ();
+    configure_PIT ();
     _kprintOK();
 
     /*asm ("movl $0, %eax\n"
