@@ -30,6 +30,7 @@
 
 int _kstrncmp (const char *, const char *, int);
 void *memset(void *, const int, int);
+extern void * memmove(void *,const void *,size_t);
 int strlen (const char *);
 char *strncpy (char *, const char *, size_t);
 char *strchr (const char *, int);

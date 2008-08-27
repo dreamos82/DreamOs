@@ -1,3 +1,12 @@
+# Please set your kernel preference versions..
+# Enjoy your self :)
+# Osiris at jeek69@katamail.com
+
+VERSION = 0
+PATCHLEVEL = 0
+EXTRAVERSION = -dreamos
+NAME = DreamOS
+
 CFLAGS = -nostdlib -fomit-frame-pointer -fno-builtin -fno-stack-protector -Wall -march=i686 -m32 -I./include -I./include/io -I./include/drivers -I./include/libc -I./include/processore -I./include/hardware -I./include/mem -I./include/system -I./include/shell -I./include/misc
 
 OBJ = kernel.o io/video.o drivers/keyboard.o libc/ctype.o libc/string.o io/io.o libc/stdio.o hardware/cpuid.o hardware/keyboard.o processore/gdt.o processore/idt.o processore/handlers.o hardware/pic8259.o mem/fismem.o mem/paging.o mem/kheap.o mem/buddy.o misc/ordered_array.o system/syscall.o hardware/8253.o shell/shell.o
@@ -39,6 +48,10 @@ img:
 	umount boot/os
 
 vers: 
+	 sed -i -e "/^#define VERSION/s/\".*\"/\"$(VERSION)\"/" include/version.h
+	 sed -i -e "/^#define PATCHLEVEL/s/\".*\"/\"$(PATCHLEVEL)\"/" include/version.h
+	 sed -i -e "/^#define EXTRAVERSION/s/\".*\"/\"$(EXTRAVERSION)\"/" include/version.h
+	 sed -i -e "/^#define NAME/s/\".*\"/\"$(NAME)\"/" include/version.h
 	 sed -i -e "/^#define REV_NUM/s/\".*\"/\""-r`cat .svn/entries | head -n 4 | tail -n 1`"\"/" include/version.h
 
 .PHONY: clean install qemu

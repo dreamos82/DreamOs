@@ -60,7 +60,8 @@ void help()
                "do_fault  - Test a page_fault (WARNING: This hang the OS)\n"
                "aalogo    - Show an ascii art logo\n"
                "uname     - Print kernel version\n"
-               "try_buddy - Try buddy mmu\n");
+               "try_buddy - Try buddy mmu\n"
+	       "echo      - Print some lines of text\n");
 }
 
 void poweroff()
@@ -99,18 +100,23 @@ void info()
 	printf(":==========: :==========: :==========:\n");
 }
 
-void shell(void)
+void shell(int argc, char *argv[])
 {
 	unsigned char cmd[256];
 	//char *cmd=malloc(256); //Dio maiale, Page Fault con il puntatore...
-	//char *cmd;
+	unsigned char text[256];
 	int a = 1;
+	printf("[?] Enter your username: ");
+    	char user[16];
+	scanf ("%s",user);
+	printf("\n\n\n\n\n\n");
 	aalogo();
+	printf("\n\n\n\n");
 
     shell_mess = 7;
 	for (;;)
 	{
-		_kputs("root~# ");
+		printf("%s~# ",user);
 	        scanf("%s",cmd);	// scanf non va bene per gli argomenti..
 
 		if (!(_kstrncmp(cmd,"help",4) ) )
@@ -118,6 +124,16 @@ void shell(void)
 			printf("Available command: \n");
 			help();
 			cmd[a]=NULL;
+		}
+
+		if (!(_kstrncmp(cmd, "echo", 4) ) )
+		{
+			char string[256];
+			strncpy(string,cmd, strlen(cmd));
+			memmove(string, string+5, strlen(string));
+			printf("%s\n",string);
+			cmd[a]=NULL;
+			string[a]=NULL;	
 		}
 
 		else if (!(_kstrncmp(cmd,"poweroff",8)))
@@ -129,7 +145,12 @@ void shell(void)
 		
 		else if (!(_kstrncmp(cmd, "uname",5)))
 		{
+			//if (argv[2] == "-a")
+       			//{
 			printf("%s %s.%s.%s%s #1 beta CEST 2008 %s\n",NAME,VERSION,PATCHLEVEL,REV_NUM,EXTRAVERSION,cpu_vendor);
+			cmd[a]=NULL;
+			//}
+			//else { printf("%s\n", NAME); }
 
 		}
 
@@ -182,13 +203,12 @@ void shell(void)
 }
 
 void aalogo() {
-//printf("\n\n");
-printf("\t____                     _____ _____\n");
-printf("\t|    \\ ___ ___ ___ _____|     |   __|\n");
-printf("\t|  |  |  _| -_| = |     |  |  |__   |\n");
-printf("\t|____/|_| |___|__||_|_|_|_____|_____|\n");
-printf("\t|------rev: \"%s\"|\n",REV_NUM);
-printf("\t|:::::::::::......|\n");
+printf("\t ____                     _____ _____\n");
+printf("\t |    \\ ___ ___ ___ _____|     |   __|\n");
+printf("\t |  |  |  _| -_| = |     |  |  |__   |\n");
+printf("\t |____/|_| |___|__||_|_|_|_____|_____|\n");
+printf("\t |------rev: \"%s\"|\n",REV_NUM);
+printf("\t |:::::::::::......|\n");
 logo();
 }
 

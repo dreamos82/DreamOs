@@ -98,12 +98,7 @@ int main_loop(struct multiboot_info *boot_info)
 
     printf("\n\n[+] It's TODO ok ------------------------------------------>");
     _kprintOK();
-    printf("Now you can try the OS with the Shell\n\n");
-    printf(" [?] Would you like to load the shell ? [Y/n] ");
-    char choise[16];
-    scanf("%s",choise);
-	if (!(_kstrncmp(choise,"Y",1) ) || !(_kstrncmp(choise,"y",1)))
-   	{
+
 		printf("\n----\n");
     		printf("Loading the shell..\n");
 		printf("[+] End: %d \n"
@@ -112,12 +107,6 @@ int main_loop(struct multiboot_info *boot_info)
    	        _kprintOK();
 		printf("\n\n");
 		shell();
-	 }
-		else {
-			printf("\n\n[-] Mmh.. fuck.\n\n");
-			poweroff();
-			
-	        }
 
 }
 

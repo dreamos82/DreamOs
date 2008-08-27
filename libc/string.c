@@ -78,6 +78,26 @@ void *memset(void *dest, const int c, int n)
   return dest;
 }
 
+void *memmove(void * dest,const void *src,size_t count)
+{
+	char *tmp, *s;
+
+	if (dest <= src) {
+		tmp = (char *) dest;
+		s = (char *) src;
+		while (count--)
+			*tmp++ = *s++;
+		}
+	else {
+		tmp = (char *) dest + count;
+		s = (char *) src + count;
+		while (count--)
+			*--tmp = *--s;
+		}
+
+	return dest;
+}
+
 /*
  * Duplicate a string and return the new one
  */
