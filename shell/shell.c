@@ -14,8 +14,10 @@
 */
 
 /* 
-  Shell Coded by
-	Osiris 
+*  Shell Coded by
+*	Osiris 
+*
+*   jeek69 [at] katamail dot com
 */
 
 #include <multiboot.h>
@@ -38,7 +40,7 @@
 #include <kheap.h>
 #include <buddy.h>
 #include <version.h>
-
+//#include <stdlib.h>
 
 
 extern buddy_t* kbuddy;
@@ -69,7 +71,7 @@ void poweroff()
 	/*asm(	"movl %0, %%eax\n"
 		"int $0xff\n"
 		: : "g"(1)); // valore di enum*/
-    asm("hlt");
+    asm("sti");
     printf("E' ora possibile spegnere il computer.\n");
     while(1);
 }
@@ -103,37 +105,69 @@ void info()
 void shell(int argc, char *argv[])
 {
 	unsigned char cmd[256];
-	//char *cmd=malloc(256); //Dio maiale, Page Fault con il puntatore...
-	unsigned char text[256];
-	int a = 1;
+	//char *cmd=kmalloc(sizeof(cmd));
+	//char *string=kmalloc(sizeof(string));
+	unsigned char string[256];
+	int a = 1, flag = 1;
+	char *str1;
+
 	printf("[?] Enter your username: ");
-    	char user[16];
+    	char user[24];
 	scanf ("%s",user);
+
 	printf("\n\n\n\n\n\n");
 	aalogo();
 	printf("\n\n\n\n");
 
     shell_mess = 7;
+    argc=1;
+
 	for (;;)
 	{
-		printf("%s~# ",user);
-	        scanf("%s",cmd);	// scanf non va bene per gli argomenti..
+	    printf("%s~# ",user);
+	    scanf("%s",cmd);
+
+	    // Inizio funzione argc e argv --->
+
+	   while (1)
+	   {
+		if (flag) {
+			str1 = strtok(cmd, " ");
+			flag = 0;
+		} 
+		else 
+		{
+			str1 = strtok(NULL, " ");
+		}
+
+		if (str1 == NULL)
+		{
+			break;
+		}
+
+		argv[argc] = (char *)kmalloc(strlen(str1) + 1); // Qui ho usato kmalloc() perchè non c'è malloc() 
+
+		strncpy(argv[argc], str1, strlen(str1));
+		argc++;
+	    }
+	    // fine argomentazione.. facile no ? :) --> Osiris r0x :P
+
 
 		if (!(_kstrncmp(cmd,"help",4) ) )
 		{
 			printf("Available command: \n");
 			help();
 			cmd[a]=NULL;
+			memset(cmd, 0, strlen(cmd));
 		}
 
 		if (!(_kstrncmp(cmd, "echo", 4) ) )
 		{
-			char string[256];
-			strncpy(string,cmd, strlen(cmd));
+			strncpy(string,cmd,strlen(cmd));
 			memmove(string, string+5, strlen(string));
 			printf("%s\n",string);
-			cmd[a]=NULL;
-			string[a]=NULL;	
+			memset(string+5, 0, strlen(string));
+			memset(cmd, 0, strlen(cmd));
 		}
 
 		else if (!(_kstrncmp(cmd,"poweroff",8)))
@@ -141,16 +175,30 @@ void shell(int argc, char *argv[])
 			printf("Poweroff..\n");
 			poweroff();
 			cmd[a]=NULL;
+			memset(cmd, 0, strlen(cmd));
 		}
 		
+		else if (!(_kstrncmp(cmd, "clear", 5)))
+		{
+			_kclear();
+			cmd[a]=NULL;
+			memset(cmd, 0, strlen(cmd));
+		}
+
 		else if (!(_kstrncmp(cmd, "uname",5)))
 		{
-			//if (argv[2] == "-a")
-       			//{
-			printf("%s %s.%s.%s%s #1 beta CEST 2008 %s\n",NAME,VERSION,PATCHLEVEL,REV_NUM,EXTRAVERSION,cpu_vendor);
-			cmd[a]=NULL;
+			//if (_kstrncmp(argv[2], NULL,0) == -1)
+			//{
+				memmove(argv[2], argv[2]+6, strlen(argv[2]));
+				//printf("%s\n", argv[2]);
 			//}
-			//else { printf("%s\n", NAME); }
+
+			if (!(_kstrncmp(argv[2], "-a", 2)))
+       			{
+			printf("%s %s.%s.%s%s #1 beta CEST 2008 %s\n",NAME,VERSION,PATCHLEVEL,REV_NUM,EXTRAVERSION,cpu_vendor);
+			}
+			else { printf("%s\n", NAME); }
+			memset(cmd, 0, strlen(cmd));
 
 		}
 
@@ -158,12 +206,14 @@ void shell(int argc, char *argv[])
 		{
 			info();
 			cmd[a]=NULL;
+			memset(cmd, 0, strlen(cmd));
 		}
 		else if (!(_kstrncmp(cmd,"answer",6)))
-        {
-            printf("42\n");
-            cmd[a]=NULL;
-        }
+      		  {
+          		  printf("42\n");
+          		  cmd[a]=NULL;
+			  memset(cmd, 0, strlen(cmd));
+        	}
         else if (!(_kstrncmp(cmd,"kmalloc",7)))
         {
             printf("kmalloc try: ...\n");
@@ -181,12 +231,16 @@ void shell(int argc, char *argv[])
             }
             printf("Address of a: %d\n", b);
             cmd[a]=NULL;
+        	memset(cmd, 0, strlen(cmd));
+
         }
         else if (!(_kstrncmp(cmd,"do_fault",8))){  
             char *prova;
             prova = 0xa0000000;
             *prova = 10;
             cmd[a]=NULL;
+	    memset(cmd, 0, strlen(cmd));
+
         }
         else if (!(_kstrncmp(cmd,"try_buddy",9))){
              printf("L'indirizzo di kbuddy e': 0x%x\n", kbuddy);
@@ -194,12 +248,15 @@ void shell(int argc, char *argv[])
              printf("New allocation\n\n");
              alloc_buddy(8, kbuddy);
             cmd[a] = NULL;
+	    memset(cmd, 0, strlen(cmd));
+
         }
         else if (!(_kstrncmp(cmd,"aalogo",6))) aalogo();        
-        else printf("Error %s\n", cmd);
+        //else printf("Error %s\n", cmd);
         cmd[a]=NULL;
-	}
+	memset(cmd, 0, strlen(cmd));
 
+	}
 }
 
 void aalogo() {
@@ -207,8 +264,7 @@ printf("\t ____                     _____ _____\n");
 printf("\t |    \\ ___ ___ ___ _____|     |   __|\n");
 printf("\t |  |  |  _| -_| = |     |  |  |__   |\n");
 printf("\t |____/|_| |___|__||_|_|_|_____|_____|\n");
-printf("\t |------rev: \"%s\"|\n",REV_NUM);
-printf("\t |:::::::::::......|\n");
+printf("\t -.rev: \"%s\"\n",REV_NUM);
 logo();
 }
 

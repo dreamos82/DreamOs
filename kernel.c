@@ -96,8 +96,8 @@ int main_loop(struct multiboot_info *boot_info)
     get_cpuid();    
     printf("\n");    
 
-    printf("\n\n[+] It's TODO ok ------------------------------------------>");
-    _kprintOK();
+    //printf("\n\n[+] It's TODO ok ------------------------------------------>");
+    //_kprintOK();
 
 		printf("\n----\n");
     		printf("Loading the shell..\n");
