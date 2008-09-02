@@ -63,7 +63,8 @@ typedef struct{
 heap_t* make_heap(unsigned int, unsigned int, unsigned int); //Rivedere il return value
 void* kmalloc(unsigned int);
 void kfree(unsigned int);
+void try_alloc();
 
-void* alloc(unsigned int);
+void* alloc(unsigned int, heap_t*);
 
 #endif

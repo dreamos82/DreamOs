@@ -63,6 +63,7 @@ void help()
                "aalogo    - Show an ascii art logo\n"
                "uname     - Print kernel version\n"
                "try_buddy - Try buddy mmu\n"
+               "try_heap - Try heap mmu\n"
 	       "echo      - Print some lines of text\n");
 }
 
@@ -112,7 +113,8 @@ void shell(int argc, char *argv[])
 	char *str1;
 
 	printf("[?] Enter your username: ");
-    	char user[24];
+    char user[24];
+    memset(user, 0, 24);   
 	scanf ("%s",user);
 
 	printf("\n\n\n\n\n\n");
@@ -239,8 +241,11 @@ void shell(int argc, char *argv[])
             prova = 0xa0000000;
             *prova = 10;
             cmd[a]=NULL;
-	    memset(cmd, 0, strlen(cmd));
-
+    	    memset(cmd, 0, strlen(cmd));
+        }
+        else if (!(_kstrncmp(cmd,"try_heap",8))){
+            try_alloc();
+            memset(cmd, 0, strlen(cmd));
         }
         else if (!(_kstrncmp(cmd,"try_buddy",9))){
              printf("L'indirizzo di kbuddy e': 0x%x\n", kbuddy);
@@ -248,11 +253,13 @@ void shell(int argc, char *argv[])
              printf("New allocation\n\n");
              alloc_buddy(8, kbuddy);
             cmd[a] = NULL;
-	    memset(cmd, 0, strlen(cmd));
-
+	        memset(cmd, 0, strlen(cmd));
         }
         else if (!(_kstrncmp(cmd,"aalogo",6))) aalogo();        
-        //else printf("Error %s\n", cmd);
+        else if(strlen(cmd)>0){
+            printf("Unknown command: %s\n", cmd);
+            memset(cmd, 0, strlen(cmd));
+        }
         cmd[a]=NULL;
 	memset(cmd, 0, strlen(cmd));
 

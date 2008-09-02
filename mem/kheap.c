@@ -34,6 +34,8 @@ heap_t *kheap = 0;
 unsigned int address_cur = (unsigned int) &end;
 
 void* kmalloc(unsigned int size){
+/** Questa funzione andra' modificata con l'evoluzione del paging.
+  */
     unsigned int temp;
     
     temp = address_cur;
@@ -61,9 +63,20 @@ heap_t* make_heap(unsigned int start, unsigned int end, unsigned int size){
     new_heap->free_list = first_node;
     new_heap->used_list = NULL;
     printf("First heap created...\n");   
-    printf("Size: %d - Tot mem: %d\n", first_node->size, tot_mem);
+    printf("Size: %d - Tot mem: %d - Address: %x\n", (new_heap->free_list)->size, tot_mem, new_heap);    
     return (heap_t*) new_heap;
 }
 
-void* alloc(unsigned int size){
+void* alloc(unsigned int size, heap_t *cur_heap){    
+    heap_node_t* cur_list;
+    cur_list = cur_heap->free_list;
+    while(cur_list!=NULL) {
+        printf("All right let's go\n");
+        cur_list = cur_list->next;
+    }
+}
+
+/**Queste funzioni sono messe solo per alcune prove verranno eliminate entro le prossime revisioni*/
+void try_alloc(){
+    alloc(4, kheap);
 }
