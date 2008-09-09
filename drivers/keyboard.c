@@ -161,6 +161,10 @@ void keyboard_isr (void)
 	break;
 
     case KEY_BACKSPACE:
+	if (STEP(buf_w) == buf_r)
+	  buf_r = STEP(buf_r);
+	circlebuf[buf_w] = '\b';
+	buf_w = STEP(buf_w);
 	_kbackspace();
         _ksetcursauto();
 	break;

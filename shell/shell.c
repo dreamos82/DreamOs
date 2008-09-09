@@ -237,6 +237,7 @@ void shell(int argc, char *argv[])
 
         }
         else if (!(_kstrncmp(cmd,"do_fault",8))){  
+	    printf ("Genero un pagefault...\n");
             char *prova;
             prova = 0xa0000000;
             *prova = 10;

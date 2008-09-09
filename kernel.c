@@ -51,8 +51,8 @@ asmlinkage void _start(struct multiboot_info *boot_info){
 }
 
 int main_loop(struct multiboot_info *boot_info)
-{    
-    unsigned int* provatore;
+{    unsigned int *provatore;
+
     _kclear();
     syscall_init();
     _kcolor('\012');
@@ -66,36 +66,42 @@ int main_loop(struct multiboot_info *boot_info)
     _kputs("\n");    
     _kputs(LNG_GDT);
     init_gdt();
-    _kprintOK();    
+    _kprintOK();
+
     outportb(0xFF, MASTER_PORT_1);
     outportb(0xFF, SLAVE_PORT_1);
     _kputs(LNG_IDT);
 
     asm("cli");   
     init_idt();
-    _kprintOK();    
+    _kprintOK();   
 //     calcola_memoria();    
     set_memorysize((boot_info->mem_upper+boot_info->mem_lower)*1024);
     init_mem();    
     _kputs(LNG_PIC8259);
     init_IRQ();
     asm("sti");
+    _kprintOK();   
+    init_paging();
     _kprintOK();
     init_paging();   
-    printf("End: %x\n", end);    
+    printf("End: %x\n", end);
     printf(LNG_PIT8253);
     configure_PIT ();
     _kprintOK();
-
+//      printf("Prova_2 %s, %d\n", prova_2, &prova_2);
     /*asm ("movl $0, %eax\n"
      "movl $37, %ebx\n"
      "int $80");    */
 
     printf("Memory (upper) amount-> %d kb \n", boot_info->mem_upper);
-    printf("Memory (lower) amount-> %d kb end \n", boot_info->mem_lower);    
+    printf("Memory (lower) amount-> %d kb \n", boot_info->mem_lower);
     get_cpuid();    
-    printf("\n");    
-
+    printf("\n");
+    printf("----\n");
+    printf("Loading the shell..\n");
+    printf("[+] Loading complete!!\n\n");    
+//     printf("End: %d Address: 0x%x\n", end, &end);
     //printf("\n\n[+] It's TODO ok ------------------------------------------>");
     //_kprintOK();
 

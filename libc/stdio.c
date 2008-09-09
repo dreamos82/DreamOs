@@ -186,8 +186,8 @@ char *gets ()
 	c = getchar();
 	if (c=='\n') // tasto invio
 	    break;
-	else if (c=='\b' && count>=0) //backspace
-            str[--count] = '\0';
+	else if (c=='\b' && count>0) //backspace
+            count--;
 	else
 	    str[count++] = c;
     } while (count<255);
