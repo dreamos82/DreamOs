@@ -31,9 +31,6 @@
 #include <buddy.h>
 // #define DEBUG 1
 
-#define BITMASK(len) ((1<<((len) + 1)) - 1)
-#define BITRANGE(n, from,to) (((n) >> (from)) & BITMASK(to-from))
-
 unsigned int *current_page_dir;
 unsigned int *current_page_table;
 extern size_t tot_mem;
@@ -214,39 +211,3 @@ void load_pdbr(unsigned int pdbase){
         ::"r"(pdbr), "r" (tmp));
 }
 
-void page_fault_handler (int ecode)
-{
-        unsigned int fault_addr;
-	int pdir, ptable;
-        unsigned int pd_entry, pt_entry;
-        unsigned int *new_pt;
-	void *new_p;
-
-        asm ("movl %%cr2, %0"
-             :"=r" (fault_addr));
-
-        if ((ecode & 0b0011) == 2 || (ecode & 0b0011) == 0) {
-          pdir = BITRANGE (fault_addr, 22, 31); // 640
-	  ptable = BITRANGE (fault_addr, 12, 21); // 0
-          printf ("PT: %d, PD: %d, ADDR: %d\n", ptable, pdir, fault_addr);
-	// ptable = 0, pdir = 640	
-
-	  pd_entry = get_pagedir_entry (pdir);
-	  printf ("Vecchia pagedir entry: %d\n", pd_entry);
-          if (pd_entry == 0) {
-	    new_pt = create_pageTable();
-            set_pagedir_entry_ric (pdir, *new_pt, PD_PRESENT|SUPERVISOR|WRITE, 0);
-	    printf ("Nuova pagedir entry: %d\n", get_pagedir_entry (pdir));
-          }
-
-	  pt_entry = get_pagetable_entry (pdir, ptable);
-	  printf ("Vecchia pagetable entry: %d\n", pt_entry);
-	  if (pt_entry == 0) {
-	    new_p = request_pages (1, ADD_LIST);
-	    set_pagetable_entry_ric (pdir, ptable, new_p, PD_PRESENT|SUPERVISOR|WRITE, 0);
-	    printf ("Nuova pagetable entry: %d\n", get_pagetable_entry (pdir, ptable));
-	  }
-	}
-
-        //while(1);
-}
