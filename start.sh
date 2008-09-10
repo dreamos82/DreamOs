@@ -23,7 +23,7 @@ exit
 fi
 
 if [ "$1" == "bochs" ]; then
-bochs boot/grub.img
+bochs -f .bochsrc -q
 exit
 fi
 

@@ -43,9 +43,9 @@
 
 unsigned int *current_page_table;
 extern unsigned int end;
-// multiboot_info_t *boot_informations;
+ multiboot_info_t *boot_informations;
 asmlinkage void _start(struct multiboot_info *boot_info){
-//     boot_informations = boot_info;    
+     boot_informations = boot_info;    
 	main_loop(boot_info);
 	while(1);
 }
@@ -75,7 +75,7 @@ int main_loop(struct multiboot_info *boot_info)
     asm("cli");   
     init_idt();
     _kprintOK();   
-//     calcola_memoria();    
+    //calcola_memoria(); 
     set_memorysize((boot_info->mem_upper+boot_info->mem_lower)*1024);
     init_mem();    
     _kputs(LNG_PIC8259);
@@ -89,10 +89,6 @@ int main_loop(struct multiboot_info *boot_info)
     printf(LNG_PIT8253);
     configure_PIT ();
     _kprintOK();
-//      printf("Prova_2 %s, %d\n", prova_2, &prova_2);
-    /*asm ("movl $0, %eax\n"
-     "movl $37, %ebx\n"
-     "int $80");    */
 
     printf("Memory (upper) amount-> %d kb \n", boot_info->mem_upper);
     printf("Memory (lower) amount-> %d kb \n", boot_info->mem_lower);
@@ -101,9 +97,7 @@ int main_loop(struct multiboot_info *boot_info)
     printf("----\n");
     printf("Loading the shell..\n");
     printf("[+] Loading complete!!\n\n");    
-//     printf("End: %d Address: 0x%x\n", end, &end);
-    //printf("\n\n[+] It's TODO ok ------------------------------------------>");
-    //_kprintOK();
+    printf("End: %d Address: 0x%x\n", end, &end);
 
 		printf("\n----\n");
     		printf("Loading the shell..\n");
