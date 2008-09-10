@@ -14,16 +14,19 @@ else
 make clean 
 make vers
 make 
-make img 
+make img
+umount boot/os
 fi
 
 if [ "$1" == "qemu" ]; then
 qemu -fda boot/grub.img
+umount boot/os
 exit
 fi
 
 if [ "$1" == "bochs" ]; then
 bochs -f .bochsrc -q
+umount boot/os
 exit
 fi
 

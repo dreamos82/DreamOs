@@ -44,7 +44,8 @@
 unsigned int *current_page_table;
 extern unsigned int end;
  multiboot_info_t *boot_informations;
-asmlinkage void _start(struct multiboot_info *boot_info){
+asmlinkage void _start(struct multiboot_info *boot_info)
+{
      boot_informations = boot_info;    
 	main_loop(boot_info);
 	while(1);

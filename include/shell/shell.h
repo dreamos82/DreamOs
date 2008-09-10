@@ -25,5 +25,8 @@
 void shell();
 void logo();
 void aalogo();
-
+void uname_help();
+void help();
+void poweroff();
+void info();
 #endif
