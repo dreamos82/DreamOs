@@ -74,7 +74,7 @@ void shell(int argc, char *argv[])
 	aalogo();
 	printf("\n\n\n\n");
 
-        shell_mess = 7;
+        shell_mess = strlen (user) + 3;
         argc=1;
 
 	for (;;)

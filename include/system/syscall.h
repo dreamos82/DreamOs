@@ -27,5 +27,6 @@
 
 void syscall_handler();
 void sysputch();
+void syscall_init();
 
 #endif
