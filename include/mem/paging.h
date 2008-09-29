@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
  
  /*
@@ -71,8 +71,8 @@ void set_pagetable_entry_ric(int, int , unsigned int, unsigned char, unsigned ch
 unsigned int get_pagedir_entry(int);
 unsigned int get_pagetable_entry(int,int);
 
-void page_fault();
 void load_pdbr(unsigned int);
 void map_kernel(pde_t);
+void page_fault_handler(int);
 
 #endif

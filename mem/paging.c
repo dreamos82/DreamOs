@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
  
  /*
@@ -30,6 +30,9 @@
 #include <kheap.h>
 #include <buddy.h>
 // #define DEBUG 1
+
+#define BITMASK(len) ((1<<((len) + 1)) - 1)
+#define BITRANGE(n, from,to) (((n) >> (from)) & BITMASK(to-from))
 
 unsigned int *current_page_dir;
 unsigned int *current_page_table;
@@ -211,3 +214,48 @@ void load_pdbr(unsigned int pdbase){
         ::"r"(pdbr), "r" (tmp));
 }
 
+/**
+  * Pagefault Handler
+  * @author shainer
+  * @version 1.0
+  * @param ecode  Codice di errore dell'eccezione
+  * @return none
+  */
+void page_fault_handler (int ecode)
+{
+        unsigned int fault_addr;
+	int pdir, ptable;
+        unsigned int pd_entry, pt_entry;
+        unsigned int *new_pt;
+	void *new_p;
+
+        /* Ricava l'indirizzo che ha causato l'eccezione */
+        asm ("movl %%cr2, %0"
+             :"=r" (fault_addr));
+
+        if ((ecode & 0b0011) == 2 || (ecode & 0b0011) == 0) {
+          pdir = BITRANGE (fault_addr, 22, 31);
+	  ptable = BITRANGE (fault_addr, 12, 21);
+          printf ("PD entry num: %d, PT entry num: %d, Indirizzo: %d\n", ptable, pdir, fault_addr);
+
+ 	  /* Mappatura della pagedir se non presente */
+	  pd_entry = get_pagedir_entry (pdir);
+	  printf ("Entry corrente della pagedir: %d\n", pd_entry);
+          if (pd_entry == 0) {
+	    new_pt = create_pageTable();
+            set_pagedir_entry_ric (pdir, new_pt, PD_PRESENT|SUPERVISOR|WRITE, 0);
+	    printf ("Nuova entry dopo la mappatura: %d\n", get_pagedir_entry (pdir));
+          }
+
+	  /* Mappatura della pagetable se non presente */
+	  pt_entry = get_pagetable_entry (pdir, ptable);
+	  printf ("Entry corrente della pagetable: %d\n", pt_entry);
+	  if (pt_entry == 0) {
+	    new_p = request_pages (1, ADD_LIST);
+	    set_pagetable_entry_ric (pdir, ptable, new_p, PD_PRESENT|SUPERVISOR|WRITE, 0);
+	    printf ("Nuova entry dopo la mappatura: %d\n", get_pagetable_entry (pdir, ptable));
+	  }
+	}
+
+        return;
+}

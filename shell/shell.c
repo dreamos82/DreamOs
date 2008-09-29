@@ -197,10 +197,11 @@ void shell(int argc, char *argv[])
 
         else if (!(_kstrncmp(cmd,"do_fault",8)))
 	{  
-             printf ("Genero un pagefault...\n");
-             char *prova;
+             printf ("Genero un pagefault scrivendo 10 nella locazione 0xa0000000...\n");
+             int *prova;
              prova = 0xa0000000;
              *prova = 10;
+             printf ("Contenuto della locazione 0xa0000000 dopo l'intervento dell'handler: %d\n", *prova);
         }
 
         else if (!(_kstrncmp(cmd,"try_heap",8))){

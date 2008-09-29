@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
  
  /*
@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include <keyboard.h>
 #include <video.h>
+#include <paging.h>
 
 // #define DEBUG 1
 void (*IntTable[IDT_SIZE])();
@@ -84,9 +85,7 @@ void _globalException(int n, int error){
     else if(n==INVALID_OPCODE) _kputs("Invalid Opcode Exception\n");
     else if(n==BOUND_RANGE_EXCEED) _kputs("Bound exception\n");
     else if(n==PAGE_FAULT) {
-        unsigned int fault_addr;
-	asm ("movl %%cr2, %0":"=r" (fault_addr));  	 	 
-	printf("Page Fault Exception- Fault address is: %d error code: %d\n", fault_addr,error);
+        page_fault_handler (error);
     }
     else if(n==INT_RSV) _kputs("Intel Reserved\n");
     else if(n==FLOATING_POINT_ERR) _kputs("Floating Point Exception\n");
