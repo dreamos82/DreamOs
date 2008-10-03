@@ -10,12 +10,9 @@ PROGETTI IMMEDIATI
 - Todo rivedere quali sono le eccezioni che hanno un error code e sostituire le relative EXCEPTION(xx) con EXCEPTION_EC(xx)
 - Fare una mega pulizia del codice
 - Eliminare il maggior numero di messaggi di errore dalla compilazione
-- Script che memorizza nei sorci il numero di revisione (genera un file header)
-- Comandi: echo - clear
 - bitmasks per interpretare errori del pagefault.
 - Rivedere il comando info della shell, probabilmente stampa alcune informazioni sbagliate
 - Script per generare automaticamente il file immagine grub.img
-- Quando il comando non esiste stmapre "nome-comando not-found" 
 
 
 PROGETTI A LUNGO TERMINE:

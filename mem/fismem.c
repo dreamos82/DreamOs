@@ -216,7 +216,7 @@ int add_memarea_element(size_t start_address, int required_pages){
 
 size_t calcola_memoria()
 {
-    unsigned int *mem_position;
+/*    unsigned int *mem_position;
     asm("cli");
     outportb(0xFF, MASTER_PORT_1);                     //Disabilito gli interrupt hardware
     outportb(0xFF, SLAVE_PORT_1);
@@ -247,7 +247,7 @@ size_t calcola_memoria()
     asm("sti");
     mem_position = 16777216;
     tot_mem = (unsigned long) mem_position;
-    return (unsigned long) mem_position;
+    return (unsigned long) mem_position;*/
 }
 
 /**

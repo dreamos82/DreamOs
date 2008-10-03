@@ -72,7 +72,7 @@ void init_paging(){
     }        
     load_pdbr((unsigned int)current_page_dir);
     kheap = make_heap(10,10,tot_mem - ((unsigned int) &end));
-    kbuddy = new_buddy();    
+//     kbuddy = new_buddy();    
 }
 
 /**
@@ -255,7 +255,6 @@ void page_fault_handler (int ecode)
 	    set_pagetable_entry_ric (pdir, ptable, new_p, PD_PRESENT|SUPERVISOR|WRITE, 0);
 	    printf ("Nuova entry dopo la mappatura: %d\n", get_pagetable_entry (pdir, ptable));
 	  }
-	}
-
+	}        
         return;
 }

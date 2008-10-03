@@ -39,6 +39,7 @@
 #include <paging.h>
 #include <use.h>
 #include <shell.h>
+#include <syscall.h>
 
 
 unsigned int *current_page_table;
@@ -52,8 +53,7 @@ asmlinkage void _start(struct multiboot_info *boot_info)
 }
 
 int main_loop(struct multiboot_info *boot_info)
-{    unsigned int *provatore;
-
+{
     _kclear();
     syscall_init();
     _kcolor('\012');

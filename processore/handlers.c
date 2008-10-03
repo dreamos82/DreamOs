@@ -84,9 +84,7 @@ void _globalException(int n, int error){
 	else if(n==GENERAL_PROTECTION) _kputs("General Protection Exception\n");
     else if(n==INVALID_OPCODE) _kputs("Invalid Opcode Exception\n");
     else if(n==BOUND_RANGE_EXCEED) _kputs("Bound exception\n");
-    else if(n==PAGE_FAULT) {
-        page_fault_handler (error);
-    }
+    else if(n==PAGE_FAULT) page_fault_handler (error);    
     else if(n==INT_RSV) _kputs("Intel Reserved\n");
     else if(n==FLOATING_POINT_ERR) _kputs("Floating Point Exception\n");
     else if(n==ALIGNMENT_CHECK) _kputs("Alignment Check Exception\n");             
