@@ -28,39 +28,26 @@
 #include <ordered_array.h>
 extern unsigned int address_cur;
 
-//Da eliminare
-typedef struct{
-    unsigned int magic;
-    unsigned int hole;
-    unsigned int size;
-} header_t;
-
-typedef struct{
-    unsigned int magic;
-    unsigned int *header;
-} footer_t;
-//Fino qua
-
 /*!  \struct heap_node_t
      \brief Struttura dati che mantiene le informazioni su locazioni occupate e libere di memoria
  */
 typedef struct {
-    unsigned int start_address;/**< L'indirizzo di partenza dell'heap*/
-    unsigned int size;    /**< quanto massimo si puo' espandere*/
+    unsigned int start_address;/** < L'indirizzo di partenza dell'heap */
+    unsigned int size;    /** < quanto massimo si puo' espandere */
     struct heap_node_t* next;
-}heap_node_t;
+} heap_node_t;
 
 /*!  \struct heap_t
      \brief Struttura dati che mantiene le informazioni su un singolo heap
  */
-typedef struct{
-    heap_node_t* free_list;/**< Locazioni di memoria libere*/
-    heap_node_t* used_list;/**< Locazioni di memoria occupate*/
-    unsigned int max_size; /**< Massima memoria allocabile */
+typedef struct {
+    heap_node_t* free_list; /** < Locazioni di memoria libere */
+    heap_node_t* used_list; /** < Locazioni di memoria occupate */
+    unsigned int max_size; /** < Massima memoria allocabile */
 } heap_t;
 
 
-heap_t* make_heap(unsigned int, unsigned int, unsigned int); //Rivedere il return value
+heap_t* make_heap(unsigned int, unsigned int, unsigned int);
 void* kmalloc(unsigned int);
 void kfree(unsigned int);
 void try_alloc();
@@ -68,3 +55,4 @@ void try_alloc();
 void* alloc(unsigned int, heap_t*);
 
 #endif
+

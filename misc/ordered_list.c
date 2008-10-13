@@ -26,16 +26,31 @@
 #include <stdio.h>
 #include <stddef.h>
 
-void insert_list(heap_node_t* new_node, heap_node_t** list){
-    if(*list==NULL){
-        printf("\n---Insert new node---\n");
-        *list=new_node;
-        printf("Provo: %d---\n", (*list)->size);
+/* 
+ * Insert a new element in the list
+ * @author shainer
+ * @version 0.1
+ * @param new_node New element
+ * @param list Destination list
+ * @return none
+ */
+void insert_list(heap_node_t *new_node, heap_node_t **ulist)
+{
+  /* First node */
+  if(!(*ulist)) {
+    (*ulist)=new_node;
+  } else {
+    heap_node_t *swap = *ulist;
+    heap_node_t *previous = swap;
+
+    /* Sorting by start address */
+    while (swap->start_address < new_node->start_address) {
+      previous = swap;
+      swap = swap->next;
+      if (!swap) break;
     }
-    else {
-        printf("List->size= %d\n", (*list)->size);
-        printf("Piano piano vado avanti\n");
-    }
-    printf("The current size: %d\n", new_node->size);
-    printf("I will insert into the list\n");
+    previous->next = new_node;
+    new_node->next = swap;             
+  }
 }
+

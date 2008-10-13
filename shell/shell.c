@@ -275,7 +275,7 @@ void help()
 	printf("help      - See the 'help' list to learn the DreamOS command now avaible\n"
 	       "poweroff  - Turn off the machine\n"
                "kmalloc   - Test a basic kmalloc function\n"
-               "do_fault  - Test a page_fault (WARNING: This hang the OS)\n"
+               "do_fault  - Test a page_fault\n"
                "aalogo    - Show an ascii art logo\n"
                "uname     - Print kernel version, try uname --help for more info\n"
                "try_buddy - Try buddy mmu\n"
