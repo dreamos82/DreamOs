@@ -145,23 +145,43 @@ char *strstr(const char *haystack, const char *needle)
 /*
  * Separate a string in token according to the delimitator
  * If str is NULL, the scanning will continue for the previous string
+ * It can be bettered
  */
 char *strtok (char *str, const char *delim)
 {
-    static char *t;
-    char *ret, *sptr;
+    int dim = strlen(delim);
+    static char *token;
+    char *point, *start;
+    char *p;
+    int i=0;
+ 
+    if (str!=NULL)
+	token = str;
 
-    if (str)
-	t = str;
+    start = token; // save the beginning of the string
+    if ((point = strstr(start, delim)))
+    {
+        /* it takes "token" just first the delimitator */
+	while (token != point)
+	  token++;
 
-    if ((ret = strstr(t, delim))) {
-	sptr = t;
-	while (t++ != ret);
-	*t = '\0';
-	t += strlen(delim);
-	return sptr;
+        /* p will contains all the chars until the delimitator */
+	while (start != point)
+          p[i++] = *start++;
+        p[i] = 0;
+
+        token += dim; // delete the delimitator, otherwise it will come up in the next call
+        return p;
     }
 
+    /* The last token, if there is no final delimitator */
+    if (token) {
+      do {
+       p[i] = token[i];
+      } while (token[i++]);
+      p[i] = 0;
+      return p;
+    }
     return NULL;
 }
 

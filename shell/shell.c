@@ -45,9 +45,29 @@
 #include <version.h>
 
 extern buddy_t* kbuddy;
+int argc;
+char **argv;
 
+void options(char *com)
+{
+  int i=0;
+  argc=0;
 
-void shell(int argc, char *argv[])
+  for (; *com; com++)
+  {
+    argv[argc] = (char *)kmalloc(sizeof(char) * 10);
+    while (*com != ' ') {
+      *(argv[argc] + i) = *com++;
+      i++;
+    } 
+    *(argv[argc] + i) = '\0';
+    argc++;
+    i=0;
+  }
+  argv[argc] = '\0';
+}
+
+void shell()
 {
 	unsigned char cmd[256];
 	unsigned char string[256];
@@ -77,32 +97,7 @@ void shell(int argc, char *argv[])
 	    printf("%s~# ",user);
 	    scanf("%s",cmd);
 
-	    // Inizio funzione argc e argv --->
-
-	   while (1)
-	   {
-		if (flag) {
-			str1 = strtok(cmd, " ");
-			flag = 0;
-		} 
-		else 
-		{
-			str1 = strtok(NULL, " ");
-		}
-
-		if (str1 == NULL)
-		{
-			break;
-		}
-
-		argv[argc] = (char *)kmalloc(strlen(str1) + 1); // Qui ho usato kmalloc() perchè non c'è malloc() 
-
-		strncpy(argv[argc], str1, strlen(str1));
-		argc++;
-	    }
-	    // fine argomentazione.. facile no ? :) --> Osiris r0x :P
-	    // Si, d'accordo, ora dobbiamo includerlo in una libreria.. :)
-
+            options (cmd);
 
 		if (!(_kstrncmp(cmd,"help",4) ) )
 		{
@@ -131,32 +126,32 @@ void shell(int argc, char *argv[])
 
 		else if (!(_kstrncmp(cmd, "uname",5)))
 		{
-			if (argv[2] != " ")
+			/*if (argv[2] != " ")
 			{
 				memmove(argv[2], argv[2]+6, strlen(argv[2]));
-			}
+			}*/
 
-			if (!(_kstrncmp(argv[2], "-a", 2)) || !(_kstrncmp(argv[2], "--all", 5)))
+			if (!(_kstrncmp(argv[1], "-a", 2)) || !(_kstrncmp(argv[1], "--all", 5)))
        		{
 				printf("%s %s.%s.%s%s #1 beta CEST 2008 %s\n",NAME,VERSION,PATCHLEVEL,REV_NUM,EXTRAVERSION,cpu_vendor);
 			}
 
-			else if (!(_kstrncmp(argv[2], "-r", 2)) || !(_kstrncmp(argv[2], "--rev", 5)))
+			else if (!(_kstrncmp(argv[1], "-r", 2)) || !(_kstrncmp(argv[1], "--rev", 5)))
        		{
 			 	printf("%s.%s.%s%s\n",VERSION,PATCHLEVEL,REV_NUM,EXTRAVERSION);
 			}
 
-			else if (!(_kstrncmp(argv[2], "-h", 2) ) || !(_kstrncmp(argv[2], "--help", 6)))
+			else if (!(_kstrncmp(argv[1], "-h", 2) ) || !(_kstrncmp(argv[1], "--help", 6)))
        		{
 			 	uname_help();
 			}
 				
-			else if (!(_kstrncmp(argv[2], "-i", 2)) || !(_kstrncmp(argv[2], "--info", 6)))
+			else if (!(_kstrncmp(argv[1], "-i", 2)) || !(_kstrncmp(argv[1], "--info", 6)))
 			{
 				info();
 			}
 
-			if (!(_kstrncmp(argv[2], '/0', 1)))
+			if (!(_kstrncmp(argv[1], '\0', 1)))
 			{
 				printf("%s\n"
 				       "For more info about this tool, please do 'uname --help'\n",NAME);
@@ -244,7 +239,7 @@ void logo()
 	printf("\t\t\t The Dream Operating System \n"
 	       "\t\t           v0.01%s pre-alpha      \n\n"
 	  "\t\t\t\t Welcome to DreamOS\n"
-	  "\t\t Where dreams don't became Reality and remain dreams. \n"
+	  "\t\t Where dreams don't become Reality and remain dreams. \n"
 	              "\t\t\tR.I.P - Rest in peace with dreamos ^_^        \n",REV_NUM);
 	
 	printf("\n\n\n\n");
