@@ -58,16 +58,11 @@ void shell(int argc, char *argv[])
 	printf("[?] Enter your username: ");
 	scanf ("%s",user);
 
-	while (1)
-	{
-		if (!(_kstrncmp(user, "", 1) ) )
-		{
+	while (!strlen(user))
+	{		
 			printf("[?] Enter your username: ");
 			scanf ("%s",user);
 			printf("[x] Please, insert your username :)\n");
-		}
-		else
-			break;	
 	}
 	
 	_kclear();
@@ -142,17 +137,17 @@ void shell(int argc, char *argv[])
 			}
 
 			if (!(_kstrncmp(argv[2], "-a", 2)) || !(_kstrncmp(argv[2], "--all", 5)))
-       			{
+       		{
 				printf("%s %s.%s.%s%s #1 beta CEST 2008 %s\n",NAME,VERSION,PATCHLEVEL,REV_NUM,EXTRAVERSION,cpu_vendor);
 			}
 
 			else if (!(_kstrncmp(argv[2], "-r", 2)) || !(_kstrncmp(argv[2], "--rev", 5)))
-       			{
+       		{
 			 	printf("%s.%s.%s%s\n",VERSION,PATCHLEVEL,REV_NUM,EXTRAVERSION);
 			}
 
 			else if (!(_kstrncmp(argv[2], "-h", 2) ) || !(_kstrncmp(argv[2], "--help", 6)))
-       			{
+       		{
 			 	uname_help();
 			}
 				
@@ -172,8 +167,7 @@ void shell(int argc, char *argv[])
 
 		else if (!(_kstrncmp(cmd,"answer",6)))
       		{
-          		  printf("42\n");
-			  memset(cmd, 0, strlen(cmd));
+          		  printf("42\n");			  
         	}
 
         else if (!(_kstrncmp(cmd,"kmalloc",7)))
@@ -208,7 +202,8 @@ void shell(int argc, char *argv[])
             try_alloc();
         }
 
-        else if (!(_kstrncmp(cmd,"try_buddy",9))){
+        else if (!(_kstrncmp(cmd,"try_buddy",9)))
+        {
              printf("L'indirizzo di kbuddy e': 0x%x\n", kbuddy);
              alloc_buddy(16, kbuddy);
              printf("New allocation\n\n");
@@ -219,9 +214,8 @@ void shell(int argc, char *argv[])
 		aalogo();
         
         else if (strlen(cmd)>0)
-	{
-            printf("Unknown command: %s\n", cmd);
-            memset(cmd, 0, strlen(cmd));
+	    {
+            printf("Unknown command: %s\n", cmd);            
         }
 
 	memset(string+5, 0, strlen(string));
@@ -249,10 +243,9 @@ void logo()
 	printf("\n");
 	printf("\t\t\t The Dream Operating System \n"
 	       "\t\t           v0.01%s pre-alpha      \n\n"
-
-	  "\t\tHave you ever dreammed an operation system \n"
-	  "\t\tof your Dream? I think yep, becuse You can \n"
-	              "\t\t\t\tChange Happens!        \n",REV_NUM);
+	  "\t\t\t\t Welcome to DreamOS\n"
+	  "\t\t Where dreams don't became Reality and remain dreams. \n"
+	              "\t\t\tR.I.P - Rest in peace with dreamos ^_^        \n",REV_NUM);
 	
 	printf("\n\n\n\n");
 	_kcolor(7);

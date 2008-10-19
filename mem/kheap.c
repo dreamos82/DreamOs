@@ -129,9 +129,10 @@ void *alloc(unsigned int size, heap_t *cur_heap)
         free_heap_list->start_address = free_heap_list->start_address + (n_pages*0x1000);
 
         insert_list (new_node, &(cur_heap->used_list));
-
+        break;
       }
-      free_heap_list = free_heap_list->next;
+      else
+        free_heap_list = free_heap_list->next;
    }
    return (void *)new_node;
 }

@@ -84,8 +84,6 @@ int main_loop(struct multiboot_info *boot_info)
     asm("sti");
     _kprintOK();   
     init_paging();
-    _kprintOK();
-    init_paging();   
     printf("End: %x\n", end);
     printf(LNG_PIT8253);
     configure_PIT ();
@@ -96,16 +94,10 @@ int main_loop(struct multiboot_info *boot_info)
     get_cpuid();    
     printf("\n");
     printf("----\n");
-    printf("Loading the shell..\n");
-    printf("[+] Loading complete!!\n\n");    
-    printf("End: %d Address: 0x%x\n", end, &end);
-
-		printf("\n----\n");
-    		printf("Loading the shell..\n");
+    printf("Loading the shell..");
+    _kprintOK();
 		printf("[+] End: %d \n"
-		       "[+] Address: 0x%x\n", end, &end);
-		printf("[+] Loading complete!!");   
-   	        _kprintOK();
+		       "[+] Address: 0x%x\n", end, &end);		   	        
 		printf("\n\n");
 		shell();
 
