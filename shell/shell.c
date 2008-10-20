@@ -71,8 +71,7 @@ void shell()
 {
 	unsigned char cmd[256];
 	unsigned char string[256];
-	int flag = 1;
-	char *str1, *user = kmalloc(24);
+	char *user = kmalloc(24);
 	memset(user, 0, strlen(user));
 
 	printf("[?] Enter your username: ");
@@ -96,7 +95,7 @@ void shell()
 	{
 	    printf("%s~# ",user);
 	    scanf("%s",cmd);
-
+        
             options (cmd);
 
 		if (!(_kstrncmp(cmd,"help",4) ) )
@@ -208,6 +207,24 @@ void shell()
         else if (!(_kstrncmp(cmd,"aalogo",6))) 
 		aalogo();
         
+        else if (!(_kstrncmp(cmd,"credits",7)))
+            {
+                _kcolor('\011');
+                _kputs("DreamOS Credits\n\n");                
+                _kputs("Main Developers:\n");
+                _kcolor('\012');
+                printf("Shainer - Lisa\n"
+                    "Finarfin - Ivan\n\n\n"            
+                );
+                _kcolor('\011');
+                _kputs("Contributors:\n");
+                _kcolor('\012');
+                _kputs("Osiris\n"
+                    "Celeron\n"
+                    "m0nt0\n"
+                    "and many others (3 or 4 :P)\n\n");
+                _kcolor('\007');
+            }
         else if (strlen(cmd)>0)
 	    {
             printf("Unknown command: %s\n", cmd);            
@@ -215,7 +232,6 @@ void shell()
 
 	memset(string+5, 0, strlen(string));
 	memset(cmd, 0, strlen(cmd));
-	memset(argv[2], 0, strlen(argv[2]));
 
 	}
 }
@@ -262,12 +278,13 @@ void help()
 {
 	printf("help      - See the 'help' list to learn the DreamOS command now avaible\n"
 	       "poweroff  - Turn off the machine\n"
-               "kmalloc   - Test a basic kmalloc function\n"
-               "do_fault  - Test a page_fault\n"
-               "aalogo    - Show an ascii art logo\n"
-               "uname     - Print kernel version, try uname --help for more info\n"
-               "try_buddy - Try buddy mmu\n"
-               "try_heap  - Try heap mmu\n"
+           "kmalloc   - Test a basic kmalloc function\n"
+           "do_fault  - Test a page_fault\n"
+           "aalogo    - Show an ascii art logo\n"
+           "uname     - Print kernel version, try uname --help for more info\n"
+           "try_buddy - Try buddy mmu\n"
+           "try_heap  - Try heap mmu\n"
+           "credits  - Show DreamOS credists\n"
 	       "echo      - Print some lines of text\n");
 }
 
