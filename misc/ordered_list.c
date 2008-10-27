@@ -26,14 +26,14 @@
 #include <stdio.h>
 #include <stddef.h>
 
-/* 
- * Insert a new element in the list
- * @author shainer
- * @version 0.1
- * @param new_node New element
- * @param list Destination list
- * @return none
- */
+/** 
+  * Insert a new element in the list
+  * @author shainer
+  * @version 0.1
+  * @param new_node New element
+  * @param list Destination list
+  * @return none
+  **/
 void insert_list(heap_node_t *new_node, heap_node_t **ulist)
 {
   /* First node */

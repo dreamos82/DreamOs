@@ -51,6 +51,7 @@ heap_t* make_heap(unsigned int, unsigned int, unsigned int);
 void* kmalloc(unsigned int);
 void kfree(unsigned int);
 void try_alloc();
+heap_node_t* alloc_node();
 
 void* alloc(unsigned int, heap_t*);
 

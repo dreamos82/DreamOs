@@ -33,6 +33,7 @@ extern unsigned int end;
 extern size_t tot_mem;
 heap_t *kheap;
 unsigned int address_cur = (unsigned int) &end;
+unsigned int node_address;
 
 void* kmalloc(unsigned int size)
 {
@@ -78,9 +79,11 @@ heap_t* make_heap(unsigned int start, unsigned int end, unsigned int size)
     heap_t* new_heap;
     heap_node_t* first_node;
 
-    new_heap = (heap_t*)kmalloc(sizeof(heap_t));
+    new_heap = 0xC0000000;
+    node_address = 0xC0000000 + sizeof(heap_t);
+//     new_heap = (heap_t*)kmalloc(sizeof(heap_t));
 
-    first_node = (heap_node_t*)kmalloc(sizeof(heap_node_t));
+    first_node = (heap_node_t*)alloc_node();
     first_node->start_address = (unsigned int)&end;
     first_node->size = size;
     first_node->next = NULL;
@@ -94,46 +97,75 @@ heap_t* make_heap(unsigned int start, unsigned int end, unsigned int size)
     return (heap_t*) new_heap;
 }
     
-/*
- * Allocation
- * @author Ivan Gualandri
- * @version 1.0
- * @param size Size of the memory to be allocated
- * @param cur_heap Current heap
- * @return The start address of the new allocated memory (or NULL if no memory can be allocated)
- */
+/**
+  * Allocation
+  * @author Ivan Gualandri
+  * @version 1.0
+  * @param size Size of the memory to be allocated
+  * @param cur_heap Current heap
+  * @return The start address of the new allocated memory (or NULL if no memory can be allocated)
+  */
 void *alloc(unsigned int size, heap_t *cur_heap)
 {    
     int n_pages = size / 4096;
+    int aval_pages;
     heap_node_t* new_node = NULL;
-    heap_node_t* free_heap_list = cur_heap->free_list;
-
+    heap_node_t* free_heap_list = cur_heap->free_list;    
+    heap_node_t* prev_node;
     if(size%4096 !=0)
       n_pages++;
     printf("----\n");
-    printf("Number of pages: %d\n", n_pages, size);
+    printf("Number of pages: %d ", n_pages);
+    
+    prev_node = free_heap_list;
 
-    /* Look for a free block of memory in the heap's free memory list */
+    /* Look for a free block of memory in the heap's free memory list */    
     while(free_heap_list) {
       if(free_heap_list->size >= size) {
-
-        new_node = (heap_node_t*)kmalloc(sizeof(heap_node_t));
-        new_node->start_address = free_heap_list->start_address;
-        new_node->next = NULL;
-        new_node->size = n_pages*0x1000;
+        aval_pages = free_heap_list->size/4096;
+        if(free_heap_list->size%4096 !=0)
+            aval_pages++;
+        printf("Available_pages: %d\n", aval_pages);
+        if(aval_pages > n_pages){
+            printf("Node should be splitted\n");
+            new_node = (heap_node_t*)alloc_node();
+            new_node->start_address = free_heap_list->start_address;
+            new_node->next = NULL;
+            new_node->size = n_pages*0x1000;
+            insert_list (new_node, &(cur_heap->used_list));
+            free_heap_list->size = (free_heap_list->size) - (n_pages*0x1000);
+            free_heap_list->start_address = free_heap_list->start_address + (n_pages*0x1000);        
+        }
+        else if(aval_pages == n_pages){
+            insert_list (free_heap_list, &(cur_heap->used_list));
+            prev_node->next = free_heap_list->next;
+            printf("\n");    
+        }
 
         printf("New_node -> Size: %d, start_address: %d\n", new_node->size, new_node->start_address);
         printf("free_heap_list -> Actual size: %d, start_address: %d\n", free_heap_list->size, free_heap_list->start_address);
         printf("----\n");
-        free_heap_list->size = (free_heap_list->size) - (n_pages*0x1000);
-        free_heap_list->start_address = free_heap_list->start_address + (n_pages*0x1000);
-
-        insert_list (new_node, &(cur_heap->used_list));
+        
         break;
       }
-      else
+      else {
+        prev_node = free_heap_list;
         free_heap_list = free_heap_list->next;
+        }      
    }
+   printf("Prev_node: %d \n", prev_node->start_address);
    return (void *)new_node;
 }
 
+/**
+  * Allocation of a new node for kheap
+  * @author Ivan Gualandri
+  * @version 1.0
+  * @return The start address of the new allocated node
+  */
+heap_node_t* alloc_node(){
+    unsigned int temp;
+    temp = node_address;
+    node_address = node_address + sizeof(heap_node_t);
+    return (heap_node_t*) temp;
+}

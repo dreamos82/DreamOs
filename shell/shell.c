@@ -277,6 +277,7 @@ void uname_help()
 void help()
 {
 	printf("help      - See the 'help' list to learn the DreamOS command now avaible\n"
+           "clear     - Clear the screen\n"
 	       "poweroff  - Turn off the machine\n"
            "kmalloc   - Test a basic kmalloc function\n"
            "do_fault  - Test a page_fault\n"
