@@ -196,6 +196,13 @@ void shell()
             try_alloc();
         }
 
+	else if (!(_kstrncmp(cmd,"free",4))) {
+	    unsigned int ptr = 425532;
+	    free(ptr);
+	    ptr = 433724;
+ 	    free(ptr);
+	}
+
         else if (!(_kstrncmp(cmd,"try_buddy",9)))
         {
              printf("L'indirizzo di kbuddy e': 0x%x\n", kbuddy);
@@ -285,6 +292,7 @@ void help()
            "uname     - Print kernel version, try uname --help for more info\n"
            "try_buddy - Try buddy mmu\n"
            "try_heap  - Try heap mmu\n"
+           "free      - Try free() with merge\n"
            "credits  - Show DreamOS credists\n"
 	       "echo      - Print some lines of text\n");
 }

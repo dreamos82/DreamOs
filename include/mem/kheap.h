@@ -54,6 +54,9 @@ void try_alloc();
 heap_node_t* alloc_node();
 
 void* alloc(unsigned int, heap_t*);
+void free (void *);
+
+void print_heap_list (heap_node_t *);
 
 #endif
 
