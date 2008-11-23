@@ -28,7 +28,6 @@
 #include <video.h>
 #include <stddef.h>
 #include <kheap.h>
-#include <buddy.h>
 // #define DEBUG 1
 
 #define BITMASK(len) ((1<<((len) + 1)) - 1)
@@ -39,7 +38,7 @@ unsigned int *current_page_table;
 extern size_t tot_mem;
 extern unsigned int end;
 extern heap_t *kheap;
-extern buddy_t *kbuddy;
+
 
 void init_paging(){
     int i;
@@ -72,7 +71,6 @@ void init_paging(){
     }        
     load_pdbr((unsigned int)current_page_dir);
     kheap = make_heap(10,10,tot_mem - ((unsigned int) &end));
-//     kbuddy = new_buddy();    
 }
 
 /**
@@ -223,38 +221,37 @@ void load_pdbr(unsigned int pdbase){
   */
 void page_fault_handler (int ecode)
 {
-        unsigned int fault_addr;
+    unsigned int fault_addr;
 	int pdir, ptable;
-        unsigned int pd_entry, pt_entry;
-        unsigned int *new_pt;
+    unsigned int pd_entry, pt_entry;
+    unsigned int *new_pt;
 	void *new_p;
 
         /* Ricava l'indirizzo che ha causato l'eccezione */
-        asm ("movl %%cr2, %0"
-             :"=r" (fault_addr));
+    asm ("movl %%cr2, %0":"=r" (fault_addr));
 
-        if ((ecode & 0b0011) == 2 || (ecode & 0b0011) == 0) {
-          pdir = BITRANGE (fault_addr, 22, 31);
-	  ptable = BITRANGE (fault_addr, 12, 21);
-          printf ("PD entry num: %d, PT entry num: %d, Indirizzo: %d\n", ptable, pdir, fault_addr);
+    if ((ecode & 0b0011) == 2 || (ecode & 0b0011) == 0) {
+    pdir = BITRANGE (fault_addr, 22, 31);
+    ptable = BITRANGE (fault_addr, 12, 21);
+    printf ("PD entry num: %d, PT entry num: %d, Indirizzo: %d\n", ptable, pdir, fault_addr);
 
  	  /* Mappatura della pagedir se non presente */
-	  pd_entry = get_pagedir_entry (pdir);
-	  printf ("Entry corrente della pagedir: %d\n", pd_entry);
-          if (pd_entry == 0) {
+	pd_entry = get_pagedir_entry (pdir);
+	printf ("Entry corrente della pagedir: %d\n", pd_entry);
+    if (pd_entry == 0) {
 	    new_pt = create_pageTable();
-            set_pagedir_entry_ric (pdir, new_pt, PD_PRESENT|SUPERVISOR|WRITE, 0);
+        set_pagedir_entry_ric (pdir, new_pt, PD_PRESENT|SUPERVISOR|WRITE, 0);
 	    printf ("Nuova entry dopo la mappatura: %d\n", get_pagedir_entry (pdir));
-          }
+    }
 
-	  /* Mappatura della pagetable se non presente */
-	  pt_entry = get_pagetable_entry (pdir, ptable);
-	  printf ("Entry corrente della pagetable: %d\n", pt_entry);
-	  if (pt_entry == 0) {
+	/* Mappatura della pagetable se non presente */
+	pt_entry = get_pagetable_entry (pdir, ptable);
+	printf ("Entry corrente della pagetable: %d\n", pt_entry);
+	if (pt_entry == 0) {
 	    new_p = request_pages (1, ADD_LIST);
 	    set_pagetable_entry_ric (pdir, ptable, new_p, PD_PRESENT|SUPERVISOR|WRITE, 0);
 	    printf ("Nuova entry dopo la mappatura: %d\n", get_pagetable_entry (pdir, ptable));
 	  }
 	}        
-        return;
+    return;
 }

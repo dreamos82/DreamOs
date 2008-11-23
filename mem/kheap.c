@@ -29,6 +29,7 @@
 #include <stddef.h>
 #include <stdio.h>
 
+// #define DEBUG 1
 extern unsigned int end;
 extern size_t tot_mem;
 heap_t *kheap;
@@ -53,8 +54,11 @@ void try_alloc()
     alloc(60, kheap);
     alloc(50, kheap);
     alloc(100, kheap);
-
+//     alloc(6000, kheap);    
+    printf("Used\n");
     print_heap_list (kheap->used_list);
+    printf("Free\n");
+    print_heap_list (kheap->free_list);
 }
 
 /**
@@ -71,7 +75,7 @@ heap_t* make_heap(unsigned int start, unsigned int end, unsigned int size)
     heap_t* new_heap;
     heap_node_t* first_node;
 
-    new_heap = 0xC0000000;
+    new_heap = (heap_t*)0xC0000000;
     node_address = 0xC0000000 + sizeof(heap_t);
 //     new_heap = (heap_t*)kmalloc(sizeof(heap_t));
 
@@ -105,10 +109,11 @@ void *alloc(unsigned int size, heap_t *cur_heap)
     heap_node_t* free_heap_list = cur_heap->free_list;    
     heap_node_t* prev_node;
     if(size%4096 !=0)
-      n_pages++;
+      n_pages++;    
+    #ifdef DEBUG
     printf("----\n");
     printf("Number of pages: %d ", n_pages);
-    
+    #endif
     prev_node = free_heap_list;
 
     /* Look for a free block of memory in the heap's free memory list */    
@@ -117,35 +122,45 @@ void *alloc(unsigned int size, heap_t *cur_heap)
         aval_pages = free_heap_list->size/4096;
         if(free_heap_list->size%4096 !=0)
             aval_pages++;
+        #ifdef DEBUG
         printf("Available_pages: %d\n", aval_pages);
+        #endif
         if(aval_pages > n_pages){
+            #ifdef DEBUG
             printf("Node should be splitted\n");
+            #endif
             new_node = (heap_node_t*)alloc_node();
             new_node->start_address = free_heap_list->start_address;
             new_node->next = NULL;
             new_node->size = n_pages*0x1000;
             insert_list (new_node, &(cur_heap->used_list));
             free_heap_list->size = (free_heap_list->size) - (n_pages*0x1000);
-            free_heap_list->start_address = free_heap_list->start_address + (n_pages*0x1000);        
+            free_heap_list->start_address = free_heap_list->start_address + (n_pages*0x1000);
+            #ifdef DEBUG
+            printf("New_node -> Size: %d, start_address: %d\n", new_node->size, new_node->start_address);
+            #endif
         }
         else if(aval_pages == n_pages){
-            insert_list (free_heap_list, &(cur_heap->used_list));
-            prev_node->next = free_heap_list->next;
-            printf("\n");    
-        }
-
-        printf("New_node -> Size: %d, start_address: %d\n", new_node->size, new_node->start_address);
-        printf("free_heap_list -> Actual size: %d, start_address: %d\n", free_heap_list->size, free_heap_list->start_address);
+            if(prev_node == free_heap_list) {                
+                kheap->free_list = free_heap_list->next;
+            }
+            else prev_node->next = free_heap_list->next;
+            insert_list (free_heap_list, &(cur_heap->used_list));            
+        }        
+        #ifdef DEBUG        
+        printf("free_heap_list -> Actual size: %d, start_address: %d\n", free_heap_list->size,        free_heap_list->start_address);
         printf("----\n");
-        
+        #endif
         break;
       }
-      else {
+      else {                
         prev_node = free_heap_list;
-        free_heap_list = free_heap_list->next;
-        }      
+        free_heap_list = (heap_node_t*)free_heap_list->next;
+      }      
    }
+   #ifdef DEBUG
    printf("Prev_node: %d \n", prev_node->start_address);
+   #endif
    return (void *)new_node;
 }
 
@@ -173,16 +188,16 @@ void free (void *location)
 {
   heap_node_t *busy = kheap->used_list;
   heap_node_t *prev = busy;
-  heap_node_t *free = kheap->free_list;
+//   heap_node_t *free = kheap->free_list;
   heap_node_t *n2;
 
   if ((unsigned int)location % 4 != 0)
     printf ("Indirizzo non allineato a 4kb\n");
 
   while (busy) {
-    if (busy->start_address == location) {
+    if (busy->start_address == (unsigned int)location) {
       if (prev == busy) { /* node is the first */
-        kheap->used_list = busy->next;
+        kheap->used_list = (heap_node_t*)busy->next;
       } else
         prev->next = busy->next;
         
@@ -196,25 +211,29 @@ void free (void *location)
       prev = kheap->free_list;
       while (n2 != busy) {
         prev = n2;
-        n2 = n2->next;
+        n2 = (heap_node_t*)n2->next;
       }
-      n2 = busy->next;
-
+      n2 = (heap_node_t*)busy->next;
+      #ifdef DEBUG
       printf ("--Pre merge--\n");
       printf ("Prev address: %d, size: %d\n", prev->start_address, prev->size);
-      printf ("Busy address: %d, size: %d\n", busy->start_address, busy->size);
+      printf ("Busy address: %d, size: %d\n", busy->start_address, busy->size);      
       if (n2)
         printf ("N2 address: %d, size %d\n\n", n2->start_address, n2->size);
-
+      #endif
       /* Merge busy into prev */
       if (prev != busy && (prev->start_address + prev->size) == busy->start_address) {
+        #ifdef DEBUG
         printf ("Backward merge\n");
+        #endif
         prev->size += busy->size;
         prev->next = n2;
       }
       /* Merge n2 into busy */
       if (n2 && (busy->start_address + busy->size) == n2->start_address) {
+        #ifdef DEBUG
         printf ("Forward merge\n");
+        #endif
         busy->size += n2->size;
         busy->next = n2->next;
       }
@@ -222,16 +241,11 @@ void free (void *location)
       break;
     }
     prev = busy;
-    busy = busy->next;
+    busy = (heap_node_t*)busy->next;
   }
 
   if (!busy)
     printf ("Address not found in list\n");
-
-  printf("Navigating used list...\n");
-  print_heap_list (kheap->used_list);
-  printf("Navigating free list...\n");
-  print_heap_list (kheap->free_list);
 }
 
 /**
@@ -243,10 +257,10 @@ void free (void *location)
 void print_heap_list (heap_node_t *list)
 {
    int count=0;
-
+   int prova;
    while (list) {
-     printf ("%d) Current->start_address: %d\n", count++, list->start_address);
-     list = list->next;
+     printf ("%d) Current->start_address: %d size: %d\n", count++, list->start_address, list->size);     
+     list = (heap_node_t*)list->next;
    }
    printf ("\n");
 }

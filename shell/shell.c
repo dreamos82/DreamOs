@@ -41,10 +41,9 @@
 #include <use.h>
 #include <shell.h>
 #include <kheap.h>
-#include <buddy.h>
 #include <version.h>
-
-extern buddy_t* kbuddy;
+    
+extern heap_t *kheap;
 int argc;
 char **argv;
 
@@ -195,22 +194,20 @@ void shell()
         else if (!(_kstrncmp(cmd,"try_heap",8))){
             try_alloc();
         }
-
-	else if (!(_kstrncmp(cmd,"free",4))) {
-	    unsigned int ptr = 425532;
-	    free(ptr);
-	    ptr = 433724;
- 	    free(ptr);
-	}
-
-        else if (!(_kstrncmp(cmd,"try_buddy",9)))
-        {
-             printf("L'indirizzo di kbuddy e': 0x%x\n", kbuddy);
-             alloc_buddy(16, kbuddy);
-             printf("New allocation\n\n");
-             alloc_buddy(8, kbuddy);
-        }
-
+        
+ 	    else if (!(_kstrncmp(cmd,"free",4))) {
+    	    unsigned int ptr = 425532;
+	        free(ptr);
+	        ptr = 433724;
+ 	        free(ptr);
+            ptr=446012;
+            free(ptr);
+            printf("Navigating used list...\n");
+            print_heap_list (kheap->used_list);
+            printf("Navigating free list...\n");
+            print_heap_list (kheap->free_list);
+	    }
+        else if (!(_kstrncmp(cmd,"printmem",8))) print_heap_list(kheap->used_list);        
         else if (!(_kstrncmp(cmd,"aalogo",6))) 
 		aalogo();
         
@@ -290,7 +287,6 @@ void help()
            "do_fault  - Test a page_fault\n"
            "aalogo    - Show an ascii art logo\n"
            "uname     - Print kernel version, try uname --help for more info\n"
-           "try_buddy - Try buddy mmu\n"
            "try_heap  - Try heap mmu\n"
            "free      - Try free() with merge\n"
            "credits  - Show DreamOS credists\n"
