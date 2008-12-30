@@ -16,8 +16,8 @@
 # NOTE: if you use the "wx" configuration interface, you must also use
 # the "wx" display library.
 #=======================================================================
-#config_interface: textconfig
-config_interface: wx
+config_interface: textconfig
+#config_interface: wx
 
 #=======================================================================
 # DISPLAY_LIBRARY
@@ -59,8 +59,8 @@ config_interface: wx
 #display_library: sdl, options="fullscreen" # startup in fullscreen mode
 #display_library: term
 #display_library: win32, options="legacyF12" # use F12 to toggle mouse
-display_library: wx
-#display_library: x
+#display_library: wx
+display_library: x
 
 #=======================================================================
 # ROMIMAGE:

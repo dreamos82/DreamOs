@@ -87,8 +87,7 @@ int main_loop(struct multiboot_info *boot_info)
     printf("End: %x\n", end);
     printf(LNG_PIT8253);
     configure_PIT ();
-    _kprintOK();
-
+    _kprintOK();    
     printf("Memory (upper) amount-> %d kb \n", boot_info->mem_upper);
     printf("Memory (lower) amount-> %d kb \n", boot_info->mem_lower);
     get_cpuid();    

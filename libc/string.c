@@ -42,7 +42,7 @@ char *strncpy (char *dest, const char *src, size_t n)
 /*
  * Return the number of a string's characters
  */
-int strlen (const char *s)
+size_t strlen (const char *s)
 {
     int len = 0;
     while (*s != 0) { s++; len++; }

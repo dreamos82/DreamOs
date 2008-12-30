@@ -41,7 +41,7 @@ mem_area_pointer mem_info = (mem_area_pointer)0x110000;
 
 void init_mem(){
     int i=0;
-    int remainder=0;
+//     int remainder=0;
     mem_info = mem_info_root;
     while(i<BITMAP_SIZE){
         if(i<16)mem_bitmap.mem_map[i] = 0xFFFFFFFF;
@@ -248,6 +248,7 @@ size_t calcola_memoria()
     mem_position = 16777216;
     tot_mem = (unsigned long) mem_position;
     return (unsigned long) mem_position;*/
+    return tot_mem;
 }
 
 /**

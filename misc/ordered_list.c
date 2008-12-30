@@ -46,7 +46,7 @@ void insert_list(heap_node_t *new_node, heap_node_t **ulist)
     /* Sorting by start address */
     while (swap->start_address < new_node->start_address) {
       previous = swap;
-      swap = swap->next;
+      swap = (heap_node_t*)swap->next;
       if (!swap) break;
     }
 

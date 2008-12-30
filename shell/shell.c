@@ -68,8 +68,8 @@ void options(char *com)
 
 void shell()
 {
-	unsigned char cmd[256];
-	unsigned char string[256];
+	char cmd[256];
+	char string[256];
 	char *user = kmalloc(24);
 	memset(user, 0, strlen(user));
 
@@ -167,7 +167,7 @@ void shell()
         {
             printf("kmalloc try: ...\n");
             int *b;
-            b = (int) kmalloc(10*sizeof(int));
+            b = (int*) kmalloc(10*sizeof(int));
             int i = 0;
             while(i<10){
                 b[i] = i*2;
@@ -186,7 +186,7 @@ void shell()
     	{  
              printf ("Genero un pagefault scrivendo 10 nella locazione 0xa0000000...\n");
              int *prova;
-             prova = 0xa0000000;
+             prova = (int*)0xa0000000;
              *prova = 10;
               printf ("Contenuto della locazione 0xa0000000 dopo l'intervento dell'handler: %d\n", *prova);
         }
@@ -197,15 +197,17 @@ void shell()
         
  	    else if (!(_kstrncmp(cmd,"free",4))) {
     	    unsigned int ptr = 425532;
-	        free(ptr);
+	        free((unsigned int*)ptr);
 	        ptr = 433724;
- 	        free(ptr);
+ 	        free((unsigned int*)ptr);
             ptr=446012;
-            free(ptr);
+            free((unsigned int*)ptr);
             printf("Navigating used list...\n");
             print_heap_list (kheap->used_list);
             printf("Navigating free list...\n");
             print_heap_list (kheap->free_list);
+	    printf("Navigati free nodes...\n");
+            print_heap_list (kheap->free_nodes);
 	    }
         else if (!(_kstrncmp(cmd,"printmem",8))) print_heap_list(kheap->used_list);        
         else if (!(_kstrncmp(cmd,"aalogo",6))) 

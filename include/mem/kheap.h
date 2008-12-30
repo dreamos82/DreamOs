@@ -43,15 +43,16 @@ typedef struct {
 typedef struct {
     heap_node_t* free_list; /** < Locazioni di memoria libere */
     heap_node_t* used_list; /** < Locazioni di memoria occupate */
+    heap_node_t* free_nodes; /** < Nodi liberati */
     unsigned int max_size; /** < Massima memoria allocabile */
 } heap_t;
-
 
 heap_t* make_heap(unsigned int, unsigned int, unsigned int);
 void* kmalloc(unsigned int);
 void kfree(unsigned int);
 void try_alloc();
 heap_node_t* alloc_node();
+void free_node();
 
 void* alloc(unsigned int, heap_t*);
 void free (void *);

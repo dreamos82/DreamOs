@@ -54,11 +54,13 @@ void try_alloc()
     alloc(60, kheap);
     alloc(50, kheap);
     alloc(100, kheap);
-//     alloc(6000, kheap);    
+    alloc(6000, kheap);    
     printf("Used\n");
     print_heap_list (kheap->used_list);
     printf("Free\n");
     print_heap_list (kheap->free_list);
+    printf("Free nodes\n");
+    print_heap_list(kheap->free_nodes);
 }
 
 /**
@@ -78,16 +80,18 @@ heap_t* make_heap(unsigned int start, unsigned int end, unsigned int size)
     new_heap = (heap_t*)0xC0000000;
     node_address = 0xC0000000 + sizeof(heap_t);
 //     new_heap = (heap_t*)kmalloc(sizeof(heap_t));
-
-    first_node = (heap_node_t*)alloc_node();
+//     first_node = (heap_node_t*)alloc_node();
+    first_node = (heap_node_t*)node_address;
+    node_address = node_address + sizeof(heap_node_t);
     first_node->start_address = (unsigned int)&end;
     first_node->size = size;
     first_node->next = NULL;
 
+    new_heap->free_nodes = NULL;
     new_heap->max_size = tot_mem-(unsigned int) &end;
     new_heap->free_list = first_node;
     new_heap->used_list = NULL;
-
+    new_heap->free_nodes = NULL;
     printf("First heap created...\n");   
     printf("Size: %d - Tot mem: %d - Start address: %x\n", (new_heap->free_list)->size, tot_mem, new_heap);    
     return (heap_t*) new_heap;
@@ -142,7 +146,7 @@ void *alloc(unsigned int size, heap_t *cur_heap)
         }
         else if(aval_pages == n_pages){
             if(prev_node == free_heap_list) {                
-                kheap->free_list = free_heap_list->next;
+                kheap->free_list = (heap_node_t*)free_heap_list->next;
             }
             else prev_node->next = free_heap_list->next;
             insert_list (free_heap_list, &(cur_heap->used_list));            
@@ -171,10 +175,19 @@ void *alloc(unsigned int size, heap_t *cur_heap)
   * @return The start address of the new allocated node
   */
 heap_node_t* alloc_node(){
-    unsigned int temp;
-    temp = node_address;
-    node_address = node_address + sizeof(heap_node_t);
-    return (heap_node_t*) temp;
+    unsigned int temp;    
+   heap_node_t *new_address;
+    if(kheap->free_nodes!=NULL){      
+      new_address = kheap->free_nodes;
+      kheap->free_nodes = new_address->next;
+      printf("riciclo un nodo\n");
+      return new_address;
+    }
+    else {
+      temp = node_address;
+      node_address = node_address + sizeof(heap_node_t);
+      return (heap_node_t*) temp;
+    }
 }
 
 /**
@@ -228,6 +241,8 @@ void free (void *location)
         #endif
         prev->size += busy->size;
         prev->next = n2;
+	free_node(busy);
+// 	insert_list (busy, &(kheap->free_nodes));
       }
       /* Merge n2 into busy */
       if (n2 && (busy->start_address + busy->size) == n2->start_address) {
@@ -236,6 +251,9 @@ void free (void *location)
         #endif
         busy->size += n2->size;
         busy->next = n2->next;
+// 	insert_list (n2, &(kheap->free_nodes));
+	printf("Node_address: %d\n", n2);
+	free_node(n2);
       }
 
       break;
@@ -256,12 +274,24 @@ void free (void *location)
   */
 void print_heap_list (heap_node_t *list)
 {
-   int count=0;
-   int prova;
+   int count=0;   
    while (list) {
-     printf ("%d) Current->start_address: %d size: %d\n", count++, list->start_address, list->size);     
+     printf ("%d) Node_address: %d, Current->start_address: %d size: %d\n", count++, list,list->start_address, list->size);     
      list = (heap_node_t*)list->next;
    }
    printf ("\n");
 }
 
+/**
+  * Free a memory info node.
+  * @author finarfin
+  * @version 1.0
+  * @param node Node in free_list or used_list to be freed 
+  */
+
+void free_node(heap_node_t* toadd){    
+    toadd->start_address = NULL;
+    toadd->size = 0;    
+    toadd->next = kheap->free_nodes;
+    kheap->free_nodes = toadd;        
+}

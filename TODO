@@ -1,4 +1,5 @@
 Dreamos Rebuild:
+Nella alloc fare il contrllo prima della funzione free_nodes.
 
 PROGETTI IMMEDIATI
 - Revisionare stampa esadecimale. Funzione _kprinthex
@@ -12,7 +13,6 @@ PROGETTI IMMEDIATI
 - Eliminare il maggior numero di messaggi di errore dalla compilazione
 - bitmasks per interpretare errori del pagefault.
 - Rivedere il comando info della shell, probabilmente stampa alcune informazioni sbagliate
-- Script per generare automaticamente il file immagine grub.img
 
 
 PROGETTI A LUNGO TERMINE:
