@@ -42,7 +42,7 @@ extern heap_t *kheap;
 
 void init_paging(){
     int i;
-    printf("Abilito Paging: In lavorazione....");
+    printf("Abilito Paging: ");
     _kprintOK();    
     current_page_dir = create_pageDir();
     #ifdef DEBUG
@@ -233,24 +233,33 @@ void page_fault_handler (int ecode)
     if ((ecode & 0b0011) == 2 || (ecode & 0b0011) == 0) {
     pdir = BITRANGE (fault_addr, 22, 31);
     ptable = BITRANGE (fault_addr, 12, 21);
+    #ifdef DEBUG
     printf ("PD entry num: %d, PT entry num: %d, Indirizzo: %d\n", ptable, pdir, fault_addr);
-
+    #endif
  	  /* Mappatura della pagedir se non presente */
 	pd_entry = get_pagedir_entry (pdir);
+	#ifdef DEBUG
 	printf ("Entry corrente della pagedir: %d\n", pd_entry);
+	#endif
     if (pd_entry == 0) {
 	    new_pt = create_pageTable();
         set_pagedir_entry_ric (pdir, new_pt, PD_PRESENT|SUPERVISOR|WRITE, 0);
+	    #ifdef DEBUG
 	    printf ("Nuova entry dopo la mappatura: %d\n", get_pagedir_entry (pdir));
+	    #endif
     }
 
 	/* Mappatura della pagetable se non presente */
 	pt_entry = get_pagetable_entry (pdir, ptable);
+	#ifdef DEBUG
 	printf ("Entry corrente della pagetable: %d\n", pt_entry);
+	#endif
 	if (pt_entry == 0) {
 	    new_p = request_pages (1, ADD_LIST);
 	    set_pagetable_entry_ric (pdir, ptable, new_p, PD_PRESENT|SUPERVISOR|WRITE, 0);
+	    #ifdef DEBUG
 	    printf ("Nuova entry dopo la mappatura: %d\n", get_pagetable_entry (pdir, ptable));
+	    #endif
 	  }
 	}        
     return;

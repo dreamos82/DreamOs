@@ -83,8 +83,7 @@ int main_loop(struct multiboot_info *boot_info)
     init_IRQ();
     asm("sti");
     _kprintOK();   
-    init_paging();
-    printf("End: %x\n", end);
+    init_paging();    
     printf(LNG_PIT8253);
     configure_PIT ();
     _kprintOK();    
@@ -95,8 +94,7 @@ int main_loop(struct multiboot_info *boot_info)
     printf("----\n");
     printf("Loading the shell");
     _kprintOK();
-		printf("[+] End: %d \n"
-		       "[+] Address: 0x%x\n", end, &end);		   	        
+		printf("[+] Address: 0x%x\n", &end);		   	        
 		printf("\n\n");
 		shell();
 

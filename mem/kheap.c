@@ -92,8 +92,8 @@ heap_t* make_heap(unsigned int start, unsigned int end, unsigned int size)
     new_heap->free_list = first_node;
     new_heap->used_list = NULL;
     new_heap->free_nodes = NULL;
-    printf("First heap created...\n");   
-    printf("Size: %d - Tot mem: %d - Start address: %x\n", (new_heap->free_list)->size, tot_mem, new_heap);    
+    printf("\tFirst heap created...\n");   
+    printf("\tSize: %d - Tot mem: %d - Start address: %x\n", (new_heap->free_list)->size, tot_mem, new_heap);    
     return (heap_t*) new_heap;
 }
     
@@ -165,7 +165,7 @@ void *alloc(unsigned int size, heap_t *cur_heap)
    #ifdef DEBUG
    printf("Prev_node: %d \n", prev_node->start_address);
    #endif
-   return (void *)new_node;
+   return (void *)new_node->start_address;
 }
 
 /**
@@ -180,7 +180,9 @@ heap_node_t* alloc_node(){
     if(kheap->free_nodes!=NULL){      
       new_address = kheap->free_nodes;
       kheap->free_nodes = new_address->next;
+      #ifdef DEBUG
       printf("riciclo un nodo\n");
+      #endif
       return new_address;
     }
     else {
