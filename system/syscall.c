@@ -26,8 +26,9 @@
 #include <syscall.h>
 #include <stdio.h>
 #include <video.h>
+#include <keyboard.h>
 
-void (*syscall_table[SYSCALL_NUMBER])(int *) = {sysputch};
+void (*syscall_table[SYSCALL_NUMBER])(int *) = {sysputch};  
 
 void sysputch(int *args)
 {
@@ -35,12 +36,13 @@ void sysputch(int *args)
    s[0] = args[0];
    s[1] = '\0';
 
-    _kputs (s);
+   _kputs (s);
 }
 
-void syscall_init(){
+void syscall_init()
+{
     int i=0;
-    while(i<SYSCALL_NUMBER){
+    while(i<SYSCALL_NUMBER) {
         syscall_table[i]=0;
         i++;
     }
@@ -56,16 +58,19 @@ void syscall_handler()
      int ebx=0, ecx=0, edx=0;
      int arguments[3] = {0,0,0};
 
+     asm ("cli");
+
      asm ("movl %%eax, %0\n\t"
 	  "movl %%ebx, %1\n\t"
 	  "movl %%ecx, %2\n\t"
 	  "movl %%edx, %3\n\t"
 	  : "=r" (eax), "=r" (ebx), "=r" (ecx), "=r" (edx));
-
+     
      arguments[0] = ebx;
      arguments[1] = ecx;
      arguments[2] = edx;
          
      (*syscall_table[eax])(arguments);
+     asm ("sti");
 }
 

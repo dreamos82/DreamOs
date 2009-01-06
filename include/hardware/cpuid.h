@@ -60,6 +60,6 @@ struct cpuinfo_flags {
 
 char cpu_vendor[12]; // This will contain the main string
 /* Have a look into cpuid.c for this procedure */
-void get_cpuid ();
+struct cpuinfo_generic *get_cpuid ();
 
 #endif

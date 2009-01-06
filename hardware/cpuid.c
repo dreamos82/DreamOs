@@ -25,7 +25,7 @@
 
 #include <cpuid.h>
 
-void get_cpuid()
+struct cpuinfo_generic *get_cpuid()
 {
     int eax, ebx, ecx, edx;
     struct cpuinfo_generic *info;
@@ -90,5 +90,8 @@ void get_cpuid()
   case 3:
       info->cpu_type = "Intel Overdrive";
   }
-  return;
+
+  
+
+  return info;
 }

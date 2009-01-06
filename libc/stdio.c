@@ -35,7 +35,6 @@
 
 /*
  * Print a character
- * This is going to become a syscall to _kputc
  */
 void putchar (char ch)
 {
@@ -143,7 +142,7 @@ int printf (const char *format, ...)
 		    _kbackspace();
 	    } else {
 	    for (i=1; i<=width; i++)
-		_kputs (" ");
+		putchar (' ');
 	    }
             /* Print the argument converted to a string */
 

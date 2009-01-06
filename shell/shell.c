@@ -42,6 +42,7 @@
 #include <shell.h>
 #include <kheap.h>
 #include <version.h>
+#include <cpuid.h>
     
 extern heap_t *kheap;
 int argc;
@@ -158,6 +159,15 @@ void shell()
 
 		}
 
+		else if (!(_kstrncmp(cmd, "cpuid",5)))
+		{
+			struct cpuinfo_generic *sh_info = get_cpuid();
+
+			printf ("----- CPUID Information -----\n");
+			printf ("Vendor: %s\n", sh_info->cpu_vendor);
+			printf ("Type: %s\n", sh_info->cpu_type);
+		}
+
 		else if (!(_kstrncmp(cmd,"answer",6)))
       		{
           		  printf("42\n");			  
@@ -179,6 +189,7 @@ void shell()
                 i++;
             }
             printf("Address of a: %d\n", b);
+            free (b);
 
         }
 
@@ -191,24 +202,25 @@ void shell()
               printf ("Contenuto della locazione 0xa0000000 dopo l'intervento dell'handler: %d\n", *prova);
         }
 
-        else if (!(_kstrncmp(cmd,"try_heap",8))){
+        /*else if (!(_kstrncmp(cmd,"try_heap",8))){
             try_alloc();
         }
         
- 	    else if (!(_kstrncmp(cmd,"free",4))) {
-    	    unsigned int ptr = 425532;
-	        free((unsigned int*)ptr);
-	        ptr = 433724;
- 	        free((unsigned int*)ptr);
-            ptr=446012;
-            free((unsigned int*)ptr);
-            printf("Navigating used list...\n");
-            print_heap_list (kheap->used_list);
-            printf("Navigating free list...\n");
-            print_heap_list (kheap->free_list);
-	    printf("Navigati free nodes...\n");
-            print_heap_list (kheap->free_nodes);
-	    }
+        else if (!(_kstrncmp(cmd,"free",4))) {
+          unsigned int ptr = 425548;
+          free((unsigned int*)ptr);
+          ptr = 437836;
+          free((unsigned int*)ptr);
+          ptr=446028;
+          free((unsigned int*)ptr);
+          printf("Navigating used list...\n");
+          print_heap_list (kheap->used_list);
+          printf("Navigating free list...\n");
+          print_heap_list (kheap->free_list);
+          printf("Navigating free nodes...\n");
+          print_heap_list (kheap->free_nodes);
+        }*/
+
         else if (!(_kstrncmp(cmd,"printmem",8))) print_heap_list(kheap->used_list);        
         else if (!(_kstrncmp(cmd,"aalogo",6))) 
 		aalogo();
@@ -238,6 +250,10 @@ void shell()
 
 	memset(string+5, 0, strlen(string));
 	memset(cmd, 0, strlen(cmd));
+
+        for (--argc; argc>=0; argc--) {
+	  free (argv[argc]);
+        }
 
 	}
 }
@@ -284,14 +300,13 @@ void help()
 {
 	printf("help      - See the 'help' list to learn the DreamOS command now avaible\n"
            "clear     - Clear the screen\n"
-	       "poweroff  - Turn off the machine\n"
+	   "poweroff  - Turn off the machine\n"
            "kmalloc   - Test a basic kmalloc function\n"
            "do_fault  - Test a page_fault\n"
            "aalogo    - Show an ascii art logo\n"
            "uname     - Print kernel version, try uname --help for more info\n"
-           "try_heap  - Try heap mmu\n"
-           "free      - Try free() with merge\n"
-           "credits  - Show DreamOS credists\n"
+           "printmem  - Print used locations of memory\n"
+           "credits   - Show DreamOS credits\n"
 	       "echo      - Print some lines of text\n");
 }
 

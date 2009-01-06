@@ -24,4 +24,4 @@
 #define PATCHLEVEL "0"
 #define EXTRAVERSION "-dreamos"
 #define NAME "DreamOS"
-#define REV_NUM "-r42"
+#define REV_NUM "-r43"

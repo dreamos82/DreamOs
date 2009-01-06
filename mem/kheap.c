@@ -28,6 +28,7 @@
 #include <ordered_list.h>
 #include <stddef.h>
 #include <stdio.h>
+#define KHEAP_LIST_ADDRESS 0xC0000000
 
 // #define DEBUG 1
 extern unsigned int end;
@@ -38,11 +39,15 @@ unsigned int node_address;
 
 void* kmalloc(unsigned int size)
 {
-    unsigned int temp;
-    
-    temp = address_cur;
-    address_cur+=size;
-    return (void *) temp;
+   unsigned int temp;
+   if(kheap!=0) {
+     return (void *) alloc(size, kheap);
+   }
+   else {            
+     temp = address_cur;
+     address_cur+=size;
+   }
+     return (void *) temp;
 }
 
 /* Test procedure ("try_heap" shell command") */
@@ -77,8 +82,8 @@ heap_t* make_heap(unsigned int start, unsigned int end, unsigned int size)
     heap_t* new_heap;
     heap_node_t* first_node;
 
-    new_heap = (heap_t*)0xC0000000;
-    node_address = 0xC0000000 + sizeof(heap_t);
+    new_heap = (heap_t*)KHEAP_LIST_ADDRESS;
+    node_address = KHEAP_LIST_ADDRESS + sizeof(heap_t);
 //     new_heap = (heap_t*)kmalloc(sizeof(heap_t));
 //     first_node = (heap_node_t*)alloc_node();
     first_node = (heap_node_t*)node_address;
@@ -254,7 +259,7 @@ void free (void *location)
         busy->size += n2->size;
         busy->next = n2->next;
 // 	insert_list (n2, &(kheap->free_nodes));
-	printf("Node_address: %d\n", n2);
+
 	free_node(n2);
       }
 
