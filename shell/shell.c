@@ -178,6 +178,7 @@ void shell()
             printf("kmalloc try: ...\n");
             int *b;
             b = (int*) kmalloc(10*sizeof(int));
+	    printf("Address obtained: %d\n", b);
             int i = 0;
             while(i<10){
                 b[i] = i*2;
@@ -189,6 +190,8 @@ void shell()
                 i++;
             }
             printf("Address of a: %d\n", b);
+	  printf("Navigating used list...\n");
+          print_heap_list (kheap->used_list);
             free (b);
 
         }
@@ -307,6 +310,7 @@ void help()
            "uname     - Print kernel version, try uname --help for more info\n"
            "printmem  - Print used locations of memory\n"
            "credits   - Show DreamOS credits\n"
+	   "cpuid     - Show cpu identification informations\n"
 	       "echo      - Print some lines of text\n");
 }
 

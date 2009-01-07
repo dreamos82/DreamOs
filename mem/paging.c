@@ -234,7 +234,7 @@ void page_fault_handler (int ecode)
     pdir = BITRANGE (fault_addr, 22, 31);
     ptable = BITRANGE (fault_addr, 12, 21);
     #ifdef DEBUG
-    printf ("PD entry num: %d, PT entry num: %d, Indirizzo: %d\n", ptable, pdir, fault_addr);
+    printf ("PD entry num: %d, PT entry num: %d, Indirizzo: %d\n", pdir, ptable, fault_addr);
     #endif
  	  /* Mappatura della pagedir se non presente */
 	pd_entry = get_pagedir_entry (pdir);
@@ -242,8 +242,13 @@ void page_fault_handler (int ecode)
 	printf ("Entry corrente della pagedir: %d\n", pd_entry);
 	#endif
     if (pd_entry == 0) {
+	    int i=0;
 	    new_pt = create_pageTable();
-        set_pagedir_entry_ric (pdir, new_pt, PD_PRESENT|SUPERVISOR|WRITE, 0);
+	    while(i<PT_LIMIT){
+	      new_pt[i] = 0x00000000;
+	      i++;
+	    }
+	    set_pagedir_entry_ric (pdir, new_pt, PD_PRESENT|SUPERVISOR|WRITE, 0);
 	    #ifdef DEBUG
 	    printf ("Nuova entry dopo la mappatura: %d\n", get_pagedir_entry (pdir));
 	    #endif
