@@ -168,10 +168,20 @@ void shell()
 			printf ("Type: %s\n", sh_info->cpu_type);
 		}
 
-		else if (!(_kstrncmp(cmd,"answer",6)))
+		else if (!(_kstrncmp(cmd, "answer",6)))
       		{
           		  printf("42\n");			  
         	}
+		else if (!(_kstrncmp(cmd, "sleep", 5)))
+		{
+			int s;
+
+			if (argv[1]) {
+			  s = atoi(argv[1]);
+			  if (s != -1)
+			    sleep (s);
+		 	} else printf ("Missing operand\n");
+		}
 
         else if (!(_kstrncmp(cmd,"kmalloc",7)))
         {
@@ -310,6 +320,7 @@ void help()
            "uname     - Print kernel version, try uname --help for more info\n"
            "printmem  - Print used locations of memory\n"
            "credits   - Show DreamOS credits\n"
+	   "sleep     - pause DreamOS for a particular number of seconds\n"
 	   "cpuid     - Show cpu identification informations\n"
 	       "echo      - Print some lines of text\n");
 }

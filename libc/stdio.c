@@ -55,7 +55,7 @@ int atoi(const char *nptr)
   /* Make sure all chars are numbers */
   for (i=0; *(nptr+i); ++i) {
     if(!isdigit(*(nptr+i)))
-      return 0;
+      return -1;
   }
 
   i=0;
