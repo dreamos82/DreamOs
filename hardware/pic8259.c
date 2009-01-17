@@ -27,6 +27,7 @@
 #include <keyboard.h>
 #include <fismem.h>
 #include <8253.h>
+#include <bitops.h>
 
 IRQ_s *shareHandler[16];
 // IRQ_s shareHandler[16];
@@ -183,7 +184,12 @@ int get_current_irq(){
     outportb(GET_IRR_STATUS, MASTER_PORT);
     cur_irq = inportb(MASTER_PORT);
 //     if(cur_irq!=1) printf("%d\n", cur_irq);
-    return cur_irq;
+    if(cur_irq == 0) {
+      outportb(GET_IRR_STATUS, SLAVE_PORT);
+      cur_irq = inportb(SLAVE_PORT);
+    }
+//     printf("%d\n", find_first_bit(cur_irq));
+    return find_first_bit(cur_irq);
 }
 
 /** This Function add an IRQ Handler to the givent irq number

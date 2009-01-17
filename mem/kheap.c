@@ -211,8 +211,8 @@ void free (void *location)
 //   heap_node_t *free = kheap->free_list;
   heap_node_t *n2;
 
-  if ((unsigned int)location % 4 != 0)
-    printf ("Indirizzo non allineato a 4kb\n");
+  if ((unsigned int)location % 4 != 0) return -1;
+//     printf ("Indirizzo non allineato a 4kb\n");
 
   while (busy) {
     if (busy->start_address == (unsigned int)location) {
@@ -269,8 +269,8 @@ void free (void *location)
     busy = (heap_node_t*)busy->next;
   }
 
-  if (!busy)
-    printf ("Address not found in list\n");
+  if (!busy) return -1;
+//     printf ("Address not found in list\n");
 }
 
 /**

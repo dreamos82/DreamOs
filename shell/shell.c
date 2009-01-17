@@ -171,6 +171,7 @@ void shell()
 		else if (!(_kstrncmp(cmd, "answer",6)))
       		{
           		  printf("42\n");			  
+			  outportb('4',0xe9);
         	}
 		else if (!(_kstrncmp(cmd, "sleep", 5)))
 		{
@@ -235,6 +236,7 @@ void shell()
         }*/
 
         else if (!(_kstrncmp(cmd,"printmem",8))) print_heap_list(kheap->used_list);        
+	else if (!(_kstrncmp(cmd,"date",4))) date();                
         else if (!(_kstrncmp(cmd,"aalogo",6))) 
 		aalogo();
         
@@ -322,6 +324,7 @@ void help()
            "credits   - Show DreamOS credits\n"
 	   "sleep     - pause DreamOS for a particular number of seconds\n"
 	   "cpuid     - Show cpu identification informations\n"
+	   "date      - Show date and time\n"
 	       "echo      - Print some lines of text\n");
 }
 
