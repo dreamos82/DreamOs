@@ -9,7 +9,7 @@ NAME = DreamOS
 
 CFLAGS = -nostdlib -fomit-frame-pointer -fno-builtin -fno-stack-protector -Wall -march=i686 -m32 -I./include -I./include/io -I./include/drivers -I./include/libc -I./include/processore -I./include/hardware -I./include/mem -I./include/system -I./include/shell -I./include/misc
 
-OBJ = kernel.o io/video.o drivers/keyboard.o libc/ctype.o libc/string.o io/io.o libc/stdio.o hardware/cpuid.o hardware/keyboard.o processore/gdt.o processore/idt.o processore/handlers.o hardware/pic8259.o mem/fismem.o mem/paging.o mem/kheap.o misc/clock.o misc/ordered_array.o misc/bitops.o misc/ordered_list.o system/syscall.o hardware/8253.o shell/shell.o
+OBJ = kernel.o io/video.o drivers/keyboard.o libc/ctype.o libc/string.o io/io.o libc/stdio.o hardware/cpuid.o hardware/keyboard.o processore/gdt.o processore/idt.o processore/handlers.o hardware/pic8259.o mem/fismem.o mem/paging.o mem/kheap.o misc/clock.o misc/bitops.o misc/ordered_list.o system/syscall.o hardware/8253.o shell/shell.o
 
 dreamos.img: bl.img kernel.bin
 	mv kernel.bin dreamos.img
@@ -36,7 +36,6 @@ mem/fismem.o: mem/fismem.c
 mem/paging.o: mem/paging.c
 mem/kheap.o: mem/kheap.c
 misc/clock.o: misc/clock.c
-misc/ordered_array.o: misc/ordered_array.c
 misc/ordered_list.o: misc/ordered_list.c
 misc/bitops.o: misc/bitops.c
 drivers/keyboard.o: drivers/keyboard.c

@@ -28,6 +28,7 @@
 #include <video.h>
 #include <stddef.h>
 #include <kheap.h>
+#include <use.h>
 // #define DEBUG 1
 
 #define BITMASK(len) ((1<<((len) + 1)) - 1)
@@ -42,7 +43,7 @@ extern heap_t *kheap;
 
 void init_paging(){
     int i;
-    printf("Abilito Paging: ");
+    printf(LNG_PAGING);
     _kprintOK();    
     current_page_dir = create_pageDir();
     #ifdef DEBUG
@@ -70,7 +71,7 @@ void init_paging(){
         i++;
     }        
     load_pdbr((unsigned int)current_page_dir);
-    kheap = make_heap(10,10,tot_mem - ((unsigned int) &end));
+    kheap = make_heap(10,tot_mem - ((unsigned int) &end));
 }
 
 /**

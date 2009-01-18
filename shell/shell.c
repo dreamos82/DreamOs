@@ -43,6 +43,7 @@
 #include <kheap.h>
 #include <version.h>
 #include <cpuid.h>
+#include <clock.h>
     
 extern heap_t *kheap;
 int argc;
@@ -74,14 +75,14 @@ void shell()
 	char *user = kmalloc(24);
 	memset(user, 0, strlen(user));
 
-	printf("[?] Enter your username: ");
+	printf(LNG_USER);
 	scanf ("%23s",user);
 
 	while (!strlen(user))
 	{		
-			printf("[?] Enter your username: ");
+			printf(LNG_USER);
 			scanf ("%s",user);
-			printf("[x] Please, insert your username :)\n");
+			printf(LNG_USER_R);
 	}
 	
 	_kclear();
@@ -94,7 +95,7 @@ void shell()
 	for (;;)
 	{
 	    printf("%s~# ",user);
-	    scanf("%255s",cmd);
+	    scanf("%254s",cmd);
         
             options (cmd);
 
@@ -254,13 +255,14 @@ void shell()
                 _kcolor('\012');
                 _kputs("Osiris\n"
                     "Celeron\n"
+		    "Hamcha\n"
                     "m0nt0\n"
                     "and many others (3 or 4 :P)\n\n");
                 _kcolor('\007');
             }
         else if (strlen(cmd)>0)
 	    {
-            printf("Unknown command: %s\n", cmd);            
+            printf(LNG_UNKNOWN_CMD "%s\n", cmd);            
         }
 
 	memset(string+5, 0, strlen(string));
@@ -313,7 +315,7 @@ void uname_help()
 
 void help()
 {
-	printf("help      - See the 'help' list to learn the DreamOS command now avaible\n"
+	printf("help      - See the 'help' list to learn the DreamOS commands now available\n"
            "clear     - Clear the screen\n"
 	   "poweroff  - Turn off the machine\n"
            "kmalloc   - Test a basic kmalloc function\n"
@@ -325,7 +327,7 @@ void help()
 	   "sleep     - pause DreamOS for a particular number of seconds\n"
 	   "cpuid     - Show cpu identification informations\n"
 	   "date      - Show date and time\n"
-	       "echo      - Print some lines of text\n");
+	   "echo      - Print some lines of text\n");
 }
 
 void poweroff()

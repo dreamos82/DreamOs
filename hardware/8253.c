@@ -31,7 +31,7 @@ void PIT_handler ()
 	  seconds = 0;     
     }
     
-    outportb(EOI, MASTER_PORT);
+//     outportb(EOI, MASTER_PORT);
 }
 
 void configure_PIT ()

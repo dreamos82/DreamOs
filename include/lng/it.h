@@ -21,11 +21,16 @@
 #define LNG_SITE "\nSito: "
 #define LNG_GDT "Inizializzo GDT   "
 #define LNG_IDT "Inizializzo IDT   "
+#define LNG_PAGING "Abilito Paging: "
 #define LNG_PIT8253 "Inizializzo PIT    "
 #define LNG_PIC8259 "Inizializzo PIC8259    "
 #define LNG_CPU "\nProcessore: "
 #define LNG_FREERAM "Ram Disposizione:"
 #define LNG_FREEPAGE "\t- Numero Pagine a disposizione:"
 #define LNG_BITMAP "\t- Numero elementi della bitmap:"
+#define LNG_SHELL "Carico la shell"
+#define LNG_USER "[?] Inserisci il nome utente: "
+#define LNG_USER_R "[x] Per favore, inserisci il nome utente :)\n"
+#define LNG_UNKNOWN_CMD "Comando sconosciuto:"
 
 #endif

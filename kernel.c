@@ -92,7 +92,7 @@ int main_loop(struct multiboot_info *boot_info)
     get_cpuid();    
     printf("\n");
     printf("----\n");
-    printf("Loading the shell");
+    printf(LNG_SHELL);
     _kprintOK();
 		printf("[+] Address: 0x%x\n", &end);		   	        
 		printf("\n\n");
