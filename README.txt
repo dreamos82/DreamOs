@@ -1,0 +1,133 @@
+---------------------------
+ DreamOS
+---------------------------
+
+1. Cosa è DreamOS
+	a. Cosa NON è DreamOS
+2. Installare DreamOS
+	a. Requisiti necessari
+	b. Scaricare da SVN
+	c. Compilare DreamOS
+	d. Mettere su Floppy (opzionale)
+	e. Fare la entry per GRUB (opzionale)
+3. Usare DreamOS
+	a. L'avvio
+	b. Uso della CLI
+4. Feedback
+	a. Come segnalare bug
+	b. Come mandare un feedback
+
+
+- 1 -----------------------
+--- Cosa è DreamOS --------
+
+Il DreamOS è un sistema operativo open source rilasciato sotto licenza GPLv3 sviluppato partendo da 0 puramente per scopi didattici o comunque per capire come funzionano i sistemi operativi.
+Il team di sviluppo attuale è composto dagli sviluppatori
+
+Ivan - Finarfin (http://earyrian.elenhost.org)
+Lisa - Shainer (http://shandril.altervista.org)
+
+e dai contributori:
+
+Osiris
+Celeron
+Hamcha
+m0nt0.
+
+	- a -- Cosa NON è DreamOS -
+
+DreamOS non è un sistema operativo completo e pronto per essere utilizzato per l'uso quotidiano, non è basato su Kernel esistenti e non è supportato/sponsorizzato da alcuna società.
+
+- 2 -----------------------
+--- Installare DreamOS ----
+
+Per Installazione s'intende compilare e mettere DreamOS su un supporto per l'avvio, visto che attualmente DreamOS non è predisposto per installazioni vere e proprie.
+
+	- a - Requisiti necessari -
+
+DreamOS è un sistema operativo sviluppato per funzionare su cpu con architettura Intel x86/IA32 (i386/i686) e attualmente è sviluppato in modo da partire da floppy anche se, utilizzando GRUB, si può farlo partire avendo l'immagine compilata sull'Hard-disk.
+DreamOS può essere anche emulato usando Software come qEmu o Bochs.
+
+Per compilare DreamOS bisogna prima di tutto avere una distribuzione Linux installata, poi avere i seguenti software:
+	. Nasm
+	. GCC
+	. make
+
+Opzionalmente un emulatore di cpu se non si vuole provare il sistema operativo su hardware reale e SVN se volete scaricare le versioni più recenti da repository.
+
+	- b -- Scaricare da SVN ---
+
+Potete scaricare i sorgenti di DreamOS da SVN attraverso il repository svn://svn.berlios.de/dreamos/trunk
+Per i meno pratici il comando da eseguire è: (assicuratevi di avere il pacchetto SVN installato)
+	svn checkout svn://svn.berlios.de/dreamos/trunk
+
+Alla fine del download dovreste avere una cartella trunk/ con tutti i sorgenti al suo interno
+
+	- c -- Compilare DreamOS --
+
+Posizionatevi dentro la cartella con i sorgenti ed eseguite il comando:
+	sh start sh
+Se avete qemu installato vi partira' in automatico, se invece avete bochs, al termine della compilazione con lo script start.sh dovete dare:
+bochs
+
+	- d -- Mettere su floppy -- (Opzionale)
+
+Se avete un lettore floppy e volete provare l'ebrezza di usarlo su una macchina reale, allora in questo caso dopo avre lanciato sempre sh start.sh, andate dentro boot/ e date:
+	dd if=grub.img of=/dev/fd0
+E riavviate la macchina con il floppy inserito.
+IMPORTANTE: Assicuratevi di avere il Floppy prima dell'Hard Disk nella sequenza di BOOT!
+
+	- e - Fare la entry per GRUB (Opzionale)
+
+Se volete provare dreamos su pc reale e non avete il floppy potete farlo anche avendo grub come Boot Manager, riavviate il pc, quando si presenta grub premete il tasto c e inserite dei comandi tipo questi:
+root (hdx, y)
+kernel /path/al/file/dreamos.img
+boot
+
+Se invece volete creare una entry apposita su Grub potete farlo nel seguente modo:
+ Aprite il file /boot/grub/grub.conf e aggiugente alla fine le seguenti righe:
+	title DreamOS 0.1
+	root (hd0,0)
+	kernel /path/al/file/dreamos.img
+	boot
+Naturalmenet modificando /path/al/file/dreamos.img con la path al file dreamos.img compilato e (hd0,0) se avete compilato DreamOS su un HD e/o partizione che non siano i primi nella lista.
+
+- 3 -----------------------
+---- Usare DreamOS --------
+
+L'Interattività di DreamOS al momento si ferma ad una CLI (Command Line Interface, Interfaccia a linea di comando) con un numero limitato di comandi utilizzabili, la maggior parte a scopo di test.
+
+	- a ------- L'Avvio -------
+
+L'avvio di DreamOS contiene il loading di tutte le funzioni necessarie al funzionamento del S.O. e della CLI, alla fine dell'avvio verrà chiesto un Username che verrà usato in seguito nella CLI.
+
+	- b ---- Uso della CLI ----
+
+La CLI di DreamOS ha una struttura molto comune a quella *NIX
+	Username~# Comando inserito
+Dove Username è l'username inserito durante l'avvio.
+Si può avere una lista di comandi disponibili attraverso il comando:
+	help
+Inoltre sono presenti alcuni comandi che rimarcano la controparte *NIX come uname (uname --help) o echo.
+
+- 4 -----------------------
+---- Feedback -------------
+
+	- a -- Come segnalare Bug -
+	
+Per segnalare bug riscontrati durante l'uso di DreamOS bisogna segnalarli usando il modulo di berliOS presente alla pagina:
+	http://developer.berlios.de/bugs/?group_id=9715
+Oppure potete segnalarlo sul forum osdev.it, precisamente:
+	http://forum.osdev.it/viewforum.php?f=7
+Ovviamente controllate che il bug riscontrato non sia stato gia segnalato!
+
+	- b - Come mandare un feedback
+
+Potete mandare un resoconto o comunque raccontare la vostra esperienza con DreamOS sul forum di osdev.it:
+	http://forum.osdev.it/
+
+	
+
+DreamOS 2003-2008 by finarfin/shainer
+http://www.dreamos.org
+http://www.osdev.it

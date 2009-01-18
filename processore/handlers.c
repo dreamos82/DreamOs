@@ -69,32 +69,95 @@ void add_Interrupt(int i, void (*func)()){
   *
   * Questa funzione gestira a livello centralizzato le varie eccezione
   */
-void _globalException(int n, int error){
-	if(n==DIVIDE_ERROR)_kputs("Divide Error\n");
-	else if(n==DEBUG_EXC) _kputs("Debug Exception\n");
-	else if(n==NMI_INTERRUPT) _kputs("Nmi Exception\n");
-	else if(n==OVERFLOW) _kputs("OverFlow Exception\n");
-	else if(n==BOUND_RANGE_EXCEED) _kputs("Bound Exception\n");
-	else if(n==DEV_NOT_AVL) _kputs("Device Not Available Exception\n");
-	else if(n==COPROC_SEG_OVERRUN) _kputs("CoProcessor Segment Overrun\n");
-	else if(n==BREAKPOINT) _kputs("BreakPoint\n");
-	else if(n==INVALID_TSS) _kputs("Invalid TSS\n");
-	else if(n==SEGMENT_NOT_PRESENT) _kputs("Segment Not Present\n");
-	else if(n==STACK_SEGMENT_FAULT) _kputs("Stack Segment Fault Exception\n");
-	else if(n==GENERAL_PROTECTION) _kputs("General Protection Exception\n");
-    else if(n==INVALID_OPCODE) _kputs("Invalid Opcode Exception\n");
-    else if(n==BOUND_RANGE_EXCEED) _kputs("Bound exception\n");
-    else if(n==PAGE_FAULT) page_fault_handler (error);    
-    else if(n==INT_RSV) _kputs("Intel Reserved\n");
-    else if(n==FLOATING_POINT_ERR) _kputs("Floating Point Exception\n");
-    else if(n==ALIGNMENT_CHECK) _kputs("Alignment Check Exception\n");             
-    else if(n==MACHINE_CHECK) _kputs("Machine Check Exception\n");
-    else if(n==DOUBLE_FAULT) {
-        _kputs("DoubleFault Exception\n");
-        _kputs("Ottimo direi\n");
-    }
-    else if(n==SIMD_FP_EXC) _kputs("Simd Floating Point Exception\n");
-    else _kputs("Cose non buone avvengono\n");
+void _globalException(int n, int error)
+{
+  switch (n) {
+
+    case DIVIDE_ERROR:
+    _kputs("Divide Error\n");
+    break;
+
+    case DEBUG_EXC:
+    _kputs("Debug Exception\n");
+    break;
+
+    case NMI_INTERRUPT:
+    _kputs("NMI Exception\n");
+    break;
+
+    case OVERFLOW:
+    _kputs("OverFlow Exception\n");
+    break;
+	 
+    case BOUND_RANGE_EXCEED:
+    _kputs("Bound Exception\n");
+    break;
+
+    case DEV_NOT_AVL:
+    _kputs("Device Not Available Exception\n");
+    break;
+
+    case COPROC_SEG_OVERRUN:
+    _kputs("CoProcessor Segment Overrun\n");
+    break;
+
+    case BREAKPOINT:
+    _kputs("BreakPoint\n");
+    break;
+
+    case INVALID_TSS:
+    _kputs("Invalid TSS\n");
+    break;
+
+    case SEGMENT_NOT_PRESENT:
+    _kputs("Segment Not Present\n");
+    break;
+
+    case STACK_SEGMENT_FAULT:
+    _kputs("Stack Segment Fault Exception\n");
+    break;
+
+    case GENERAL_PROTECTION:
+    _kputs("General Protection Exception\n");
+    break;
+
+    case INVALID_OPCODE:
+    _kputs("Invalid Opcode Exception\n");
+    break;
+
+    case PAGE_FAULT:
+    page_fault_handler (error);
+    break;
+
+    case INT_RSV:
+    _kputs("Intel Reserved\n");
+    break;
+
+    case FLOATING_POINT_ERR:
+    _kputs("Floating Point Exception\n");
+    break;
+
+    case ALIGNMENT_CHECK:
+    _kputs("Alignment Check Exception\n");
+    break;
+
+    case MACHINE_CHECK:
+    _kputs("Machine Check Exception\n");
+    break;
+
+    case DOUBLE_FAULT:
+    _kputs("Double Fault Exception\n");
+    break;
+
+    case SIMD_FP_EXC:
+    _kputs ("Simd Floating Point Exception\n");
+    break;
+
+    default:
+    _kputs ("Unknown exception\n");
+    break;
+
+  }
 }
 
 void _irqinterrupt(){

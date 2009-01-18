@@ -200,6 +200,8 @@ int scanf (const char *format, ...)
     va_list scan;
     char *input;
     int count=0;
+    char maxchars[5] = {0};
+    int i=0, nmax=0;
 
     char *s_ptr;
     int *i_ptr;
@@ -212,18 +214,35 @@ int scanf (const char *format, ...)
 	    input = gets();
             count += strlen (input);
 
-	    switch (*++format) {
+            if (isdigit(*++format)) {
+              while (isdigit(*format)) {
+                maxchars[i++] = *format;
+                format++;
+              }
+              maxchars[i] = '\0';
+              nmax = atoi(maxchars);
+            }
+
+	    switch (*format) {
 	    case 's':
 		s_ptr = va_arg (scan, char *);
-		s_ptr = strncpy (s_ptr, input, strlen (input));
+
+                if (nmax == 0 || strlen(input) <= nmax)
+		  s_ptr = strncpy (s_ptr, input, strlen (input));
+                else
+                  s_ptr = strncpy (s_ptr, input, nmax);
 		break;
 
 	    case 'd':
 		i_ptr = va_arg (scan, int *);
-		*i_ptr = atoi (input);
+
+                if (nmax != 0 && strlen(input) > nmax)
+                  input[nmax] = '\0';
+		*i_ptr = atoi(input);
                 break;
 	    }
 	}
     }
+    va_end (scan);
     return count;
 }

@@ -75,7 +75,7 @@ void shell()
 	memset(user, 0, strlen(user));
 
 	printf("[?] Enter your username: ");
-	scanf ("%s",user);
+	scanf ("%23s",user);
 
 	while (!strlen(user))
 	{		
@@ -94,7 +94,7 @@ void shell()
 	for (;;)
 	{
 	    printf("%s~# ",user);
-	    scanf("%s",cmd);
+	    scanf("%255s",cmd);
         
             options (cmd);
 
