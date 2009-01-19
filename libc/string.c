@@ -69,6 +69,33 @@ int _kstrncmp(const char *s1, const char *s2, int n)
   return 0;
 }
 
+/*
+ * Compare s1 and s2
+ */
+int strcmp (const char *s1, const char *s2)
+{
+  int s1n = strlen(s1);
+  int s2n = strlen(s2);
+
+  if (s1n > s2n)
+    return 1;
+  else if (s1n < s2n)
+    return -1;
+
+  while (*s1 == *s2 && s1n>=0)
+  {
+    s1++;
+    s2++;
+    s1n--;
+  }
+
+  if (s1n>0) {
+    if (*s1 > *s2) return 1;
+    else return -1;
+  }
+  return 0;
+}
+
 /* Fill memory location dest with c for n times */
 void *memset(void *dest, const int c, int n)
 {

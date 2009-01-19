@@ -99,32 +99,34 @@ void shell()
         
             options (cmd);
 
-		if (!(_kstrncmp(cmd,"help",4) ) )
+		if (strcmp(argv[0], "help") == 0)
 		{
-			printf("Available command: \n");
+			
+			printf("Available commands:\n");
 			help();
 		}
 
-		else if (!(_kstrncmp(cmd, "echo", 4) ) )
+		else if (strcmp(argv[0], "echo") == 0)
 		{
-			strncpy(string,cmd,strlen(cmd));
-			memmove(string, string+5, strlen(string));
-			printf("%s\n",string);
-			memset(string+5, 0, strlen(string));
+			int c;
+
+			for (c=1; c<argc; c++)
+			  printf ("%s ", argv[c]);
+			printf ("\n");
 		}
 
-		else if (!(_kstrncmp(cmd,"poweroff",8)))
+		else if (strcmp(argv[0], "poweroff") == 0)
 		{
 			printf("Poweroff..\n");
 			poweroff();
 		}
 		
-		else if (!(_kstrncmp(cmd, "clear", 5)))
+		else if (strcmp(argv[0], "clear") == 0)
 		{
 			_kclear();
 		}
 
-		else if (!(_kstrncmp(cmd, "uname",5)))
+		else if (strcmp (argv[0], "uname") == 0)
 		{
 			/*if (argv[2] != " ")
 			{
@@ -160,7 +162,7 @@ void shell()
 
 		}
 
-		else if (!(_kstrncmp(cmd, "cpuid",5)))
+		else if (strcmp(argv[0], "cpuid") == 0)
 		{
 			struct cpuinfo_generic *sh_info = get_cpuid();
 
@@ -169,12 +171,12 @@ void shell()
 			printf ("Type: %s\n", sh_info->cpu_type);
 		}
 
-		else if (!(_kstrncmp(cmd, "answer",6)))
+		else if (strcmp(argv[0], "answer") == 0)
       		{
           		  printf("42\n");			  
 			  outportb('4',0xe9);
         	}
-		else if (!(_kstrncmp(cmd, "sleep", 5)))
+		else if (strcmp(argv[0], "sleep") == 0)
 		{
 			int s;
 
@@ -185,7 +187,7 @@ void shell()
 		 	} else printf ("Missing operand\n");
 		}
 
-        else if (!(_kstrncmp(cmd,"kmalloc",7)))
+        else if (strcmp(argv[0], "kmalloc") == 0)
         {
             printf("kmalloc try: ...\n");
             int *b;
@@ -208,7 +210,7 @@ void shell()
 
         }
 
-        else if (!(_kstrncmp(cmd,"do_fault",8)))
+        else if (strcmp(argv[0], "do_fault") == 0)
     	{  
              printf ("Genero un pagefault scrivendo 10 nella locazione 0xa0000000...\n");
              int *prova;
@@ -236,12 +238,12 @@ void shell()
           print_heap_list (kheap->free_nodes);
         }*/
 
-        else if (!(_kstrncmp(cmd,"printmem",8))) print_heap_list(kheap->used_list);        
-	else if (!(_kstrncmp(cmd,"date",4))) date();                
-        else if (!(_kstrncmp(cmd,"aalogo",6))) 
+        else if (strcmp(argv[0], "printmem") == 0) print_heap_list(kheap->used_list);        
+	else if (strcmp(argv[0], "date") == 0) date();                
+        else if (strcmp(argv[0], "aalogo") == 0) 
 		aalogo();
         
-        else if (!(_kstrncmp(cmd,"credits",7)))
+        else if (strcmp(argv[0], "credits") == 0)
             {
                 _kcolor('\011');
                 _kputs("DreamOS Credits\n\n");                
@@ -262,7 +264,7 @@ void shell()
             }
         else if (strlen(cmd)>0)
 	    {
-            printf(LNG_UNKNOWN_CMD "%s\n", cmd);            
+            printf(LNG_UNKNOWN_CMD " %s\n", argv[0]);            
         }
 
 	memset(string+5, 0, strlen(string));
