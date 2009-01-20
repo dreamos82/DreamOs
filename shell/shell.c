@@ -164,11 +164,12 @@ void shell()
 
 		else if (strcmp(argv[0], "cpuid") == 0)
 		{
-			struct cpuinfo_generic *sh_info = get_cpuid();
+			struct cpuinfo_generic *sinfo = get_cpuid();
 
 			printf ("----- CPUID Information -----\n");
-			printf ("Vendor: %s\n", sh_info->cpu_vendor);
-			printf ("Type: %s\n", sh_info->cpu_type);
+			printf ("Vendor: %s\n", sinfo->cpu_vendor);
+			printf ("Type: %s\n", sinfo->cpu_type);
+			free (sinfo);
 		}
 
 		else if (strcmp(argv[0], "answer") == 0)

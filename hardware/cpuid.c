@@ -24,12 +24,12 @@
 
 
 #include <cpuid.h>
+#include <kheap.h>
 
-struct cpuinfo_generic *get_cpuid()
+struct cpuinfo_generic *get_cpuid(void)
 {
     int eax, ebx, ecx, edx;
-    struct cpuinfo_generic *info;
-
+    struct cpuinfo_generic *sh_info = kmalloc(sizeof(struct cpuinfo_generic));
     /* First call with EAX==0 */
     asm ("xorl %%eax, %%eax\n\t"
 	 "cpuid\n\t"
@@ -49,7 +49,7 @@ struct cpuinfo_generic *get_cpuid()
   cpu_vendor[10] = (char)((ecx & 0x00FF0000)>>16);
   cpu_vendor[11] = (char)((ecx & 0xFF000000)>>24);
   cpu_vendor[12] = '\0';
-  info->cpu_vendor = cpu_vendor;
+  sh_info->cpu_vendor = cpu_vendor;
 
   eax = ebx = ecx = edx = 0;
 
@@ -79,19 +79,17 @@ struct cpuinfo_generic *get_cpuid()
   /* Processor type */
   switch (eax) {
   case 0:
-      info->cpu_type = "Others";
+      sh_info->cpu_type = "Others";
       break;
   case 1:
-      info->cpu_type = "Original OEM Processor";
+      sh_info->cpu_type = "Original OEM Processor";
       break;
   case 2:
-      info->cpu_type = "Intel Dual Core";
+      sh_info->cpu_type = "Intel Dual Core";
       break;
   case 3:
-      info->cpu_type = "Intel Overdrive";
+      sh_info->cpu_type = "Intel Overdrive";
   }
 
-  
-
-  return info;
+  return sh_info;
 }
