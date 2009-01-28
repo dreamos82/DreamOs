@@ -15,19 +15,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/* 
-  Shell Coded by
-    Osiris 
-*/
+#ifndef _SHELL_H
+#define _SHELL_H
 
-#ifndef __SHELL_H
-#define __SHELL_H
+void shell(void);
 
-void shell();
-void logo();
-void aalogo();
-void uname_help();
-void help();
-void poweroff();
-void info();
 #endif
