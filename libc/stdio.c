@@ -93,7 +93,6 @@ int printf (const char *format, ...)
     va_start (ap, format);
 
     while (*format) {
-
         /* % marks a specific */
 	if (*format == '%') {
 	    format++;
@@ -162,6 +161,7 @@ int printf (const char *format, ...)
 	len++;
 	for (i=0; i<255; i++)
             current[i] = 0;
+        cur_p = 0;
     }
     va_end (ap); // end of arguments
     return len;

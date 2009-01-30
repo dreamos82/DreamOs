@@ -31,10 +31,11 @@ void options(char *com)
 void shell()
 {
   char cmd[256];
+  char *cmd_ptr;
   char *user = kmalloc(24);
   char *commands[NUM_COM+1] = { "help", "clear", "poweroff", "kmalloc", "do_fault", "aalogo", "uname", "printmem", "credits", "sleep", "cpuid", "date", "echo", "answer", NULL };
   void (*routines[NUM_COM])(void) = { help, _kclear, poweroff, kmalloc_try, do_fault, aalogo, uname, printmem, credits, sleep_cmd, cpuid, date, echo, answer };
-  int i;
+  int i=0;
 
   memset(user, 0, strlen(user));
   printf(LNG_USER);
@@ -45,7 +46,6 @@ void shell()
     scanf ("%23s",user);
     printf(LNG_USER_R);
   }
-  *(user + strlen(user)) = '\0';
 	
   _kclear();
   aalogo();
@@ -57,7 +57,10 @@ void shell()
     printf("%s~# ",user);
     scanf("%254s",cmd);
         
-    options (cmd);
+    /* elimina eventuali spazi all'inizio del comando */
+    for (i=0, cmd_ptr = cmd; cmd[i] == ' '; i++, cmd_ptr++);
+    
+    options (cmd_ptr);
     if (strlen(argv[0]) == 0)
       goto end;
 

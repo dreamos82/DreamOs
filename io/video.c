@@ -310,7 +310,7 @@ void _kntohex (unsigned int number)
 
 /** @author Lisa
   * @version 1.0
-  * @param  buffer (char*) La stringa che conterr� il numero
+  * @param  buffer (char*) La stringa che contiene il numero
   * @param  num Il numero da convertire (intero)
   * @param  base la base numerica in cui convertire (per ora 0, 16,10)
   *

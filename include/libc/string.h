@@ -38,5 +38,6 @@ char *strchr (const char *, int);
 char *strstr (const char *, const char *);
 char *strtok (char *, const char *);
 char *strncat (char *, const char *, size_t);
+char *strcpy (char *, const char *);
 
 #endif
