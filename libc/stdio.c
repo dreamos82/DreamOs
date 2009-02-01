@@ -93,75 +93,75 @@ int printf (const char *format, ...)
     va_start (ap, format);
 
     while (*format) {
+
         /* % marks a specific */
-	if (*format == '%') {
-	    format++;
+        if (*format == '%') {
+            format++;
 
             /* The field width is to be written to left */
-	    if (*format == '-') {
-		direction=LEFT;
-		format++;
-	    }
+            if (*format == '-') {
+                direction=LEFT;
+                format++;
+            }
 
             /* Take field width if present and convert it to an int */
-	    if (isdigit (*format) == 1) { // precisione di campo
-		while (isdigit(*format))
-		    field[i++] = *format++;
+            if (isdigit (*format) == 1) { // precisione di campo
+                while (isdigit(*format))
+                    field[i++] = *format++;
                 field[i] = '\0';
-		width = atoi (field);
-	    }
+                width = atoi (field);
+            }
 
-	    /* Some data type aren't supported yet
+            /* Some data type aren't supported yet
              * In the future we will fix this */
-	    if (*format == 's')
-		cur_p = va_arg (ap, char *);
-	    if (*format == 'd' || *format == 'i') {
-		int varint = va_arg (ap, int);
-		_kntos (cur_p, varint, 10);
-	    }
-	    if (*format == 'u') {
-		unsigned int uint = va_arg (ap, int);
-		_kntos (cur_p, uint, 10);
-	    }
-	    if (*format == 'x' || *format == 'X') {
-	        int varhex = va_arg (ap, int);
-		_kntos (cur_p, varhex, 16);
+            if (*format == 's')
+                cur_p = va_arg (ap, char *);
+            if (*format == 'd' || *format == 'i') {
+                int varint = va_arg (ap, int);
+                _kntos (cur_p, varint, 10);
+            }
+            if (*format == 'u') {
+                unsigned int uint = va_arg (ap, int);
+                _kntos (cur_p, uint, 10);
+            }
+            if (*format == 'x' || *format == 'X') {
+                int varhex = va_arg (ap, int);
+                _kntos (cur_p, varhex, 16);
                 ishex = 1;
-	    }
-	    if (*format == 'n')
+            }
+            if (*format == 'n')
                 _kntos (cur_p, len, 10);
-	    if (*format == '%')
+            if (*format == '%')
                 putchar ('%');
 
-	    cursize = strlen(cur_p);
+            cursize = strlen(cur_p);
 
             /* Actually write the field width */
-	    if (direction==LEFT) {
-		for(i=1; i<=width; i++)
-		    _kbackspace();
-	    } else {
-	    for (i=1; i<=width; i++)
-		putchar (' ');
-	    }
+            if (direction==LEFT) {
+                for(i=1; i<=width; i++)
+                    _kbackspace();
+            } else {
+            for (i=1; i<=width; i++)
+                putchar (' ');
+            }
             /* Print the argument converted to a string */
 
-	    if (ishex != 1) {
-	      *(cur_p + cursize) = '\0';
-	      _kputs (cur_p);
-	    }
+            if (ishex != 1) {
+              *(cur_p + cursize) = '\0';
+              _kputs (cur_p);
+            }
             ishex = 0;
-	}
-	else
+        }
+        else
             putchar (*format);
 
         /* Update values */
-	format++;
-	direction=RIGHT;
+        format++;
+        direction=RIGHT;
         width=0;
-	len++;
-	for (i=0; i<255; i++)
+        len++;
+        for (i=0; i<255; i++)
             current[i] = 0;
-        cur_p = 0;
     }
     va_end (ap); // end of arguments
     return len;

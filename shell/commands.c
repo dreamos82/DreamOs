@@ -1,4 +1,25 @@
 #include <commands.h>
+#include <multiboot.h>
+#include <kernel.h>
+#include <stddef.h>
+#include <video.h>
+#include <pic8259.h>
+#include <8253.h>
+#include <gdt.h>
+#include <idt.h>
+#include <cpuid.h>
+#include <stdio.h>
+#include <string.h>
+#include <fismem.h>
+#include <io.h>
+#include <keyboard.h>
+#include <paging.h>
+#include <use.h>
+#include <shell.h>
+#include <version.h>
+#include <cpuid.h>
+#include <clock.h>
+#include <sys/utsname.h>
 
 void aalogo()
 {
@@ -100,18 +121,22 @@ void do_fault()
   printf ("Contenuto della locazione 0xa0000000 dopo l'intervento dell'handler: %d\n", *prova);
 }
 
-void uname()
+void uname_cmd()
 {
+  struct utsname *infos;
+  infos = kmalloc(sizeof(struct utsname *));
+  uname(infos);
   if (!(strcmp(argv[1], "-a")) || !(strcmp(argv[1], "--all")))
-    printf("%s %s.%s%s #1 CEST 2009 %s\n", NAME, VERSION, PATCHLEVEL, EXTRAVERSION, cpu_vendor);
+    printf("%s %s.%s%s Rev: %s #1 CEST 2009 %s\n", infos->sysname, infos->version, infos->release, EXTRAVERSION,REV_NUM, cpu_vendor);
   else if (!(strcmp(argv[1], "-r")) || !(strcmp(argv[1], "--rev")))
-    printf("%s.%s%s\n", VERSION, PATCHLEVEL, EXTRAVERSION);
+    printf("%s.%s%s\n", infos->version, infos->release, EXTRAVERSION);
   else if (!(strcmp(argv[1], "-h") ) || !(strcmp(argv[1], "--help")))
     uname_help();
   else if (!(strcmp(argv[1], "-i")) || !(strcmp(argv[1], "--info")))
     uname_info();
   else
-    printf("%s. For more info about this tool, please do 'uname --help'\n",NAME);
+    printf("%s. For more info about this tool, please do 'uname --help'\n",infos->sysname);
+  free(infos);
 }
 
 void uname_help() 

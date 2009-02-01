@@ -34,7 +34,7 @@ void shell()
   char *cmd_ptr;
   char *user = kmalloc(24);
   char *commands[NUM_COM+1] = { "help", "clear", "poweroff", "kmalloc", "do_fault", "aalogo", "uname", "printmem", "credits", "sleep", "cpuid", "date", "echo", "answer", NULL };
-  void (*routines[NUM_COM])(void) = { help, _kclear, poweroff, kmalloc_try, do_fault, aalogo, uname, printmem, credits, sleep_cmd, cpuid, date, echo, answer };
+  void (*routines[NUM_COM])(void) = { help, _kclear, poweroff, kmalloc_try, do_fault, aalogo, uname_cmd, printmem, credits, sleep_cmd, cpuid, date, echo, answer };
   int i=0;
 
   memset(user, 0, strlen(user));
@@ -51,6 +51,7 @@ void shell()
   aalogo();
   printf("\n\n\n\n");
   argc=1;
+  shell_mess = strlen (user) + 3;
 
   for (;;)
   {

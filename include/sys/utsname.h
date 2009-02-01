@@ -1,5 +1,12 @@
+/***************************************************************************
+ *            utsname.h
+ *
+ *  Mon Jan 26 23:30:13 2008
+ *  Copyright  2007  Ivan Gualandri
+ *  Email
+ ****************************************************************************/
+
 /*
- * Version.h
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -15,13 +22,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/*
- * Author: Osiris
- * osiris@katamail.com
- */
+#ifndef _UTSNAME_H
+#define _UTSNAME_H
 
-#define VERSION "0"
-#define PATCHLEVEL "1"
-#define EXTRAVERSION "-trunk"
-#define NAME "DreamOS"
-#define REV_NUM "-r61"
+#define SYS_LEN 257
+
+struct utsname {
+  char  sysname[SYS_LEN];
+  char  nodename[SYS_LEN];
+                 
+  char  release[SYS_LEN];
+  char  version[SYS_LEN];
+  char  machine[SYS_LEN];
+};
+
+int uname(struct utsname*);
+  
+#endif

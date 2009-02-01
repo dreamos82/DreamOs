@@ -23,27 +23,7 @@
 #ifndef __COMMANDS_H
 #define __COMMANDS_H
 
-#include <multiboot.h>
-#include <kernel.h>
-#include <stddef.h>
-#include <video.h>
-#include <pic8259.h>
-#include <8253.h>
-#include <gdt.h>
-#include <idt.h>
-#include <cpuid.h>
-#include <stdio.h>
-#include <string.h>
-#include <fismem.h>
-#include <io.h>
-#include <keyboard.h>
-#include <paging.h>
-#include <use.h>
-#include <shell.h>
 #include <kheap.h>
-#include <version.h>
-#include <cpuid.h>
-#include <clock.h>
 
 int argc;
 char **argv;
@@ -57,7 +37,7 @@ void poweroff();
 void kmalloc_try();
 void do_fault();
 
-void uname();
+void uname_cmd();
 void uname_help();
 void uname_info();
 void printmem();
