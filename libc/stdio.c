@@ -81,7 +81,6 @@ int printf (const char *format, ...)
     char current[255]; // maybe this size will be changed
     char *cur_p = &current[0]; // pointer to the previous array
     int cursize = 0;
-    int ishex = 0;
 
     short int direction=RIGHT;
     short int width=0;
@@ -127,7 +126,6 @@ int printf (const char *format, ...)
             if (*format == 'x' || *format == 'X') {
                 int varhex = va_arg (ap, int);
                 _kntos (cur_p, varhex, 16);
-                ishex = 1;
             }
             if (*format == 'n')
                 _kntos (cur_p, len, 10);
@@ -144,13 +142,10 @@ int printf (const char *format, ...)
             for (i=1; i<=width; i++)
                 putchar (' ');
             }
-            /* Print the argument converted to a string */
 
-            if (ishex != 1) {
-              *(cur_p + cursize) = '\0';
-              _kputs (cur_p);
-            }
-            ishex = 0;
+            /* Print the argument converted to a string */
+            *(cur_p + cursize) = '\0';
+            _kputs (cur_p);
         }
         else
             putchar (*format);

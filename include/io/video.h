@@ -48,8 +48,7 @@ int _kgetcolumn();
 void _krotate_buffer();
 void _kscrollup();
 void _kscrolldown();
-void _kntohex (unsigned int);
-void _kdecbin (int);
+void _kntohex (char *, unsigned int);
 
 unsigned short shell_mess;
 

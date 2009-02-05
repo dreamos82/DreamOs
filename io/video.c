@@ -1,4 +1,4 @@
-/***************************************************************************
+	/***************************************************************************
  *            video.c
  *
  *  Sat Mar 31 07:47:55 2007
@@ -39,10 +39,6 @@ char upbuffer[_SCR_H][_SCR_W*2];
 char downbuffer[_SCR_H][_SCR_W*2];
 int is_scrolled=0;
 int is_shifted_once=0;
-
-/* Useful for base conversions */
-int binvp[255];
-int binlen=0;
 	 
 void _kputc(char c)
 {
@@ -211,100 +207,30 @@ int _kgetline()
   return linea;
 }
 
-/* 
- * Convert from decimal to binary by saving in an integer array
- */
-void _kdecbin (int n)
-{
-  int temp[255];
-  int a=0;
-
-  do {
-    temp[a++] = n % 2;
-    n /= 2;
-  } while (n>0);
-
-  binlen = a;
-  int b, j=a;
-
-  /* Reverse the array */
-  for (b=0, --j; j>=0; j--, b++)
-    binvp[b] = temp[j];
-}
-
-char *resulthex = 0;
 /*
  * Convert a number into an hexadecimal string
  */
-void _kntohex (unsigned int number)
+void _kntohex (char *buffer, unsigned int decnum)
 {
-  int a, ct, count;
-  int four_bit[4];
-  char str[5];
-  char hex[255];
-  int j=0;
-  char hexnum[17] = "0123456789abcdef";
+  int shift=0;
+  int tempnum = decnum;
 
-  char *binnum[17];
-  binnum[0] = "0000";
-  binnum[1] = "0001";
-  binnum[2] = "0010";
-  binnum[3] = "0011";
-  binnum[4] = "0100";
-  binnum[5] = "0101";
-  binnum[6] = "0110";
-  binnum[7] = "0111";
-  binnum[8] = "1000";
-  binnum[9] = "1001";
-  binnum[10] = "1010";
-  binnum[11] = "1011";
-  binnum[12] = "1100";
-  binnum[13] = "1101";
-  binnum[14] = "1110";
-  binnum[15] = "1111";
-  binnum[16] = '\0';
-
-
-  _kdecbin (number);
-  binlen--;
-
- ciclo:
-  for (a=0; a<4; a++)
-    four_bit[a] = 0;
-
-  /* ciclo per mettere i 4bit in single */
-  for (ct=3; binlen>=0 && ct>=0; ct--, binlen--)
-    four_bit[ct] = binvp[binlen];
-
-  for (count=0; count<4; count++)
-      str[count] = four_bit[count] + '0';
-  str[4] = '\0';
-  
-  /* Fa il confronto
-   * Te mi chiederai: ma la strcmp non ce l'abbiamo
-   * beh io mi ricordo che nel vecchio dreamos c'era
-   * al massimo la rifaccio, non è poi complicata ...
-   */
-  for (count=0; count<16; count++) {
-    if (_kstrncmp (str, binnum[count], 4) == 0)
-      hex[j++] = hexnum[count];
+  while (tempnum>=16) {
+    tempnum >>= 4;
+    shift++;
   }
-    
-  /* Se ancora non siamo arrivati alla fine
-   * ripete tutto
-   */  
-  if (binlen>=0) { 
-    goto ciclo;
+
+  for (; shift>=0; shift--) {
+    tempnum = decnum;
+    tempnum >>= (4*shift);
+    tempnum &= 0xF;
+
+    if (tempnum<10)
+      *buffer++ = '0'+tempnum;
+    else
+      *buffer++ = 'A'+tempnum-10;
   }
-  
-  /* Alla fine, hex contiene l'esadecimale, ma al contrario!
-   * Indi rovesciamo tutto
-   */
-  int b;
-  for (b=0, --j; j>=0; j--, b++)
-    resulthex[b] = hex[j];
-  resulthex [b] = '\0';
-  // result contiene il risultato di tutte le fatiche :D
+  *buffer = '\0';
 }
 
 
@@ -323,37 +249,30 @@ void _kntos(char *buffer,unsigned int num, int base)
 
   p = pbase = buffer;
 
-  if (base==16) {
-     _kntohex (num);
-      buffer = resulthex; // da correggere
-      _kputs (buffer);
-      goto end;
-  }
+  if (base==16)
+     _kntohex (buffer, num);
+  else {
+    if (num == 0)
+      *p++ = 48;
 
-  if (num == 0)
-    *p++ = 48;
+    while(num > 0)
+    {
+      mod = num % base;
+      *p++ = mod + 48;
+      num = num / base;
+    }
 
-  while(num > 0)
-  {
-    mod = num % base;
-    *p++ = mod + 48;
-    num = num / base;
-  }
-
-  *p-- = 0;
-  while(p > pbase)
-  {
-    char tmp;
-    tmp = *p;
-    *p = *pbase;
-    *pbase = tmp;
+    *p-- = 0;
+    while(p > pbase)
+    {
+      char tmp;
+      tmp = *p;
+      *p = *pbase;
+      *pbase = tmp;
     
-    p--; pbase++;
+      p--; pbase++;
+    }
   }
-
- end:
-  return;
-
 }
 
 /***************************************
