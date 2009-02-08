@@ -18,6 +18,9 @@
 #ifndef _SHELL_H
 #define _SHELL_H
 
+#define USER_LEN 24
+#define CMD_LEN 256
+
 void shell(void);
 
 #endif

@@ -53,13 +53,13 @@ char *strcpy (char *dest, const char *src)
 /*
  * Return the number of a string's characters
  */
-size_t strlen (const char *s)
-{
-    int len = 0;
-    while (*s != 0) { s++; len++; }
-
-    return len;
+size_t strlen(const char* s) {
+	const char *sc;
+	for(sc = s; *sc ; sc++)
+		/*nothing*/ ;
+	return sc-s;
 }
+
 
 /*
  * Compare n characters of s2 and s1

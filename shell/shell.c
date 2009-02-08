@@ -69,14 +69,14 @@ void options(char *com)
 /* corpo della shell */
 void shell()
 {
-  char cmd[256];
+  char cmd[CMD_LEN];
   char *cmd_ptr;
-  char *user = kmalloc(24);
+  char *user = kmalloc(USER_LEN);
   char *commands[NUM_COM+1] = { "help", "clear", "poweroff", "kmalloc", "do_fault", "aalogo", "uname", "printmem", "credits", "sleep", "cpuid", "date", "echo", "answer", NULL };
   void (*routines[NUM_COM])(void) = { help, _kclear, poweroff, kmalloc_try, do_fault, aalogo, uname_cmd, printmem, credits, sleep_cmd, cpuid, date, echo, answer };
   int i=0;
 
-  memset(user, 0, strlen(user));
+  memset(user, '\0', USER_LEN);
   printf(LNG_USER);
   scanf ("%23s",user);
 
@@ -85,13 +85,13 @@ void shell()
     scanf ("%23s",user);
     printf(LNG_USER_R);
   }
-	
+ 
   _kclear();
   aalogo();
   printf("\n\n\n\n");
-  argc=1;
-  shell_mess = strlen (user) + 3;
-
+  argc=1;  
+  shell_mess = strlen(user) + 3;
+  
   for (;;)
   {
     printf("%s~# ",user);
