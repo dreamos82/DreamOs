@@ -33,4 +33,33 @@
 #define LNG_USER_R "[x] Per favore, inserisci il nome utente :)\n"
 #define LNG_UNKNOWN_CMD "Comando sconosciuto:"
 
+// DATE ME NOE!
+// MESI: sereno variabile in tutto il nord Italia
+#define LNG_DATE_JAN "Gennaio"
+#define LNG_DATE_FEB "Febbraio"
+#define LNG_DATE_MAR "Marzo"
+#define LNG_DATE_APR "Aprile"
+#define LNG_DATE_MAY "Maggio"
+#define LNG_DATE_JUN "Giugno"
+#define LNG_DATE_JUL "Luglio"
+#define LNG_DATE_AUG "Agosto"
+#define LNG_DATE_SEP "Settembre"
+#define LNG_DATE_OCT "Ottobre"
+#define LNG_DATE_NOV "Novembre"
+#define LNG_DATE_DEC "Dicembre"
+// GIORNI: Foschia in Sardegna e coste tirreniche
+#define LNG_DAY_SUN "Domenica"
+#define LNG_DAY_MON "Lunedi"
+#define LNG_DAY_TUE "Martedi"
+#define LNG_DAY_WED "Mercoledi"
+#define LNG_DAY_THU "Giovedi"
+#define LNG_DAY_FRI "Venerdi"
+#define LNG_DAY_SAT "Sabato"
+// ORE: Tutto il resto si becca un bel maltempo.
+#define LNG_HOUR_SUMM "Ora legale"
+#define LNG_HOUR_WINT "Ora solare"
+#define LNG_TIMESTAMP "Sono le "
+#define LNG_TIMESTAMP2 " del "
+#define LNG_TIMESTAMP3 " di "
+
 #endif

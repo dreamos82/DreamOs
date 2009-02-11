@@ -42,6 +42,7 @@ int get_month();
 int get_year();
 int get_day_w();
 char* get_month_lng();
+char* get_day_lng();
 void date();
 
 

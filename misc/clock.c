@@ -23,6 +23,7 @@
  */
 #include <clock.h>
 #include <stdio.h>
+#include <use.h>
 
 int get_second()
 {
@@ -79,47 +80,90 @@ char* get_month_lng()
   c = get_month();
   switch(c) {
     case 1:
-      return "Gennaio";
+      return LNG_DATE_JAN;
       break;
     case 2:
-      return "Febbraio";
+      return LNG_DATE_FEB;
       break;
     case 3:
-      return "Marzo";
+      return LNG_DATE_MAR;
       break;
     case 4:
-      return "Aprile";
+      return LNG_DATE_APR;
       break;
     case 5:
-      return "Maggio";      
+      return LNG_DATE_MAY;
+      break;
     case 6:
-      return "Giugno";      
+      return LNG_DATE_JUN;      
       break;
     case 7:
-      return "Luglio";     
+      return LNG_DATE_JUL;     
       break;
     case 8:
-      return "Agosto";  
+      return LNG_DATE_AUG;  
       break;
     case 9:
-      return "Settembre";
+      return LNG_DATE_SEP;
       break;
     case 10:
-      return "Ottobre";
+      return LNG_DATE_OCT;
       break;
     case 11:
-      return "Novembre";
+      return LNG_DATE_NOV;
       break;
     case 12:
-      return "Dicembre";     
+      return LNG_DATE_DEC;     
+      break;
+  }
+  return "";
+}
+
+char* get_day_lng()
+{
+  int c;
+  c = get_day_w();
+  switch(c) {
+    case 1:
+      return LNG_DAY_SUN;
+      break;
+    case 2:
+      return LNG_DAY_MON;
+      break;
+    case 3:
+      return LNG_DAY_TUE;
+      break;
+    case 4:
+      return LNG_DAY_WED;
+      break;
+    case 5:
+      return LNG_DAY_THU;
+      break;
+    case 6:
+      return LNG_DAY_FRI;      
+      break;
+    case 7:
+      return LNG_DAY_SAT;     
       break;
   }
   return "";
 }
 		
+//~ void date()
+//~ {
+	//~ asm("cli");	
+	//~ printf("Ora: %02x:%02x:%02x - %02x - %s - %02x\n",get_hour(),get_minute(),get_second(),get_day_m(),get_month_lng(),0x2000+get_year());	
+	//~ asm("sti");
+//~ }
+
 void date()
 {
-	asm("cli");	
-	printf("Ora: %02x:%02x:%02x - %02x - %s - %02x\n",get_hour(),get_minute(),get_second(),get_day_m(),get_month_lng(),0x2000+get_year());	
+	asm("cli");
+	printf("%s ", LNG_TIMESTAMP);
+	printf("%x:%x:%x " ,get_hour(),get_minute(),get_second());	
+	printf("%s %s ", LNG_TIMESTAMP3,get_day_lng());
+	printf("%02x ", get_day_m());
+	printf("%s ", get_month_lng()); 
+	printf("%02x\n",0x2000+get_year());
 	asm("sti");
 }

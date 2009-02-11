@@ -43,6 +43,8 @@
 
 #define DIRTY 0x01
 
+#define PF_MASK 0x03
+
 typedef unsigned int pde_t; /**< Tipo dati per indicare una page dir entry */
 typedef unsigned int pte_t; /**< Tipo dati per indicare una page table entry */
 

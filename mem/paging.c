@@ -231,7 +231,7 @@ void page_fault_handler (int ecode)
         /* Ricava l'indirizzo che ha causato l'eccezione */
     asm ("movl %%cr2, %0":"=r" (fault_addr));
 
-    if ((ecode & 0b0011) == 2 || (ecode & 0b0011) == 0) {
+    if ((ecode & PF_MASK) == 2 || (ecode & PF_MASK) == 0) {
     pdir = BITRANGE (fault_addr, 22, 31);
     ptable = BITRANGE (fault_addr, 12, 21);
     #ifdef DEBUG

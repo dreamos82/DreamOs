@@ -32,4 +32,32 @@
 #define LNG_USER_R "[x] Please, insert your username :)\n"
 #define LNG_UNKNOWN_CMD "Unknown command:"
 
+// DATE ME NOE!
+// MONTHS
+#define LNG_DATE_JAN "January"
+#define LNG_DATE_FEB "February"
+#define LNG_DATE_MAR "March"
+#define LNG_DATE_APR "April"
+#define LNG_DATE_MAY "May"
+#define LNG_DATE_JUN "June"
+#define LNG_DATE_JUL "July"
+#define LNG_DATE_AUG "August"
+#define LNG_DATE_SEP "September"
+#define LNG_DATE_OCT "October"
+#define LNG_DATE_NOV "November"
+#define LNG_DATE_DEC "December"
+// DAYS
+#define LNG_DAY_SUN "Sunday"
+#define LNG_DAY_MON "Monday"
+#define LNG_DAY_TUE "Tuesday"
+#define LNG_DAY_WED "Wednesday"
+#define LNG_DAY_THU "Thursday"
+#define LNG_DAY_FRI "Friday"
+#define LNG_DAY_SAT "Saturday"
+// HOURS
+#define LNG_HOUR_SUMM "Summer hour"
+#define LNG_HOUR_WINT "Winter hour"
+#define LNG_TIMESTAMP "It's "
+#define LNG_TIMESTAMP2 " of "
+#define LNG_TIMESTAMP3 " of "
 #endif
