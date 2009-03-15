@@ -105,7 +105,7 @@ void shell()
       goto end;
 
     for (i=NUM_COM; i>=0; --i) {
-      if(strcmp(argv[0], commands[i]) == 0) {
+      if(strcmp(argv[0], commands[i]) == NULL) {
         (*routines[i])();
         break;
       }

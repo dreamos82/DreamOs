@@ -1,7 +1,6 @@
 /***************************************************************************
- *            cloch.c
- *
- *  Sat Mar 31 07:47:17 2007
+ *            clock.c
+ s *  Sat Mar 31 07:47:17 2007
  *  Copyright  2007  Alessandro Lopez - Ivan Gualandri
  *  Email
  ****************************************************************************/
@@ -148,22 +147,11 @@ char* get_day_lng()
   }
   return "";
 }
-		
-//~ void date()
-//~ {
-	//~ asm("cli");	
-	//~ printf("Ora: %02x:%02x:%02x - %02x - %s - %02x\n",get_hour(),get_minute(),get_second(),get_day_m(),get_month_lng(),0x2000+get_year());	
-	//~ asm("sti");
-//~ }
 
 void date()
 {
-	asm("cli");
-	printf("%s ", LNG_TIMESTAMP);
-	printf("%x:%x:%x " ,get_hour(),get_minute(),get_second());	
-	printf("%s %s ", LNG_TIMESTAMP3,get_day_lng());
-	printf("%02x ", get_day_m());
-	printf("%s ", get_month_lng()); 
-	printf("%02x\n",0x2000+get_year());
-	asm("sti");
+       asm("cli");
+       printf("%s %x:%x:%x %s %s %02x %s %02x\n",LNG_TIMESTAMP,get_hour(),get_minute(),get_second(),LNG_TIMESTAMP3, get_day_lng(), get_day_m(), get_month_lng(), 0x2000+get_year());
+       asm("sti");
 }
+

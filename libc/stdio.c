@@ -29,6 +29,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <keyboard.h>
+#include <kheap.h>
 
 #define LEFT 1
 #define RIGHT 0
@@ -78,8 +79,8 @@ int atoi(const char *nptr)
 int printf (const char *format, ...)
 {
     va_list ap;
-    char current[255]; // maybe this size will be changed
-    char *cur_p = &current[0]; // pointer to the previous array
+    char current[255];
+    char *cur_p = &current[0];
     int cursize = 0;
 
     short int direction=RIGHT;
@@ -113,8 +114,9 @@ int printf (const char *format, ...)
 
             /* Some data type aren't supported yet
              * In the future we will fix this */
-            if (*format == 's')
-                cur_p = va_arg (ap, char *);
+            if (*format == 's') {
+		cur_p = strcpy(cur_p, va_arg (ap, char *));
+            }
             if (*format == 'd' || *format == 'i') {
                 int varint = va_arg (ap, int);
                 _kntos (cur_p, varint, 10);
@@ -155,8 +157,8 @@ int printf (const char *format, ...)
         direction=RIGHT;
         width=0;
         len++;
-        for (i=0; i<255; i++)
-            current[i] = 0;
+        for(i=0; i<255; i++)
+	  current[i] = 0;
     }
     va_end (ap); // end of arguments
     return len;

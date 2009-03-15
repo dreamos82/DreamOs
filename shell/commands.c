@@ -240,13 +240,60 @@ void sleep_cmd(void)
   } else printf ("Missing operand\n");
 }
 
+void cpuid_help()
+{
+  printf ("CPUID help message\n"
+          "-v : shows verbose CPUID information\n");
+}
+
+/*
+ * Call CPUID command and display information
+ */
 void cpuid(void)
 {
-  struct cpuinfo_generic *sinfo = get_cpuid();
+  struct cpuinfo_generic *sinfo;
+
+  /* List of features */
+  char *ecx_features[ECX_FLAGS_SIZE] = { "SSE3", "Reserved", "Reserved", "Monitor/MWAIT", "CPL Debug Store", "Virtual Machine", "Safer Mode", "Enhanced Intel SpeedStep Technology", "Thermal Monitor 2", "SSSE3", "L1 Context ID", "Reserved", "Reserved", "CMPXCHG16B", "xTPR Update Control", "Perfmon and Debug Capability", "Reserved", "Reserved", "DCA", "SSE4.1", "SSE4.2", "Reserved", "Reserved", "POPCNT" };
+  char *edx_features[EDX_FLAGS_SIZE] = { "x87 FPU", "Virtual 8086 Mode", "Debugging Extensions", "Page Size Extensions", "Time Stamp Counter", "RDMSR and WRMSR", "Physical Address Extensions", "Machine Check Exception", "CMPXCHG8B", "APIC On-chip", "Reserved", "SYSENTER and SYSEXIT", "Memory Type Range Registers", "PTE Global Bit", "Machine Check Architecture", "Conditional Move Instructions", "Page Attribute Table", "36-bit Page Size", "Processor Serial Number", "Reserved", "Debug Store", "Thermal Monitor and Clock Facilities", "Intel MMX", "FXSAVE and FXRSTOR", "SSE", "SSE2", "Self Snoop", "Multi-Threading", "TTC", "Reserved", "Pending Break Enable" };
+  
+  int i;
+  int verbose=0;
+
+  /* Examine possible options */
+  if (argv[1] != NULL) {
+    if (strcmp (argv[1], "-v") == 0)
+      verbose=1;
+    else {
+      printf ("Unknown option %s\n", argv[1]);
+      cpuid_help();
+      return;
+    }
+  }
+
+  sinfo = kmalloc(sizeof(struct cpuinfo_generic));
+  get_cpuid (sinfo);
 
   printf ("----- CPUID Information -----\n");
+  if (strcmp(sinfo->brand_string, "Reserved") != 0)
+    printf ("%s\n", sinfo->brand_string);
   printf ("Vendor: %s\n", sinfo->cpu_vendor);
-  printf ("Type: %s\n", sinfo->cpu_type);
+  printf ("Type: %s, Family: %x, Model: %x\n", sinfo->cpu_type, sinfo->cpu_family, sinfo->cpu_model);
+  printf ("Apic ID: %d\n", sinfo->apic_id);
+
+  if (verbose==1) {
+    printf ("\n--- Supported features ---\n");
+    for (i=0; i<ECX_FLAGS_SIZE; i++) {
+      if (sinfo->cpuid_ecx_flags[i] == 1)
+        printf ("%s\n", ecx_features[i]);
+    }
+    for (i=0; i<EDX_FLAGS_SIZE; i++) {
+      if (sinfo->cpuid_edx_flags[i] == 1)
+        printf ("%s\n", edx_features[i]);
+    }
+    printf ("--------------------------\n");
+  }
+
   free (sinfo);
 }
 

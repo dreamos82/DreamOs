@@ -26,40 +26,29 @@
 
 #include <stddef.h>
 
+#define ECX_FLAGS_SIZE 24
+#define EDX_FLAGS_SIZE 32
+
 struct cpuinfo_generic {
     char *cpu_vendor;
     char *cpu_type;
     int cpu_family;
     int cpu_model;
-    int cpu_csize;
+    int apic_id;
+    int cpuid_ecx_flags[ECX_FLAGS_SIZE];
+    int cpuid_edx_flags[EDX_FLAGS_SIZE];
+    int is_brand_string;
+    char *brand_string;
 };
 
-/* Flags about what is supported or not */
-struct cpuinfo_flags {
-    ushort est  : 1;
-    ushort tm2  : 1;
-    ushort htt  : 1;
-    ushort ss   : 1;
-    ushort sse2 : 1;
-    ushort sse  : 1;
-    ushort fxsr : 1;
-    ushort mmx  : 1;
-    ushort acpi : 1;
-    ushort ds   : 1;
-    ushort pat  : 1;
-    ushort mca  : 1;
-    ushort pge  : 1;
-    ushort mtrr : 1;
-    ushort sep  : 1;
-    ushort mce  : 1;
-    ushort msr  : 1;
-    ushort pse  : 1;
-    ushort de   : 1;
-    ushort fpu  : 1;
+struct registri {
+    int eax;
+    int ebx;
+    int ecx;
+    int edx;
 };
 
 char cpu_vendor[12]; // This will contain the main string
-/* Have a look into cpuid.c for this procedure */
-struct cpuinfo_generic * get_cpuid (void);
-
+void get_cpuid (struct cpuinfo_generic *);
 #endif
+

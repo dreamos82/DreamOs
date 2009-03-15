@@ -89,7 +89,7 @@ int main_loop(struct multiboot_info *boot_info)
     _kprintOK();    
     printf("Memory (upper) amount-> %d kb \n", boot_info->mem_upper);
     printf("Memory (lower) amount-> %d kb \n", boot_info->mem_lower);
-    get_cpuid();    
+
     printf("\n");
     printf("----\n");
     printf(LNG_SHELL);
