@@ -86,28 +86,35 @@ void poweroff()
 
 void kmalloc_try()
 {
-  int *b;
+  int *b, *c,*d;
   int i=0;
 
-  printf("Kmalloc try: ...\n");
-  b = (int *)kmalloc(10 * sizeof(int));
-  printf("Address obtained: %d\n", b);
+  printf("Kmalloc try: ... ");
+  //print_heap_list (kheap->free_list);
+  b = (int *)kmalloc(15 * sizeof(int));
+  c = (int *)kmalloc(10 * sizeof(int));
+  d = (int *)kmalloc(15 * sizeof(int));
+  printf("Address obtained: %d %d %d\n", b, c, d);
   
-  while(i<10) {
+  while(i<15) {
     b[i] = i*2;
+    if(i<10) c[i] = i*3;
+    d[i] = i*2;
     i++;
   }
   i=0;
 
-  while(i<10) {
-    printf("b[%d] = %d\n",i, b[i]);
+  while(i<15) {
+    printf("b[%d] = %d d[%d] = %d ",i, b[i], i,d[i]);
+    if(i<10) printf("c[%d] = %d\n", i, c[i]);
+    else printf("\n");
     i++;
   }
-
-  printf("Address of b: %d\n", b);
   printf("Navigating used list...\n");
   print_heap_list (kheap->used_list);
   free (b);
+  free (c);
+  free (d);
 }
 
 void do_fault()

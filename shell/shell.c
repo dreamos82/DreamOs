@@ -53,7 +53,7 @@ void options(char *com)
   argc=0;
 
   for (; *com; com++)
-  {
+  {    
     argv[argc] = (char *)kmalloc(sizeof(char) * 10);
     while (*com != ' ') {
       *(argv[argc] + i) = *com++;
@@ -115,7 +115,7 @@ void shell()
 
     end:
     memset (cmd, 0, strlen(cmd));
-    for (--argc; argc>=0; argc--) {
+    for (--argc; argc>=0; argc--) {      
       free (argv[argc]);
     }
   }

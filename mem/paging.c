@@ -40,7 +40,6 @@ extern size_t tot_mem;
 extern unsigned int end;
 extern heap_t *kheap;
 
-
 void init_paging(){
     int i;
     printf(LNG_PAGING);
@@ -105,7 +104,7 @@ unsigned int* create_pageTable(){
   * @return none
   */
 void set_pagedir_entry(int pos, unsigned int base, unsigned char opt1 , unsigned char opt2){
-    current_page_dir[pos] = (base&0xFFFFF000)|opt1|opt2;
+	current_page_dir[pos] = (base&0xFFFFF000)|opt1|opt2;
     #ifdef DEBUG
     printf("base: %d, basepde: %d\n", base, current_page_dir[pos]);
     #endif
@@ -175,7 +174,7 @@ void set_pagetable_entry_ric(int pd_entry, int pt_entry ,unsigned int base, unsi
   * @return Il contenuto dell'entry
   */
 unsigned int get_pagedir_entry(int num){
-    unsigned int *mod_address;
+    unsigned int *mod_address;    
     mod_address= (0xFFFFF000 + (num*4));
     return *mod_address;
 }
@@ -189,7 +188,7 @@ unsigned int get_pagedir_entry(int num){
   * @return Il contenuto dell'entry
   */
 unsigned int get_pagetable_entry(int dir_num, int tab_num){
-    unsigned int *mod_address;
+    unsigned int *mod_address;    
     mod_address=(0xFFC00000|(dir_num<<12))+ (tab_num*4);
     return (unsigned int) (*mod_address);
 }

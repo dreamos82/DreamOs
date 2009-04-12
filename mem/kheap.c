@@ -34,6 +34,7 @@
 extern unsigned int end;
 extern size_t tot_mem;
 heap_t *kheap;
+heap_t *kheap_tmp;
 unsigned int address_cur = (unsigned int) &end;
 unsigned int node_address;
 
@@ -41,7 +42,7 @@ void* kmalloc(unsigned int size)
 {
    unsigned int temp;
    if(kheap!=0) {
-     return (void *) alloc(size, kheap);
+     if (size>0) return (void *) alloc(size, kheap);
    }
    else {            
      temp = address_cur;
@@ -55,11 +56,11 @@ void try_alloc()
 {
    
     printf("try_alloc(): Used list address: %d, Value: %d\n", &(kheap->used_list), kheap->used_list);
-    alloc(5000, kheap);
+    alloc(50, kheap);
     alloc(60, kheap);
     alloc(50, kheap);
     alloc(100, kheap);
-    alloc(6000, kheap);    
+    alloc(6, kheap);    
     printf("Used\n");
     print_heap_list (kheap->used_list);
     printf("Free\n");
@@ -112,52 +113,48 @@ heap_t* make_heap(unsigned int start, unsigned int size)
   */
 void *alloc(unsigned int size, heap_t *cur_heap)
 {    
-    int n_pages = size / 4096;
-    int aval_pages;
     heap_node_t* new_node = NULL;
     heap_node_t* free_heap_list = cur_heap->free_list;    
     heap_node_t* prev_node;
-    if(size%4096 !=0)
-      n_pages++;    
     #ifdef DEBUG
     printf("----\n");
-    printf("Number of pages: %d ", n_pages);
+    printf("Required Size: %d ", size);    
     #endif
     prev_node = free_heap_list;
 
     /* Look for a free block of memory in the heap's free memory list */    
     while(free_heap_list) {
-      if(free_heap_list->size >= size) {
-        aval_pages = free_heap_list->size/4096;
-        if(free_heap_list->size%4096 !=0)
-            aval_pages++;
+      if(free_heap_list->size >= size) {   
         #ifdef DEBUG
         printf("Available_pages: %d\n", aval_pages);
         #endif
-        if(aval_pages > n_pages){
+        /*Se lo spazio disponibile e' maggiore di quello richiesto*/
+        if(free_heap_list->size > size){
             #ifdef DEBUG
             printf("Node should be splitted\n");
             #endif
-            new_node = (heap_node_t*)alloc_node();
-            new_node->start_address = free_heap_list->start_address;
+            new_node = (heap_node_t*)alloc_node();            
+            new_node->start_address = free_heap_list->start_address;            
             new_node->next = NULL;
-            new_node->size = n_pages*0x1000;
+            new_node->size = size;
             insert_list (new_node, &(cur_heap->used_list));
-            free_heap_list->size = (free_heap_list->size) - (n_pages*0x1000);
-            free_heap_list->start_address = free_heap_list->start_address + (n_pages*0x1000);
+            free_heap_list->size = (free_heap_list->size) - (size);
+            free_heap_list->start_address = free_heap_list->start_address + (size);
             #ifdef DEBUG
             printf("New_node -> Size: %d, start_address: %d\n", new_node->size, new_node->start_address);
             #endif
         }
-        else if(aval_pages == n_pages){
+        /*Se lo spazio richiesto e' uguale a quello disponibile*/         
+        else if(free_heap_list->size == size){
             if(prev_node == free_heap_list) {                
                 kheap->free_list = (heap_node_t*)free_heap_list->next;
-            }
+            }            
             else prev_node->next = free_heap_list->next;
-            insert_list (free_heap_list, &(cur_heap->used_list));            
+            insert_list (free_heap_list, &(cur_heap->used_list));
+            return (void *)free_heap_list->start_address;            
         }        
         #ifdef DEBUG        
-        printf("free_heap_list -> Actual size: %d, start_address: %d\n", free_heap_list->size,        free_heap_list->start_address);
+        printf("free_heap_list -> Actual size: %d, start_address: %d\n", free_heap_list->size, free_heap_list->start_address);
         printf("----\n");
         #endif
         break;
@@ -169,7 +166,8 @@ void *alloc(unsigned int size, heap_t *cur_heap)
    }
    #ifdef DEBUG
    printf("Prev_node: %d \n", prev_node->start_address);
-   #endif
+   printf("New Address: %d ", new_node->start_address);    
+   #endif   
    return (void *)new_node->start_address;
 }
 
@@ -211,8 +209,8 @@ void free (void *location)
 //   heap_node_t *free = kheap->free_list;
   heap_node_t *n2;
 
-  if ((unsigned int)location % 4 != 0) return -1;
-//     printf ("Indirizzo non allineato a 4kb\n");
+	//if ((unsigned int)location % 4 != 0) return -1;
+	//     printf ("Indirizzo non allineato a 4kb\n");
 
   while (busy) {
     if (busy->start_address == (unsigned int)location) {
@@ -248,7 +246,7 @@ void free (void *location)
         #endif
         prev->size += busy->size;
         prev->next = n2;
-	free_node(busy);
+	    free_node(busy);
 // 	insert_list (busy, &(kheap->free_nodes));
       }
       /* Merge n2 into busy */
@@ -260,11 +258,12 @@ void free (void *location)
         busy->next = n2->next;
 // 	insert_list (n2, &(kheap->free_nodes));
 
-	free_node(n2);
+    	free_node(n2);
       }
 
       break;
     }
+    //printf("busy: %d - free: %d\n", busy->start_address, location );
     prev = busy;
     busy = (heap_node_t*)busy->next;
   }
@@ -302,3 +301,70 @@ void free_node(heap_node_t* toadd){
     toadd->next = kheap->free_nodes;
     kheap->free_nodes = toadd;        
 }
+
+/*-----------------------------------------------------------------------------*/
+
+//~ void *alloc(unsigned int size, heap_t *cur_heap)
+//~ {    
+    //~ int n_pages = size / 4096;
+    //~ int aval_pages;
+    //~ heap_node_t* new_node = NULL;
+    //~ heap_node_t* free_heap_list = cur_heap->free_list;    
+    //~ heap_node_t* prev_node;
+    //~ if(size%4096 !=0)
+      //~ n_pages++;    
+    //~ #ifdef DEBUG
+    //~ printf("----\n");
+    //~ printf("Number of pages: %d ", n_pages);
+    //~ #endif
+    //~ prev_node = free_heap_list;
+//~ 
+    //~ /* Look for a free block of memory in the heap's free memory list */    
+    //~ while(free_heap_list) {
+      //~ if(free_heap_list->size >= size) {
+        //~ aval_pages = free_heap_list->size/4096;
+        //~ if(free_heap_list->size%4096 !=0)
+            //~ aval_pages++;
+        //~ #ifdef DEBUG
+        //~ printf("Available_pages: %d\n", aval_pages);
+        //~ #endif
+        //~ /*Se lo spazio disponibile e' maggiore di quello richiesto*/
+        //~ if(aval_pages > n_pages){
+            //~ #ifdef DEBUG
+            //~ printf("Node should be splitted\n");
+            //~ #endif
+            //~ new_node = (heap_node_t*)alloc_node();
+            //~ new_node->start_address = free_heap_list->start_address;
+            //~ new_node->next = NULL;
+            //~ new_node->size = n_pages*0x1000;
+            //~ insert_list (new_node, &(cur_heap->used_list));
+            //~ free_heap_list->size = (free_heap_list->size) - (n_pages*0x1000);
+            //~ free_heap_list->start_address = free_heap_list->start_address + (n_pages*0x1000);
+            //~ #ifdef DEBUG
+            //~ printf("New_node -> Size: %d, start_address: %d\n", new_node->size, new_node->start_address);
+            //~ #endif
+        //~ }
+        //~ /*Se lo spazio richiesto e' uguale a quello disponibile*/         
+        //~ else if(aval_pages == n_pages){
+            //~ if(prev_node == free_heap_list) {                
+                //~ kheap->free_list = (heap_node_t*)free_heap_list->next;
+            //~ }            
+            //~ else prev_node->next = free_heap_list->next;
+            //~ insert_list (free_heap_list, &(cur_heap->used_list));            
+        //~ }        
+        //~ #ifdef DEBUG        
+        //~ printf("free_heap_list -> Actual size: %d, start_address: %d\n", free_heap_list->size,        free_heap_list->start_address);
+        //~ printf("----\n");
+        //~ #endif
+        //~ break;
+      //~ }
+      //~ else {                
+        //~ prev_node = free_heap_list;
+        //~ free_heap_list = (heap_node_t*)free_heap_list->next;
+      //~ }      
+   //~ }
+   //~ #ifdef DEBUG
+   //~ printf("Prev_node: %d \n", prev_node->start_address);
+   //~ #endif
+   //~ return (void *)new_node->start_address;
+//~ }
