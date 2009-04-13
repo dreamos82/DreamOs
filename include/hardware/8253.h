@@ -21,6 +21,7 @@
 
 #define PIT_COMREG 0x43
 #define PIT_DATAREG0 0x40
+#define PIT_DIVISOR 11931
 
 void PIT_handler ();
 void configure_PIT ();

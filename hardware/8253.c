@@ -15,9 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+#include <8253.h>
 #include <io.h>
 #include <stdio.h>
-#include <8253.h>
 #include <pic8259.h>
 
 static unsigned int ticks;
@@ -36,7 +37,7 @@ void PIT_handler ()
 
 void configure_PIT ()
 {
-    int divisor = 65535;
+    int divisor = PIT_DIVISOR;
 
     asm ("cli");
     ticks = seconds = 0;

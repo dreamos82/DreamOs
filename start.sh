@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # This script is more important to do a right compilation..
 # 
 # Coded by Osiris

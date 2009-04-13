@@ -183,8 +183,12 @@ char *gets ()
 	c = getchar();
 	if (c=='\n') // tasto invio
 	    break;
-	else if (c=='\b' && count>0) //backspace
-            count--;
+	else if (c=='\b') //backspace
+	{
+	    if (count>0)
+                count--;
+	}
+	else if (c=='\t'); //tab momentaneamente non implementato
 	else
 	    str[count++] = c;
     } while (count<255);

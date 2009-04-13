@@ -78,7 +78,7 @@ void try_alloc()
   * @param size Heap maximum size
   * @return Pointer to a new heap
   */
-heap_t* make_heap(unsigned int start, unsigned int size)
+heap_t* make_heap(unsigned int size)
 {
     heap_t* new_heap;
     heap_node_t* first_node;

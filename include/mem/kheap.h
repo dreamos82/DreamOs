@@ -47,7 +47,7 @@ typedef struct {
     unsigned int max_size; /** < Massima memoria allocabile */
 } heap_t;
 
-heap_t* make_heap(unsigned int, unsigned int);
+heap_t* make_heap(unsigned int);
 void* kmalloc(unsigned int);
 void kfree(unsigned int);
 void try_alloc();

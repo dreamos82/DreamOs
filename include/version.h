@@ -24,4 +24,4 @@
 #define PATCHLEVEL "1.1"
 #define EXTRAVERSION "-trunk"
 #define NAME "DreamOS"
-#define REV_NUM "-r70"
+#define REV_NUM "-r72"

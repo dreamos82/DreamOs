@@ -70,7 +70,7 @@ void init_paging(){
         i++;
     }        
     load_pdbr((unsigned int)current_page_dir);
-    kheap = make_heap(10,tot_mem - ((unsigned int) &end));
+    kheap = make_heap(tot_mem - ((unsigned int) &end));
 }
 
 /**

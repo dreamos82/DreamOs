@@ -39,10 +39,10 @@ void logo()
   _kcolor (5);
   printf("\n");
   printf("\t\t\t The Dream Operating System \n"
-	 "\t\t           v%s.%s%s      \n\n"
+	 "\t\t           v%s.%s%s %s      \n\n"
 	 "\t\t\t\t Welcome to DreamOS\n"
 	 "\t\t Where dreams don't become Reality and remain dreams. \n"
-	 "\t\t\tR.I.P - Rest in peace with dreamos ^_^        \n",VERSION, PATCHLEVEL, EXTRAVERSION);
+	 "\t\t\tR.I.P - Rest in peace with dreamos ^_^        \n",VERSION, PATCHLEVEL, EXTRAVERSION, REV_NUM	);
 	
   printf("\n\n\n\n");
   _kcolor(7);
