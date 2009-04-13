@@ -23,16 +23,7 @@
 
 #include <cpuid.h>
 #include <kheap.h>
-
-void call_cpuid (struct registri *);
-void cpuid_write_vendor (struct cpuinfo_generic *, struct registri *);
-void cpuid_write_proctype (struct cpuinfo_generic *, struct registri *);
-void cpuid_feature_ecx (struct cpuinfo_generic *, int);
-void cpuid_feature_edx (struct cpuinfo_generic *, int);
-int cpuid_get_byte (int, int, int);
-
-char *cpuid_brand_index (struct registri *);
-char *cpuid_brand_string (struct registri *);
+#include <string.h>
 
 /*
  * Main CPUID procedure

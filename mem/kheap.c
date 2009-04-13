@@ -126,7 +126,7 @@ void *alloc(unsigned int size, heap_t *cur_heap)
     while(free_heap_list) {
       if(free_heap_list->size >= size) {   
         #ifdef DEBUG
-        printf("Available_pages: %d\n", aval_pages);
+        printf("Available_pages: %d\n", free_heap_list->size / 4096);
         #endif
         /*Se lo spazio disponibile e' maggiore di quello richiesto*/
         if(free_heap_list->size > size){

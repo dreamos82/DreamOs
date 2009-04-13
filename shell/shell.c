@@ -77,20 +77,17 @@ void shell()
   int i=0;
 
   memset(user, '\0', USER_LEN);
-  printf(LNG_USER);
-  scanf ("%23s",user);
 
-  while (!strlen(user)) {		
+  do {		
     printf(LNG_USER);
     scanf ("%23s",user);
     printf(LNG_USER_R);
-  }
+  } while (!strlen(user));
  
   _kclear();
   aalogo();
   printf("\n\n\n\n");
   argc=1;  
-  shell_mess = strlen(user) + 3;
   
   for (;;)
   {

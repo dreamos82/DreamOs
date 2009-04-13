@@ -43,11 +43,10 @@ int is_shifted_once=0;
 void _kputc(char c)
 {
     /* Print a character on the screen*/
-  _ksetcursauto();
   _kshiftAll();
   *VIDEO_PTR++ = c;
   *VIDEO_PTR++ = VIDEO_CLR;
-
+  _ksetcursauto();
 }
 
 void _kputs(char *s)

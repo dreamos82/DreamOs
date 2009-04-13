@@ -161,6 +161,7 @@ int printf (const char *format, ...)
 	  current[i] = 0;
     }
     va_end (ap); // end of arguments
+    shell_mess = _kgetcolumn ();
     return len;
 }
 
