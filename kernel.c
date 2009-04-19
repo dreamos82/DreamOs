@@ -41,7 +41,6 @@
 #include <shell.h>
 #include <syscall.h>
 
-
 unsigned int *current_page_table;
 extern unsigned int end;
  multiboot_info_t *boot_informations;
@@ -89,6 +88,10 @@ int main_loop(struct multiboot_info *boot_info)
     _kprintOK();    
     printf("Memory (upper) amount-> %d kb \n", boot_info->mem_upper);
     printf("Memory (lower) amount-> %d kb \n", boot_info->mem_lower);
+
+    /* Alloc and fill CPUID structure */
+    sinfo = kmalloc(sizeof(struct cpuinfo_generic));
+    get_cpuid (sinfo);
 
     printf("\n");
     printf("----\n");

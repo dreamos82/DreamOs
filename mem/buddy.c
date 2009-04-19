@@ -43,7 +43,8 @@ buddy_t* new_buddy(){
     return temp;
 }
 
-unsigned int alloc_buddy(int size, buddy_t* tmp_buddy){
+unsigned int alloc_buddy(int size, buddy_t* tmp_buddy)
+{
     buddy_t* cur_buddy;    
     int new_size;
     cur_buddy = tmp_buddy;

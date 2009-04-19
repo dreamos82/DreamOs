@@ -258,7 +258,6 @@ void cpuid_help()
  */
 void cpuid(void)
 {
-  struct cpuinfo_generic *sinfo;
 
   /* List of features */
   char *ecx_features[ECX_FLAGS_SIZE] = { "SSE3", "Reserved", "Reserved", "Monitor/MWAIT", "CPL Debug Store", "Virtual Machine", "Safer Mode", "Enhanced Intel SpeedStep Technology", "Thermal Monitor 2", "SSSE3", "L1 Context ID", "Reserved", "Reserved", "CMPXCHG16B", "xTPR Update Control", "Perfmon and Debug Capability", "Reserved", "Reserved", "DCA", "SSE4.1", "SSE4.2", "Reserved", "Reserved", "POPCNT" };
@@ -277,9 +276,6 @@ void cpuid(void)
       return;
     }
   }
-
-  sinfo = kmalloc(sizeof(struct cpuinfo_generic));
-  get_cpuid (sinfo);
 
   printf ("----- CPUID Information -----\n");
   if (strcmp(sinfo->brand_string, "Reserved") != 0)
@@ -300,8 +296,6 @@ void cpuid(void)
     }
     printf ("--------------------------\n");
   }
-
-  free (sinfo);
 }
 
 void answer(void)

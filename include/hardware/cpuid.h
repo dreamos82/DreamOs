@@ -60,5 +60,7 @@ int cpuid_get_byte (int, int, int);
 
 char *cpuid_brand_index (struct registri *);
 char *cpuid_brand_string (struct registri *);
+
+struct cpuinfo_generic *sinfo;
 #endif
 
