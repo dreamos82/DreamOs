@@ -50,7 +50,7 @@ void _kscrollup();
 void _kscrolldown();
 void _kntohex (char *, unsigned int);
 
-unsigned short shell_mess;
+unsigned short shell_mess_col, shell_mess_line;
 
 
 #endif /* _VIDEO_H */

@@ -42,7 +42,8 @@ void logo()
 	 "\t\t           v%s.%s%s %s      \n\n"
 	 "\t\t\t\t Welcome to DreamOS\n"
 	 "\t\t Where dreams don't become Reality and remain dreams. \n"
-	 "\t\t\tR.I.P - Rest in peace with dreamos ^_^        \n",VERSION, PATCHLEVEL, EXTRAVERSION, REV_NUM	);
+	 "\t\t\tR.I.P - Rest in peace with dreamos ^_^        \n", 
+	 VERSION, PATCHLEVEL, EXTRAVERSION, REV_NUM);
 	
   printf("\n\n\n\n");
   _kcolor(7);
@@ -68,10 +69,9 @@ void help()
 
 void echo()
 {
-  int c;
-
-    for (c=1; c<argc; c++)
-      printf ("%s ", argv[c]);
+    int c;
+    for (c = 1; c < argc; c++)
+        printf ("%s ", argv[c]);
     printf ("\n");
 }
 
@@ -86,8 +86,8 @@ void poweroff()
 
 void kmalloc_try()
 {
-  int *b, *c,*d;
-  int i=0;
+  int *b, *c, *d;
+  int i = 0;
 
   printf("Kmalloc try: ... ");
   //print_heap_list (kheap->free_list);
@@ -96,17 +96,17 @@ void kmalloc_try()
   d = (int *)kmalloc(15 * sizeof(int));
   printf("Address obtained: %d %d %d\n", b, c, d);
   
-  while(i<15) {
+  while(i < 15) {
     b[i] = i*2;
-    if(i<10) c[i] = i*3;
+    if(i < 10) c[i] = i*3;
     d[i] = i*2;
     i++;
   }
-  i=0;
+  i = 0;
 
-  while(i<15) {
+  while(i < 15) {
     printf("b[%d] = %d d[%d] = %d ",i, b[i], i,d[i]);
-    if(i<10) printf("c[%d] = %d\n", i, c[i]);
+    if(i < 10) printf("c[%d] = %d\n", i, c[i]);
     else printf("\n");
     i++;
   }
@@ -260,11 +260,27 @@ void cpuid(void)
 {
 
   /* List of features */
-  char *ecx_features[ECX_FLAGS_SIZE] = { "SSE3", "Reserved", "Reserved", "Monitor/MWAIT", "CPL Debug Store", "Virtual Machine", "Safer Mode", "Enhanced Intel SpeedStep Technology", "Thermal Monitor 2", "SSSE3", "L1 Context ID", "Reserved", "Reserved", "CMPXCHG16B", "xTPR Update Control", "Perfmon and Debug Capability", "Reserved", "Reserved", "DCA", "SSE4.1", "SSE4.2", "Reserved", "Reserved", "POPCNT" };
-  char *edx_features[EDX_FLAGS_SIZE] = { "x87 FPU", "Virtual 8086 Mode", "Debugging Extensions", "Page Size Extensions", "Time Stamp Counter", "RDMSR and WRMSR", "Physical Address Extensions", "Machine Check Exception", "CMPXCHG8B", "APIC On-chip", "Reserved", "SYSENTER and SYSEXIT", "Memory Type Range Registers", "PTE Global Bit", "Machine Check Architecture", "Conditional Move Instructions", "Page Attribute Table", "36-bit Page Size", "Processor Serial Number", "Reserved", "Debug Store", "Thermal Monitor and Clock Facilities", "Intel MMX", "FXSAVE and FXRSTOR", "SSE", "SSE2", "Self Snoop", "Multi-Threading", "TTC", "Reserved", "Pending Break Enable" };
+  const char *ecx_features[ECX_FLAGS_SIZE] = {
+      "SSE3", "Reserved", "Reserved", "Monitor/MWAIT", "CPL Debug Store", 
+      "Virtual Machine", "Safer Mode", "Enhanced Intel SpeedStep Technology", 
+      "Thermal Monitor 2", "SSSE3", "L1 Context ID", "Reserved", "Reserved", 
+      "CMPXCHG16B", "xTPR Update Control", "Perfmon and Debug Capability", 
+      "Reserved", "Reserved", "DCA", "SSE4.1", "SSE4.2", "Reserved", "Reserved", "POPCNT" 
+  };
+  const char *edx_features[EDX_FLAGS_SIZE] = { 
+      "x87 FPU", "Virtual 8086 Mode", "Debugging Extensions", "Page Size Extensions",
+      "Time Stamp Counter", "RDMSR and WRMSR", "Physical Address Extensions", 
+      "Machine Check Exception", "CMPXCHG8B", "APIC On-chip", "Reserved", 
+      "SYSENTER and SYSEXIT", "Memory Type Range Registers", "PTE Global Bit", 
+      "Machine Check Architecture", "Conditional Move Instructions", 
+      "Page Attribute Table", "36-bit Page Size", "Processor Serial Number", 
+      "Reserved", "Debug Store", "Thermal Monitor and Clock Facilities", "Intel MMX",
+      "FXSAVE and FXRSTOR", "SSE", "SSE2", "Self Snoop", "Multi-Threading", "TTC", 
+      "Reserved", "Pending Break Enable" 
+  };
   
   int i;
-  int verbose=0;
+  int verbose = 0;
 
   /* Examine possible options */
   if (argv[1] != NULL) {

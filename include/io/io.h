@@ -23,10 +23,10 @@
  *  Byte I/O on ports prototypes
  ****************************************************************************/
  
- #ifndef _IO_H
- #define _IO_H
+#ifndef _IO_H
+#define _IO_H
  
- unsigned char inportb (int);
- void outportb (int, int);
+unsigned char inportb (int);
+void outportb (int, int);
  
- #endif
+#endif

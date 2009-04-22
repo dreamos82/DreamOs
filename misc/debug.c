@@ -1,8 +1,8 @@
 /***************************************************************************
- *            utsname.c
+ *            debug.c
  *
- *  Mon Jan 26 23:30:13 2008
- *  Copyright  2007  Ivan Gualandri
+ *  Sat Mar 31 07:47:17 2007
+ *  Copyright  2007  Theking0 - finarfin
  *  Email
  ****************************************************************************/
 
@@ -22,16 +22,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <sys/utsname.h>
-#include <string.h>
-#include <version.h>
 
-int uname(struct utsname* os_infos){
-/*Uname code goes here*/  
-  strcpy(os_infos->sysname, NAME);
-  strcpy(os_infos->release, PATCHLEVEL);
-  strcpy(os_infos->version, VERSION);
-  strcpy(os_infos->nodename, "testbed");
-  strcpy(os_infos->machine, "i686");
-  return 0;
+#include <debug.h>
+#include <io.h>
+/******************************
+ *		Debug Func
+ ******************************/
+
+/**
+ *  Print msg in the bochs prompt 
+ */ 
+void dbg_bochs_print( const unsigned char *msg )
+{
+    register unsigned int i;
+    for ( i = 0; msg[i] != '\0'; i++ )
+        outportb(msg[i],0xE9);
+}
+
+/**
+ *  Send cmd to bochs port
+ */
+inline void dbg_bochs_send_cmd( const int port, const int cmd )
+{
+    outportb(port, cmd);
 }

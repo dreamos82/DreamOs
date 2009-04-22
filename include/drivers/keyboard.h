@@ -32,6 +32,7 @@
 #define KEY_SPACE      0x39
 #define KEY_ENTER      0x1c
 #define KEY_BACKSPACE  0xe
+#define KEY_TAB        0xf
 #define KEY_UPARROW    0x48
 #define KEY_DOWNARROW  0x50
 #define KEY_PGUP       0x49

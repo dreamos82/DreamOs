@@ -29,35 +29,36 @@
 /*
  * Copy n characters from src to dest, returning dest
  */
-char *strncpy (char *dest, const char *src, size_t n)
+char *strncpy (char *dest, register const char *src, 
+	register size_t n)
 {
-    int i;
-
-    for (i=0; i<n; i++)
-        dest[i] = src[i];
-
+    register int i;
+	if ( n > 0 ) {
+		for (i = 0; i < n; i++)
+			dest[i] = src[i];
+	}
     return dest;
 }
 
-char *strcpy (char *dest, const char *src)
+char *strcpy(char *dest, register const char *src)
 {
-  int i;
+	register char *s = dest;
+	while (*s++ = *src++)
+		/* nothing */ ;
 
-  for (i=0; src[i]; i++)
-    *(dest+i) = *(src+i);
-  dest[i] = '\0';
-
-  return dest;
+	return dest;
 }
 
 /*
  * Return the number of a string's characters
  */
-size_t strlen(const char* s) {
-	const char *sc;
-	for(sc = s; *sc ; sc++)
-		/*nothing*/ ;
-	return sc-s;
+size_t strlen(const char *s) 
+{
+	register unsigned int len = 0;
+	while (s[len] != '\0') 
+		len++;
+
+	return(len);	
 }
 
 
@@ -108,31 +109,41 @@ int strcmp (const char *s1, const char *s2)
 }
 
 /* Fill memory location dest with c for n times */
-void *memset(void *dest, const int c, int n)
-{
-  int i;
-  for (i = 0; i < n; i++)
-    *((int *) dest + i) = c;
-  return dest;
+void *memset(void *dest, register const int c, register size_t n)
+{ 
+	register char *s = dest;
+	if ( n > 0 ) {
+		n++;
+		while (--n > 0)
+		    *s++ = c;
+	}
+	return dest;
 }
 
-void *memmove(void * dest,const void *src,size_t count)
+void *memmove(void * dest, const void *src, size_t count)
 {
-	char *tmp, *s;
+	register char *tmp;
+	register const char *s;
 
-	if (dest <= src) {
-		tmp = (char *) dest;
-		s = (char *) src;
-		while (count--)
-			*tmp++ = *s++;
+	if ( count > 0 ) 
+	{
+		if (dest <= src) 
+		{
+			tmp = (char *) dest;
+			s = (char *) src;
+			
+			while (count--)
+				*tmp++ = *s++;
 		}
-	else {
-		tmp = (char *) dest + count;
-		s = (char *) src + count;
-		while (count--)
-			*--tmp = *--s;
+		else 
+		{
+			tmp = (char *) dest + count;
+			s = (char *) src + count;
+			
+			while (count--)
+				*--tmp = *--s;
 		}
-
+	}
 	return dest;
 }
 
@@ -155,11 +166,14 @@ char *strdup (const char *s)
  * Look for the first occurence of c in s
  * Return the substring starting with c
  */
-char *strchr (const char *s, int c)
+char *strchr(register const char *s, register int c)
 {
-    while (*s++ != c);
+	c = (char) c;
+	while (c != *s)
+		if (*s++ == '\0') 
+			return NULL;  /* No Found */
 
-    return --s;
+	return (char *)s;
 }
 
 /*

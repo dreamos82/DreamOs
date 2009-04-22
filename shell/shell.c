@@ -72,9 +72,31 @@ void shell()
   char cmd[CMD_LEN];
   char *cmd_ptr;
   char *user = kmalloc(USER_LEN);
-  char *commands[NUM_COM+1] = { "help", "clear", "poweroff", "kmalloc", "do_fault", "aalogo", "uname", "printmem", "credits", "sleep", "cpuid", "date", "echo", "answer", NULL };
-  void (*routines[NUM_COM])(void) = { help, _kclear, poweroff, kmalloc_try, do_fault, aalogo, uname_cmd, printmem, credits, sleep_cmd, cpuid, date, echo, answer };
-  int i=0;
+
+  const char *commands[NUM_COM + 1] = { 
+      "help", "clear", "poweroff", "kmalloc", "do_fault", 
+      "aalogo", "uname", "printmem", "credits", "sleep", 
+      "cpuid", "date", "echo", "answer", NULL 
+      };
+
+  void (*routines[NUM_COM])(void) = { 
+      help, 
+      _kclear, 
+      poweroff, 
+      kmalloc_try, 
+      do_fault, 
+      aalogo, 
+      uname_cmd, 
+      printmem, 
+      credits, 
+      sleep_cmd, 
+      cpuid, 
+      date, 	
+      echo,
+      answer 
+      };
+
+  int i = 0;
 
   memset(user, '\0', USER_LEN);
 
@@ -95,25 +117,25 @@ void shell()
     scanf("%254s",cmd);
         
     /* elimina eventuali spazi all'inizio del comando */
-    for (i=0, cmd_ptr = cmd; cmd[i] == ' '; i++, cmd_ptr++);
+    for (i = 0, cmd_ptr = cmd; cmd[i] == ' '; i++, cmd_ptr++);
     
     options (cmd_ptr);
     if (strlen(argv[0]) == 0)
-      goto end;
+        goto end;
 
-    for (i=NUM_COM; i>=0; --i) {
-      if(strcmp(argv[0], commands[i]) == NULL) {
-        (*routines[i])();
-        break;
-      }
+    for (i = NUM_COM; i >= 0; --i) {
+        if(strcmp(argv[0], commands[i]) == NULL) {
+            (*routines[i])();
+            break;
+        }
     }
     if (i<0)
       printf(LNG_UNKNOWN_CMD " %s\n", argv[0]);
 
-    end:
-    memset (cmd, 0, strlen(cmd));
+end:
+    memset(cmd, 0, strlen(cmd));
     for (--argc; argc>=0; argc--) {      
-      free (argv[argc]);
+        free (argv[argc]);
     }
   }
 }

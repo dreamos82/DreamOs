@@ -30,15 +30,15 @@
 
 int _kstrncmp (const char *, const char *, int);
 int strcmp (const char *, const char *);
-void *memset(void *, const int, int);
+void *memset(void *, register const int, register size_t);
 extern void * memmove(void *,const void *,size_t);
 void *memcpy(void *, const void *, size_t );
 size_t strlen (const char *);
-char *strncpy (char *, const char *, size_t);
-char *strchr (const char *, int);
+char *strncpy (char *, register const char *, size_t);
+char *strchr (register const char *, register int);
 char *strstr (const char *, const char *);
 char *strtok (char *, const char *);
 char *strncat (char *, const char *, size_t);
-char *strcpy (char *, const char *);
+char *strcpy (char *, register const char *);
 
 #endif

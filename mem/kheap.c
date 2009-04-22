@@ -268,7 +268,6 @@ void free (void *location)
     busy = (heap_node_t*)busy->next;
   }
 
-  if (!busy) return -1;
 //     printf ("Address not found in list\n");
 }
 

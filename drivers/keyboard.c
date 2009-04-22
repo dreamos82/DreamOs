@@ -77,6 +77,8 @@ static int is_tab_pressed;
 static int is_num_pressed;
 static int is_scroll_pressed;
 
+extern unsigned int last_tab;
+
 /*
  * The keyboard handler
  */
@@ -176,7 +178,18 @@ void keyboard_isr (void)
 	buf_w = STEP(buf_w);
 	_knewline();
 	_ksetcursauto();
+	last_tab = 0;
     outportb(EOI, MASTER_PORT);
+	break;
+
+    case KEY_TAB:
+	if (STEP(buf_w) == buf_r)
+	    buf_r = STEP(buf_r);
+	circlebuf[buf_w] = '\t';
+	buf_w = STEP(buf_w);
+	_ktab();
+	_ksetcursauto();
+	last_tab++;
 	break;
 
     /*case KEY_PGUP:

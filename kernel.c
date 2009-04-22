@@ -40,6 +40,7 @@
 #include <use.h>
 #include <shell.h>
 #include <syscall.h>
+#include <debug.h>
 
 unsigned int *current_page_table;
 extern unsigned int end;
@@ -70,8 +71,8 @@ int main_loop(struct multiboot_info *boot_info)
 
     outportb(0xFF, MASTER_PORT_1);
     outportb(0xFF, SLAVE_PORT_1);
-    _kputs(LNG_IDT);
-
+    _kputs(LNG_IDT);    
+    //outportb(0xE9, 'c');
     asm("cli");   
     init_idt();
     _kprintOK();   
@@ -99,7 +100,11 @@ int main_loop(struct multiboot_info *boot_info)
     _kprintOK();
 		printf("[+] Address: 0x%x\n", &end);		   	        
 		printf("\n\n");
+		#ifdef BOCHS_DEBUG
+		dbg_bochs_print("DreamOS Debug");
+		#endif
 		shell();
 
+    return 0;
 }
 

@@ -39,7 +39,8 @@ char upbuffer[_SCR_H][_SCR_W*2];
 char downbuffer[_SCR_H][_SCR_W*2];
 int is_scrolled=0;
 int is_shifted_once=0;
-	 
+unsigned int last_tab=0;
+
 void _kputc(char c)
 {
     /* Print a character on the screen*/
@@ -80,7 +81,15 @@ void _kcolor(char color)
  */
 void _kbackspace()
 {
-    if (_kgetcolumn() > shell_mess) {
+    if (last_tab) {
+      unsigned int i;
+      for (i = 0; i < 7; i++) {
+        VIDEO_PTR -= 2;
+        *VIDEO_PTR = 0x20;
+      }
+      last_tab--;
+    }
+    else if (shell_mess_line != _kgetline () || shell_mess_col < _kgetcolumn ()) {
       VIDEO_PTR -= 2;
       *VIDEO_PTR = 0x20; // delete the character
     }

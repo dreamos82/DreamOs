@@ -30,6 +30,7 @@
 #include <string.h>
 #include <keyboard.h>
 #include <kheap.h>
+#include <debug.h>
 
 #define LEFT 1
 #define RIGHT 0
@@ -161,7 +162,7 @@ int printf (const char *format, ...)
 	  current[i] = 0;
     }
     va_end (ap); // end of arguments
-    shell_mess = _kgetcolumn ();
+
     return len;
 }
 
@@ -178,6 +179,8 @@ char *gets ()
     char *str=0;
     int c;
     int count=0;
+    shell_mess_col = _kgetcolumn ();
+    shell_mess_line = _kgetline ();
 
     do {
 	c = getchar();
@@ -188,7 +191,6 @@ char *gets ()
 	    if (count>0)
                 count--;
 	}
-	else if (c=='\t'); //tab momentaneamente non implementato
 	else
 	    str[count++] = c;
     } while (count<255);
