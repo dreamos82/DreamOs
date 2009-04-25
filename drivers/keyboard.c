@@ -61,7 +61,7 @@ static int shifted_it_map[] =
     -1,  -1,  62,  -1,  -1                                     //88
  };
 
-static unsigned char pad_map[] = { '7', '8', '9', '0', '4', '5', '6', '0', '1', '2', '3', '0', '0' };
+/* UNUSED static unsigned char pad_map[] = { '7', '8', '9', '0', '4', '5', '6', '0', '1', '2', '3', '0', '0' };*/
 
 /* The buffer where keys are stored */
 static int circlebuf[BUFSIZE];
@@ -84,7 +84,6 @@ extern unsigned int last_tab;
  */
 void keyboard_isr (void)
 {
-    int control;
     sc = inportb (0x60); // take scancode from the port    
     /* error handling */
     if (sc == 0x00 || sc == 0xFF) {
@@ -161,6 +160,9 @@ void keyboard_isr (void)
 	    is_scroll_pressed = 0;
 	}
 	break;
+
+    case KEY_ESCAPE:
+        break;
 
     case KEY_BACKSPACE:
 	if (STEP(buf_w) == buf_r)

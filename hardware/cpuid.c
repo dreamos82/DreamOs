@@ -157,10 +157,10 @@ char *cpuid_brand_string (struct registri *r)
   for(r->eax = 0x80000002; r->eax <= 0x80000004; (r->eax)++) {
     r->ebx = r->ecx = r->edx = 0;
     call_cpuid (r);
-    temp = strncat (temp, r->eax, strlen(r->eax));
-    temp = strncat (temp, r->ebx, strlen(r->ebx));
-    temp = strncat (temp, r->ecx, strlen(r->ecx));
-    temp = strncat (temp, r->edx, strlen(r->edx));
+    temp = strncat (temp, (const char*)r->eax, strlen((const char*)r->eax));
+    temp = strncat (temp, (const char*)r->ebx, strlen((const char*)r->ebx));
+    temp = strncat (temp, (const char*)r->ecx, strlen((const char*)r->ecx));
+    temp = strncat (temp, (const char*)r->edx, strlen((const char*)r->edx));
   }
    
   return temp;

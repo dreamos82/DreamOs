@@ -56,8 +56,7 @@ void _kputs(char *s)
     if(*s=='\n')
       _knewline();
     else if(*s=='\033') {
-      *s++;
-      _kcolor(*s);
+      _kcolor(*++s);
     } else if (*s=='\t')
       _ktab();
     else if(*s=='\b')

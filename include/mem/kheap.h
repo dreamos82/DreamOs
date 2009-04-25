@@ -31,10 +31,10 @@ extern unsigned int address_cur;
 /*!  \struct heap_node_t
      \brief Struttura dati che mantiene le informazioni su locazioni occupate e libere di memoria
  */
-typedef struct {
+typedef struct heap_node {
     unsigned int start_address;/** < L'indirizzo di partenza dell'heap */
     unsigned int size;    /** < quanto massimo si puo' espandere */
-    struct heap_node_t* next;
+    struct heap_node* next;
 } heap_node_t;
 
 /*!  \struct heap_t
@@ -52,7 +52,7 @@ void* kmalloc(unsigned int);
 void kfree(unsigned int);
 void try_alloc();
 heap_node_t* alloc_node();
-void free_node();
+void free_node(heap_node_t*);
 
 void* alloc(unsigned int, heap_t*);
 void free (void *);

@@ -228,7 +228,9 @@ void credits(void)
   _kcolor('\011');
   _kputs("Contributors:\n");
   _kcolor('\012');
-  _kputs("Osiris\n"
+  _kputs("vinc94\n"
+  		 "tk0\n"
+  		 "Osiris\n"
          "Celeron\n"
 	 "Hamcha\n"
          "m0nt0\n"

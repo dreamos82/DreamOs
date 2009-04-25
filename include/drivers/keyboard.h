@@ -29,6 +29,7 @@
 /* Special keys */
 #define CODE_BREAK      0x80
 
+#define KEY_ESCAPE     0x1
 #define KEY_SPACE      0x39
 #define KEY_ENTER      0x1c
 #define KEY_BACKSPACE  0xe

@@ -121,8 +121,7 @@ void set_pagedir_entry(int pos, unsigned int base, unsigned char opt1 , unsigned
   * @return none
   */
 void set_pagedir_entry_ric(int pd_entry, unsigned int base, unsigned char opt1, unsigned char opt2){
-    unsigned int* mod_address;    
-    mod_address = 0xFFFFF000 + (pd_entry*4);
+    unsigned int* mod_address  = (unsigned int*) (0xFFFFF000 + (pd_entry*4));
     *mod_address = (base&0xFFFFF000)|opt1|opt2;    
     #ifdef DEBUG
     printf("value for entry n.: %d is: %d\n", pd_entry,*mod_address);
@@ -174,8 +173,7 @@ void set_pagetable_entry_ric(int pd_entry, int pt_entry ,unsigned int base, unsi
   * @return Il contenuto dell'entry
   */
 unsigned int get_pagedir_entry(int num){
-    unsigned int *mod_address;    
-    mod_address= (0xFFFFF000 + (num*4));
+    unsigned int *mod_address = (unsigned int*) (0xFFFFF000 + (num*4));
     return *mod_address;
 }
 
@@ -188,8 +186,7 @@ unsigned int get_pagedir_entry(int num){
   * @return Il contenuto dell'entry
   */
 unsigned int get_pagetable_entry(int dir_num, int tab_num){
-    unsigned int *mod_address;    
-    mod_address=(0xFFC00000|(dir_num<<12))+ (tab_num*4);
+    unsigned int *mod_address = (unsigned int*) (0xFFC00000|(dir_num<<12))+ (tab_num*4);
     return (unsigned int) (*mod_address);
 }
 
@@ -248,7 +245,7 @@ void page_fault_handler (int ecode)
 	      new_pt[i] = 0x00000000;
 	      i++;
 	    }
-	    set_pagedir_entry_ric (pdir, new_pt, PD_PRESENT|SUPERVISOR|WRITE, 0);
+	    set_pagedir_entry_ric (pdir, (unsigned int)new_pt, PD_PRESENT|SUPERVISOR|WRITE, 0);
 	    #ifdef DEBUG
 	    printf ("Nuova entry dopo la mappatura: %d\n", get_pagedir_entry (pdir));
 	    #endif
@@ -261,7 +258,7 @@ void page_fault_handler (int ecode)
 	#endif
 	if (pt_entry == 0) {
 	    new_p = request_pages (1, ADD_LIST);
-	    set_pagetable_entry_ric (pdir, ptable, new_p, PD_PRESENT|SUPERVISOR|WRITE, 0);
+	    set_pagetable_entry_ric (pdir, ptable, (unsigned int)new_p, PD_PRESENT|SUPERVISOR|WRITE, 0);
 	    #ifdef DEBUG
 	    printf ("Nuova entry dopo la mappatura: %d\n", get_pagetable_entry (pdir, ptable));
 	    #endif

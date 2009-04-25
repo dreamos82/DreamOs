@@ -40,11 +40,12 @@
 #include <use.h>
 #include <shell.h>
 #include <syscall.h>
+#include <kheap.h>
 #include <debug.h>
 
 unsigned int *current_page_table;
 extern unsigned int end;
- multiboot_info_t *boot_informations;
+multiboot_info_t *boot_informations;
 asmlinkage void _start(struct multiboot_info *boot_info)
 {
      boot_informations = boot_info;    
@@ -101,7 +102,7 @@ int main_loop(struct multiboot_info *boot_info)
 		printf("[+] Address: 0x%x\n", &end);		   	        
 		printf("\n\n");
 		#ifdef BOCHS_DEBUG
-		dbg_bochs_print("DreamOS Debug");
+		dbg_bochs_print("DreamOS Debug\n");
 		#endif
 		shell();
 
