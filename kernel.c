@@ -101,9 +101,9 @@ int main_loop(struct multiboot_info *boot_info)
     _kprintOK();
 		printf("[+] Address: 0x%x\n", &end);		   	        
 		printf("\n\n");
-		#ifdef BOCHS_DEBUG
+#ifdef BOCHS_DEBUG
 		dbg_bochs_print("DreamOS Debug\n");
-		#endif
+#endif
 		shell();
 
     return 0;

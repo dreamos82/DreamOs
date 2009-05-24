@@ -25,7 +25,15 @@
 #ifndef __STDDEF__H
 #define __STDDEF__H
 
-#define NULL 0
+#ifndef NULL
+#define NULL ((void*)0)
+#endif
+
+#ifndef EOF
+#define EOF (-1)
+#endif
+
+#define BUFSIZ 512
 
 #define KERNEL_SIZE 0x200
 

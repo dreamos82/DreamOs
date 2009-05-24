@@ -25,8 +25,11 @@
  
 #ifndef _IO_H
 #define _IO_H
+
+#define sti() __asm__ __volatile__ ("sti");
+#define cli() __asm__ __volatile__ ("cli");
  
-unsigned char inportb (int);
-void outportb (int, int);
+inline unsigned char inportb (int);
+inline void outportb (int, int);
  
 #endif

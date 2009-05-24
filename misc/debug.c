@@ -42,7 +42,7 @@ void dbg_bochs_print( const unsigned char *msg )
 /**
  *  Send cmd to bochs port
  */
-inline void dbg_bochs_send_cmd( const int port, const int cmd )
+static inline void dbg_bochs_send_cmd( const int port, const int cmd )
 {
-    outportb(port, cmd);
+    outportb(cmd, port);
 }

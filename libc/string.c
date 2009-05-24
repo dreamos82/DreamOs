@@ -40,13 +40,15 @@ char *strncpy (char *dest, register const char *src,
     return dest;
 }
 
-char *strcpy(char *dest, register const char *src)
+char *strcpy (char *dest, const char *src)
 {
-	register char *s = dest;
-	while (*s++ = *src++)
-		/* nothing */ ;
+  int i;
 
-	return dest;
+  for (i=0; src[i]; i++)
+    *(dest+i) = *(src+i);
+  dest[i] = '\0';
+
+  return dest;
 }
 
 /*
