@@ -41,6 +41,11 @@
 
 #define NUM_COM 14
 
+struct cmd {
+	const char cmdname[CMD_LEN];
+	void (*h_func)(void);
+};
+
 /*
  * Inserisce gli argomenti di un comando in un array di stringhe
  * argc = numero degli argomenti
@@ -73,28 +78,21 @@ void shell()
   char *cmd_ptr;
   char *user = kmalloc(USER_LEN);
 
-  const char *commands[NUM_COM + 1] = { 
-      "help", "clear", "poweroff", "kmalloc", "do_fault", 
-      "aalogo", "uname", "printmem", "credits", "sleep", 
-      "cpuid", "date", "echo", "answer", NULL 
-      };
-
-  void (*routines[NUM_COM])(void) = { 
-      help, 
-      _kclear, 
-      poweroff, 
-      kmalloc_try, 
-      do_fault, 
-      aalogo, 
-      uname_cmd, 
-      printmem, 
-      credits, 
-      sleep_cmd, 
-      cpuid, 
-      date, 	
-      echo,
-      answer 
-      };
+  static struct cmd shell_cmd[NUM_COM] = {
+	{ "aalogo",   aalogo      },
+	{ "clear",    _kclear     },
+	{ "poweroff", poweroff    },
+	{ "kmalloc",  kmalloc_try },
+	{ "do_fault", do_fault    },
+	{ "uname",    uname_cmd   },
+	{ "printmem", printmem    },
+	{ "credits",  credits     },
+	{ "sleep",    sleep       },
+	{ "cpuid",    cpuid 	  },
+	{ "date",     date 	  },
+	{ "echo",     echo 	  },
+	{ "help",     help	  },
+        };
 
   int i = 0;
 
@@ -124,8 +122,8 @@ void shell()
         goto end;
 
     for (i = NUM_COM; i >= 0; --i) {
-        if(strcmp(argv[0], commands[i]) == NULL) {
-            (*routines[i])();
+        if(strcmp(argv[0], shell_cmd[i].cmdname) == NULL) {
+            (*shell_cmd[i].h_func)();
             break;
         }
     }
