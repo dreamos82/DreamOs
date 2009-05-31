@@ -40,13 +40,15 @@ char downbuffer[_SCR_H][_SCR_W*2];
 int is_scrolled=0;
 int is_shifted_once=0;
 unsigned int last_tab=0;
+int last_x=0, last_y=0;
 
 void _kputc(char c)
 {
     /* Print a character on the screen*/
-  _kshiftAll();
+  if (last_x && last_y) _kscrolldown ();
   *VIDEO_PTR++ = c;
   *VIDEO_PTR++ = VIDEO_CLR;
+  _kshiftAll();
   _ksetcursauto();
 }
 
@@ -351,6 +353,9 @@ void _kscrollup ()
     }
   }
   is_scrolled=1;
+  last_x = _kgetcolumn ();
+  last_y = _kgetline ();
+  _kgoto (_SCR_W, _SCR_H);
 }
 
 /*
@@ -373,6 +378,10 @@ void _kscrolldown ()
     for (x=0; x<_SCR_W*2; x++)
       *ptr++ = downbuffer[y][x];
   }
+  is_scrolled=0;
+  _kgoto (last_x, last_y);
+  last_x=0;
+  last_y=0;
 }
 
 /* EOF */

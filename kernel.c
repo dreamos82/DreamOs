@@ -48,7 +48,7 @@ extern unsigned int end;
 multiboot_info_t *boot_informations;
 asmlinkage void _start(struct multiboot_info *boot_info)
 {
-     boot_informations = boot_info;    
+    boot_informations = boot_info;    
 	main_loop(boot_info);
 	while(1);
 }
@@ -72,12 +72,10 @@ int main_loop(struct multiboot_info *boot_info)
 
     outportb(0xFF, MASTER_PORT_1);
     outportb(0xFF, SLAVE_PORT_1);
-    _kputs(LNG_IDT);    
-    //outportb(0xE9, 'c');
+    _kputs(LNG_IDT);        
     asm("cli");   
     init_idt();
     _kprintOK();   
-    //calcola_memoria(); 
     set_memorysize((boot_info->mem_upper+boot_info->mem_lower)*1024);
     init_mem();    
     _kputs(LNG_PIC8259);
@@ -102,7 +100,7 @@ int main_loop(struct multiboot_info *boot_info)
 		printf("[+] Address: 0x%x\n", &end);		   	        
 		printf("\n\n");
 #ifdef BOCHS_DEBUG
-		dbg_bochs_print("DreamOS Debug\n");
+		dbg_bochs_print("DreamOS Debug String for Bochs\n");
 #endif
 		shell();
 

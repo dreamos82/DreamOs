@@ -42,6 +42,7 @@ extern heap_t *kheap;
 
 void init_paging(){
     int i;
+    int apic_location;
     printf(LNG_PAGING);
     _kprintOK();    
     current_page_dir = create_pageDir();
@@ -68,7 +69,9 @@ void init_paging(){
         if(i<10) printf("cpt: %d\n", current_page_table[i]);
         #endif
         i++;
-    }        
+    }
+    apic_location = request_pages(1, NOT_ADD_LIST);       
+            
     load_pdbr((unsigned int)current_page_dir);
     kheap = make_heap(tot_mem - ((unsigned int) &end));
 }
