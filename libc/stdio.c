@@ -40,9 +40,14 @@
  */
 void putchar (char ch)
 {
-   asm ("movl $0x0, %%eax\n"
+   /*asm ("movl $0x0, %%eax\n"
 	"int $80\n\t"
-	:: "b" (ch));
+	:: "b" (ch));*/
+	char s[2];
+	s[0] = ch;
+	s[1] = '\0';
+
+   _kputs (s);
 }
 
 /*
