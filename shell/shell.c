@@ -39,7 +39,7 @@
 #include <clock.h>
 #include <sys/utsname.h>
 
-#define NUM_COM 14
+#define NUM_COM 15
 
 struct cmd {
 	const char cmdname[CMD_LEN];
@@ -87,11 +87,12 @@ void shell()
 	{ "uname",    uname_cmd   },
 	{ "printmem", printmem    },
 	{ "credits",  credits     },
-	{ "sleep",    sleep       },
+	{ "sleep",    sleep_cmd   },
 	{ "cpuid",    cpuid 	  },
 	{ "date",     date 	  },
 	{ "echo",     echo 	  },
 	{ "help",     help	  },
+	{ "answer",   answer  },
         };
 
   int i = 0;

@@ -50,6 +50,7 @@ typedef enum irq_types{
     COM1_3,
     LPT2,
     FLOPPY,
+    LPT1,
     REAL_TIME_CLOCK,
     AVAILABLE_1,
     AVAILABLE_2,

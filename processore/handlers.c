@@ -165,27 +165,19 @@ void _irqinterrupt(){
     irqn = get_current_irq();  
     IRQ_s* tmpHandler; 
     if(irqn>=0) {
-//       switch(irqn){
-// 	case 1: 
-// 	  PIT_handler();
-// 	  break;
-// 	case 2:
-// 	  keyboard_isr();
-// 	  break;
-//       }
-         tmpHandler = shareHandler[irqn];
-	 if(tmpHandler!=0) {
-	    tmpHandler->IRQ_func();
-	    #ifdef DEBUG
-	    printf("2 - IRQ_func: %d, %d\n", tmpHandler->IRQ_func, tmpHandler);
-	    #endif
-	    while(tmpHandler->next!=NULL) {
-	      tmpHandler = tmpHandler->next;                           
-	      #ifdef DEBUG
-	      printf("1 - IRQ_func (_prova): %d, %d\n", tmpHandler->IRQ_func, tmpHandler);
-	      #endif
-	      if(tmpHandler!=0) tmpHandler->IRQ_func();
-	    }
+        tmpHandler = shareHandler[irqn];
+		if(tmpHandler!=0) {
+	    	tmpHandler->IRQ_func();
+	    	#ifdef DEBUG
+	    		printf("2 - IRQ_func: %d, %d\n", tmpHandler->IRQ_func, tmpHandler);
+	    	#endif
+	    	while(tmpHandler->next!=NULL) {
+	      		tmpHandler = tmpHandler->next;                           
+	      		#ifdef DEBUG
+	      			printf("1 - IRQ_func (_prova): %d, %d\n", tmpHandler->IRQ_func, tmpHandler);
+	      		#endif
+	      		if(tmpHandler!=0) tmpHandler->IRQ_func();
+	    	}
 	  } else printf("irqn: %d\n", irqn);
     }
     else printf("IRQ N: %d E' arrivato qualcosa che non so gestire ", irqn);
@@ -201,9 +193,4 @@ void _int_rsv(){
 	while(1);
 }
 
-/*void _prova(){
-    #ifdef DEBUG
-    _kputs("Shared 1\n");
-    #endif    
-}*/
 

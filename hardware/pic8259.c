@@ -83,11 +83,7 @@ void init_IRQ(){
     outportb(0xFF,SLAVE_PORT_1);
 
     outportb (0xFC, MASTER_PORT_1);
-//<<<<<<< .mine
-    //enable_IRQ (0);
-//=======
- //     enable_IRQ (0);
-//>>>>>>> .r13
+
 
     setup_IRQ();
     asm("sti");
@@ -214,9 +210,6 @@ void add_IRQ_handler(int irq_number, void (*func)()){
             tmpHandler = tmpHandler->next;
             tmpHandler->next = NULL;
             tmpHandler->IRQ_func = func;
-            #ifdef DEBUG
-    //         printf("
-            #endif
         }
     }
     else return; 
