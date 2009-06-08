@@ -124,25 +124,25 @@ char* get_day_lng()
   int c;
   c = get_day_w();
   switch(c) {
-    case 0:
+    case 1:
       return LNG_DAY_SUN;
       break;
-    case 1:
+    case 2:
       return LNG_DAY_MON;
       break;
-    case 2:
+    case 3:
       return LNG_DAY_TUE;
       break;
-    case 3:
+    case 4:
       return LNG_DAY_WED;
       break;
-    case 4:
+    case 5:
       return LNG_DAY_THU;
       break;
-    case 5:
+    case 6:
       return LNG_DAY_FRI;      
       break;
-    case 6:
+    case 7:
       return LNG_DAY_SAT;     
       break;
   }

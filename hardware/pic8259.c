@@ -80,6 +80,7 @@ void init_IRQ(){
     outportb(0xFF,MASTER_PORT_1);
     enable_IRQ(KEYBOARD);
     enable_IRQ(TIMER);
+    enable_IRQ(TO_SLAVE_PIC);
     outportb(0xFF,SLAVE_PORT_1);
 
     outportb (0xFC, MASTER_PORT_1);
