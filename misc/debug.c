@@ -37,7 +37,7 @@ void dbg_bochs_print( const unsigned char *msg )
 #if defined(BOCHS_DEBUG)
     register unsigned int i;
     for ( i = 0; msg[i] != '\0'; i++ )
-        outportb(msg[i],0xE9);
+        outportb(0xE9, msg[i]);
 #endif
 }
 
@@ -47,6 +47,6 @@ void dbg_bochs_print( const unsigned char *msg )
 static inline void dbg_bochs_send_cmd( const int port, const int cmd )
 {
 #if defined(BOCHS_DEBUG)
-    outportb(cmd, port);
+    outportb(port, cmd);
 #endif
 }

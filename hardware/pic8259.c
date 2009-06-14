@@ -62,28 +62,29 @@ void init_IRQ(){
     int i;
     asm("cli");
 // Inizializzo i 2 processori pic con ICw1 ICW2 ICW3 e ICW4
-    outportb(ICW_1,MASTER_PORT);
-    outportb(ICW_1,SLAVE_PORT);
+    outportb(MASTER_PORT,ICW_1);
+    outportb(SLAVE_PORT, ICW_1);
 
-    outportb(ICW_2_M,MASTER_PORT_1);
-    outportb(ICW_2_S,SLAVE_PORT_1);
+    outportb(MASTER_PORT_1, ICW_2_M);
+    outportb(SLAVE_PORT_1,  ICW_2_S);
 
-    outportb(ICW_3_M,MASTER_PORT_1);
-    outportb(ICW_3_S,SLAVE_PORT_1);
+    outportb(MASTER_PORT_1, ICW_3_M);
+    outportb(SLAVE_PORT_1,  ICW_3_S) ;
 
-    outportb(ICW_4,MASTER_PORT_1);
-    outportb(ICW_4,SLAVE_PORT_1);
+    outportb(MASTER_PORT_1, ICW_4);
+    outportb(SLAVE_PORT_1,  ICW_4);
 
     master_cur_mask = 0xFF;
     slave_cur_mask = 0xFF;
 
-    outportb(0xFF,MASTER_PORT_1);
+    outportb(MASTER_PORT_1, 0xFF);
+	outportb(SLAVE_PORT_1,  0xFF);
+
+    //outportb (0xFC, MASTER_PORT_1);
     enable_IRQ(KEYBOARD);
     enable_IRQ(TIMER);
     enable_IRQ(TO_SLAVE_PIC);
-    outportb(0xFF,SLAVE_PORT_1);
-
-    outportb (0xFC, MASTER_PORT_1);
+   
 
 
     setup_IRQ();
@@ -130,14 +131,14 @@ int enable_IRQ (IRQ_t irq){
         if(irq<8){
             new_mask = ~(1<<irq);
             cur_mask = inportb(MASTER_PORT_1);
-            outportb((new_mask&cur_mask), MASTER_PORT_1);
+            outportb(MASTER_PORT_1, (new_mask&cur_mask));
             master_cur_mask=(new_mask&cur_mask);
             }
         else{
             irq = irq-8;
             new_mask = ~(1<<irq);
             cur_mask = inportb(SLAVE_PORT_1);
-            outportb((new_mask&cur_mask), SLAVE_PORT_1);
+            outportb(SLAVE_PORT_1, (new_mask&cur_mask));
             slave_cur_mask=(new_mask&cur_mask);
         }
         return 0;
@@ -158,13 +159,13 @@ int disable_IRQ(IRQ_t irq){
         if(irq<8){
             cur_mask = inportb(MASTER_PORT_1);
             cur_mask |= (1<< irq);
-            outportb(cur_mask&0xFF, MASTER_PORT_1);
+            outportb(MASTER_PORT_1, cur_mask&0xFF);
         }
         else {
             irq = irq-8;
             cur_mask = inportb(SLAVE_PORT_1);
             cur_mask |= (1<< irq);
-            outportb(cur_mask&0xFF, SLAVE_PORT_1);
+            outportb(SLAVE_PORT_1, cur_mask&0xFF);
         }
         return 0;
     }
@@ -178,11 +179,11 @@ int disable_IRQ(IRQ_t irq){
   **/
 int get_current_irq(){
     int cur_irq;
-    outportb(GET_IRR_STATUS, MASTER_PORT);
+    outportb(MASTER_PORT,GET_IRR_STATUS);
     cur_irq = inportb(MASTER_PORT);
 //     if(cur_irq!=1) printf("%d\n", cur_irq);
     if(cur_irq == 0) {
-      outportb(GET_IRR_STATUS, SLAVE_PORT);
+      outportb(SLAVE_PORT, GET_IRR_STATUS);
       cur_irq = inportb(SLAVE_PORT);
     }
 //     printf("%d\n", find_first_bit(cur_irq));

@@ -181,10 +181,10 @@ void _irqinterrupt(){
 	  } else printf("irqn: %d\n", irqn);
     }
     else printf("IRQ N: %d E' arrivato qualcosa che non so gestire ", irqn);
-    if(irqn<=8) outportb(0x20, MASTER_PORT);
+    if(irqn<=8) outportb(MASTER_PORT, EOI);
     else if(irqn<=16){
-      outportb(0x20, SLAVE_PORT);
-      outportb(0x20, MASTER_PORT);
+      outportb(SLAVE_PORT, EOI);
+      outportb(MASTER_PORT, EOI);
     }
 }
 

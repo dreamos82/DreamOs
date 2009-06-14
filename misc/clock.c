@@ -27,49 +27,49 @@
 
 int get_second()
 {
-  outportb(SECOND_RTC,0x70);
+  outportb(0x70, SECOND_RTC);
   int c = inportb(0x71);
   return c;
 }
 
 int get_minute()
 {
-  outportb(MINUTE_RTC,0x70);
+  outportb(0x70, MINUTE_RTC);
   int c = inportb(0x71);
   return c;
 }
 
 int get_hour()
 {
-  outportb(HOUR_RTC,0x70);
+  outportb(0x70, HOUR_RTC);
   int c = inportb(0x71);
   return c;
 }
 
 int get_day_w()
 {
-  outportb(DAY_W_RTC,0x70);
+  outportb(0x70, DAY_W_RTC);
   int c = inportb(0x71);
   return c;
 }
 
 int get_day_m()
 {
-  outportb(DAY_M_RTC,0x70);
+  outportb(0x70, DAY_M_RTC);
   int c = inportb(0x71);
   return c;
 }
 
 int get_month()
 {
-  outportb(MONTH_RTC,0x70);
+  outportb(0x70,MONTH_RTC);
   int c = inportb(0x71);
   return c;
 }
 
 int get_year()
 {
-  outportb(YEAR_RTC,0x70);
+  outportb(0x70, YEAR_RTC);
   int c = inportb(0x71);
   return c;
 }

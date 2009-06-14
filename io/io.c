@@ -32,7 +32,7 @@ inline unsigned char inportb (int portnum)
   return data;
 }
 
-inline void outportb (int data, int portnum)
+inline void outportb (int portnum, int data)
 {
   __asm__ __volatile__ ("outb %%al, %%dx" :: "a" (data),"d" (portnum));
 }

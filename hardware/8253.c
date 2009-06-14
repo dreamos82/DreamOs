@@ -41,9 +41,9 @@ void configure_PIT ()
 
     asm ("cli");
     ticks = seconds = 0;
-    outportb (0x37, PIT_COMREG);
-    outportb (divisor & 0xFF, PIT_DATAREG0);
-    outportb (divisor >> 8, PIT_DATAREG0);
+    outportb (PIT_COMREG,0x37);
+    outportb (PIT_DATAREG0,divisor & 0xFF);
+    outportb (PIT_DATAREG0,divisor >> 8);
     asm ("sti");
 
 }

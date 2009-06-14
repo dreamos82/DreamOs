@@ -104,7 +104,7 @@ void keyboard_isr (void)
     /* In case of useless break codes, switch controls...*/
     if (sc > CODE_BREAK && sc != (KEY_LSHIFT|CODE_BREAK) && sc != (KEY_RSHIFT|CODE_BREAK)){
         if (sc==KEY_ENTER+128)
-            outportb(EOI,MASTER_PORT);
+            outportb(MASTER_PORT, EOI);
 	    goto end;
         }
 
@@ -181,7 +181,7 @@ void keyboard_isr (void)
 	_knewline();
 	_ksetcursauto();
 	last_tab = 0;
-    outportb(EOI, MASTER_PORT);
+    outportb(MASTER_PORT, EOI);
 	break;
 
     case KEY_TAB:
@@ -221,7 +221,7 @@ void keyboard_isr (void)
 end:
     /* Send acknowledge */
     //printf ("Prego");
-    outportb (EOI, MASTER_PORT);
+    outportb (MASTER_PORT, EOI);
     return;
 }
 
@@ -255,19 +255,19 @@ void _ksetleds(int capslock, int numlock, int scrlock)
 	ledstate ^= scrlock;
     }
 
-    outportb (0xED, 0x60);
-    outportb (ledstate, 0x60);
+    outportb (0x60, 0xED);
+    outportb (0x60, ledstate);
 }
 
 /* Need explanations? */
 void keyboard_enable (void)
 {
-    outportb (0xF4, 0x60);
+    outportb (0x60, 0xF4);
 }
 
 void keyboard_disable (void)
 {
-    outportb (0xF5, 0x60);
+    outportb (0x60, 0xF5);
 }
 
 /*
