@@ -1,0 +1,56 @@
+#	    The DreamOS Operating System 
+#
+#   Greez to all DreamOS Dev & Community
+#	Lord Osiris at osiris@Devils.com
+#		    or diego.stamigni@linux.com
+
+
+This DOC is about the "start.sh" init script that allow you to use many
+functions.
+
+Usage: start.sh --options $command $language
+
+Starting DreamOS Emulation:"
+
+  Usage: '$0 qemu'  -> to use Qemu Emulator
+	 '$0 bochs' -> to use Bochs Emulator
+
+be sure you have one of those, else you can try it from
+floppy drive, or boot it form your grub.. DreamOS can! :) 
+
+However you have the possibility to choose if you want to 
+compile DreamOS or only lunch the 'Emulator'.
+If you want to compile, use the USE Flags '--compile' then
+the command, like:
+
+  Usage: start.sh --compile $emulator
+or any command you like to compile before.
+
+Also you can chose the language for the boot message, it
+can be very important to understanding the OS and do the
+			 debug.
+
+So please add the argv[3] into your option to this launch 
+script, something like that:
+
+  Usage: start.sh --compile $emulator $language
+
+where now language supported is 'it' or 'en'
+  
+If you want, you can install DreamOS on your floppy
+So, it's very simple, just type install in argv[1] then
+your test on emulators:
+
+  Usage: start.sh floppy_install
+
+
+If you want to install DreamOS into your grub, the step
+is very simple, just grub into your argv[1] :-)
+Please, be sure you have python."
+
+  Usage: start.sh grub
+
+Please Read the HOW To Grub Script to a secure use of it.
+
+
+						  Lord Osiris

@@ -55,7 +55,7 @@ typedef enum irq_types{
     AVAILABLE_1,
     AVAILABLE_2,
     AVAILABLE_3,
-    AVAILABLE_4,
+    MOUSE,
     MATH_CPU,
     FIRST_HD,
     SECOND_HD

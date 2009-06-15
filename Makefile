@@ -30,6 +30,7 @@ CFLAGS = -nostdlib\
 OBJ = kernel.o\
       io/video.o\
       drivers/keyboard.o\
+      drivers/mouse.o\
       libc/ctype.o\
       libc/string.o\
       io/io.o\
@@ -82,6 +83,7 @@ misc/ordered_list.o: misc/ordered_list.c
 misc/bitops.o: misc/bitops.c
 misc/debug.o: misc/debug.c
 drivers/keyboard.o: drivers/keyboard.c
+drivers/mouse.o: drivers/mouse.c
 system/syscall.o: system/syscall.c
 hardware/8253.o: hardware/8253.c
 shell/shell.o: shell/shell.c

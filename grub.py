@@ -2,6 +2,11 @@
 import sys
 import os
 
+if os.getuid() != 0:
+	print "--------------------DreamOS v0.1.2 Grub Autogen--------------------"
+	print "[-] You need to run this install script as root!"
+	sys.exit(1)
+
 def grub_hd(pn):
 	letter = pn[2]
 	nump = int(pn[3]) - 1
@@ -48,5 +53,12 @@ if answer == 'y':
 	fd.write("\nroot\t" + partition)
 	fd.write("\nkernel\t" + cwd)
 	fd.write("\nboot\n")
-
 fd.close()
+
+print ""
+print "Changes added to /boot/grub/menu.lst: "
+print "\n+title\tDreamOS v0.1.2 trunk"
+print "+root\t" + partition
+print "+kernel\t" + cwd
+print "+boot\n"
+print "[+] Done."

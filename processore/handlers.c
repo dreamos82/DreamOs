@@ -165,7 +165,12 @@ void _irqinterrupt(){
     irqn = get_current_irq();  
     IRQ_s* tmpHandler; 
     if(irqn>=0) {
-        tmpHandler = shareHandler[irqn];
+		if(irqn==2) {
+			outportb(SLAVE_PORT,GET_IRR_STATUS);
+			irqn = inportb(SLAVE_PORT);
+			irqn = 8 + find_first_bit(irqn);			
+		}
+        tmpHandler = shareHandler[irqn];		
 		if(tmpHandler!=0) {
 	    	tmpHandler->IRQ_func();
 	    	#ifdef DEBUG
@@ -181,8 +186,8 @@ void _irqinterrupt(){
 	  } else printf("irqn: %d\n", irqn);
     }
     else printf("IRQ N: %d E' arrivato qualcosa che non so gestire ", irqn);
-    if(irqn<=8) outportb(MASTER_PORT, EOI);
-    else if(irqn<=16){
+    if(irqn<=8 && irqn!=2) outportb(MASTER_PORT, EOI);
+    else if(irqn<=16 || irqn==2){	  
       outportb(SLAVE_PORT, EOI);
       outportb(MASTER_PORT, EOI);
     }

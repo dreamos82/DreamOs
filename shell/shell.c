@@ -98,7 +98,8 @@ void shell()
   int i = 0;
 
   memset(user, '\0', USER_LEN);
-
+  printf("\t\t.: Benvenuto in DreamOS :.\n\n");
+  
   do {		
     printf(LNG_USER);
     scanf ("%23s",user);

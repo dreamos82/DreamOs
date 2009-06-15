@@ -93,6 +93,10 @@ int main_loop(struct multiboot_info *boot_info)
     sinfo = kmalloc(sizeof(struct cpuinfo_generic));
     get_cpuid (sinfo);
 
+    /* Driver mouse init */
+    mouse_init();
+    _kprintOK();
+
     printf("\n");
     printf("----\n");
     printf(LNG_SHELL);

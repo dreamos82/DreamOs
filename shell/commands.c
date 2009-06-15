@@ -40,9 +40,9 @@ void logo()
   printf("\n");
   printf("\t\t\t The Dream Operating System \n"
 	 "\t\t           v%s.%s%s %s      \n\n"
-	 "\t\t\t\t Welcome to DreamOS\n"
-	 "\t\t Where dreams don't become Reality and remain dreams. \n"
-	 "\t\t\tR.I.P - Rest in peace with dreamos ^_^        \n", 
+	 "\t\t\t   Welcome to DreamOS\n"
+	 "\t  Where dreams don't become Reality and remain dreams. \n"
+	 "\t          R.I.P - Rest in peace with dreamos ^_^        \n", 
 	 VERSION, PATCHLEVEL, EXTRAVERSION, REV_NUM);
 	
   printf("\n\n\n\n");
@@ -222,6 +222,7 @@ void credits(void)
   _kputs("Main Developers:\n");
   _kcolor('\012');
    printf("Shainer - Lisa\n"
+	  "Osiris\n"
           "Finarfin - Ivan\n\n\n"            
          );
 
@@ -229,8 +230,8 @@ void credits(void)
   _kputs("Contributors:\n");
   _kcolor('\012');
   _kputs("vinc94\n"
-  		 "tk0\n"
-  		 "Osiris\n"
+	  "tk0\n"
+	  "DT\n"
          "Celeron\n"
 	 "Hamcha\n"
          "m0nt0\n"
