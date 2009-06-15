@@ -1,8 +1,27 @@
-/* 
- * Driver for *PS2* Mouses.
- * 	greez to Osiris
- *	  & DT (Contributor)
+/*
+ * Dreamos
+ * mouse.c
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+ /*
+  * Driver for *PS2* Mouses.
+  * Authors DT, Osiris
+  * Contributor: finarfin 
+  * first version: 16/06/2009
+  */
 
 #include <mouse.h>
 #include <video.h>
@@ -10,10 +29,11 @@
 #include <handlers.h>
 #include <pic8259.h>
 #include <stdio.h>
+#include <use.h>
 
 void mouse_init()
 {
-	printf("Inizializzo il driver del mouse..");
+	printf(LNG_MOUSE_SETUP);
 	mouse_waitcmd(1);
 	outportb(0x64,0xA8);
 	mouse_waitcmd(1);
@@ -94,11 +114,11 @@ void mouse_IRQhandler(struct regs *a_r)
 	if (!(mouse_bytes[0] & 0x10))
 	  x |= 0xFFFFFF00;
 	if (mouse_bytes[0] & 0x4)
-	    printf("\n[+] Mouse driver: rilevato tasto centrale premuto!");
+	    printf(LNG_MOUSE_MID);
 	if (mouse_bytes[0] & 0x2)
-	    printf("\n[+] Mouse driver: rilevato tasto destro premuto!");
+	    printf(LNG_MOUSE_RIGHT);
 	if (mouse_bytes[0] & 0x1)
-	    printf("\n[+] Mouse driver: rilevato tasto sinistro premuto!");
+	    printf(LNG_MOUSE_LEFT);
 	}
 } //End
 

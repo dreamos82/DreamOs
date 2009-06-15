@@ -102,6 +102,7 @@ heap_t* make_heap(unsigned int size)
     printf("  Size: %d\n"
 	   "  Tot mem: %d\n"
 	   "  Start address: %x\n", (new_heap->free_list)->size, tot_mem, new_heap);    
+	set_pagetable_entry_ric(1019, 512 ,0xFEE00000, SUPERVISOR|PD_PRESENT|WRITE, 0);
     return (heap_t*) new_heap;
 }
     

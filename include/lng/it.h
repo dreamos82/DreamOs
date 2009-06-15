@@ -32,6 +32,11 @@
 #define LNG_USER "[?] Inserisci il nome utente: "
 #define LNG_USER_R "[x] Per favore, inserisci il nome utente :)\n"
 #define LNG_UNKNOWN_CMD "Comando sconosciuto:"
+#define LNG_MOUSE_SETUP "Inizializzo il driver del mouse.."
+#define LNG_MOUSE_MID "\n[+] Mouse driver: rilevato tasto centrale premuto!"
+#define LNG_MOUSE_RIGHT "\n[+] Mouse driver: rilevato tasto destro premuto!"
+#define LNG_MOUSE_LEFT "\n[+] Mouse driver: rilevato tasto sinistro premuto!"
+#define LNG_WELCOME "\t\t.: Benvenuto in DreamOS :.\n\n"
 
 // DATE ME NOE!
 // MESI: sereno variabile in tutto il nord Italia

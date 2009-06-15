@@ -98,7 +98,7 @@ void shell()
   int i = 0;
 
   memset(user, '\0', USER_LEN);
-  printf("\t\t.: Benvenuto in DreamOS :.\n\n");
+  printf(LNG_WELCOME);
   
   do {		
     printf(LNG_USER);
