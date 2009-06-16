@@ -51,6 +51,14 @@ void mouse_init()
 	mouse_read();
 	add_IRQ_handler(12, mouse_IRQhandler);
 	enable_IRQ(12);
+	_kprintOK();
+}
+
+void mouse_dead()
+{
+	printf(LNG_MOUSE_REMOVE);
+	disable_IRQ(12);
+	_kprintOK();
 }
 
 void mouse_waitcmd(unsigned char type)
@@ -99,26 +107,90 @@ void mouse_IRQhandler(struct regs *a_r)
 	static unsigned char cycle = 0;
 	static char mouse_bytes[3];
 	mouse_bytes[cycle++] = inportb(0x60);
-	char x, y;
- 
-	// Debug, se viene visualizzato questo messagio, il driver worka!
-//	_kputs("\nCi sono!\n");
+	// dichiariamo le due variabili che conterranno le coordinate
+	// e inizializziamole a 0
+	signed long int MousePositionX = 0, MousePositionY = 0;
+      
+	// e alliniamolo al centro!
+	// non va bene _SCR_H e _SCR_W
+	//MousePositionX=(_SCR_H/2)-(_SCR_W/2);
+	//MousePositionY=(_SCR_H/2)-(_SCR_W/2);
+	MousePositionX=(800/2)-(800/2);
+	MousePositionY=(800/2)-(600/2);
 
 	if (cycle == 3) {
-	cycle = 0; 
+	  cycle = 0; 
 
-	if ((mouse_bytes[0] & 0x80) || (mouse_bytes[0] & 0x40))
-	  return;
-	if (!(mouse_bytes[0] & 0x20))
-	   y |= 0xFFFFFF00;
-	if (!(mouse_bytes[0] & 0x10))
-	  x |= 0xFFFFFF00;
-	if (mouse_bytes[0] & 0x4)
-	    printf(LNG_MOUSE_MID);
-	if (mouse_bytes[0] & 0x2)
-	    printf(LNG_MOUSE_RIGHT);
-	if (mouse_bytes[0] & 0x1)
-	    printf(LNG_MOUSE_LEFT);
+//	if ((mouse_bytes[0] & 0x80) || (mouse_bytes[0] & 0x40))
+//	  return;
+
+	// coordinate x stanno in mouse_bytes[1] e
+	// le coordinate y stanno in mouse_bytes[2]
+	// direzione (0=destra, 1=sinitra)
+
+	if((mouse_bytes[0] & 0x07)==0) // 0x07 forse non è un valore corretto
+	//if((mouse_bytes[0] & 0x40)==0)
+	{
+	  //if((mouse_bytes[0] & 0x05)==0) // 0x05 forse non è un valore corretto
+	  if((mouse_bytes[0] & 0x10)==0)
+	  {
+	      MousePositionX+=mouse_bytes[1];
+	  } else {
+	      MousePositionX-=mouse_bytes[1];
+	  }
+	} else //overflow
+	  MousePositionX+=mouse_bytes[1]/2;
+   
+	// direzioni (0=su, 1=sotto)
+	if((mouse_bytes[0] & 0x08)==0) // 0x08 forse non è un valore corretto
+	//if((mouse_bytes[0] & 0x80)==0)
+	{
+	  //if((mouse_bytes[0] & 0x06)==0) // 0x06 forse non è un valore corretto
+	  if((mouse_bytes[0] & 0x20)==0)
+	  {
+	      MousePositionY-=mouse_bytes[2];
+	  } else {
+	      MousePositionY+=mouse_bytes[2];
+	  }
+	} else  // overflow
+	    MousePositionY-=mouse_bytes[2]/2;
+	
+	// manteniamo il cursore entro i limiti 
+	// per uno schermo 800x600
+	// per MousePositionX
+	if(MousePositionX>=800-16) 
+	  MousePositionX=800-16;
+
+	if(MousePositionX<=0)
+	  MousePositionX=0;
+
+	// e per MousePositionY
+	if(MousePositionY>=600-24)
+	  MousePositionY=600-24;
+
+	if(MousePositionY<=0)
+	  MousePositionY=0;
+
+	// stampa la posizione
+	printf("\rx: %d | y: %d", MousePositionX, MousePositionY);
+
+	// e muove il cursore 
+	_ksetcursor(MousePositionX, MousePositionY);
+/*
+	// Qui è si rilevato un problema, se il mouse si muove
+	// vengono rilevati tasti premuti..
+
+	// Rilevo i tasti premuti..
+	if (mouse_bytes[0] & 0x4) 
+	    printf(LNG_MOUSE_MID);  // Centrale premuto
+
+	else if (mouse_bytes[0] & 0x2) 
+	    printf(LNG_MOUSE_RIGHT);  // Destro premuto
+
+	else if (mouse_bytes[0] & 0x1) 
+	    printf(LNG_MOUSE_LEFT);  // Sinistro premuto
+*/
 	}
+
 } //End
 

@@ -45,4 +45,5 @@ void credits();
 void sleep_cmd();
 void cpuid();
 void answer();
+void modprobe();
 #endif

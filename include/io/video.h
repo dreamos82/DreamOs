@@ -42,6 +42,7 @@ void _kshiftAll();
 void _ktab();
 void _kclear();
 void _knewline();
+void _kminline();
 void _kprintOK();
 int _kgetline();
 int _kgetcolumn();

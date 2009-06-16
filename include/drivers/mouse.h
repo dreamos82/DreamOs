@@ -58,5 +58,6 @@ unsigned char mouse_read();
  * 0 per ricevere
  **/
 
+void mouse_dead();
 void mouse_IRQhandler();
 #endif /* _MOUSE_H_ */

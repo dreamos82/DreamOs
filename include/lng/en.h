@@ -32,6 +32,7 @@
 #define LNG_USER_R "[x] Please, insert your username :)\n"
 #define LNG_UNKNOWN_CMD "Unknown command:"
 #define LNG_MOUSE_SETUP "Setting up mouse driver.."
+#define LNG_MOUSE_REMOVE "Setting down mouse driver.."
 #define LNG_MOUSE_MID "\n[+] Mouse driver: central key pressed!"
 #define LNG_MOUSE_RIGHT  "\n[+] Mouse driver: right key pressed!"
 #define LNG_MOUSE_LEFT  "\n[+] Mouse driver: left key pressed!"

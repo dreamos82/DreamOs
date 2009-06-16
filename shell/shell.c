@@ -93,6 +93,7 @@ void shell()
 	{ "echo",     echo 	  },
 	{ "help",     help	  },
 	{ "answer",   answer  },
+	{ "modprobe", modprobe},
         };
 
   int i = 0;

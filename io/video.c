@@ -63,6 +63,8 @@ void _kputs(char *s)
       _ktab();
     else if(*s=='\b')
       _kbackspace();
+    else if (*s=='\r')
+      _kminline();
     else
       _kputc(*s);
     s++;
@@ -146,6 +148,16 @@ void _knewline()
     _ksetcursauto();
 }
 
+/*
+ * Move to the up line (the effect of \n character)
+ */
+void _kminline()
+{	
+    VIDEO_PTR = VIDEO_MEM + ((((VIDEO_PTR - VIDEO_MEM) / (_SCR_W * 2)) - 1) * (_SCR_W * 2));
+    _knewline();
+    _kshiftAll();
+    _ksetcursauto();
+}
 /*
  * Move the cursor to the correct position
  */

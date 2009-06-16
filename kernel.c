@@ -86,9 +86,7 @@ int main_loop(struct multiboot_info *boot_info)
     printf(LNG_PIT8253);
     configure_PIT ();
     _kprintOK();    
-	/* Driver mouse init */    
-	mouse_init();
-	_kprintOK();
+
     printf("Memory (upper) amount-> %d kb \n", boot_info->mem_upper);
     printf("Memory (lower) amount-> %d kb \n", boot_info->mem_lower);
 
@@ -96,6 +94,11 @@ int main_loop(struct multiboot_info *boot_info)
     sinfo = kmalloc(sizeof(struct cpuinfo_generic));
     get_cpuid (sinfo);
         
+
+    /* Driver mouse init */
+    //mouse_init();
+    //_kprintOK();
+    // NON IMPOSTATELO, ORA VIENE GESTITO DA MODPROBE l'INIT! */
 
     printf("\n");
     printf("----\n");
