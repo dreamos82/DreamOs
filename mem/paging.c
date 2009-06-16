@@ -45,6 +45,7 @@ void init_paging(){
     unsigned int apic_location;
     printf(LNG_PAGING);
     _kprintOK();    
+	apic_location = create_pageTable();
     current_page_dir = create_pageDir();
     #ifdef DEBUG
     printf("Pd baseAddress: %d\n", (unsigned int) current_page_dir);
