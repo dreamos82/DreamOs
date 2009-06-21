@@ -82,6 +82,7 @@ heap_t* make_heap(unsigned int size)
 {
     heap_t* new_heap;
     heap_node_t* first_node;
+	heap_node_t* apic_node;
 
     new_heap = (heap_t*)KHEAP_LIST_ADDRESS;
     node_address = KHEAP_LIST_ADDRESS + sizeof(heap_t);
@@ -101,8 +102,17 @@ heap_t* make_heap(unsigned int size)
     printf("  First heap created...\n");   
     printf("  Size: %d\n"
 	   "  Tot mem: %d\n"
-	   "  Start address: %x\n", (new_heap->free_list)->size, tot_mem, new_heap);    
-	set_pagetable_entry_ric(1019, 512 ,0xFEE00000, SUPERVISOR|PD_PRESENT|WRITE, 0);
+	   "  Start address: %x\n", (new_heap->free_list)->size, tot_mem, new_heap);	    
+	apic_node = alloc_node();
+	apic_node->start_address = 0xFEC00000;
+	apic_node->size = 4096;
+	apic_node->next = NULL;
+	insert_list (apic_node, &(new_heap->used_list));
+	apic_node = alloc_node();
+	apic_node->start_address = 0xFEE00000;
+	apic_node->size = 4096;
+	apic_node->next = NULL;
+	insert_list (apic_node, &(new_heap->used_list));
     return (heap_t*) new_heap;
 }
     
@@ -296,7 +306,6 @@ void print_heap_list (heap_node_t *list)
   * @version 1.0
   * @param node Node in free_list or used_list to be freed 
   */
-
 void free_node(heap_node_t* toadd){    
     toadd->start_address = NULL;
     toadd->size = 0;    

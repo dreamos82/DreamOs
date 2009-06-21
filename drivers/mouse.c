@@ -57,7 +57,9 @@ void mouse_init()
 void mouse_dead()
 {
 	printf(LNG_MOUSE_REMOVE);
-	disable_IRQ(12);
+	disable_IRQ(MOUSE);
+	mouse_write(0xF5); 
+	mouse_read();
 	_kprintOK();
 }
 

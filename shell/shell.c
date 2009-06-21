@@ -39,7 +39,7 @@
 #include <clock.h>
 #include <sys/utsname.h>
 
-#define NUM_COM 15
+#define NUM_COM 16
 
 struct cmd {
 	const char cmdname[CMD_LEN];

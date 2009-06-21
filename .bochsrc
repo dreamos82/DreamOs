@@ -16,8 +16,8 @@
 # NOTE: if you use the "wx" configuration interface, you must also use
 # the "wx" display library.
 #=======================================================================
-config_interface: textconfig
-#config_interface: wx
+#config_interface: textconfig
+config_interface: wx
 
 #=======================================================================
 # DISPLAY_LIBRARY
@@ -59,7 +59,7 @@ config_interface: textconfig
 #display_library: sdl, options="fullscreen" # startup in fullscreen mode
 #display_library: term
 #display_library: win32, options="legacyF12" # use F12 to toggle mouse
-#display_library: wx
+display_library: wx
 #display_library: x, options="gui_debug"
 #display_library: x
 #=======================================================================
@@ -541,7 +541,7 @@ keyboard_paste_delay: 1000
 #   mouse: enabled=1, type=serial
 #   mouse: enabled=0
 #=======================================================================
-#mouse: enabled=1, type=ps2
+mouse: enabled=1, type=ps2
 
 #=======================================================================
 # private_colormap: Request that the GUI create and use it's own

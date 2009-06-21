@@ -72,9 +72,11 @@ void init_paging(){
         i++;
     }
     //apic_location = request_pages(1, NOT_ADD_LIST);	
-	set_pagedir_entry(1019, (unsigned int) apic_location,PD_PRESENT|SUPERVISOR, 0);	
-            
+	set_pagedir_entry(1019, (unsigned int) apic_location, PD_PRESENT|SUPERVISOR, 0);	
+           
     load_pdbr((unsigned int)current_page_dir);
+	set_pagetable_entry_ric(1019, 512 ,0xFEE00000, SUPERVISOR|PD_PRESENT|WRITE, 0);
+	set_pagetable_entry_ric(1019, 0 ,0xFEC00000, SUPERVISOR|PD_PRESENT|WRITE, 0);
     kheap = make_heap(tot_mem - ((unsigned int) &end));
 }
 

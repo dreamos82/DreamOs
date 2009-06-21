@@ -4,7 +4,7 @@
 
 NAME = DreamOS
 VERSION = 0
-PATCHLEVEL = 1.2
+PATCHLEVEL = 1.3
 EXTRAVERSION = -trunk
 
 CFLAGS = -nostdlib\
