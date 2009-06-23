@@ -165,11 +165,11 @@ void _irqinterrupt(){
     irqn = get_current_irq();  
     IRQ_s* tmpHandler; 
     if(irqn>=0) {
-		if(irqn==2) {
+		/*if(irqn==2) {
 			outportb(SLAVE_PORT,GET_IRR_STATUS);
 			irqn = inportb(SLAVE_PORT);
 			irqn = 8 + find_first_bit(irqn);			
-		}
+		}*/
         tmpHandler = shareHandler[irqn];		
 		if(tmpHandler!=0) {
 	    	tmpHandler->IRQ_func();

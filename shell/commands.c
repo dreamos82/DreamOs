@@ -223,21 +223,21 @@ void credits(void)
   _kputs("DreamOS Credits\n\n");                
   _kputs("Main Developers:\n");
   _kcolor('\012');
-   printf("Shainer - Lisa\n"
-	  "Osiris\n"
+   printf("Shainer - Lisa\n"	  
           "Finarfin - Ivan\n\n\n"            
          );
 
   _kcolor('\011');
   _kputs("Contributors:\n");
   _kcolor('\012');
-  _kputs("vinc94\n"
-	  "tk0\n"
-	  "DT\n"
-         "Celeron\n"
-	 "Hamcha\n"
-         "m0nt0\n"
-         "and many others (3 or 4 :P)\n\n");
+  _kputs(	"Osiris\n"
+		    "vinc94\n"
+	  		"tk0\n"
+	  		"DT\n"
+         	"Celeron\n"
+	 		"Hamcha\n"
+         	"m0nt0\n"
+         	"and many others (3 or 4 :P)\n\n");
   _kcolor('\007');
 }
 

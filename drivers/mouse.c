@@ -54,6 +54,11 @@ void mouse_init()
 	_kprintOK();
 }
 
+/**
+  * Disable the mouse driver
+  * @author Ivan Gualandri, Diego Stamigni, DT
+  * @version 1.0
+  */
 void mouse_dead()
 {
 	printf(LNG_MOUSE_REMOVE);
@@ -63,6 +68,11 @@ void mouse_dead()
 	_kprintOK();
 }
 
+/**
+ * Mouse wait for a command
+ * @param type: 1 for sending - 0 for receive
+ * @return none
+ **/
 void mouse_waitcmd(unsigned char type)
 {
 	register unsigned int _time_out=100000;
@@ -90,6 +100,10 @@ void mouse_waitcmd(unsigned char type)
 	}
 }
 
+/**
+ * Send data to mouse
+ * @param data data to send
+ **/
 void mouse_write (unsigned char a_write)
 {
 	mouse_waitcmd(1);
@@ -98,6 +112,10 @@ void mouse_write (unsigned char a_write)
 	outportb(0x60, a_write);
 }
 
+/**
+ * Read data from mouse
+ * @return data received from mouse
+ **/
 unsigned char mouse_read()
 {
 	mouse_waitcmd(0);

@@ -179,12 +179,12 @@ int get_current_irq(){
     int cur_irq;
     outportb(MASTER_PORT,GET_IRR_STATUS);
     cur_irq = inportb(MASTER_PORT);
-//     if(cur_irq!=1) printf("%d\n", cur_irq);
-    if(cur_irq == 0) {
+    if(cur_irq == 4) {		
       outportb(SLAVE_PORT, GET_IRR_STATUS);
       cur_irq = inportb(SLAVE_PORT);
+	  //printf("Slave irq number: %d\n", cur_irq);
+	  return 8 + find_first_bit(cur_irq);
     }
-//     printf("%d\n", find_first_bit(cur_irq));
     return find_first_bit(cur_irq);
 }
 
