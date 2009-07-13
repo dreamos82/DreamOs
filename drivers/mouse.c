@@ -141,15 +141,15 @@ void mouse_IRQhandler(struct regs *a_r)
 	if (cycle == 3) {
 	  cycle = 0; 
 
-//	if ((mouse_bytes[0] & 0x80) || (mouse_bytes[0] & 0x40))
-//	  return;
+	//if ((mouse_bytes[0] & 0x80) || (mouse_bytes[0] & 0x40))
+	//  return;
 
 	// coordinate x stanno in mouse_bytes[1] e
 	// le coordinate y stanno in mouse_bytes[2]
 	// direzione (0=destra, 1=sinitra)
 
-	if((mouse_bytes[0] & 0x07)==0) // 0x07 forse non è un valore corretto
-	//if((mouse_bytes[0] & 0x40)==0)
+	//if((mouse_bytes[0] & 0x07)==0) // 0x07 forse non è un valore corretto
+	if((mouse_bytes[0] & 0x40)==0)
 	{
 	  //if((mouse_bytes[0] & 0x05)==0) // 0x05 forse non è un valore corretto
 	  if((mouse_bytes[0] & 0x10)==0)
@@ -162,8 +162,8 @@ void mouse_IRQhandler(struct regs *a_r)
 	  MousePositionX+=mouse_bytes[1]/2;
    
 	// direzioni (0=su, 1=sotto)
-	if((mouse_bytes[0] & 0x08)==0) // 0x08 forse non è un valore corretto
-	//if((mouse_bytes[0] & 0x80)==0)
+	//if((mouse_bytes[0] & 0x08)==0) // 0x08 forse non è un valore corretto
+	if((mouse_bytes[0] & 0x80)==0)
 	{
 	  //if((mouse_bytes[0] & 0x06)==0) // 0x06 forse non è un valore corretto
 	  if((mouse_bytes[0] & 0x20)==0)
@@ -195,19 +195,19 @@ void mouse_IRQhandler(struct regs *a_r)
 	printf("\rx: %d | y: %d", MousePositionX, MousePositionY);
 
 	// e muove il cursore 
-	_ksetcursor(MousePositionX, MousePositionY);
-/*
+	//_ksetcursor(MousePositionX, MousePositionY); // Not now
+
 	// Qui è si rilevato un problema, se il mouse si muove
 	// vengono rilevati tasti premuti..
-
+/*
 	// Rilevo i tasti premuti..
 	if (mouse_bytes[0] & 0x4) 
 	    printf(LNG_MOUSE_MID);  // Centrale premuto
 
-	else if (mouse_bytes[0] & 0x2) 
+	if (mouse_bytes[0] & 0x2) 
 	    printf(LNG_MOUSE_RIGHT);  // Destro premuto
 
-	else if (mouse_bytes[0] & 0x1) 
+	if (mouse_bytes[0] & 0x1) 
 	    printf(LNG_MOUSE_LEFT);  // Sinistro premuto
 */
 	}

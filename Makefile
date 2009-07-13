@@ -107,6 +107,7 @@ vers:
 clean:
 	rm -f *.img *.bin *.map
 	rm -f $(OBJ)
+#	echo "" > include/version.h
 
 install:
 	mkfs.ext2 /dev/fd0

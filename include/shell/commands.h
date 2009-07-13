@@ -45,5 +45,5 @@ void credits();
 void sleep_cmd();
 void cpuid();
 void answer();
-void modprobe();
+void drv_load();
 #endif

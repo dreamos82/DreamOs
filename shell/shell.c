@@ -93,7 +93,7 @@ void shell()
 	{ "echo",     echo 	  },
 	{ "help",     help	  },
 	{ "answer",   answer  },
-	{ "modprobe", modprobe},
+	{ "drv_load", drv_load},
         };
 
   int i = 0;
