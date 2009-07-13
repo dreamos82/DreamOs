@@ -21,6 +21,11 @@
 #define USER_LEN 24
 #define CMD_LEN 256
 
+struct cmd {
+	const char cmdname[CMD_LEN];
+	void (*h_func)(void);
+};
+
 void shell(void);
 
 #endif

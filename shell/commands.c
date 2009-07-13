@@ -55,18 +55,18 @@ void help()
   printf ("Available commands:\n");
   printf("help      - See the 'help' list to learn the DreamOS commands now available\n"
          "clear     - Clear the screen\n"
-	 "poweroff  - Turn off the machine\n"
+		 "poweroff  - Turn off the machine\n"
          "kmalloc   - Test a basic kmalloc function\n"
          "do_fault  - Test a page_fault\n"
          "aalogo    - Show an ascii art logo\n"
          "uname     - Print kernel version, try uname --help for more info\n"
          "printmem  - Print used locations of memory\n"
          "credits   - Show DreamOS credits\n"
-	 "sleep     - pause DreamOS for a particular number of seconds\n"
-	 "cpuid     - Show cpu identification informations\n"
-	 "date      - Show date and time\n"
-	 "echo      - Print some lines of text\n"
-	 "drv_load  - Tool to load and kill modules\n");
+	 	 "sleep     - pause DreamOS for a particular number of seconds\n"
+	 	 "cpuid     - Show cpu identification informations\n"
+	 	 "date      - Show date and time\n"
+	  	 "echo      - Print some lines of text\n"
+	 	 "drv_load  - Tool to load and kill drivers\n");
 }
 
 void echo()
@@ -81,7 +81,7 @@ void poweroff()
 {
   printf ("Poweroff...\n");
   
-  asm("sti");
+  asm("cli");
   printf("E' ora possibile spegnere il computer.\n");
   while(1);
 }
@@ -223,10 +223,11 @@ void credits(void)
   _kputs("DreamOS Credits\n\n");                
   _kputs("Main Developers:\n");
   _kcolor('\012');
-   printf("Osiris - Diego Stamigni \n"	  
-             "Finarfin - Ivan\n\n\n"            
-         );
-
+   printf(  "Finarfin - Ivan (Founder)\n\n");
+  _kcolor('\011');
+  _kputs("Developers:\n");
+  _kcolor('\012');
+  _kputs("Osiris - Diego Stamigni \n\n");
   _kcolor('\011');
   _kputs("Contributors:\n");
   _kcolor('\012');
@@ -236,6 +237,7 @@ void credits(void)
          	"Celeron\n"
 	 		"Hamcha\n"
          	"m0nt0\n"
+			"shainer\n"
          	"and many others (3 or 4 :P)\n\n");
   _kcolor('\007');
 }

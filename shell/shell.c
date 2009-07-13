@@ -41,11 +41,6 @@
 
 #define NUM_COM 16
 
-struct cmd {
-	const char cmdname[CMD_LEN];
-	void (*h_func)(void);
-};
-
 /*
  * Inserisce gli argomenti di un comando in un array di stringhe
  * argc = numero degli argomenti
@@ -140,4 +135,3 @@ end:
     }
   }
 }
-

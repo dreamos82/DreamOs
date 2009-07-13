@@ -36,8 +36,7 @@ OBJ = kernel.o\
       io/io.o\
       libc/stdio.o\
       hardware/cpuid.o\
-      hardware/keyboard.o\
-      processore/gdt.o\
+	  processore/gdt.o\
       processore/idt.o\
       processore/handlers.o\
       hardware/pic8259.o\

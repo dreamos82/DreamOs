@@ -34,8 +34,7 @@
 // #define DEBUG 1
 void (*IntTable[IDT_SIZE])();
 IRQ_s *shareHandler[16];
-// IRQ_s *tmpHandler;
-// IRQ_s shareHandler[16];
+
 /** @author Ivan Gualandri
  *  @return none
  * Questa funzione si occupa di inizializzare la tabella di funzioni che gestiscono le 
