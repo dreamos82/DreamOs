@@ -60,7 +60,7 @@ bl.img : boot/multicatcher.S
 	nasm -f elf ./boot/multicatcher.S -o bl.img
 
 kernel.bin: $(OBJ)
-	su -c "ld -static --oformat elf32-i386 --output=kernel.bin --script=kernel.lds bl.img $(OBJ) -Ttext 0x100000 -Map kernel.map"
+	ld -static --oformat elf32-i386 --output=kernel.bin --script=kernel.lds bl.img $(OBJ) -Ttext 0x100000 -Map kernel.map
 
 kernel.o: kernel.c
 io/video.o: io/video.c
