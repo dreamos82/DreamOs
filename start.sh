@@ -6,8 +6,6 @@
 # diego.stamigni@linux.com
 # greez ;
 
-
-
 VERS="make vers"
 CLEAN="make clean"
 MAKE="make"
@@ -15,10 +13,10 @@ MAKE_IMG="make img"
 
 if [ "$1" != "--compile" ]; then
 
-  if [ $UID != "0" ]; then
-      echo "[-] You need to run this install script as root!"
-      exit
-  fi
+#  if [ $UID != "0" ]; then
+#      echo "[-] You need to run this install script as root!"
+#     exit
+#  fi
 
 if [ "$1" == "help" ]; then
 echo ""
@@ -66,6 +64,14 @@ echo "Please, be sure you have python."
 echo ""
 echo "Usage: '$0' 'grub'"
 echo "------------------------------------------------------"
+echo ""
+echo "If you want, you can create a DreamOS ISO Image Disk"
+echo "to burn it on a cdrom and boot it from a real PC."
+echo "Make sure you have installed mkisofs from cdrkit package."
+echo "The command is like this:"
+echo ""
+echo "Usage: '$0' 'create_iso'"
+echo "------------------------------------------------------"
 exit 1
 
 elif [ "$1" == "qemu" ] || [ "$1" == "bochs" ]; then
@@ -82,7 +88,7 @@ elif [ "$1" == "floppy_install" ]; then
 
   echo "---------------------- "
   echo "Installing in progres.."
-  make install
+  su -c "make install"
   echo "done."
   echo "---------------------- "
   exit
@@ -92,7 +98,17 @@ elif [ "$1" == "grub" ]; then
   echo "--------------------------------------------- "
   echo "Launching grub installer script in progress.."
   echo ""
-  python grub.py
+  su -c "python grub.py"
+  echo "done."
+  echo "--------------------------------------------- "
+  exit
+
+elif [ "$1" == "create_iso" ]; then
+
+  echo "--------------------------------------------- "
+  echo "Launching ISO Creating script in progress.."
+  echo ""
+  mkisofs -o dreamos-image.iso -A DreamOS -b boot/grub.img `pwd`
   echo "done."
   echo "--------------------------------------------- "
   exit
@@ -114,10 +130,10 @@ fi
 
 else
 
-  if [ $UID != "0" ]; then
-      echo "[-] You need to run this install script as root!"
-      exit
-  fi
+#  if [ $UID != "0" ]; then
+#      echo "[-] You need to run this install script as root!"
+#      exit
+#  fi
 
 if [ "$2" == "qemu" ] || [ "$2" == "bochs" ]; then
 
@@ -168,7 +184,7 @@ elif [ "$2" == "floppy_install" ]; then
   $VERS && $CLEAN && $MAKE && $MAKE_IMG
   echo "---------------------- "
   echo "Installing in progres.."
-  make install
+  su -c "make install"
   echo "done."
   echo "---------------------- "
   exit
@@ -178,7 +194,7 @@ elif [ "$2" == "grub" ]; then
   $VERS && $CLEAN && $MAKE && $MAKE_IMG
   echo "--------------------------------------------- "
   echo "Launching grub installer script in progress.."
-  python grub.py
+  su -c "python grub.py"
   echo "done."
   echo "--------------------------------------------- "
   exit
@@ -189,7 +205,26 @@ elif [ "$2" == "" ]; then
   echo "----------------------->"
   echo "Usage: '$0 help'"
   exit
+
+
+elif [ "$2" == "create_iso" ]; then
+  $VERS && $CLEAN && $MAKE && $MAKE_IMG
+  echo "--------------------------------------------- "
+  echo "Launching ISO Creating script in progress.."
+  echo ""
+  mkisofs -o dreamos-image.iso -A DreamOS -b boot/grub.img `pwd`
+  echo "done."
+  echo "--------------------------------------------- "
+  exit
+
+else
+  echo "Uhm? What the hell did you insert ? Lool! '$2' ?? I don't know what is it!"
+  echo "Please, read the help!!!"
+  echo "----------------------->"
+  echo "Usage: '$0 help'"
+  exit
+
 fi  
-    
+ 
 fi
 

@@ -60,7 +60,7 @@ bl.img : boot/multicatcher.S
 	nasm -f elf ./boot/multicatcher.S -o bl.img
 
 kernel.bin: $(OBJ)
-	ld -static --oformat elf32-i386 --output=kernel.bin --script=kernel.lds bl.img $(OBJ) -Ttext 0x100000 -Map kernel.map
+	su -c "ld -static --oformat elf32-i386 --output=kernel.bin --script=kernel.lds bl.img $(OBJ) -Ttext 0x100000 -Map kernel.map"
 
 kernel.o: kernel.c
 io/video.o: io/video.c
@@ -90,9 +90,7 @@ shell/commands.o: shell/commands.c
 sys/utsname.o: sys/utsname.c
 
 img:
-	mount -o loop boot/grub.img boot/os
-	cp dreamos.img boot/os/boot/grub/
-	umount boot/os
+	su -c "mount -o loop boot/grub.img boot/os && cp dreamos.img boot/os/boot/grub/ && umount boot/os"
 
 vers: 
 	 sed -i -e "/^#define VERSION/s/\".*\"/\"$(VERSION)\"/" include/version.h
@@ -106,7 +104,6 @@ vers:
 clean:
 	rm -f *.img *.bin *.map
 	rm -f $(OBJ)
-#	echo "" > include/version.h
 
 install:
 	mkfs.ext2 /dev/fd0
