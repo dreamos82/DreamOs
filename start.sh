@@ -96,6 +96,9 @@ elif [ "$1" == "floppy_install" ]; then
 elif [ "$1" == "grub" ]; then
 
   echo "--------------------------------------------- "
+  echo "Creating backup of menu.lst (/boot/grub/menu.lst_backup) .."
+  su -c "cp /boot/grub/menu.lst /boot/grub/menu.lst_backup"
+  echo "done.."
   echo "Launching grub installer script in progress.."
   echo ""
   su -c "python grub.py"
