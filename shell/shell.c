@@ -89,6 +89,7 @@ void shell()
 	{ "help",     help	  },
 	{ "answer",   answer  },
 	{ "drv_load", drv_load},
+	{ "ls",       ls},
         };
 
   int i = 0;

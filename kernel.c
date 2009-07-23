@@ -42,6 +42,7 @@
 #include <syscall.h>
 #include <kheap.h>
 #include <debug.h>
+#include <vfs.h>
 
 unsigned int *current_page_table;
 extern unsigned int end;
@@ -94,7 +95,7 @@ int main_loop(struct multiboot_info *boot_info)
     sinfo = kmalloc(sizeof(struct cpuinfo_generic));
     get_cpuid (sinfo);
         
-
+    vfs_init();
     /* Driver mouse init */
     //mouse_init();
     //_kprintOK();

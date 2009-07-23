@@ -21,6 +21,9 @@
 #include <clock.h>
 #include <sys/utsname.h>
 #include <mouse.h>
+#include <vfs.h>
+
+struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 
 void aalogo()
 {
@@ -66,7 +69,8 @@ void help()
 	 	 "cpuid     - Show cpu identification informations\n"
 	 	 "date      - Show date and time\n"
 	  	 "echo      - Print some lines of text\n"
-	 	 "drv_load  - Tool to load and kill drivers\n");
+	 	 "drv_load  - Tool to load and kill drivers\n"
+		 "ls        - Tool for listing dir - not complete-\n");
 }
 
 void echo()
@@ -378,4 +382,14 @@ void  drv_load(void)
 
    }
 	
+}
+
+void ls(){
+	int i;
+	i=0;
+	printf("Listing files and dirs\n");
+	while(i<64 && strcmp(mountpoint_list[i].mountpoint, "")){
+		printf("%s \t uid: %d Gid: %d\n",mountpoint_list[i].mountpoint, mountpoint_list[i].uid, mountpoint_list[i].gid);
+		i++;
+	}	
 }

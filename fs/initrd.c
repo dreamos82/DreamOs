@@ -1,5 +1,6 @@
 /*
- * DreamOS
+ * Dreamos
+ * initrd.c
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -12,39 +13,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
-
- * Autrice: Lisa
- * Febbraio 2006
- * Prototipi di funzione e variabili globali per la shell
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __COMMANDS_H
-#define __COMMANDS_H
+#include <initrd.h>
 
-#include <kheap.h>
-
-int argc;
-char **argv;
-extern heap_t *kheap;
-
-void aalogo();
-void logo();
-void help();
-void echo();
-void poweroff();
-void kmalloc_try();
-void do_fault();
-
-void uname_cmd();
-void uname_help();
-void uname_info();
-void printmem();
-void credits();
-void sleep_cmd();
-void cpuid();
-void answer();
-void drv_load();
-void ls();
-#endif
+void dummy(){
+	printf("Qui solo per una prova\n");
+}	

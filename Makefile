@@ -4,7 +4,7 @@
 
 NAME = DreamOS
 VERSION = 0
-PATCHLEVEL = 1.3
+PATCHLEVEL = 2.0
 EXTRAVERSION = -trunk
 
 CFLAGS = -nostdlib\
@@ -25,12 +25,14 @@ CFLAGS = -nostdlib\
 	 -I./include/system\
 	 -I./include/shell\
 	 -I./include/misc\
+	 -I./include/fs\
 	 -DBOCHS_DEBUG
 
 OBJ = kernel.o\
       io/video.o\
       drivers/keyboard.o\
       drivers/mouse.o\
+	  fs/vfs.o\
       libc/ctype.o\
       libc/string.o\
       io/io.o\
@@ -63,6 +65,7 @@ kernel.bin: $(OBJ)
 	ld -static --oformat elf32-i386 --output=kernel.bin --script=kernel.lds bl.img $(OBJ) -Ttext 0x100000 -Map kernel.map
 
 kernel.o: kernel.c
+fs/vfs.o: fs/vfs.c
 io/video.o: io/video.c
 io/io.o: io/io.c
 processore/gdt.o: processore/gdt.c
