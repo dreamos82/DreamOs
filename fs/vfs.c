@@ -54,12 +54,24 @@ void vfs_init(){
  	mountpoint_list[1].start_address = 0;
  	mountpoint_list[1].operations = kmalloc(sizeof(struct super_node_operations));
 
-	printf("Created mountpoint: %s\n", mountpoint_list[0].mountpoint);
-	printf("Created mountpoint: %s\n", mountpoint_list[1].mountpoint);
+	//printf("Created mountpoint: %s\n", mountpoint_list[0].mountpoint);
+	//printf("Created mountpoint: %s\n", mountpoint_list[1].mountpoint);
  	//initrd = kmalloc(sizeof(struct inode)); 	 	
 }
 
 void open_vfs (struct inode *node){
 	if(node->read!=0) printf("read node");
 	else return;
+}
+
+int open_dir(char *path){
+	int i = 0;
+	while(i<MAX_MOUNTPOINT ){
+			if(!strcmp(path, mountpoint_list[i].mountpoint)) {
+				printf("Changing dir %s\n", mountpoint_list[i].mountpoint);
+				return i;
+			}
+			i++;
+		}		
+		return -1;		
 }

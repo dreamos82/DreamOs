@@ -47,4 +47,5 @@ void cpuid();
 void answer();
 void drv_load();
 void ls();
+void cd();
 #endif

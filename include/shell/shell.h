@@ -26,6 +26,8 @@ struct cmd {
 	void (*h_func)(void);
 };
 
+extern char cur_path[256];
+
 void shell(void);
 
 #endif

@@ -24,6 +24,7 @@
 #include <vfs.h>
 
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
+char cur_path[256];
 
 void aalogo()
 {
@@ -70,7 +71,8 @@ void help()
 	 	 "date      - Show date and time\n"
 	  	 "echo      - Print some lines of text\n"
 	 	 "drv_load  - Tool to load and kill drivers\n"
-		 "ls        - Tool for listing dir - not complete-\n");
+		 "ls        - Tool for listing dir - not complete-\n"
+		 "cd        - Change dir - not complete-\n");
 }
 
 void echo()
@@ -392,4 +394,16 @@ void ls(){
 		printf("%s \t uid: %d Gid: %d\n",mountpoint_list[i].mountpoint, mountpoint_list[i].uid, mountpoint_list[i].gid);
 		i++;
 	}	
+}
+
+void cd(){
+	if(argc > 2) printf("Too many arguments\n");
+	else if(argc <2) printf("Too few arguments\n");
+	else {
+		int i=0;
+		//printf("Argc: %d ", argc);
+		i = open_dir(argv[1]);
+		if(i == -1) printf("Path not found\n");
+		else strcpy(cur_path, mountpoint_list[i].mountpoint);		
+	}
 }

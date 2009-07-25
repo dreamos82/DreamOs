@@ -39,7 +39,7 @@
 #include <clock.h>
 #include <sys/utsname.h>
 
-#define NUM_COM 16
+#define NUM_COM 17
 
 /*
  * Inserisce gli argomenti di un comando in un array di stringhe
@@ -90,10 +90,12 @@ void shell()
 	{ "answer",   answer  },
 	{ "drv_load", drv_load},
 	{ "ls",       ls},
+	{ "cd",       cd},
         };
 
   int i = 0;
 
+  memset(cmd, '\0', CMD_LEN);
   memset(user, '\0', USER_LEN);
   printf(LNG_WELCOME);
   
@@ -107,10 +109,11 @@ void shell()
   aalogo();
   printf("\n\n\n\n");
   argc=1;  
+  strcpy(cur_path, "");
   
   for (;;)
   {
-    printf("%s~# ",user);
+    printf("%s~%s# ",user, cur_path);
     scanf("%254s",cmd);
         
     /* elimina eventuali spazi all'inizio del comando */
