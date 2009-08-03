@@ -20,13 +20,22 @@
 
 #define USER_LEN 24
 #define CMD_LEN 256
+#define CURPATH_LEN 256
 
 struct cmd {
 	const char cmdname[CMD_LEN];
 	void (*h_func)(void);
 };
 
-extern char cur_path[256];
+struct user_env {
+	char username[USER_LEN];
+	char cur_path[CURPATH_LEN];
+};
+
+//extern char cur_path[256];
+typedef struct user_env userenv_t;
+
+extern userenv_t current_user;
 
 void shell(void);
 

@@ -41,6 +41,7 @@
 
 #define NUM_COM 17
 
+userenv_t current_user;
 /*
  * Inserisce gli argomenti di un comando in un array di stringhe
  * argc = numero degli argomenti
@@ -72,7 +73,7 @@ void shell()
   char cmd[CMD_LEN];
   char *cmd_ptr;
   char *user = kmalloc(USER_LEN);
-
+  
   static struct cmd shell_cmd[NUM_COM] = {
 	{ "aalogo",   aalogo      },
 	{ "clear",    _kclear     },
@@ -96,24 +97,25 @@ void shell()
   int i = 0;
 
   memset(cmd, '\0', CMD_LEN);
-  memset(user, '\0', USER_LEN);
+  memset(current_user.username, '\0', USER_LEN);
+  memset(current_user.cur_path, '\0', CURPATH_LEN);
   printf(LNG_WELCOME);
   
   do {		
     printf(LNG_USER);
-    scanf ("%23s",user);
+    scanf ("%23s",current_user.username);
     printf(LNG_USER_R);
-  } while (!strlen(user));
+  } while (!strlen(current_user.username));
  
   _kclear();
   aalogo();
   printf("\n\n\n\n");
   argc=1;  
-  strcpy(cur_path, "");
+  strcpy(current_user.cur_path, "");
   
   for (;;)
   {
-    printf("%s~%s# ",user, cur_path);
+    printf("%s~:%s# ",current_user.username, current_user.cur_path);
     scanf("%254s",cmd);
         
     /* elimina eventuali spazi all'inizio del comando */

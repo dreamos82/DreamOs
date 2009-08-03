@@ -3,7 +3,7 @@ import sys
 import os
 
 if os.getuid() != 0:
-	print "--------------------DreamOS v0.1.2 Grub Autogen--------------------"
+	print "--------------------DreamOS v0.2 Grub Autogen--------------------"
 	print "[-] You need to run this install script as root!"
 	sys.exit(1)
 
@@ -26,7 +26,7 @@ def sub_mount(mp, cwd):
 # Manca il controllo errori
 fd = open("/boot/grub/menu.lst", "a")
 
-print "--------------------DreamOS v0.1.2 Grub Autogen--------------------"
+print "--------------------DreamOS v0.2 Grub Autogen--------------------"
 print "Inserire la partizione dei sorgenti:",
 pn = raw_input()
 partition = grub_hd(pn)
@@ -41,7 +41,7 @@ else:
 	cwd = sub_mount(mp, cwd)
 	
 print "+---------------------------------INFO----------------------------------+"
-print "| Title: DreamOS v0.1.2 trunk                                           |"
+print "| Title: DreamOS v0.2 trunk                                           |"
 print "| Root: " + partition + "                                                         |"
 print "| Kernel: " + cwd
 print "+-----------------------------------------------------------------------+"
@@ -49,7 +49,7 @@ print "Procedere alla scrittura? (y/n):",
 answer = raw_input()
 
 if answer == 'y':
-	fd.write("\ntitle\tDreamOS v0.1.2 trunk")
+	fd.write("\ntitle\tDreamOS v0.2 trunk")
 	fd.write("\nroot\t" + partition)
 	fd.write("\nkernel\t" + cwd)
 	fd.write("\nboot\n")
@@ -57,7 +57,7 @@ fd.close()
 
 print ""
 print "Changes added to /boot/grub/menu.lst: "
-print "\n+title\tDreamOS v0.1.2 trunk"
+print "\n+title\tDreamOS v0.2 trunk"
 print "+root\t" + partition
 print "+kernel\t" + cwd
 print "+boot\n"

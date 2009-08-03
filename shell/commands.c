@@ -24,7 +24,7 @@
 #include <vfs.h>
 
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
-char cur_path[256];
+userenv_t current_user;
 
 void aalogo()
 {
@@ -404,6 +404,6 @@ void cd(){
 		//printf("Argc: %d ", argc);
 		i = open_dir(argv[1]);
 		if(i == -1) printf("Path not found\n");
-		else strcpy(cur_path, mountpoint_list[i].mountpoint);		
+		else strcpy(current_user.cur_path, mountpoint_list[i].mountpoint);		
 	}
 }

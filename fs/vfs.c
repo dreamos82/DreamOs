@@ -22,6 +22,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <kheap.h>
+#include <unistd.h>
 
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 
@@ -71,6 +72,9 @@ int open_dir(char *path){
 				printf("Changing dir %s\n", mountpoint_list[i].mountpoint);
 				return i;
 			}
+			else{
+				/* Continua a cercare il mountpoint e se nn lo trova torna errore.*/				
+			}	
 			i++;
 		}		
 		return -1;		

@@ -18,7 +18,7 @@ CFLAGS = -nostdlib\
 	 -I./include\
 	 -I./include/io\
 	 -I./include/drivers\
-     -I./include/libc\
+         -I./include/libc\
 	 -I./include/processore\
 	 -I./include/hardware\
 	 -I./include/mem\
@@ -26,6 +26,7 @@ CFLAGS = -nostdlib\
 	 -I./include/shell\
 	 -I./include/misc\
 	 -I./include/fs\
+	 -I./include/sys \
 	 -DBOCHS_DEBUG
 
 OBJ = kernel.o\
