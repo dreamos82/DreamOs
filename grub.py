@@ -1,9 +1,13 @@
-#GrubScript ver 0.1
+# Liza feat. Lord Osiris
+# GrubScript ver 0.2
+
 import sys
 import os
+import commands
+trunk = commands.getoutput("cat .svn/entries | head -n 4 | tail -n 1")
+patchlevel = commands.getoutput("cat include/version.h | grep PATCHLEVEL | cut -b 21-23")
 
 if os.getuid() != 0:
-	print "--------------------DreamOS v0.2 Grub Autogen--------------------"
 	print "[-] You need to run this install script as root!"
 	sys.exit(1)
 
@@ -26,8 +30,8 @@ def sub_mount(mp, cwd):
 # Manca il controllo errori
 fd = open("/boot/grub/menu.lst", "a")
 
-print "--------------------DreamOS v0.2 Grub Autogen--------------------"
-print "Inserire la partizione dei sorgenti:",
+print "------------ DreamOS Grub Autogen --------------"
+print "Inserire la partizione dei sorgenti (ex. hda2): ",
 pn = raw_input()
 partition = grub_hd(pn)
 
@@ -40,25 +44,31 @@ if mp == "/":
 else:
 	cwd = sub_mount(mp, cwd)
 	
-print "+---------------------------------INFO----------------------------------+"
-print "| Title: DreamOS v0.2 trunk                                           |"
-print "| Root: " + partition + "                                                         |"
-print "| Kernel: " + cwd
-print "+-----------------------------------------------------------------------+"
+
+print "+--------------------------- INFO ------------------------------+"
+print "| Title: DreamOS v0." + patchlevel + "-" + trunk +"                                     |"
+print "| Root: " + partition + "                                  		|"
+print "| Kernel: " + cwd +"	|"
+print "+---------------------------------------------------------------+"
+
 print "Procedere alla scrittura? (y/n):",
 answer = raw_input()
 
 if answer == 'y':
-	fd.write("\ntitle\tDreamOS v0.2 trunk")
+	fd.write("\ntitle\tDreamOS v0." + patchlevel + "-" + trunk +"")
 	fd.write("\nroot\t" + partition)
 	fd.write("\nkernel\t" + cwd)
 	fd.write("\nboot\n")
-fd.close()
+	fd.close()
+	print ""
+        print "Changes added to /boot/grub/menu.lst: "
+        print "\n+title\tDreamOS trunk"
+        print "+root\t" + partition
+        print "+kernel\t" + cwd
+        print "+boot\n"
+        print "[+] Done."
 
-print ""
-print "Changes added to /boot/grub/menu.lst: "
-print "\n+title\tDreamOS v0.2 trunk"
-print "+root\t" + partition
-print "+kernel\t" + cwd
-print "+boot\n"
-print "[+] Done."
+
+elif answer == 'n':
+	print "Ok, bye :)"
+
