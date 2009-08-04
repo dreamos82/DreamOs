@@ -30,8 +30,7 @@ def sub_mount(mp, cwd):
 # Manca il controllo errori
 fd = open("/boot/grub/menu.lst", "a")
 
-print "------------ DreamOS Grub Autogen --------------"
-print "Inserire la partizione dei sorgenti (ex. hda2): ",
+print "Inserire la partizione dei sorgenti (ex. hda2):",
 pn = raw_input()
 partition = grub_hd(pn)
 
@@ -44,17 +43,23 @@ if mp == "/":
 else:
 	cwd = sub_mount(mp, cwd)
 	
+print "Vuoi lo splash di DreamOS nel tuo Grub? (y/n):",
+answer2 = raw_input()
 
-print "+--------------------------- INFO ------------------------------+"
-print "| Title: DreamOS v0." + patchlevel + "-" + trunk +"                                     |"
-print "| Root: " + partition + "                                  		|"
-print "| Kernel: " + cwd +"	|"
-print "+---------------------------------------------------------------+"
+if answer2 == 'y':
 
-print "Procedere alla scrittura? (y/n):",
+	print "+--------------------------- INFO ------------------------------+"
+	print "| splashimage=" + partition + "/boot/grub/grub2.xpm.gz 			|"
+	print "| Title: DreamOS v0." + patchlevel + "-" + trunk +"                                     |"
+	print "| Root: " + partition + "                                  		|"
+	print "| Kernel: " + cwd +"	|"
+	print "+---------------------------------------------------------------+"
+
+	print "Procedere alla scrittura? (y/n):",
 answer = raw_input()
 
 if answer == 'y':
+	fd.write("\nsplashimage=" + partition + "/boot/grub/grub2.xpm.gz\n\n")
 	fd.write("\ntitle\tDreamOS v0." + patchlevel + "-" + trunk +"")
 	fd.write("\nroot\t" + partition)
 	fd.write("\nkernel\t" + cwd)
@@ -71,4 +76,30 @@ if answer == 'y':
 
 elif answer == 'n':
 	print "Ok, bye :)"
+	
+elif answer2 == 'n':
+	print "+--------------------------- INFO ------------------------------+"
+	print "| Title: DreamOS v0." + patchlevel + "-" + trunk +"                                     |"
+	print "| Root: " + partition + "                                  		|"
+	print "| Kernel: " + cwd +"	|"
+	print "+---------------------------------------------------------------+"
 
+	print "Procedere alla scrittura? (y/n):",
+answer3 = raw_input()
+
+if answer3 == 'y':
+	fd.write("\ntitle\tDreamOS v0." + patchlevel + "-" + trunk +"")
+	fd.write("\nroot\t" + partition)
+	fd.write("\nkernel\t" + cwd)
+	fd.write("\nboot\n")
+	fd.close()
+	print ""
+        print "Changes added to /boot/grub/menu.lst: "
+        print "\n+title\tDreamOS trunk"
+        print "+root\t" + partition
+        print "+kernel\t" + cwd
+        print "+boot\n"
+        print "[+] Done."
+
+elif answer3 == 'n':
+	print "Ok, ahahah :)"
