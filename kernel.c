@@ -96,10 +96,6 @@ int main_loop(struct multiboot_info *boot_info)
     get_cpuid (sinfo);
         
     vfs_init();
-    /* Driver mouse init */
-    //mouse_init();
-    //_kprintOK();
-    // NON IMPOSTATELO, ORA VIENE GESTITO DA MODPROBE l'INIT! */
 
     printf("\n");
     printf("----\n");

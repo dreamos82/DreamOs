@@ -387,13 +387,25 @@ void  drv_load(void)
 }
 
 void ls(){
-	int i;
-	i=0;
-	printf("Listing files and dirs\n");
-	while(i<64 && strcmp(mountpoint_list[i].mountpoint, "")){
-		printf("%s \t uid: %d Gid: %d\n",mountpoint_list[i].mountpoint, mountpoint_list[i].uid, mountpoint_list[i].gid);
-		i++;
-	}	
+	int i=0, j=0;
+    while ( strcmp(mountpoint_list[i].mountpoint, "") ) {
+         	j = j++, i = i++;
+    }
+	i = 0;
+	while( i<j && strcmp(mountpoint_list[i].mountpoint, "") ) {
+		if (argc < 2) {
+			printf("%s ", mountpoint_list[i].mountpoint);
+		}
+		else {
+			if  ( (_kstrncmp(argv[1], "-l", 2) ) == 0 ) 
+				printf("%s \t uid=%d(%s), gid=%d(%s)\n", mountpoint_list[i].mountpoint, mountpoint_list[i].uid, current_user.username, 
+				       mountpoint_list[i].gid, current_user.username);
+			else
+				printf("No option %s found. ", argv[1]);
+		}
+	 i++; 
+   }
+	printf("\n");
 }
 
 void cd(){
@@ -401,9 +413,8 @@ void cd(){
 	else if(argc <2) printf("Too few arguments\n");
 	else {
 		int i=0;
-		//printf("Argc: %d ", argc);
 		i = open_dir(argv[1]);
-		if(i == -1) printf("Path not found\n");
+		if(i == -1) printf("cd: %s: No such file or directory\n", argv[1]);
 		else strcpy(current_user.cur_path, mountpoint_list[i].mountpoint);		
 	}
 }
