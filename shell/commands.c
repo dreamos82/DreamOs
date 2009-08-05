@@ -389,7 +389,8 @@ void  drv_load(void)
 void ls(){
 	int i=0, j=0;
     while ( strcmp(mountpoint_list[i].mountpoint, "") ) {
-         	j = j++, i = i++;
+         	j = j++;
+			i = i++;
     }
 	i = 0;
 	while( i<j && strcmp(mountpoint_list[i].mountpoint, "") ) {
@@ -413,7 +414,7 @@ void cd(){
 	else if(argc <2) printf("Too few arguments\n");
 	else {
 		int i=0;
-		i = open_dir(argv[1]);
+		i = get_mountpoint_id(argv[1]);
 		if(i == -1) printf("cd: %s: No such file or directory\n", argv[1]);
 		else strcpy(current_user.cur_path, mountpoint_list[i].mountpoint);		
 	}
