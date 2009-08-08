@@ -57,22 +57,24 @@ void logo()
 void help()
 {
   printf ("Available commands:\n");
-  printf("help      - See the 'help' list to learn the DreamOS commands now available\n"
-         "clear     - Clear the screen\n"
-		 "poweroff  - Turn off the machine\n"
-         "kmalloc   - Test a basic kmalloc function\n"
-         "do_fault  - Test a page_fault\n"
-         "aalogo    - Show an ascii art logo\n"
-         "uname     - Print kernel version, try uname --help for more info\n"
-         "printmem  - Print used locations of memory\n"
-         "credits   - Show DreamOS credits\n"
-	 	 "sleep     - pause DreamOS for a particular number of seconds\n"
-	 	 "cpuid     - Show cpu identification informations\n"
-	 	 "date      - Show date and time\n"
-	  	 "echo      - Print some lines of text\n"
-	 	 "drv_load  - Tool to load and kill drivers\n"
-		 "ls        - Tool for listing dir - not complete-\n"
-		 "cd        - Change dir - not complete-\n");
+  printf("help       - See the 'help' list to learn the DreamOS commands now available\n"
+         "clear      - Clear the screen\n"
+		 "poweroff   - Turn off the machine\n"
+         "kmalloc    - Test a basic kmalloc function\n"
+         "do_fault   - Test a page_fault\n"
+         "aalogo     - Show an ascii art logo\n"
+         "uname      - Print kernel version, try uname --help for more info\n"
+         "printmem   - Print used locations of memory\n"
+         "credits    - Show DreamOS credits\n"
+	 	 "sleep      - pause DreamOS for a particular number of seconds\n"
+	 	 "cpuid      - Show cpu identification informations\n"
+	 	 "date       - Show date and time\n"
+	  	 "echo       - Print some lines of text\n"
+	 	 "drv_load   - Tool to load and kill drivers\n"
+		 "ls         - Tool for listing dir - not complete-\n"
+		 "cd         - Change dir - not complete-\n"
+		 "try_strcpy - Try strcpy function\n"
+		 "whoami     - Show the current user name\n");
 }
 
 void echo()
@@ -410,12 +412,36 @@ void ls(){
 }
 
 void cd(){
+	char *relpath;
 	if(argc > 2) printf("Too many arguments\n");
 	else if(argc <2) printf("Too few arguments\n");
 	else {
 		int i=0;
+		int rel_size = 0;		
 		i = get_mountpoint_id(argv[1]);
+		rel_size = strlen(argv[1]) - strlen(mountpoint_list[i].mountpoint);
 		if(i == -1) printf("cd: %s: No such file or directory\n", argv[1]);
-		else strcpy(current_user.cur_path, mountpoint_list[i].mountpoint);		
+		else strcpy(current_user.cur_path, mountpoint_list[i].mountpoint);
+		if(rel_size >0){
+			int j=0;
+			relpath = kmalloc(rel_size);
+			while(j < rel_size){
+				relpath[j] = *(argv[1]+(strlen(mountpoint_list[i].mountpoint) + j));
+				j++;
+			}			
+			relpath[j] = '\0';
+			printf("Relative path: %s %d\n",relpath, rel_size);
+		}
 	}
+}
+
+void whoami(){
+	printf("%s\n", current_user.username);
+}
+
+void try_strcpy(){
+	char string1[50], string2[50];
+	strcpy(string1, "Io sono una stringa di tipo 1");
+	strcpy(string2, "Ed io sono quella di tipo 2");
+	printf("%s - %d\n%s - %d\n", string1, strlen(string1), string2, strlen(string2));
 }

@@ -48,4 +48,6 @@ void answer();
 void drv_load();
 void ls();
 void cd();
+void whoami();
+void try_strcpy();
 #endif

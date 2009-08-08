@@ -43,8 +43,10 @@ char *strncpy (char *dest, register const char *src,
 char *strcpy (char *dest, const char *src)
 {
   int i;
+  int k = 0;
+  k=strlen(src);
 
-  for (i=0; src[i]; i++)
+  for (i=0; i<k; i++)  	
     *(dest+i) = *(src+i);
   dest[i] = '\0';
 

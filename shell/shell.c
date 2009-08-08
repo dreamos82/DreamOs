@@ -39,7 +39,7 @@
 #include <clock.h>
 #include <sys/utsname.h>
 
-#define NUM_COM 17
+#define NUM_COM 20
 
 userenv_t current_user;
 /*
@@ -92,6 +92,8 @@ void shell()
 	{ "drv_load", drv_load},
 	{ "ls",       ls},
 	{ "cd",       cd},
+	{ "whoami",   whoami},
+	{ "try_strcpy", try_strcpy},
         };
 
   int i = 0;
