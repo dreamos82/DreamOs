@@ -88,3 +88,22 @@ int get_mountpoint_id(char *path){
 			   if(last!=-1) printf("Changing dir %s - %d\n", mountpoint_list[last].mountpoint, last);
                return last;
 }
+
+char* get_rel_path(int mountpoint_id, char* path){
+	char *tmp_path;
+	int rel_size = 0;
+	int j=0;
+	rel_size = strlen(path) - strlen(mountpoint_list[mountpoint_id].mountpoint);
+	if(rel_size>0){		
+		int mp_size= 0;
+		tmp_path = kmalloc(rel_size);		
+		mp_size = strlen(mountpoint_list[mountpoint_id].mountpoint);
+		while(j<rel_size){			
+			tmp_path[j] = path[mp_size + j];
+			j++;
+		}
+		tmp_path[j]='\0';
+	}
+	printf("Path: %s - %s- %d\n", path,tmp_path, rel_size);
+	return tmp_path;
+}

@@ -419,17 +419,19 @@ void cd(){
 		int i=0;
 		int rel_size = 0;		
 		i = get_mountpoint_id(argv[1]);
+		printf("path: %s\n", argv[1]);
 		rel_size = strlen(argv[1]) - strlen(mountpoint_list[i].mountpoint);
 		if(i == -1) printf("cd: %s: No such file or directory\n", argv[1]);
 		else strcpy(current_user.cur_path, mountpoint_list[i].mountpoint);
 		if(rel_size >0){
-			int j=0;
-			relpath = kmalloc(rel_size);
-			while(j < rel_size){
-				relpath[j] = *(argv[1]+(strlen(mountpoint_list[i].mountpoint) + j));
-				j++;
-			}			
-			relpath[j] = '\0';
+			//int j=0;
+			//relpath = kmalloc(rel_size);
+			relpath = get_rel_path(i, argv[1]);
+			//while(j < rel_size){
+			//	relpath[j] = *(argv[1]+(strlen(mountpoint_list[i].mountpoint) + j));
+			//	j++;
+			//}			
+			//relpath[j] = '\0';
 			printf("Relative path: %s %d\n",relpath, rel_size);
 		}
 	}

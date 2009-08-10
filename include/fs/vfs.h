@@ -69,6 +69,7 @@ extern struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 void open_vfs (struct inode *);
 void close (struct inode *);
 int get_mountpoint_id(char *);
+char* get_rel_path(int, char*);
 int open_dir(char *);
 int read (struct inode *, int, int, int *);
 int write (struct inode *, int, int, int *);
