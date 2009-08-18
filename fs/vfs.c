@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
  
+#include <video.h>
 #include <vfs.h>
 #include <stdio.h>
 #include <kheap.h>
@@ -89,21 +90,22 @@ int get_mountpoint_id(char *path){
                return last;
 }
 
-char* get_rel_path(int mountpoint_id, char* path){
-	char *tmp_path;
+char *get_rel_path(int mountpoint_id, char* path){
 	int rel_size = 0;
 	int j=0;
-	rel_size = strlen(path) - strlen(mountpoint_list[mountpoint_id].mountpoint);
+	char *tmp_path;
+	rel_size = strlen(path) - strlen(mountpoint_list[mountpoint_id].mountpoint);	
 	if(rel_size>0){		
 		int mp_size= 0;
-		tmp_path = kmalloc(rel_size);		
-		mp_size = strlen(mountpoint_list[mountpoint_id].mountpoint);
+		tmp_path = kmalloc(rel_size * sizeof(char));		
+		mp_size = strlen(mountpoint_list[mountpoint_id].mountpoint);		
 		while(j<rel_size){			
-			tmp_path[j] = path[mp_size + j];
+			tmp_path[j] = path[mp_size + j];			
+			_kputc(path[mp_size + j]);
 			j++;
 		}
 		tmp_path[j]='\0';
-	}
-	printf("Path: %s - %s- %d\n", path,tmp_path, rel_size);
+		printf("\n");
+	}	
 	return tmp_path;
 }

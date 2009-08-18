@@ -412,17 +412,17 @@ void ls(){
 }
 
 void cd(){
-	char *relpath;
+	char *relpath;	
 	if(argc > 2) printf("Too many arguments\n");
 	else if(argc <2) printf("Too few arguments\n");
 	else {
 		int i=0;
 		int rel_size = 0;		
 		i = get_mountpoint_id(argv[1]);
-		printf("path: %s\n", argv[1]);
+		//printf("path: %s\n", argv[1]);
 		rel_size = strlen(argv[1]) - strlen(mountpoint_list[i].mountpoint);
 		if(i == -1) printf("cd: %s: No such file or directory\n", argv[1]);
-		else strcpy(current_user.cur_path, mountpoint_list[i].mountpoint);
+		else strcpy(current_user.cur_path, argv[1]);
 		if(rel_size >0){
 			//int j=0;
 			//relpath = kmalloc(rel_size);
@@ -432,7 +432,7 @@ void cd(){
 			//	j++;
 			//}			
 			//relpath[j] = '\0';
-			printf("Relative path: %s %d\n",relpath, rel_size);
+			//printf("Relative path: %s %d\n",relpath, rel_size);
 		}
 	}
 }

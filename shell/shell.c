@@ -55,7 +55,7 @@ void options(char *com)
 
   for (; *com; com++)
   {    
-    argv[argc] = (char *)kmalloc(sizeof(char) * 10);
+    argv[argc] = (char *)kmalloc(sizeof(char) * 30);
     while (*com != ' ') {
       *(argv[argc] + i) = *com++;
       i++;
