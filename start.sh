@@ -112,8 +112,11 @@ elif [ "$1" == "create_iso" ]; then
   echo "Launching ISO Creating script in progress.."
   echo ""
   mkisofs -o dreamos-image.iso -A DreamOS -b boot/grub.img `pwd`
+  mv dreamos-image.iso ISO/dreamos-image.iso
   echo "done."
   echo "--------------------------------------------- "
+  echo "ISO Created in ISO/"
+  echo "---------------------------------------------
   exit
 
 elif [ "$1" == "" ]; then
@@ -216,8 +219,11 @@ elif [ "$2" == "create_iso" ]; then
   echo "Launching ISO Creating script in progress.."
   echo ""
   mkisofs -o dreamos-image.iso -A DreamOS -b boot/grub.img `pwd`
+  mv dreamos-image.iso ISO/dreamos-image.iso
   echo "done."
   echo "--------------------------------------------- "
+  echo "ISO Created in ISO/"
+  echo "---------------------------------------------
   exit
 
 else
