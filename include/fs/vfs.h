@@ -1,6 +1,6 @@
 /*
  * Dreamos
- * vfs.h
+ * vfs.c
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -53,6 +53,11 @@ struct mountpoint_t {
 		unsigned int start_address; /**< Indirizzo di partenza del FileSystem*/
 		int dev_id; /**< Device ID*/		
 		struct super_node_operations *operations;
+};
+
+struct file_descriptor {
+	int fs_spec_id;
+	int mountpoint_id;
 };
 
 struct super_node_operations {

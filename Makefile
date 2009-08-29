@@ -34,6 +34,7 @@ OBJ = kernel.o\
       drivers/keyboard.o\
       drivers/mouse.o\
 	  fs/vfs.o\
+	  fs/fcntl.o\
       libc/ctype.o\
       libc/string.o\
       io/io.o\
@@ -54,7 +55,8 @@ OBJ = kernel.o\
       hardware/8253.o\
       shell/shell.o\
       shell/commands.o\
-      sys/utsname.o
+      sys/utsname.o\
+      sys/dirent.o
 
 dreamos.img: bl.img kernel.bin
 	mv kernel.bin dreamos.img
@@ -67,6 +69,7 @@ kernel.bin: $(OBJ)
 
 kernel.o: kernel.c
 fs/vfs.o: fs/vfs.c
+fs/fcntl.o: fs/fcntl.c
 io/video.o: io/video.c
 io/io.o: io/io.c
 processore/gdt.o: processore/gdt.c
@@ -92,6 +95,7 @@ hardware/8253.o: hardware/8253.c
 shell/shell.o: shell/shell.c
 shell/commands.o: shell/commands.c
 sys/utsname.o: sys/utsname.c
+sys/dirent.o: sys/dirent.c
 
 img:
 	su -c "mount -o loop boot/grub.img boot/os && cp dreamos.img boot/os/boot/grub/ && umount boot/os"

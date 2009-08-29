@@ -86,7 +86,7 @@ int get_mountpoint_id(char *path){
                        }					   					   
                        i++;
                }
-			   if(last!=-1) printf("Changing dir %s - %d\n", mountpoint_list[last].mountpoint, last);
+			   if(last!=-1) printf("Changing dir %s	\n", mountpoint_list[last].mountpoint, last);
                return last;
 }
 
@@ -101,11 +101,11 @@ char *get_rel_path(int mountpoint_id, char* path){
 		mp_size = strlen(mountpoint_list[mountpoint_id].mountpoint);		
 		while(j<rel_size){			
 			tmp_path[j] = path[mp_size + j];			
-			_kputc(path[mp_size + j]);
+			//_kputc(path[mp_size + j]);
 			j++;
 		}
 		tmp_path[j]='\0';
-		printf("\n");
+		//printf("\n");
 	}	
 	return tmp_path;
 }

@@ -424,16 +424,8 @@ void cd(){
 		if(i == -1 || (i==0  && strcmp("/", argv[1]))) printf("cd: %s: No such file or directory\n", argv[1]);
 		else strcpy(current_user.cur_path, argv[1]);
 		if(rel_size >0){
-			//int j=0;
-			//relpath = kmalloc(rel_size);
 			relpath = get_rel_path(i, argv[1]);
 			free(relpath);
-			//while(j < rel_size){
-			//	relpath[j] = *(argv[1]+(strlen(mountpoint_list[i].mountpoint) + j));
-			//	j++;
-			//}			
-			//relpath[j] = '\0';
-			//printf("Relative path: %s %d\n",relpath, rel_size);
 		}
 	}
 }
