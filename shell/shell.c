@@ -93,7 +93,6 @@ void shell()
 	{ "ls",       ls},
 	{ "cd",       cd},
 	{ "whoami",   whoami},
-	{ "try_strcpy", try_strcpy},
         };
 
   int i = 0;
@@ -117,7 +116,12 @@ void shell()
   
   for (;;)
   {
-    printf("%s~:%s# ",current_user.username, current_user.cur_path);
+    //printf("[%s]~:%s# ",current_user.username, current_user.cur_path);
+    //_kcolor(4);
+    printf("%s~:%s# ", current_user.username, 
+				  current_user.cur_path,
+				  current_user.username);
+    //_kcolor(7);
     scanf("%254s",cmd);
         
     /* elimina eventuali spazi all'inizio del comando */

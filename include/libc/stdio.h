@@ -31,6 +31,7 @@
 void putchar (char);
 int atoi (const char *);
 int printf (const char *, ...);
+int puts (char *s);
 int scanf (const char *, ...);
 
 #endif

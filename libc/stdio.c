@@ -31,9 +31,34 @@
 #include <keyboard.h>
 #include <kheap.h>
 #include <debug.h>
+#include <string.h>
 
 #define LEFT 1
 #define RIGHT 0
+
+char *VIDEO_MEMZ = (char*) 0xb8000,
+	 *VIDEO_PTRZ = (char*) 0xb8000,
+	 VIDEO_CLRZ = 0x7;
+	 
+int last_Xz=0, last_Yz=0;
+
+/* 
+ *  puts() function
+ *  print *s
+ *  do newline
+ */
+int puts(char *s)
+{
+  while( *s != 0 ) {
+	if (last_Xz && last_Yz) _kscrolldown ();
+	*VIDEO_PTRZ++ = s;
+	*VIDEO_PTRZ++ = VIDEO_CLRZ;
+	_kshiftAll();
+	_ksetcursauto();
+	 s++;
+  }
+   _knewline();
+}
 
 /*
  * Print a character
@@ -46,8 +71,7 @@ void putchar (char ch)
 	char s[2];
 	s[0] = ch;
 	s[1] = '\0';
-
-   _kputs (s);
+	_kputs(s);
 }
 
 /*

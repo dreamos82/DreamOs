@@ -79,10 +79,18 @@ void help()
 
 void echo()
 {
-    int c;
+    /*int c;
     for (c = 1; c < argc; c++)
         printf ("%s ", argv[c]);
-    printf ("\n");
+    printf ("\n");*/
+    if ( argc == 1 ) {
+         printf("");
+    } else {
+		while ( --argc > 0 ) {
+		printf("%s ",*++argv);
+        }
+   }
+   printf("\n");
 }
 
 void poweroff()
@@ -388,40 +396,46 @@ void  drv_load(void)
 	
 }
 
-void ls(){
+void ls ( ) {
 	int i=0, j=0;
-    while ( strcmp(mountpoint_list[i].mountpoint, "") ) {
-         	j = j++;
-			i = i++;
-    }
+	while ( strcmp(mountpoint_list[i].mountpoint, "") ) {
+         	j++;
+		i++;
+	}
 	i = 0;
-	while( i<j && strcmp(mountpoint_list[i].mountpoint, "") ) {
-		if (argc < 2) {
-			printf("%s ", mountpoint_list[i].mountpoint);
+	while( i < j ) {
+		if (argc == 1) {
+			_kcolor(1);
+			printf("%s   ", mountpoint_list[i].mountpoint);
 		}
 		else {
-			if  ( (_kstrncmp(argv[1], "-l", 2) ) == 0 ) 
-				printf("%s \t uid=%d(%s), gid=%d(%s)\n", mountpoint_list[i].mountpoint, mountpoint_list[i].uid, current_user.username, 
-				       mountpoint_list[i].gid, current_user.username);
-			else
-				printf("No option %s found. ", argv[1]);
+			if  ( (_kstrncmp(argv[1], "-l", 2) ) == 0 )
+				printf("uid=%d(%s), gid=%d(%s) - ", 
+							mountpoint_list[i].uid,
+							current_user.username,
+							mountpoint_list[i].gid, 
+							current_user.username);
+				_kcolor(1);
+				printf("%s\n", mountpoint_list[i].mountpoint);
+				_kcolor(7);
 		}
-	 i++; 
-   }
-	printf("\n");
+		i++; 
+	}
+	_kcolor(7);
+	printf(" -->   Total: %d\n", j);
 }
 
-void cd(){
+void cd( ){
 	char *relpath;	
-	if(argc > 2) printf("Too many arguments\n");
-	else if(argc <2) printf("Too few arguments\n");
+	if(argc != 2) printf("Bad usage. Try 'ls -l' and then 'cd dir'.\n");
 	else {
 		int i=0;
 		int rel_size = 0;		
 		i = get_mountpoint_id(argv[1]);
 		//printf("path: %s\n", argv[1]);
 		rel_size = strlen(argv[1]) - strlen(mountpoint_list[i].mountpoint);
-		if(i == -1 || (i==0  && strcmp("/", argv[1]))) printf("cd: %s: No such file or directory\n", argv[1]);
+		if(i == -1 || (i==0  && strcmp("/", argv[1]))) 
+			printf("cd: %s: No such file or directory\n", argv[1]);
 		else strcpy(current_user.cur_path, argv[1]);
 		if(rel_size >0){
 			relpath = get_rel_path(i, argv[1]);
@@ -432,11 +446,4 @@ void cd(){
 
 void whoami(){
 	printf("%s\n", current_user.username);
-}
-
-void try_strcpy(){
-	char string1[50], string2[50];
-	strcpy(string1, "Io sono una stringa di tipo 1");
-	strcpy(string2, "Ed io sono quella di tipo 2");
-	printf("%s - %d\n%s - %d\n", string1, strlen(string1), string2, strlen(string2));
 }

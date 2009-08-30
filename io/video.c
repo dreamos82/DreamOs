@@ -34,7 +34,7 @@ char *VIDEO_MEM = (char*) 0xb8000,
      *VIDEO_PTR = (char*) 0xb8000,
     VIDEO_CLR = 0x7;
 
-/* Scrolling buffer */
+// Scrolling buffer 
 char upbuffer[_SCR_H][_SCR_W*2];
 char downbuffer[_SCR_H][_SCR_W*2];
 int is_scrolled=0;
