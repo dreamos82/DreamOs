@@ -19,7 +19,14 @@
 #include <dirent.h>
 #include <sys/types.h>
 #include <stdio.h>
+#include <vfs.h>
+
 
 DIR *opendir(const char *path){
-	printf("Prova\n");
+	int mpoint_id = 0;
+	char* rel_path;
+
+	mpoint_id = get_mountpoint_id(path);
+	rel_path = get_rel_path(mpoint_id, path);
+	printf("%d - %s\n", mpoint_id, rel_path);	
 }

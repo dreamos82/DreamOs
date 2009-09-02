@@ -442,6 +442,7 @@ void cd( ){
 			free(relpath);
 		}
 	}
+	opendir(argv[1]);
 }
 
 void whoami(){
