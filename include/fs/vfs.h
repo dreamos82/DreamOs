@@ -18,28 +18,28 @@
 #ifndef _VFS_H
 #define _VFS_H
 
+#include <dirent.h>
+#include <stddef.h>
+
 #define MAX_MOUNTPOINT 10
 #define MAX_FD 255
 
 #define FS_FILE 0x01
 #define FS_DIRECTORY 0x02
 
-struct inode {
-	char filename[256];
-	int type;
- 	int length;
-	struct inode *parent;
 
-	/* Inutili per adesso */
-	int uid;
-	int gid;
-	int pmask;
+struct directory_operations {
+	DIR* (*opendir_f)(const char *);
+	int (*closedir_f)(DIR *dirp);
+	struct dirent* (*readdir_f)(DIR *dirp);
+};
 
- 	/* puntatori a funzione */
-	void (*open)(struct inode *);
-	void (*close)(struct inode *);
-	int (*read)(struct inode *, int, int, int *);
-	int (*write)(struct inode *, int, int, int *);
+struct super_node_operations {
+	/*Qui vanno i puntatori alle funzioni sul supernode*/
+	void (*open)(char *, int );
+	void (*close)(int);
+	int (*read)(int, void*, size_t);
+	int (*write)(int, void*, size_t);
 };
 
 /*!  \struct mountpoint_t
@@ -52,7 +52,8 @@ struct mountpoint_t {
 		unsigned int gid; /**< Group ID*/
 		unsigned int start_address; /**< Indirizzo di partenza del FileSystem*/
 		int dev_id; /**< Device ID*/		
-		struct super_node_operations *operations;
+		struct super_node_operations operations;
+		//struct directory_operations dir_op;
 };
 
 struct file_descriptor {
@@ -60,24 +61,16 @@ struct file_descriptor {
 	int mountpoint_id;
 };
 
-struct super_node_operations {
-	/*Qui vanno i puntatori alle funzioni sul supernode*/
-	void (*open)(char *r_path, int o_flags);
-	void (*close)(int);
-	/*t (*read)(stct inode *, int, int, int *);
-	int (*write)(struct inode *, int, int, int *);*/
-};
-
-extern struct inode *root;
+//extern struct inode *root;
 extern struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 
-void open_vfs (struct inode *);
-void close (struct inode *);
+//void open_vfs (struct inode *);
+void close (int);
 int get_mountpoint_id(char *);
 char* get_rel_path(int, char*);
 int open_dir(char *);
-int read (struct inode *, int, int, int *);
-int write (struct inode *, int, int, int *);
+int read (int, void*, size_t);
+int write (int, void*, size_t);
 
 void vfs_init();
 

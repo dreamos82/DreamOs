@@ -37,7 +37,7 @@ void vfs_init(){
  		mountpoint_list[i].pmask = 0;
  		mountpoint_list[i].dev_id = 0;
 	 	mountpoint_list[i].start_address = 0;
-	 	mountpoint_list[i].operations = NULL;
+	 	//mountpoint_list[i].operations = NULL;
  		i++;
 	}
 	
@@ -47,7 +47,7 @@ void vfs_init(){
  	mountpoint_list[0].pmask = 0;
  	mountpoint_list[0].dev_id = 0;
  	mountpoint_list[0].start_address = 0;
- 	mountpoint_list[0].operations = kmalloc(sizeof(struct super_node_operations));
+ 	//mountpoint_list[0].operations = kmalloc(sizeof(struct super_node_operations));
 
 	strcpy(mountpoint_list[1].mountpoint,"/dev"); 	
 	mountpoint_list[1].uid = 0;
@@ -55,7 +55,7 @@ void vfs_init(){
  	mountpoint_list[1].pmask = 0;
  	mountpoint_list[1].dev_id = 0;
  	mountpoint_list[1].start_address = 0;
- 	mountpoint_list[1].operations = kmalloc(sizeof(struct super_node_operations));
+ 	//mountpoint_list[1].operations = kmalloc(sizeof(struct super_node_operations));
 	
 	strcpy(mountpoint_list[2].mountpoint,"/dev/video"); 	
 	mountpoint_list[2].uid = 0;
@@ -63,7 +63,7 @@ void vfs_init(){
  	mountpoint_list[2].pmask = 0;
  	mountpoint_list[2].dev_id = 0;
  	mountpoint_list[2].start_address = 0;
- 	mountpoint_list[2].operations = kmalloc(sizeof(struct super_node_operations));
+ 	//mountpoint_list[2].operations = kmalloc(sizeof(struct super_node_operations));
 	
 	strcpy(mountpoint_list[3].mountpoint,"/root");
  	mountpoint_list[3].uid = 0;
@@ -71,13 +71,8 @@ void vfs_init(){
  	mountpoint_list[3].pmask = 0;
  	mountpoint_list[3].dev_id = 0;
  	mountpoint_list[3].start_address = 0;
- 	mountpoint_list[3].operations = kmalloc(sizeof(struct super_node_operations));
+ 	//mountpoint_list[3].operations = kmalloc(sizeof(struct super_node_operations));
 
-}
-
-void open_vfs (struct inode *node){
-	if(node->read!=0) printf("read node");
-	else return;
 }
 
 int get_mountpoint_id(char *path){

@@ -19,6 +19,7 @@
 #include <dirent.h>
 #include <sys/types.h>
 #include <stdio.h>
+#include <string.h>
 #include <vfs.h>
 
 
@@ -28,5 +29,9 @@ DIR *opendir(const char *path){
 
 	mpoint_id = get_mountpoint_id(path);
 	rel_path = get_rel_path(mpoint_id, path);
+	if(rel_path[0] == '\0' || (strlen(rel_path)==1 && rel_path[0]=='/')) {
+		printf("mountpoint open root\n");
+	} else{
 	printf("%d - %s\n", mpoint_id, rel_path);	
+	}
 }
