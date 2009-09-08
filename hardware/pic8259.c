@@ -79,14 +79,15 @@ void init_IRQ(){
 
     outportb(MASTER_PORT_1, 0xFF);
 	outportb(SLAVE_PORT_1,  0xFF);
-
+		
     //outportb (0xFC, MASTER_PORT_1);
-    enable_IRQ(KEYBOARD);
+    enable_IRQ(KEYBOARD);    
     enable_IRQ(TIMER);
     enable_IRQ(TO_SLAVE_PIC);
    
     setup_IRQ();
     asm("sti");
+                    
     i=0;
     while(i<16){
         shareHandler[i] = NULL;

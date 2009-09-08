@@ -80,14 +80,13 @@ int main_loop(struct multiboot_info *boot_info)
     set_memorysize((boot_info->mem_upper+boot_info->mem_lower)*1024);
     init_mem();    
     _kputs(LNG_PIC8259);
-    init_IRQ();
+    init_IRQ();    
     asm("sti");
     _kprintOK();   
     init_paging();    
     printf(LNG_PIT8253);
     configure_PIT ();
-    _kprintOK();    
-
+    _kprintOK();    	
     printf("Memory (upper) amount-> %d kb \n", boot_info->mem_upper);
     printf("Memory (lower) amount-> %d kb \n", boot_info->mem_lower);
 

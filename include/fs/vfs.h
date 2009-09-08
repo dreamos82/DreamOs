@@ -53,7 +53,7 @@ struct mountpoint_t {
 		unsigned int start_address; /**< Indirizzo di partenza del FileSystem*/
 		int dev_id; /**< Device ID*/		
 		struct super_node_operations operations;
-		//struct directory_operations dir_op;
+		struct directory_operations dir_op;
 };
 
 struct file_descriptor {
