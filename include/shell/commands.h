@@ -23,7 +23,9 @@
 #ifndef __COMMANDS_H
 #define __COMMANDS_H
 
+#include <shell.h>
 #include <kheap.h>
+#define MAX_TEST 10
 
 int argc;
 char **argv;
@@ -49,5 +51,11 @@ void drv_load();
 void ls();
 void cd();
 void whoami();
-void test();
+void tester();
+
+struct a_b {
+	const char cmd_testname[CMD_LEN];
+	void (*func)(void);
+};
+
 #endif

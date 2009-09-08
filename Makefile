@@ -55,6 +55,7 @@ OBJ = kernel.o\
       hardware/8253.o\
       shell/shell.o\
       shell/commands.o\
+      shell/testing.o\
       sys/utsname.o\
       sys/dirent.o
 

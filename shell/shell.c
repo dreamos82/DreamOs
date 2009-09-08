@@ -39,7 +39,7 @@
 #include <clock.h>
 #include <sys/utsname.h>
 
-#define NUM_COM 20
+#define NUM_COM 30
 
 userenv_t current_user;
 /*
@@ -78,10 +78,7 @@ void shell()
 	{ "aalogo",   aalogo      },
 	{ "clear",    _kclear     },
 	{ "poweroff", poweroff    },
-	{ "kmalloc",  kmalloc_try },
-	{ "do_fault", do_fault    },
 	{ "uname",    uname_cmd   },
-	{ "printmem", printmem    },
 	{ "credits",  credits     },
 	{ "sleep",    sleep_cmd   },
 	{ "cpuid",    cpuid 	  },
@@ -93,7 +90,7 @@ void shell()
 	{ "ls",       ls},
 	{ "cd",       cd},
 	{ "whoami",   whoami},
-	{ "test", test},
+	{ "tester", tester},
         };
 
   int i = 0;
@@ -117,12 +114,9 @@ void shell()
   
   for (;;)
   {
-    //printf("[%s]~:%s# ",current_user.username, current_user.cur_path);
-    //_kcolor(4);
     printf("%s~:%s# ", current_user.username, 
 				  current_user.cur_path,
 				  current_user.username);
-    //_kcolor(7);
     scanf("%254s",cmd);
         
     /* elimina eventuali spazi all'inizio del comando */

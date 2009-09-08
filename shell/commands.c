@@ -22,6 +22,7 @@
 #include <sys/utsname.h>
 #include <mouse.h>
 #include <vfs.h>
+#include <testing.h>
 
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 userenv_t current_user;
@@ -61,11 +62,8 @@ void help()
 	"help          - See the 'help' list to learn the DreamOS commands now available\n"
 	"clear         - Clear the screen\n"
 	"poweroff      - Turn off the machine\n"
-	"kmalloc       - Test a basic kmalloc function\n"
-	"do_fault      - Test a page_fault\n"
 	"aalogo        - Show an ascii art logo\n"
 	"uname         - Print kernel version, try uname --help for more info\n"
-	"printmem      - Print used locations of memory\n"
 	"credits       - Show DreamOS credits\n"
 	"sleep         - pause DreamOS for a particular number of seconds\n"
 	"cpuid         - Show cpu identification informations\n"
@@ -75,7 +73,7 @@ void help()
 	"ls            - Tool for listing dir - not complete-\n"
 	"cd            - Change dir - not complete-\n"
 	"whoami        - Show the current user name\n"
-	"test          - Try some functions, now 'strtok'\n"
+	"tester        - Try some functions, 'tester --help' for more info'\n"
 	);
 }
 
@@ -98,50 +96,6 @@ void poweroff()
   asm("cli");
   printf("E' ora possibile spegnere il computer.\n");
   while(1);
-}
-
-void kmalloc_try()
-{
-  int *b, *c, *d;
-  int i = 0;
-
-  printf("Kmalloc try: ... ");
-  //print_heap_list (kheap->free_list);
-  b = (int *)kmalloc(15 * sizeof(int));
-  c = (int *)kmalloc(10 * sizeof(int));
-  d = (int *)kmalloc(15 * sizeof(int));
-  printf("Address obtained: %d %d %d\n", b, c, d);
-  
-  while(i < 15) {
-    b[i] = i*2;
-    if(i < 10) c[i] = i*3;
-    d[i] = i*2;
-    i++;
-  }
-  i = 0;
-
-  while(i < 15) {
-    printf("b[%d] = %d d[%d] = %d ",i, b[i], i,d[i]);
-    if(i < 10) printf("c[%d] = %d\n", i, c[i]);
-    else printf("\n");
-    i++;
-  }
-  printf("Navigating used list...\n");
-  print_heap_list (kheap->used_list);
-  free (b);
-  free (c);
-  free (d);
-}
-
-void do_fault()
-{
-  int *prova;
-
-  printf ("Genero un pagefault scrivendo 10 nella locazione 0xa0000000...\n");
-  prova = (int *)0xa0000000;
-  *prova = 10;
-
-  printf ("Contenuto della locazione 0xa0000000 dopo l'intervento dell'handler: %d\n", *prova);
 }
 
 void uname_cmd()
@@ -225,12 +179,12 @@ void uname_info()
 
   printf("\n:==========: :===========: :==========:\n\n");
 }
-
+/*
 void printmem(void)
 {
   print_heap_list(kheap->used_list);
 }
-
+*/
 void credits(void)
 {
   _kcolor('\011');
@@ -313,7 +267,7 @@ void cpuid(void)
     }
   }
 
-  printf ("----- CPUID Information -----\n");
+  printf ("----- CPU ID Information -----\n");
   if (strcmp(sinfo->brand_string, "Reserved") != 0)
     printf ("%s\n", sinfo->brand_string);
   printf ("Vendor: %s\n", sinfo->cpu_vendor);
@@ -330,7 +284,7 @@ void cpuid(void)
       if (sinfo->cpuid_edx_flags[i] == 1)
         printf ("%s\n", edx_features[i]);
     }
-    printf ("--------------------------\n");
+    printf ("---------------------------\n");
   }
 }
 
@@ -384,10 +338,10 @@ void  drv_load(void)
      else
 	{
 	 	if ( (_kstrncmp (argv[1], "-r", 2) == 0) && (_kstrncmp (argv[2], "mouse", 5) == -1) )
-	 	   printf("FATAL: Driver %s not found.\n", argv[2]); 
+			printf("FATAL: Driver %s not found.\n", argv[2]); 
 	
-		 else
-	    	 printf("FATAL: Driver %s not found.\n", argv[1]);
+		else
+			printf("FATAL: Driver %s not found.\n", argv[1]);
 	 }
 
    }
@@ -425,8 +379,10 @@ void ls ( ) {
 
 void cd( ){
 	char *relpath;	
-	if(argc != 2) printf("Bad usage. Try 'ls -l' and then 'cd dir'.\n");
-	else {
+	if(argc != 2) {
+		printf("Bad usage. Try 'ls -l' and then 'cd dir'.\n");
+		return;
+	} else {
 		int i=0;
 		int rel_size = 0;		
 		i = get_mountpoint_id(argv[1]);
@@ -447,16 +403,28 @@ void whoami(){
 	printf("%s\n", current_user.username);
 }
 
-void test(){
-	char *s = "Hello World";
-	char *p;
-	
-	printf("Stringa completa: %s\n"
-		 "Stringa spezzata: \n" ,s);
-	
-	p = strtok(s, " ");
-	while (p != NULL) {
-		printf("%s\n", p);
-		p = strtok(NULL, " ");
+void tester(){
+	int i = 0;
+	static struct a_b testing[MAX_TEST] = { 
+					{ "try_kmalloc", try_kmalloc },
+					{ "try_strtok", try_strtok },
+					{ "do_fault", do_fault },
+					{ "try_printmem", try_printmem },
+					{ "--help", help_tester },
+					};
+	if (argc != 2) {
+		printf ("Bad usage. Try '%s --help' for more info about the usage.\n", argv[0]);
+		return;
+	} else { 
+		for ( i = 0 ; i <= MAX_TEST ; i++) {
+			if ( (strcmp(argv[1], testing[i].cmd_testname) ) == NULL ) {
+				 (testing[i].func)();
+				break;
+			} 
+		}
+		if ( i > MAX_TEST ) {
+			printf("Error: %s not found.\n", argv[1]);
+			//return;
+		}
 	}
 }
