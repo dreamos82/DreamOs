@@ -203,43 +203,48 @@ char *strstr(const char *haystack, const char *needle)
  * If str is NULL, the scanning will continue for the previous string
  * It can be bettered
  */
-char *strtok (char *str, const char *delim)
+
+char *strtok(char *s, const char *delim)
 {
-    int dim = strlen(delim);
-    static char *token;
-    char *point, *start;
-    char *p;
-    int i=0;
- 
-    if (str!=NULL)
-	token = str;
+  const char *spanp;
+  int c, sc;
+  char *tok;
+  static char *last;
 
-    start = token; // save the beginning of the string
-    if ((point = strstr(start, delim)))
-    {
-        /* it takes "token" just first the delimitator */
-	while (token != point)
-	  token++;
 
-        /* p will contains all the chars until the delimitator */
-	while (start != point)
-          p[i++] = *start++;
-        p[i] = 0;
+  if (s == NULL && (s = last) == NULL)
+    return (NULL);
 
-        token += dim; // delete the delimitator, otherwise it will come up in the next call
-        return p;
-    }
+ cont:
+  c = *s++;
+  for (spanp = delim; (sc = *spanp++) != 0;) {
+    if (c == sc)
+      goto cont;
+  }
 
-    /* The last token, if there is no final delimitator */
-    if (token) {
-      do {
-       p[i] = token[i];
-      } while (token[i++]);
-      p[i] = 0;
-      return p;
-    }
-    return NULL;
+  if (c == 0) {             
+    last = NULL;
+    return (NULL);
+  }
+  tok = s - 1;
+
+  for (;;) {
+    c = *s++;
+    spanp = delim;
+    do {
+      if ((sc = *spanp++) == c) {
+        if (c == 0)
+          s = NULL;
+        else
+          s[-1] = 0;
+        last = s;
+        return (tok);
+      }
+    } while (sc != 0);
+  }
+
 }
+
 
 /*
  * Concatenate n characters of src to dest

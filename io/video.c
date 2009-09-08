@@ -50,6 +50,21 @@ void _kputc(char c)
   *VIDEO_PTR++ = VIDEO_CLR;
   _kshiftAll();
   _ksetcursauto();
+/*
+  while(c != 0) {
+	if ( c=='\n' )
+		_knewline();
+	else if ( c=='\t' )
+		_ktab();
+	//else if(c=='\033')
+	//	_kcolor(++c);	NON STAMPA CORRETTAMENTE I COLORI
+	else if( c=='\b' )
+		_kbackspace();
+	else if ( c=='\r' )
+		_kminline();
+	c++;
+  }
+*/
 }
 
 void _kputs(char *s)

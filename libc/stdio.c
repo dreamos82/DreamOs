@@ -36,10 +36,7 @@
 #define LEFT 1
 #define RIGHT 0
 
-char *VIDEO_MEMZ = (char*) 0xb8000,
-	 *VIDEO_PTRZ = (char*) 0xb8000,
-	 VIDEO_CLRZ = 0x7;
-	 
+char *VIDEO_RAM = (char*) 0xb8000, *VIDEO_PTRZ = (char*) 0xb8000, VIDEO_CLRZ = 0x7;
 int last_Xz=0, last_Yz=0;
 
 /* 
@@ -63,16 +60,17 @@ int puts(char *s)
 /*
  * Print a character
  */
+
 void putchar (char ch)
 {
-   /*asm ("movl $0x0, %%eax\n"
-	"int $80\n\t"
-	:: "b" (ch));*/
 	char s[2];
 	s[0] = ch;
 	s[1] = '\0';
 	_kputs(s);
+	//_kputc(ch); 
+
 }
+
 
 /*
  * Convert a string to an integer

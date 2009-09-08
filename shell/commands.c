@@ -57,40 +57,38 @@ void logo()
 void help()
 {
   printf ("Available commands:\n");
-  printf("help       - See the 'help' list to learn the DreamOS commands now available\n"
-         "clear      - Clear the screen\n"
-		 "poweroff   - Turn off the machine\n"
-         "kmalloc    - Test a basic kmalloc function\n"
-         "do_fault   - Test a page_fault\n"
-         "aalogo     - Show an ascii art logo\n"
-         "uname      - Print kernel version, try uname --help for more info\n"
-         "printmem   - Print used locations of memory\n"
-         "credits    - Show DreamOS credits\n"
-	 	 "sleep      - pause DreamOS for a particular number of seconds\n"
-	 	 "cpuid      - Show cpu identification informations\n"
-	 	 "date       - Show date and time\n"
-	  	 "echo       - Print some lines of text\n"
-	 	 "drv_load   - Tool to load and kill drivers\n"
-		 "ls         - Tool for listing dir - not complete-\n"
-		 "cd         - Change dir - not complete-\n"
-		 "try_strcpy - Try strcpy function\n"
-		 "whoami     - Show the current user name\n");
+  printf(
+	"help          - See the 'help' list to learn the DreamOS commands now available\n"
+	"clear         - Clear the screen\n"
+	"poweroff      - Turn off the machine\n"
+	"kmalloc       - Test a basic kmalloc function\n"
+	"do_fault      - Test a page_fault\n"
+	"aalogo        - Show an ascii art logo\n"
+	"uname         - Print kernel version, try uname --help for more info\n"
+	"printmem      - Print used locations of memory\n"
+	"credits       - Show DreamOS credits\n"
+	"sleep         - pause DreamOS for a particular number of seconds\n"
+	"cpuid         - Show cpu identification informations\n"
+	"date          - Show date and time\n"
+	"echo          - Print some lines of text\n"
+	"drv_load      - Tool to load and kill drivers\n"
+	"ls            - Tool for listing dir - not complete-\n"
+	"cd            - Change dir - not complete-\n"
+	"whoami        - Show the current user name\n"
+	"test          - Try some functions, now 'strtok'\n"
+	);
 }
 
 void echo()
 {
-    /*int c;
-    for (c = 1; c < argc; c++)
-        printf ("%s ", argv[c]);
-    printf ("\n");*/
     if ( argc == 1 ) {
          printf("");
     } else {
 		while ( --argc > 0 ) {
 		printf("%s ",*++argv);
-        }
-   }
-   printf("\n");
+		}
+	}
+    printf("\n");
 }
 
 void poweroff()
@@ -168,9 +166,9 @@ void uname_help()
 {
   printf("Uname function allow you to see the kernel and system information.\n");
   printf("Function avaibles:\n");
-  printf("1) '-a'   - Kernel version and processor type\n"
-  	 "2) '-r'   - Only the kernel version\n"
-  	 "3) '-i'   - All info of system and kernel\n");	
+  printf("1) -a   - Kernel version and processor type\n"
+  	   "2) -r   - Only the kernel version\n"
+	   "3) -i   - All info of system and kernel\n");	
 }
 
 void uname_info()
@@ -178,11 +176,11 @@ void uname_info()
   printf("\n:==========: :System info: :==========:\n\n");
 	
   // Kernel info
-  printf( "Version: '%s'\n"
-	  "Patchlevel: '%s'\n"
-	  "Extraversion: '%s'\n"
-	  "Name: '%s'\n"
-	  "Revision: '%s'\n",VERSION,PATCHLEVEL,EXTRAVERSION,NAME,REV_NUM);
+  printf( "Version: %s\n"
+	  "Patchlevel: %s\n"
+	  "Extraversion: %s\n"
+	  "Name: %s\n"
+	  "Revision: %s\n",VERSION,PATCHLEVEL,EXTRAVERSION,NAME,REV_NUM);
 
   // CPU Info
   _kputs (LNG_CPU);
@@ -243,7 +241,7 @@ void credits(void)
   _kcolor('\011');
   _kputs("Developers:\n");
   _kcolor('\012');
-  _kputs("Osiris - Diego Stamigni \n\n");
+  _kputs("Lord Osiris - Diego Stamigni \n\n");
   _kcolor('\011');
   _kputs("Contributors:\n");
   _kcolor('\012');
@@ -447,4 +445,18 @@ void cd( ){
 
 void whoami(){
 	printf("%s\n", current_user.username);
+}
+
+void test(){
+	char *s = "Hello World";
+	char *p;
+	
+	printf("Stringa completa: %s\n"
+		 "Stringa spezzata: \n" ,s);
+	
+	p = strtok(s, " ");
+	while (p != NULL) {
+		printf("%s\n", p);
+		p = strtok(NULL, " ");
+	}
 }

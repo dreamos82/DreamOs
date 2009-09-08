@@ -28,7 +28,7 @@
 
 #define MAX_DIGITS_IN_INTEGER 11
 
-void putchar (char);
+void putchar (char ch);
 int atoi (const char *);
 int printf (const char *, ...);
 int puts (char *s);

@@ -93,6 +93,7 @@ void shell()
 	{ "ls",       ls},
 	{ "cd",       cd},
 	{ "whoami",   whoami},
+	{ "test", test},
         };
 
   int i = 0;
