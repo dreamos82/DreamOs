@@ -35,6 +35,7 @@ OBJ = kernel.o\
       drivers/mouse.o\
 	  fs/vfs.o\
 	  fs/fcntl.o\
+	  fs/initrd.o\
       libc/ctype.o\
       libc/string.o\
       io/io.o\
@@ -71,6 +72,7 @@ kernel.bin: $(OBJ)
 kernel.o: kernel.c
 fs/vfs.o: fs/vfs.c
 fs/fcntl.o: fs/fcntl.c
+fs/initrd.o: fs/initrd.c
 io/video.o: io/video.c
 io/io.o: io/io.c
 processore/gdt.o: processore/gdt.c

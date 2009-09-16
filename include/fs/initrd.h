@@ -17,8 +17,10 @@
  */
 
 #ifndef INITRD_H
-
+#define INITRD_H
 #define FILENAME_LENGTH 64
+
+#include <dirent.h>
 
 struct initrd_t{
 	int nfiles;
@@ -32,4 +34,5 @@ struct initrd_file_t{
 };
 
 void dummy();
+DIR *dummy_opendir(const char *);
 #endif

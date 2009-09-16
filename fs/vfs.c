@@ -24,6 +24,7 @@
 #include <string.h>
 #include <kheap.h>
 #include <unistd.h>
+#include <initrd.h>
 
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 
@@ -47,6 +48,7 @@ void vfs_init(){
  	mountpoint_list[0].pmask = 0;
  	mountpoint_list[0].dev_id = 0;
  	mountpoint_list[0].start_address = 0;
+ 	mountpoint_list[0].dir_op.opendir_f = dummy_opendir;
  	//mountpoint_list[0].operations = kmalloc(sizeof(struct super_node_operations));
 
 	strcpy(mountpoint_list[1].mountpoint,"/dev"); 	

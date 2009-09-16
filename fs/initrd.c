@@ -16,8 +16,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include <stdio.h>
 #include <initrd.h>
 
 void dummy(){
 	printf("Qui solo per una prova\n");
 }	
+
+DIR *dummy_opendir(const char *path){
+	printf("Sono una dummy_opendir, ti piaccio?\n");
+}
