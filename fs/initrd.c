@@ -17,6 +17,7 @@
  */
 
 #include <stdio.h>
+#include <stddef.h>
 #include <initrd.h>
 
 void dummy(){
@@ -24,5 +25,6 @@ void dummy(){
 }	
 
 DIR *dummy_opendir(const char *path){
-	printf("Sono una dummy_opendir, ti piaccio?\n");
+	printf("Sono una dummy_opendir, ti piaccio? path: %s\n", path);
+	return NULL;
 }
