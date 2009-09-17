@@ -20,6 +20,7 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include <string.h>
+#include <stddef.h>
 #include <vfs.h>
 
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
@@ -32,9 +33,9 @@ DIR *opendir(const char *path){
 	rel_path = get_rel_path(mpoint_id, path);
 	if(rel_path[0] == '\0' || (strlen(rel_path)==1 && rel_path[0]=='/')) {
 		printf("mountpoint open root\n");
-		mountpoint_list[mpoint_id].dir_op.opendir_f("/");
+		if(mountpoint_list[mpoint_id].dir_op.opendir_f!=NULL) mountpoint_list[mpoint_id].dir_op.opendir_f("/");
 	} else{
-	printf("%d - %s\n", mpoint_id, rel_path);
+		printf("%d - %s\n", mpoint_id, rel_path);
 		//mountpoint_list[mpoint_id].dir_op.opendir_f(rel_path);
 	}
 }
