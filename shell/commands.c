@@ -410,6 +410,7 @@ void tester(){
 					{ "try_strtok", try_strtok },
 					{ "do_fault", do_fault },
 					{ "try_printmem", try_printmem },
+					{ "try_module", try_module },
 					{ "--help", help_tester },
 					};
 	if (argc != 2) {

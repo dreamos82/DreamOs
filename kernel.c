@@ -47,6 +47,7 @@
 unsigned int *current_page_table;
 extern unsigned int end;
 multiboot_info_t *boot_informations;
+char *module_start;
 asmlinkage void _start(struct multiboot_info *boot_info)
 {
     boot_informations = boot_info;    
@@ -95,10 +96,12 @@ int main_loop(struct multiboot_info *boot_info)
     get_cpuid (sinfo);
         
     vfs_init();
-
+	if(boot_info->mods_count > 0) printf("Found n. %d Modules\n", boot_info->mods_count);	
+	module_start = *((unsigned int*)boot_info->mods_addr);
+	//printf("Address of module: 0x%x\n", tmp);
     printf("\n");
     printf("----\n");
-    printf(LNG_SHELL);
+    printf(LNG_SHELL);    
     _kprintOK();
 		printf("[+] Address: 0x%x\n", &end);		   	        
 		printf("\n\n");

@@ -26,7 +26,10 @@
 #define _KERNEL_H
 
 #define asmlinkage __attribute__((regparm(0)))
+
+extern multiboot_info_t *boot_informations;
 asmlinkage void _start(struct multiboot_info*);
+extern char *module_start;
 int main_loop(struct multiboot_info*);
 
 #define DREAMOS_VER "DreamOS ver 0.2.0 - trunk"

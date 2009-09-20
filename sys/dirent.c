@@ -40,7 +40,12 @@ DIR *opendir(const char *path){
 		return NULL;
 	}
 }
+
 int closedir(DIR *dirp){
 	printf("Closing directory\n");
-	//free(dirp);
+	free(dirp);
+}
+
+DIR* fake_opendir (const char *path){
+	printf("One day, when i will grow up, i could open that path: %s\n", path);
 }

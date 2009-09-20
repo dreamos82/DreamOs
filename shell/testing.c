@@ -23,6 +23,11 @@
 #include <mouse.h>
 #include <vfs.h>
 #include <testing.h>
+#include <multiboot.h>
+#include <kernel.h>
+
+//multiboot_info_t *boot_informations;
+char *module_start;
 
 void try_strtok()
 {
@@ -100,4 +105,15 @@ void help_tester()
 		"  -> try_strtok        - Test strtok() function in string.h\n"
 		"  -> try_printmem      - Print used locations of memory\n"
 		);	
+}
+
+void try_module(){
+	int j=0;
+	char* mod_address;
+	mod_address = module_start;	
+	while(j<36){
+		_kputc(mod_address[j]);
+		j++;
+	}
+	_kputs("\n");
 }

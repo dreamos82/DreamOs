@@ -21,3 +21,4 @@ void try_kmalloc();
 void try_printmem(void);
 void do_fault();
 void help_tester();
+void try_module();
