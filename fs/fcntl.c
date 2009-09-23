@@ -17,8 +17,15 @@
  */
  
 #include <fcntl.h>
+#include <stdarg.h>
+#include <stdio.h>
 
-int  open(const char *path, int flags, ...){
-	printf("Tmp\n");
+int  open(const char *path, int flags,  ...){
+	int prova;
+	va_list ap;
+	va_start(ap, flags);
+	
+	prova = va_arg(ap, int);
+	printf("Prov vale: %d e il path: %s\n", prova,path);
 }
 

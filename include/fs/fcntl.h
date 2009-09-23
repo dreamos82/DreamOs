@@ -19,6 +19,14 @@
 #ifndef _FCNTL_H
 #define _FCNTL_H
 
+#include <sys/types.h>
 
+#define O_RDONLY	00000000
+#define O_WRONLY    00000001
+#define O_RDWR      00000002
+
+int  creat(const char *, mode_t);
+int  fcntl(int, int, ...);
 int  open(const char *, int, ...);
+
 #endif

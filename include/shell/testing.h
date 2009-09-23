@@ -15,10 +15,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
  
- 
+#ifndef TESTING_H
+#define TESTING_H
+
 void try_strtok();
 void try_kmalloc();
 void try_printmem(void);
 void do_fault();
 void help_tester();
 void try_module();
+void try_open();
+
+#endif

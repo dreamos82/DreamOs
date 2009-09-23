@@ -22,4 +22,6 @@
 typedef unsigned int ino_t;
 typedef unsigned int dev_t;
 
+typedef unsigned int mode_t;
+
 #endif

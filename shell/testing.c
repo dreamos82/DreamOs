@@ -111,9 +111,13 @@ void try_module(){
 	int j=0;
 	char* mod_address;
 	mod_address = module_start;	
-	while(j<36){
-		_kputc(mod_address[j]);
+	while(j<101){
+		putchar(mod_address[j]);
 		j++;
 	}
 	_kputs("\n");
+}
+
+void try_open(){
+	open("Prova", 0, 42);
 }
