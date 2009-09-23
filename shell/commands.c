@@ -388,8 +388,10 @@ void cd( ){
 		i = get_mountpoint_id(argv[1]);
 		//printf("path: %s\n", argv[1]);
 		rel_size = strlen(argv[1]) - strlen(mountpoint_list[i].mountpoint);
-		if(i == -1 || (i==0  && strcmp("/", argv[1]))) 
+		if(i == -1 || (i==0  && strcmp("/", argv[1]))) {			
 			printf("cd: %s: No such file or directory\n", argv[1]);
+			return;
+		}
 		else strcpy(current_user.cur_path, argv[1]);
 		if(rel_size >0){
 			relpath = get_rel_path(i, argv[1]);
