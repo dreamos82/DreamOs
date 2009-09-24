@@ -104,6 +104,8 @@ void help_tester()
 		"  -> do_fault          - Test a page_fault\n"
 		"  -> try_strtok        - Test strtok() function in string.h\n"
 		"  -> try_printmem      - Print used locations of memory\n"
+		"  -> try_module        - Read the content of the memory zone loaded in module, aka initfs \n"
+		"  -> try_open          - Function to test open() & stdarg() \n"
 		);	
 }
 

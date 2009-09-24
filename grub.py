@@ -37,7 +37,7 @@ partition = grub_hd(pn)
 print "Inserire il mountpoint:",
 mp = raw_input()
 cwd = os.getcwd() + "/dreamos.img"
-
+initFS = os.getcwd() + "fs/initfs"
 if mp == "/":
 	path = cwd
 else:
@@ -53,6 +53,7 @@ if answer2 == 'y':
 	print "| Title: DreamOS v0." + patchlevel + "-" + trunk +"                                     |"
 	print "| Root: " + partition + "                                  		|"
 	print "| Kernel: " + cwd +"	|"
+	print "| Module: " + initFS +" |"
 	print "+---------------------------------------------------------------+"
 
 	print "Procedere alla scrittura? (y/n):",
@@ -62,7 +63,7 @@ if answer == 'y':
 	fd.write("\nsplashimage=" + partition + "/boot/grub/grub2.xpm.gz\n\n")
 	fd.write("\ntitle\tDreamOS v0." + patchlevel + "-" + trunk +"")
 	fd.write("\nroot\t" + partition)
-	fd.write("\nkernel\t" + cwd)
+	fd.write("\nkernel\t" + cwd + "\tmodule\t" + initFS)
 	fd.write("\nboot\n")
 	fd.close()
 	print ""
@@ -82,6 +83,7 @@ elif answer2 == 'n':
 	print "| Title: DreamOS v0." + patchlevel + "-" + trunk +"                                     |"
 	print "| Root: " + partition + "                                  		|"
 	print "| Kernel: " + cwd +"	|"
+	print "| Module: " + initFS +"          |"
 	print "+---------------------------------------------------------------+"
 
 	print "Procedere alla scrittura? (y/n):",
@@ -90,7 +92,7 @@ answer3 = raw_input()
 if answer3 == 'y':
 	fd.write("\ntitle\tDreamOS v0." + patchlevel + "-" + trunk +"")
 	fd.write("\nroot\t" + partition)
-	fd.write("\nkernel\t" + cwd)
+	fd.write("\nkernel\t" + cwd + "\tmodule\t" + initFS)
 	fd.write("\nboot\n")
 	fd.close()
 	print ""
