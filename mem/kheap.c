@@ -28,6 +28,7 @@
 #include <ordered_list.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <kernel.h>
 #define KHEAP_LIST_ADDRESS 0xC0000000
 
 // #define DEBUG 1
@@ -37,6 +38,8 @@ heap_t *kheap;
 heap_t *kheap_tmp;
 unsigned int address_cur = (unsigned int) &end;
 unsigned int node_address;
+char *module_start;
+unsigned int module_end;
 
 void* kmalloc(unsigned int size)
 {
@@ -83,6 +86,7 @@ heap_t* make_heap(unsigned int size)
     heap_t* new_heap;
     heap_node_t* first_node;
 	heap_node_t* apic_node;
+	heap_node_t* module_node;
 
     new_heap = (heap_t*)KHEAP_LIST_ADDRESS;
     node_address = KHEAP_LIST_ADDRESS + sizeof(heap_t);
@@ -113,6 +117,10 @@ heap_t* make_heap(unsigned int size)
 	apic_node->size = 4096;
 	apic_node->next = NULL;
 	insert_list (apic_node, &(new_heap->used_list));
+	module_node = alloc_node();
+	module_node->start_address = (unsigned int)module_start;
+	module_node->size = module_end - (unsigned int)module_start;	
+	insert_list(module_node, &(new_heap->used_list));
     return (heap_t*) new_heap;
 }
     

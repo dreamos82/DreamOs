@@ -218,38 +218,6 @@ int add_memarea_element(size_t start_address, int required_pages){
 
 size_t calcola_memoria()
 {
-/*    unsigned int *mem_position;
-    asm("cli");
-    outportb(0xFF, MASTER_PORT_1);                     //Disabilito gli interrupt hardware
-    outportb(0xFF, SLAVE_PORT_1);
-    mem_position = (unsigned int*) BASE_MEM;
-    *mem_position = VALUE_MEM;
-
-      while(*mem_position == VALUE_MEM)
-      {
-
-            *mem_position = ANTI_VALUE_MEM;
-            asm("": : :"memory");
-
-            	 if (*mem_position == ANTI_VALUE_MEM)
-		 {
-              	 	  *mem_position += OFFSET_MEM;
-                	  asm("": : :"memory");
-            	 }
-	    
-            else 
-		break;
-
-            asm("": : :"memory");
-    }
-
-
-    outportb(master_cur_mask, MASTER_PORT_1);         //Abilito gli interrupt hardware
-    outportb(slave_cur_mask, SLAVE_PORT_1);
-    asm("sti");
-    mem_position = 16777216;
-    tot_mem = (unsigned long) mem_position;
-    return (unsigned long) mem_position;*/
     return tot_mem;
 }
 

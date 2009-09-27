@@ -48,6 +48,7 @@ unsigned int *current_page_table;
 extern unsigned int end;
 multiboot_info_t *boot_informations;
 char *module_start;
+unsigned int module_end;
 asmlinkage void _start(struct multiboot_info *boot_info)
 {
     boot_informations = boot_info;    
@@ -59,6 +60,8 @@ int main_loop(struct multiboot_info *boot_info)
 {
     _kclear();
     syscall_init();
+    module_start = *((unsigned int*)boot_info->mods_addr);
+	module_end = *((unsigned int*)(boot_info->mods_addr+4));
     _kcolor('\012');
     _kputs(DREAMOS_VER);
     _kcolor('\007');
@@ -96,9 +99,8 @@ int main_loop(struct multiboot_info *boot_info)
     get_cpuid (sinfo);
         
     vfs_init();
-	if(boot_info->mods_count > 0) printf("Found n. %d Modules\n", boot_info->mods_count);	
-	module_start = *((unsigned int*)boot_info->mods_addr);
-	//printf("Address of module: 0x%x\n", tmp);
+	if(boot_info->mods_count > 0) printf("Found n. %d Modules\n", boot_info->mods_count);		
+	printf("Address of module: 0x%x - 0x%d\n", *((unsigned int*)boot_info->mods_addr),module_end-(unsigned int) module_start);
     printf("\n");
     printf("----\n");
     printf(LNG_SHELL);    
