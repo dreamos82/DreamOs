@@ -113,7 +113,7 @@ void try_module(){
 	int j=0;
 	char* mod_address;
 	mod_address = module_start;	
-	while(j<67){
+	while(j<66){
 		putchar(mod_address[j]);
 		j++;
 	}

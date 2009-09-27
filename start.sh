@@ -87,7 +87,7 @@ elif [ "$1" == "qemu" ] || [ "$1" == "bochs" ]; then
 elif [ "$1" == "floppy_install" ]; then
 
   echo "---------------------- "
-  echo "Installing in progres.."
+  echo "Installation in progres.."
   su -c "make install"
   echo "done."
   echo "---------------------- "
@@ -145,17 +145,17 @@ if [ "$2" == "qemu" ] || [ "$2" == "bochs" ]; then
   if [ "$2" == "qemu" ]; then
 
 	  if [ "$3" == "it" ]; then
-		  echo "Ok! Language '$2' imposted, done."
+		  echo "Setting up Language '$2', done."
 		  make it                          
 		  echo "----------------------->"  
 
 	  elif [ "$3" == "en" ]; then
-		  echo "Ok! Language '$2' imposted, done."
+		  echo "Setting up Language '$2', done."
 		  make en                          
 		  echo "----------------------->"  
 		
 	  else                                     
-		  echo "Warning: No language traslation declared!"
+		  echo "Warning: No language translation declared!"
 		  echo "----------------------->"                 
 	  fi   
 	 $VERS && $CLEAN && $MAKE && $MAKE_IMG
@@ -165,12 +165,12 @@ if [ "$2" == "qemu" ] || [ "$2" == "bochs" ]; then
   elif [ "$2" == "bochs" ]; then
 
 	  if [ "$3" == "it" ]; then
-		  echo "Ok! Language '$3' imposted, done."
+		  echo "Setting up Language '$3', done."
 		  make it                          
 		  echo "----------------------->"  
 		  
 	  elif [ "$3" == "en" ]; then
-		  echo "Ok! Language '$3' imposted, done."
+		  echo "Setting up Language '$3', done."
 		  make en                          
 		  echo "----------------------->"  
 	  else                                     
@@ -188,7 +188,7 @@ elif [ "$2" == "floppy_install" ]; then
 
   $VERS && $CLEAN && $MAKE && $MAKE_IMG
   echo "---------------------- "
-  echo "Installing in progres.."
+  echo "Installation in progres.."
   su -c "make install"
   echo "done."
   echo "---------------------- "
@@ -215,7 +215,7 @@ elif [ "$2" == "" ]; then
 elif [ "$2" == "create_iso" ]; then
   $VERS && $CLEAN && $MAKE && $MAKE_IMG
   echo "--------------------------------------------- "
-  echo "Launching ISO Creating script in progress.."
+  echo "Launching ISO Creation script in progress.."
   echo ""
   mkisofs -o ISO/dreamos-image.iso -A DreamOS -b boot/grub.img `pwd`
   echo "done."
