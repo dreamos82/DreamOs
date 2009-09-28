@@ -28,10 +28,23 @@
 #include <dirent.h>
 
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
+file_descriptor_t fd_list[_SC_OPEN_MAX];
+int cur_fd;
 
 void vfs_init(){
-	int i=0;
- 	printf("\nPreparing VFS\n");
+	int i,j;
+	i=0;
+	j=0;
+	cur_fd=0;
+	
+	printf("\nPreparing VFS\n"); 	
+
+	while (j<_SC_OPEN_MAX){
+		fd_list[j].fs_spec_id = 0;
+		fd_list[j].mountpoint_id =0;
+		j++;
+	}
+ 	
  	while(i<MAX_MOUNTPOINT) {
  		strcpy(mountpoint_list[i].mountpoint,"");
  		mountpoint_list[i].uid = 0;

@@ -20,6 +20,7 @@
 
 #include <dirent.h>
 #include <stddef.h>
+#include <unistd.h>
 
 #define MAX_MOUNTPOINT 10
 #define MAX_FD 255
@@ -62,6 +63,10 @@ struct file_descriptor {
 };
 
 //extern struct inode *root;
+typedef struct file_descriptor file_descriptor_t;
+
+extern int cur_fd;
+extern file_descriptor_t fd_list[_SC_OPEN_MAX];
 extern struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 
 //void open_vfs (struct inode *);

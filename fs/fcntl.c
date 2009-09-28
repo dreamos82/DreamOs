@@ -16,16 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
  
+#include <vfs.h>
 #include <fcntl.h>
 #include <stdarg.h>
 #include <stdio.h>
 
+int cur_fd;
 int  open(const char *path, int flags,  ...){
 	int prova;
 	va_list ap;
 	va_start(ap, flags);
 	
 	prova = va_arg(ap, int);
-	printf("Prov vale: %d e il path: %s\n", prova,path);
+	printf("Prova vale: %d e il path: %s e cur_fd: %d\n", prova,path,cur_fd);
+	cur_fd++;
+	va_end(ap);
 }
 

@@ -19,6 +19,6 @@
 #ifndef __UNISTD_H
 #define __UNISTD_H
 
-#define _SC_OPEN_MAX 5
+#define _SC_OPEN_MAX 10
 
 #endif

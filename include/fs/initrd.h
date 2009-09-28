@@ -18,9 +18,10 @@
 
 #ifndef INITRD_H
 #define INITRD_H
-#define FILENAME_LENGTH 64
 
 #include <dirent.h>
+
+#define FILENAME_LENGTH 64
 
 struct initrd_t{
 	int nfiles;
