@@ -25,6 +25,7 @@
 #include <testing.h>
 #include <multiboot.h>
 #include <kernel.h>
+#include <fcntl.h>
 
 //multiboot_info_t *boot_informations;
 char *module_start;
@@ -121,5 +122,8 @@ void try_module(){
 }
 
 void try_open(){
-	open("Prova", 0, 42);
+	char appoggio[50];
+	printf("Please insert a path: ");
+	scanf("%s", appoggio);
+	open(appoggio, 0, 42);
 }

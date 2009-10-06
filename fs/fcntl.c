@@ -22,6 +22,7 @@
 #include <stdio.h>
 
 int cur_fd;
+file_descriptor_t fd_list[_SC_OPEN_MAX];
 int  open(const char *path, int flags,  ...){
 	int prova;
 	va_list ap;
@@ -29,7 +30,12 @@ int  open(const char *path, int flags,  ...){
 	
 	prova = va_arg(ap, int);
 	printf("Prova vale: %d e il path: %s e cur_fd: %d\n", prova,path,cur_fd);
-	cur_fd++;
+	if(cur_fd >= _SC_OPEN_MAX) cur_fd=0;
+	else {		
+		fd_list[cur_fd].mountpoint_id = get_mountpoint_id(path);
+		printf("Mpoint id: %d\n", fd_list[cur_fd].mountpoint_id);
+		cur_fd++;
+	}	
 	va_end(ap);
 }
 

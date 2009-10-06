@@ -95,17 +95,16 @@ void vfs_init(){
 
 int get_mountpoint_id(char *path){
        int i = 0;
-       int last;
-	   last = -1;	   	 
+       int last=-1;
        while(i<MAX_MOUNTPOINT ){
                        if(!_kstrncmp(path, mountpoint_list[i].mountpoint, strlen(mountpoint_list[i].mountpoint))) {                 
 							   if(strlen(mountpoint_list[i].mountpoint) > strlen(mountpoint_list[last].mountpoint) && i>0)  
                                		last = i;
-							   else last = i;
+							   else if(i==0) last = i;
                        }					   					   
                        i++;
-               }
-			   if(last!=-1) printf("Changing dir %s\n", mountpoint_list[last].mountpoint, last);
+               }               
+			   if(last!=-1) printf("Changing dir %s\n", mountpoint_list[last].mountpoint, last);			   
                return last;
 }
 
