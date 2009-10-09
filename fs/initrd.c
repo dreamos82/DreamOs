@@ -28,3 +28,7 @@ DIR *dummy_opendir(const char *path){
 	printf("Sono una dummy_opendir, ti piaccio? path: %s\n", path);
 	return NULL;
 }
+
+int dummy_open(char *path, int flags){
+	printf("Hi, i'm a dummy open. And i do nothing!!!\n");
+}

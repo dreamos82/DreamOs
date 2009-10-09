@@ -36,4 +36,5 @@ struct initrd_file_t{
 
 void dummy();
 DIR *dummy_opendir(const char *);
+int dummy_open(char *, int );
 #endif

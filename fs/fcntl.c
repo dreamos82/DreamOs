@@ -23,10 +23,12 @@
 
 int cur_fd;
 file_descriptor_t fd_list[_SC_OPEN_MAX];
-int  open(const char *path, int flags,  ...){
+struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
+
+int  open(const char *path, int oflags,  ...){
 	int prova;
 	va_list ap;
-	va_start(ap, flags);
+	va_start(ap, oflags);
 	
 	prova = va_arg(ap, int);
 	printf("Prova vale: %d e il path: %s e cur_fd: %d\n", prova,path,cur_fd);
@@ -34,6 +36,8 @@ int  open(const char *path, int flags,  ...){
 	else {		
 		fd_list[cur_fd].mountpoint_id = get_mountpoint_id(path);
 		printf("Mpoint id: %d\n", fd_list[cur_fd].mountpoint_id);
+		if(mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open != NULL)
+			mountpoint_list[get_mountpoint_id(path)].operations.open(path, 0);		
 		cur_fd++;
 	}	
 	va_end(ap);
