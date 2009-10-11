@@ -29,6 +29,6 @@ DIR *dummy_opendir(const char *path){
 	return NULL;
 }
 
-int dummy_open(char *path, int flags){
+int dummy_open(const char *path, int flags){
 	printf("Hi, i'm a dummy open. And i do nothing!!!\n");
 }

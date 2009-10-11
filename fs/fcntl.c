@@ -37,7 +37,7 @@ int  open(const char *path, int oflags,  ...){
 		fd_list[cur_fd].mountpoint_id = get_mountpoint_id(path);
 		printf("Mpoint id: %d\n", fd_list[cur_fd].mountpoint_id);
 		if(mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open != NULL)
-			mountpoint_list[get_mountpoint_id(path)].operations.open(path, 0);		
+			mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open(path, oflags);		
 		cur_fd++;
 	}	
 	va_end(ap);
