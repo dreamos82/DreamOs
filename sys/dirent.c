@@ -22,7 +22,7 @@
 #include <string.h>
 #include <stddef.h>
 #include <vfs.h>
-#include <fismem.h>
+#include <kheap.h>
 
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 

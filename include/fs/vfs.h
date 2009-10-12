@@ -70,7 +70,7 @@ extern file_descriptor_t fd_list[_SC_OPEN_MAX];
 extern struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 
 //void open_vfs (struct inode *);
-void close (int);
+//void close (int);
 int get_mountpoint_id(char *);
 char* get_rel_path(int, char*);
 int open_dir(char *);

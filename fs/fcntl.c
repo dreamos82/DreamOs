@@ -25,7 +25,14 @@ int cur_fd;
 file_descriptor_t fd_list[_SC_OPEN_MAX];
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 
-int  open(const char *path, int oflags,  ...){
+/**
+  * @author Ivan Gualandri
+  * @param char* path percorso del file da aprire
+  * @param int oflags parametri di apertura
+  *
+  * Dato un path viene aperto se presente, e si torna il numero di descrittore che lo contiene
+  */
+int open(const char *path, int oflags,  ...){
 	int prova;
 	va_list ap;
 	va_start(ap, oflags);
@@ -41,5 +48,6 @@ int  open(const char *path, int oflags,  ...){
 		cur_fd++;
 	}	
 	va_end(ap);
+	return cur_fd;
 }
 

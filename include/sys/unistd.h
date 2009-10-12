@@ -21,4 +21,6 @@
 
 #define _SC_OPEN_MAX 10
 
+int close(int);
+
 #endif
