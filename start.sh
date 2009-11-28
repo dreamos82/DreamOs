@@ -174,7 +174,7 @@ if [ "$2" == "qemu" ] || [ "$2" == "bochs" ]; then
 		  make en                          
 		  echo "----------------------->"  
 	  else                                     
-		  echo "Warning: No language traslation declared!"
+		  echo "Warning: No language translation declared!"
 		  echo "----------------------->"                 
 	  fi  
 

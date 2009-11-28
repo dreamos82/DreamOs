@@ -132,5 +132,5 @@ void try_open(){
 	printf("Please insert a path: ");
 	//appoggio = gets();
 	scanf("%s", appoggio);	
-	open(appoggio, 0, 42);
+	open(appoggio, O_RDONLY, 42);
 }

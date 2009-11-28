@@ -44,7 +44,9 @@ int open(const char *path, int oflags,  ...){
 		fd_list[cur_fd].mountpoint_id = get_mountpoint_id(path);
 		printf("Mpoint id: %d\n", fd_list[cur_fd].mountpoint_id);
 		if(mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open != NULL)
-			mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open(path, oflags);		
+			mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open(path, oflags);
+		else 
+			printf("No OPEN services found here\n");
 		cur_fd++;
 	}	
 	va_end(ap);
