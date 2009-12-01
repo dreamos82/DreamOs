@@ -57,9 +57,13 @@ struct mountpoint_t {
 		struct directory_operations dir_op;
 };
 
+/*!  \struct file_descriptor
+     \brief Struttura dati che le informazioni su di un file aperto
+ */
+
 struct file_descriptor {
-	int fs_spec_id;
-	int mountpoint_id;
+	int fs_spec_id; /**< Il descrittore del file interno del FileSystem*/
+	int mountpoint_id; /**< L'id del mountpoint nel quale si trova il file */
 };
 
 //extern struct inode *root;

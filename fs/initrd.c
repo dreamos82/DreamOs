@@ -19,6 +19,9 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <initrd.h>
+#include <multiboot.h>
+
+extern char *module_start;
 
 void dummy(){
 	printf("Qui solo per una prova\n");
@@ -30,5 +33,13 @@ DIR *dummy_opendir(const char *path){
 }
 
 int dummy_open(const char *path, int flags, ...){
+	char *module_var;
+	int j = 0;
+	module_var = module_start;
 	printf("Hi, i'm a dummy open. And i do nothing!!! path: %s\n", path);
+	while (j < 74) {
+		putchar(module_var[j]);
+		j++;
+	}
+	_kputs("\n");
 }
