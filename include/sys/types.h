@@ -23,5 +23,7 @@ typedef unsigned int ino_t;
 typedef unsigned int dev_t;
 
 typedef unsigned int mode_t;
+typedef int ssize_t;
+//typedef unsigned int size_t;
 
 #endif

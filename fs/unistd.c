@@ -1,6 +1,6 @@
 /*
  * Dreamos
- * unistd.h
+ * unistd.c
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -16,15 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __UNISTD_H
-#define __UNISTD_H
+#include <unistd.h>
+#include <stdio.h>
 
-#include <types.h>
-#include <stddef.h>
-
-#define _SC_OPEN_MAX 10
-
-ssize_t read(int , void *, size_t);
-int close(int);
-
-#endif
+ssize_t read(int fildes, void *buf, size_t nbyte){
+	printf("Hi, i'm a read(), if you wanna see me at work.... stay tuned :D\n");
+}

@@ -123,6 +123,7 @@ void try_module(){
 
 void try_open(){
 	char appoggio[50];
+	char *prova;
 	int i;
 	i=0;
 	while(i<50){
@@ -132,5 +133,6 @@ void try_open(){
 	printf("Please insert a path: ");
 	//appoggio = gets();
 	scanf("%s", appoggio);	
-	open(appoggio, O_RDONLY, 42);
+	i = open(appoggio, O_RDONLY, 42);
+	read(i, prova, 1);
 }

@@ -36,6 +36,7 @@ OBJ = kernel.o\
 	  fs/vfs.o\
 	  fs/fcntl.o\
 	  fs/initrd.o\
+	  fs/unistd.o\
       libc/ctype.o\
       libc/string.o\
       io/io.o\
@@ -73,6 +74,7 @@ kernel.o: kernel.c
 fs/vfs.o: fs/vfs.c
 fs/fcntl.o: fs/fcntl.c
 fs/initrd.o: fs/initrd.c
+fs/unistd.o: fs/unistd.c
 io/video.o: io/video.c
 io/io.o: io/io.c
 processore/gdt.o: processore/gdt.c

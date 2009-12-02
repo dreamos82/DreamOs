@@ -28,6 +28,7 @@ struct initrd_t{
 };
 
 struct initrd_file_t{
+	int magic;
 	char fileName[FILENAME_LENGTH];
 	int  uid;
 	unsigned int offset;
