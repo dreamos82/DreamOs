@@ -18,7 +18,14 @@
 
 #include <unistd.h>
 #include <stdio.h>
+#include <fcntl.h>
+#include <vfs.h>
+
+struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
+file_descriptor_t fd_list[_SC_OPEN_MAX];
 
 ssize_t read(int fildes, void *buf, size_t nbyte){
-	printf("Hi, i'm a read(), if you wanna see me at work.... stay tuned :D\n");
+	int mp_id = 0;
+	mp_id = fd_list[fildes].mountpoint_id;
+	printf("Mpoint id: %d\n", mp_id);
 }

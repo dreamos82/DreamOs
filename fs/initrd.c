@@ -20,6 +20,8 @@
 #include <stddef.h>
 #include <initrd.h>
 #include <multiboot.h>
+#include <unistd.h>
+#include <types.h>
 
 extern char *module_start;
 
@@ -27,12 +29,12 @@ void dummy(){
 	printf("Qui solo per una prova\n");
 }	
 
-DIR *dummy_opendir(const char *path){
+DIR *initfs_opendir(const char *path){
 	printf("Sono una dummy_opendir, ti piaccio? path: %s\n", path);
 	return NULL;
 }
 
-int dummy_open(const char *path, int flags, ...){
+int initfs_open(const char *path, int flags, ...){
 	char *module_var;
 	int j = 0;
 	module_var = module_start;
@@ -42,4 +44,9 @@ int dummy_open(const char *path, int flags, ...){
 		j++;
 	}
 	_kputs("\n");
+}
+
+ssize_t initfs_read(int fildes, void *buf, size_t nbyte){
+	printf("Hi i'm a dummy read... do you like me?\n");
+	return nbyte;
 }

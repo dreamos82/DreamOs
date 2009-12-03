@@ -20,6 +20,7 @@
 #define INITRD_H
 
 #include <dirent.h>
+#include <unistd.h>
 
 #define FILENAME_LENGTH 64
 
@@ -36,6 +37,7 @@ struct initrd_file_t{
 };
 
 void dummy();
-DIR *dummy_opendir(const char *);
-int dummy_open(const char *, int, ... );
+DIR *initfs_opendir(const char *);
+int initfs_open(const char *, int, ...);
+ssize_t initfs_read(int, void *, size_t);
 #endif
