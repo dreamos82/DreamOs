@@ -68,6 +68,7 @@ void vfs_init(){
  	mountpoint_list[0].start_address = 0;
  	mountpoint_list[0].dir_op.opendir_f = initfs_opendir;
  	mountpoint_list[0].operations.open = initfs_open;
+ 	mountpoint_list[0].operations.read = initfs_read;
  	//mountpoint_list[0].operations = kmalloc(sizeof(struct super_node_operations));
 
 	strcpy(mountpoint_list[1].mountpoint,"/dev"); 	
