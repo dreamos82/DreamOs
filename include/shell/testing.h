@@ -25,5 +25,5 @@ void do_fault();
 void help_tester();
 void try_module();
 void try_open();
-
+void try_fsinit();
 #endif

@@ -414,6 +414,7 @@ void tester(){
 					{ "try_printmem", try_printmem },
 					{ "try_module", try_module },
 					{ "try_open", try_open},
+					{ "try_fsinit", try_fsinit},
 					{ "--help", help_tester },
 					};
 	if (argc != 2) {

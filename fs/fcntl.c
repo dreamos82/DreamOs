@@ -31,6 +31,7 @@ struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
   * @param int oflags parametri di apertura
   *
   * Dato un path viene aperto se presente, e si torna il numero di descrittore che lo contiene
+  * @todo Inserire gestione flags
   */
 int open(const char *path, int oflags,  ...){
 	int prova;

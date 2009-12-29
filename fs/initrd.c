@@ -25,9 +25,20 @@
 
 extern char *module_start;
 
+initrd_t fs_specs;
+
 void dummy(){
 	printf("Qui solo per una prova\n");
 }	
+
+int initfs_init(){
+	char *module_var;
+	module_var = module_start;
+	
+	printf("Number of files present: ");
+	putchar(module_var[0]);
+	printf("\n");
+}
 
 DIR *initfs_opendir(const char *path){
 	printf("Sono una dummy_opendir, ti piaccio? path: %s\n", path);

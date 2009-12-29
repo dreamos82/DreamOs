@@ -26,6 +26,7 @@
 #include <multiboot.h>
 #include <kernel.h>
 #include <fcntl.h>
+#include <initrd.h>
 
 //multiboot_info_t *boot_informations;
 char *module_start;
@@ -107,6 +108,7 @@ void help_tester()
 		"  -> try_printmem      - Print used locations of memory\n"
 		"  -> try_module        - Read the content of the memory zone loaded in module, aka initfs \n"
 		"  -> try_open          - Function to test open() & stdarg() \n"
+		"  -> try_fsinit          - Function to test the initialization of initrd\n"
 		);	
 }
 
@@ -135,4 +137,8 @@ void try_open(){
 	scanf("%s", appoggio);	
 	i = open(appoggio, O_RDONLY, 42);
 	read(i, prova, 1);
+}
+
+void try_fsinit(){
+	initfs_init();
 }

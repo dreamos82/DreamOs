@@ -33,3 +33,15 @@ ssize_t read(int fildes, void *buf, size_t nbyte){
 	else
 		printf("No READ Found for that file system\n");
 }
+
+int close(int fildes){
+	if (fd_list[fildes].fs_spec_id >= 0){
+		fd_list[fildes].fs_spec_id = -1;
+		fd_list[fildes].mountpoint_id = -1;
+		return 0;
+	}
+	else
+		return -1;
+
+return 0;
+}

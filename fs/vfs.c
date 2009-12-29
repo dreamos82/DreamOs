@@ -26,6 +26,7 @@
 #include <unistd.h>
 #include <initrd.h>
 #include <dirent.h>
+#include <kernel.h>
 
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 file_descriptor_t fd_list[_SC_OPEN_MAX];
@@ -65,7 +66,7 @@ void vfs_init(){
  	mountpoint_list[0].gid = 0;
  	mountpoint_list[0].pmask = 0;
  	mountpoint_list[0].dev_id = 0;
- 	mountpoint_list[0].start_address = 0;
+ 	mountpoint_list[0].start_address = module_start;
  	mountpoint_list[0].dir_op.opendir_f = initfs_opendir;
  	mountpoint_list[0].operations.open = initfs_open;
  	mountpoint_list[0].operations.read = initfs_read;

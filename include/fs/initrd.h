@@ -36,7 +36,11 @@ struct initrd_file_t{
 	unsigned int length;
 };
 
+typedef struct initrd_t initrd_t;
+
+extern initrd_t fs_specs;
 void dummy();
+int initfs_init();
 DIR *initfs_opendir(const char *);
 int initfs_open(const char *, int, ...);
 ssize_t initfs_read(int, void *, size_t);
