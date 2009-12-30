@@ -47,6 +47,8 @@ DIR *initfs_opendir(const char *path){
 
 int initfs_open(const char *path, int flags, ...){
 	char *module_var;
+	int ifs_fd;
+	ifs_fd = 0;
 	int j = 0;
 	module_var = module_start;
 	printf("Hi, i'm a dummy open. And i do nothing!!! path: %s\n", path);
@@ -55,6 +57,7 @@ int initfs_open(const char *path, int flags, ...){
 		j++;
 	}
 	_kputs("\n");
+	return ifs_fd;
 }
 
 ssize_t initfs_read(int fildes, void *buf, size_t nbyte){

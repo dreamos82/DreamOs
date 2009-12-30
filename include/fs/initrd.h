@@ -23,6 +23,7 @@
 #include <unistd.h>
 
 #define FILENAME_LENGTH 64
+#define MAX_FILES 32
 
 struct initrd_t{
 	int nfiles;
