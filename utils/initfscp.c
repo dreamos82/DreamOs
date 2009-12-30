@@ -21,14 +21,20 @@
 #include <initfscp.h>
 
 int main(int argc, char* argv[]){
+	unsigned int offset;
 	if(argc <= 1) usage(argv[0]);
 	else {
 		if(!strcmp(argv[1], "--version") || !strcmp(argv[1], "-v")) version(argv[0]+2);
+		else if(!strcmp(argv[1], "--help") || !strcmp(argv[1], "-h")) usage(argv[0]);
 		else{
 			initrd_file_t headers[MAX_FILES];
 			int i=0;
-			printf("Welcome to dreamos initfs file copier tool\n");
+			FILE *fsdest;
+			fsdest = fopen(argv[argc-1], "w");
+			if(fsdest == NULL) printf("Could not create FileSystem\n");
+			printf("Welcome to Dreamos initfs file copier tool\n");
 			printf("Clearing headers structures ");
+			offset = sizeof(struct initrd_file_t) * 32;
 			for (i=0; i<MAX_FILES; i++){
 				headers[i].magic = 0xBF;
 				strcpy(headers[i].fileName, "");
@@ -39,7 +45,7 @@ int main(int argc, char* argv[]){
 			printf("\t\tDONE\n");			
 			printf("Number of files to copy %d\n", argc - 2);
 			printf("FileSystem name: %s\n", argv[argc-1]);
-			printf("Creating File headers\n\n");
+			printf("Creating File headers\n\n");			
 			i=0;
 			for(i=0; i< argc - 2; i++){
 				FILE *fd;
@@ -52,16 +58,21 @@ int main(int argc, char* argv[]){
 					strcpy(headers[i].fileName, argv[i+1]);
 					fseek(fd, 0, SEEK_END);
 					printf("File %s Found! Size: %d\n", argv[i+1], ftell(fd));				
+					headers[i].length = ftell(fd);
+					headers[i].offset = offset;
 					fclose(fd);
-				}
+					offset += headers[i].length;
+				}				
 			}
 			printf("\t\tDONE\n");
 			i=0;
+			fwrite(headers, sizeof(struct initrd_file_t), 32, fsdest);
 			for(i=0; i<argc - 2; i++){
-				printf("%s\n", headers[i].fileName);
+				printf("FileName: %s Length: %d offset: %d\n", headers[i].fileName, headers[i].length, headers[i].offset);
 			}
-		}
-	}
+			fclose(fsdest);
+		}		
+	}	
 }
 
 void usage(char *prgname){
