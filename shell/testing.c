@@ -113,13 +113,21 @@ void help_tester()
 }
 
 void try_module(){
+	initrd_file_t* headers;
+	int i;
+	i=0;
+	headers = (initrd_file_t *) module_start;
+	while(i<2){
+		printf("%s\t%d\n", headers[i].fileName, headers[i].length);
+		i++;
+	}
 	int j=0;
-	char* mod_address;
+	/*char* mod_address;
 	mod_address = module_start;	
 	while(j<74){
 		putchar(mod_address[j]);
 		j++;
-	}
+	}*/
 	_kputs("\n");
 }
 
