@@ -20,6 +20,7 @@
 #include <string.h>
 #include <initfscp.h>
 
+
 int main(int argc, char* argv[]){
 	unsigned int offset;
 	if(argc <= 1) usage(argv[0]);
@@ -33,6 +34,7 @@ int main(int argc, char* argv[]){
 			fsdest = fopen(argv[argc-1], "w");
 			if(fsdest == NULL) printf("Could not create FileSystem\n");
 			printf("Welcome to Dreamos initfs file copier tool\n");
+			printf("Size of headers: %d\n\n", sizeof(struct initrd_file_t)*32);
 			printf("Clearing headers structures ");
 			offset = sizeof(struct initrd_file_t) * 32;
 			for (i=0; i<MAX_FILES; i++){
@@ -42,10 +44,10 @@ int main(int argc, char* argv[]){
 				headers[i].offset = 0;
 				headers[i].length = 0;
 			}			
-			printf("\t\tDONE\n");			
+			printf("\e[33,44mDONE\e[0m\n\n");			
 			printf("Number of files to copy %d\n", argc - 2);
-			printf("FileSystem name: %s\n", argv[argc-1]);
-			printf("Creating File headers\n\n");			
+			printf("FileSystem name: %s\n\n", argv[argc-1]);
+			printf("Creating File headers\n");			
 			i=0;
 			for(i=0; i< argc - 2; i++){
 				FILE *fd;
@@ -57,19 +59,29 @@ int main(int argc, char* argv[]){
 				else {
 					strcpy(headers[i].fileName, argv[i+1]);
 					fseek(fd, 0, SEEK_END);
-					printf("File %s Found! Size: %d\n", argv[i+1], ftell(fd));				
+					printf("\tFile %s Found! Size: %d\n", argv[i+1], ftell(fd));				
 					headers[i].length = ftell(fd);
 					headers[i].offset = offset;
 					fclose(fd);
 					offset += headers[i].length;
 				}				
 			}
-			printf("\t\tDONE\n");
+			printf("\e[33,44mDONE\e[0m\n\n");
 			i=0;
+			printf("Copying headers to %s filesystem  ", argv[argc-1]);		
 			fwrite(headers, sizeof(struct initrd_file_t), 32, fsdest);
+			printf("\e[33,44mDONE\e[0m\n\n");			
+			printf("Copying data to %s filesystem\n", argv[argc-1]);		
 			for(i=0; i<argc - 2; i++){
-				printf("FileName: %s Length: %d offset: %d\n", headers[i].fileName, headers[i].length, headers[i].offset);
+				FILE *fd2;
+				char *buffer;
+				fd2=fopen(argv[i+1], "r+");
+				buffer = (unsigned char*) malloc(headers[i].length);
+				fread(buffer, 1, headers[i].length, fd2);
+				fwrite(buffer, 1, headers[i].length, fsdest);
+				printf("\t\tFileName: %s Length: %d offset: %d\n", headers[i].fileName, headers[i].length, headers[i].offset);
 			}
+			printf("\e[33,44mDONE\e[0m\n\n");
 			fclose(fsdest);
 		}		
 	}	
