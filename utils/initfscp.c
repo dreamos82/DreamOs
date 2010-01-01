@@ -29,14 +29,16 @@ int main(int argc, char* argv[]){
 		else if(!strcmp(argv[1], "--help") || !strcmp(argv[1], "-h")) usage(argv[0]);
 		else{
 			initrd_file_t headers[MAX_FILES];
+			int nfiles;
+			nfiles = argc - 2;
 			int i=0;
 			FILE *fsdest;
 			fsdest = fopen(argv[argc-1], "w");
 			if(fsdest == NULL) printf("Could not create FileSystem\n");
 			printf("Welcome to Dreamos initfs file copier tool\n");
-			printf("Size of headers: %d\n\n", sizeof(struct initrd_file_t)*32);
+			printf("Size of headers: %d %d\n\n", sizeof(struct initrd_file_t)*32, sizeof(initrd_file_t));
 			printf("Clearing headers structures ");
-			offset = sizeof(struct initrd_file_t) * 32;
+			offset = sizeof(struct initrd_file_t) * 32 + sizeof(int);
 			for (i=0; i<MAX_FILES; i++){
 				headers[i].magic = 0xBF;
 				strcpy(headers[i].fileName, "");
@@ -45,7 +47,7 @@ int main(int argc, char* argv[]){
 				headers[i].length = 0;
 			}			
 			printf("\e[33,44mDONE\e[0m\n\n");			
-			printf("Number of files to copy %d\n", argc - 2);
+			printf("Number of files to copy %d\n", nfiles);
 			printf("FileSystem name: %s\n\n", argv[argc-1]);
 			printf("Creating File headers\n");			
 			i=0;
@@ -69,6 +71,7 @@ int main(int argc, char* argv[]){
 			printf("\e[33,44mDONE\e[0m\n\n");
 			i=0;
 			printf("Copying headers to %s filesystem  ", argv[argc-1]);		
+			fwrite(&nfiles, sizeof(int), 1, fsdest);
 			fwrite(headers, sizeof(struct initrd_file_t), 32, fsdest);
 			printf("\e[33,44mDONE\e[0m\n\n");			
 			printf("Copying data to %s filesystem\n", argv[argc-1]);		

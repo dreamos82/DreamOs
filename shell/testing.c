@@ -113,14 +113,17 @@ void help_tester()
 }
 
 void try_module(){
+	initrd_t *fs_head;
 	initrd_file_t* headers;
 	int i;
 	i=0;
-	headers = (initrd_file_t *) module_start;
-	while(i<2){
+	fs_head = (initrd_t *)module_start;
+	headers = (initrd_file_t *) (module_start + sizeof(initrd_t));
+	while(i<fs_head->nfiles){
 		printf("%s\t%d\n", headers[i].fileName, headers[i].length);
 		i++;
 	}
+	printf("Total Files: %d\n", fs_head->nfiles);
 	int j=0;
 	/*char* mod_address;
 	mod_address = module_start;	
