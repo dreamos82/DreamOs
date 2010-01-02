@@ -40,7 +40,8 @@ struct initrd_file_t{
 typedef struct initrd_t initrd_t;
 typedef struct initrd_file_t initrd_file_t;
 
-extern initrd_t fs_specs;
+extern initrd_t* fs_specs;
+extern initrd_file_t* fs_headers;
 void dummy();
 int initfs_init();
 DIR *initfs_opendir(const char *);

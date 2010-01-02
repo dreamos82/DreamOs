@@ -124,7 +124,7 @@ void try_module(){
 		i++;
 	}
 	printf("Total Files: %d\n", fs_head->nfiles);
-	int j=0;
+	//int j=0;
 	/*char* mod_address;
 	mod_address = module_start;	
 	while(j<74){

@@ -24,20 +24,18 @@
 #include <types.h>
 
 extern char *module_start;
-
-initrd_t fs_specs;
+initrd_t *fs_specs;
+initrd_file_t* fs_headers;
 
 void dummy(){
 	printf("Qui solo per una prova\n");
 }	
 
-int initfs_init(){
-	char *module_var;
-	module_var = module_start;
+int initfs_init(){	
+	fs_specs = (initrd_t *) module_start;
+	//module_var = module_start;
 	
-	printf("Number of files present: ");
-	putchar(module_var[0]);
-	printf("\n");
+	printf("Number of files present: %d\n", fs_specs->nfiles);		
 }
 
 DIR *initfs_opendir(const char *path){
