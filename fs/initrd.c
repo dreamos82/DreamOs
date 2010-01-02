@@ -22,6 +22,7 @@
 #include <multiboot.h>
 #include <unistd.h>
 #include <types.h>
+#include <string.h>
 
 extern char *module_start;
 initrd_t *fs_specs;
@@ -33,9 +34,9 @@ void dummy(){
 
 int initfs_init(){	
 	fs_specs = (initrd_t *) module_start;
-	//module_var = module_start;
-	
-	printf("Number of files present: %d\n", fs_specs->nfiles);		
+	fs_headers = (initrd_file_t *)(module_start + sizeof(initrd_t));
+	return fs_specs->nfiles;
+	//printf("Number of files present: %d\n", fs_specs->nfiles);		
 }
 
 DIR *initfs_opendir(const char *path){
@@ -44,17 +45,15 @@ DIR *initfs_opendir(const char *path){
 }
 
 int initfs_open(const char *path, int flags, ...){
-	char *module_var;
+	initrd_file_t *module_var;
 	int ifs_fd;
 	ifs_fd = 0;
 	int j = 0;
-	module_var = module_start;
-	printf("Hi, i'm a dummy open. And i do nothing!!! path: %s\n", path);
-	while (j < 74) {
-		putchar(module_var[j]);
+	module_var = fs_headers;	
+	while (j < fs_specs->nfiles) {
+		if(!strcmp(path, module_var[j].fileName)) printf("%s Found. Size: %d\n", path, module_var[j].length);
 		j++;
 	}
-	_kputs("\n");
 	return ifs_fd;
 }
 

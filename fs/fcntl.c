@@ -35,6 +35,7 @@ struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
   */
 int open(const char *path, int oflags,  ...){
 	int prova;
+	int mpid;
 	va_list ap;
 	va_start(ap, oflags);
 	
@@ -42,8 +43,10 @@ int open(const char *path, int oflags,  ...){
 	printf("Prova vale: %d e il path: %s e cur_fd: %d\n", prova,path,cur_fd);
 	if(cur_fd >= _SC_OPEN_MAX) cur_fd=0;
 	else {		
-		fd_list[cur_fd].mountpoint_id = get_mountpoint_id(path);
-		printf("Mpoint id: %d\n", fd_list[cur_fd].mountpoint_id);
+		mpid = get_mountpoint_id(path);
+		fd_list[cur_fd].mountpoint_id = mpid;				
+		path = get_rel_path(mpid, path);
+		printf("Mpoint id: %d %s\n", mpid, path);
 		if(mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open != NULL)
 			mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open(path, oflags);
 		else 

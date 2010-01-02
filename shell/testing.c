@@ -144,12 +144,12 @@ void try_open(){
 		i++;
 	}
 	printf("Please insert a path: ");
-	//appoggio = gets();
+	
 	scanf("%s", appoggio);	
 	i = open(appoggio, O_RDONLY, 42);
 	read(i, prova, 1);
 }
 
 void try_fsinit(){
-	initfs_init();
+	printf("Number of files present: %d\n", initfs_init());
 }

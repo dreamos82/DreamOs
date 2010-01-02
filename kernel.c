@@ -43,6 +43,7 @@
 #include <kheap.h>
 #include <debug.h>
 #include <vfs.h>
+#include <initrd.h>
 
 unsigned int *current_page_table;
 extern unsigned int end;
@@ -99,6 +100,7 @@ int main_loop(struct multiboot_info *boot_info)
     get_cpuid (sinfo);
         
     vfs_init();
+    initfs_init();
 	if(boot_info->mods_count > 0) printf("Found n. %d Modules\n", boot_info->mods_count);		
 	printf("Address of module: 0x%x - 0x%d\n", *((unsigned int*)boot_info->mods_addr),module_end-(unsigned int) module_start);
     printf("\n");

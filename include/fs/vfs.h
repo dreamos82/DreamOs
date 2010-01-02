@@ -21,6 +21,7 @@
 #include <dirent.h>
 #include <stddef.h>
 #include <unistd.h>
+#include <use.h>
 
 #define MAX_MOUNTPOINT 10
 #define MAX_FD 255

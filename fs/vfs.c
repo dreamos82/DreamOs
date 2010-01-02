@@ -38,7 +38,7 @@ void vfs_init(){
 	j=0;
 	cur_fd=0;
 	
-	printf("\nPreparing VFS\n"); 	
+	printf(LNG_VFS); 	
 
 	while (j<_SC_OPEN_MAX){
 		fd_list[j].fs_spec_id = 0;
@@ -109,7 +109,7 @@ int get_mountpoint_id(char *path){
                        }					   					   
                        i++;
                }               
-			   if(last!=-1) printf("Changing dir %s\n", mountpoint_list[last].mountpoint, last);			   
+			   //if(last!=-1) printf("Changing dir %s\n", mountpoint_list[last].mountpoint, last);			   
                return last;
 }
 
