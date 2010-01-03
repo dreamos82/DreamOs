@@ -56,6 +56,8 @@ int main(int argc, char* argv[]){
 				fd = fopen(argv[i+1], "r+");
 				if(fd == NULL){
 					 printf("Error one or more files not found\n");
+					 // Debug
+      					 printf("Nome del file: -->%s<--\n",argv[i+1]);
 					 return -1;
 				 }
 				else {

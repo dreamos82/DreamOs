@@ -3,20 +3,16 @@
 # 
 # Coded by Osiris
 # For any question about this or other, mail me to
-# diego.stamigni@linux.com
+# osiris@Devils.com
 # greez ;
 
 VERS="make vers"
 CLEAN="make clean"
 MAKE="make"
 MAKE_IMG="make img"
+MAKE_FS="make initfs"
 
 if [ "$1" != "--compile" ]; then
-
-#  if [ $UID != "0" ]; then
-#      echo "[-] You need to run this install script as root!"
-#     exit
-#  fi
 
 if [ "$1" == "help" ]; then
 echo ""
@@ -48,7 +44,7 @@ echo "So please add the argv[3] into your option to this launch "
 echo "script, something like that:"
 echo ""
 echo "Usage: '$0' '--compile' 'emulator' 'language'"
-echo "where now language supported is 'it' or 'en'"
+echo "where, now, language supported is 'it' or 'en'"
 echo "------------------------------------------------------"
 echo ""
 echo "If you want, you can install DreamOS on your floppy"
@@ -71,6 +67,16 @@ echo "Make sure you have installed mkisofs from cdrkit package."
 echo "The command is like this:"
 echo ""
 echo "Usage: '$0' 'create_iso'"
+echo "------------------------------------------------------"
+echo ""
+echo "If you want, you can create a DreamOS FileSystem"
+echo "You know, this is *VERY* important :)"
+echo "To add the file and then re-create the FS, put you files"
+echo "into files/ and do:"
+echo ""
+echo "Usage: '$0' 'create_fs'"
+echo "Also you should know that this process is do during the"
+echo "compilation of DreamOS."
 echo "------------------------------------------------------"
 exit 1
 
@@ -118,6 +124,20 @@ elif [ "$1" == "create_iso" ]; then
   echo "---------------------------------------------"
   exit
 
+elif [ "$1" == "create_fs" ]; then
+
+  echo "--------------------------------------------- "
+  echo "Launching FS Creating script in progress.."
+  echo ""
+  utils/initfscp `find files/* -exec echo {} +;` initfs
+  echo "done."
+  #$MAKE_FS
+  su -c "mount -o loop boot/grub.img boot/os && rm -rf boot/os/initfs && cp initfs boot/os/initfs && umount boot/os"
+  echo "--------------------------------------------- "
+  echo "FS Created and added to boot/grub.img"
+  echo "---------------------------------------------"
+  exit
+
 elif [ "$1" == "" ]; then
   echo "Error: No command inserted!"
   echo "----------------------->"
@@ -135,10 +155,6 @@ fi
 
 else
 
-#  if [ $UID != "0" ]; then
-#      echo "[-] You need to run this install script as root!"
-#      exit
-#  fi
 
 if [ "$2" == "qemu" ] || [ "$2" == "bochs" ]; then
 
@@ -158,7 +174,20 @@ if [ "$2" == "qemu" ] || [ "$2" == "bochs" ]; then
 		  echo "Warning: No language translation declared!"
 		  echo "----------------------->"                 
 	  fi   
+	  
 	 $VERS && $CLEAN && $MAKE && $MAKE_IMG
+	  
+	 echo "--------------------------------------------- "
+  	 echo "Launching FS Creating script in progress.."
+	 echo ""
+         utils/initfscp `find files/* -exec echo {} +;` initfs
+         echo "done."
+         #$MAKE_FS
+         su -c "mount -o loop boot/grub.img boot/os && rm -rf boot/os/initfs && cp initfs boot/os/initfs && umount boot/os"
+         echo "--------------------------------------------- "
+         echo "FS Created and added to boot/grub.img"
+         echo "---------------------------------------------"
+         
 	 qemu -fda boot/grub.img
 	 exit
 
@@ -225,7 +254,7 @@ elif [ "$2" == "create_iso" ]; then
   exit
 
 else
-  echo "Uhm? What the hell did you insert ? Lool! '$2' ?? I don't know what is it!"
+  echo "Uhm? What the hell did you insert ? '$2' ?? I don't know what is it!"
   echo "Please, read the help!!!"
   echo "----------------------->"
   echo "Usage: '$0 help'"

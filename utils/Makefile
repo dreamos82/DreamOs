@@ -1,2 +1,10 @@
+CC = gcc
+FILE = initfscp.c
+OUTPUT = initfscp
+
 all:
-	gcc -o initfscp initfscp.c -I./include
+	$(CC) $(FILE) -I./include -o $(OUTPUT)
+
+clean:
+	rm -rf $(OUTPUT)
+

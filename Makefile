@@ -1,6 +1,6 @@
 # Please set your kernel preference versions..
 # Enjoy your self :)
-# Osiris at jeek69@katamail.com
+# Osiris at osiris@Devils.com
 
 NAME = DreamOS
 VERSION = 0
@@ -115,7 +115,7 @@ vers:
 .PHONY: clean install qemu
 
 clean:
-	rm -f *.img *.bin *.map
+	rm -f *.img *.bin *.map initfs
 	rm -f $(OBJ)
 
 install:
@@ -130,3 +130,6 @@ it:
 
 en:
 	cp include/lng/en.h include/use.h
+	
+initfs:
+	su -c "mount -o loop boot/grub.img boot/os && rm -rf boot/os/initfs && cp initfs boot/os/initfs && umount boot/os"
