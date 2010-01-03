@@ -1,9 +1,9 @@
 CC = gcc
-FILE = initfscp.c
-OUTPUT = initfscp
+FILE = utils/initfscp.c
+OUTPUT = utils/initfscp
 
 all:
-	$(CC) $(FILE) -I./include -o $(OUTPUT)
+	$(CC) $(FILE) -I./utils/include -o $(OUTPUT)
 
 clean:
 	rm -rf $(OUTPUT)

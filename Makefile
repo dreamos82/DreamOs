@@ -69,6 +69,7 @@ bl.img : boot/multicatcher.S
 
 kernel.bin: $(OBJ)
 	ld -static --oformat elf32-i386 --output=kernel.bin --script=kernel.lds bl.img $(OBJ) -Ttext 0x100000 -Map kernel.map
+	make -f utils/Makefile
 
 kernel.o: kernel.c
 fs/vfs.o: fs/vfs.c
@@ -102,6 +103,12 @@ shell/commands.o: shell/commands.c
 sys/utsname.o: sys/utsname.c
 sys/dirent.o: sys/dirent.c
 
+utils:
+	make -f utils/Makefile
+	
+filesystem:
+	su -c "mount -o loop boot/grub.img boot/os && cp initfs boot/os/initfs && umount boot/os"
+	
 img:
 	su -c "mount -o loop boot/grub.img boot/os && cp dreamos.img boot/os/boot/grub/ && umount boot/os"
 
@@ -117,6 +124,7 @@ vers:
 clean:
 	rm -f *.img *.bin *.map initfs
 	rm -f $(OBJ)
+	rm -rf utils/initfscp
 
 install:
 	mkfs.ext2 /dev/fd0
@@ -131,5 +139,3 @@ it:
 en:
 	cp include/lng/en.h include/use.h
 	
-initfs:
-	su -c "mount -o loop boot/grub.img boot/os && rm -rf boot/os/initfs && cp initfs boot/os/initfs && umount boot/os"

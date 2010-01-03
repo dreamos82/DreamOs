@@ -39,6 +39,7 @@ int main(int argc, char* argv[]){
 			printf("Size of headers: %d %d\n\n", sizeof(struct initrd_file_t)*32, sizeof(initrd_file_t));
 			printf("Clearing headers structures ");
 			offset = sizeof(struct initrd_file_t) * 32 + sizeof(int);
+			
 			for (i=0; i<MAX_FILES; i++){
 				headers[i].magic = 0xBF;
 				strcpy(headers[i].fileName, "");
@@ -46,7 +47,7 @@ int main(int argc, char* argv[]){
 				headers[i].offset = 0;
 				headers[i].length = 0;
 			}			
-			printf("\e[33,44mDONE\e[0m\n\n");			
+			printf("[ \033[1;33mDONE\e[0m ]\n\n");	
 			printf("Number of files to copy %d\n", nfiles);
 			printf("FileSystem name: %s\n\n", argv[argc-1]);
 			printf("Creating File headers\n");			
@@ -57,7 +58,7 @@ int main(int argc, char* argv[]){
 				if(fd == NULL){
 					 printf("Error one or more files not found\n");
 					 // Debug
-      					 printf("Nome del file: -->%s<--\n",argv[i+1]);
+      					 printf("Name of file: -->%s<--\n",argv[i+1]);
 					 return -1;
 				 }
 				else {
@@ -70,12 +71,13 @@ int main(int argc, char* argv[]){
 					offset += headers[i].length;
 				}				
 			}
-			printf("\e[33,44mDONE\e[0m\n\n");
+
+			printf("[ \033[1;33mDONE\e[0m ]\n\n");		
 			i=0;
 			printf("Copying headers to %s filesystem  ", argv[argc-1]);		
 			fwrite(&nfiles, sizeof(int), 1, fsdest);
 			fwrite(headers, sizeof(struct initrd_file_t), 32, fsdest);
-			printf("\e[33,44mDONE\e[0m\n\n");			
+			printf("[ \033[1;33mDONE\e[0m ]\n\n");	
 			printf("Copying data to %s filesystem\n", argv[argc-1]);		
 			for(i=0; i<argc - 2; i++){
 				FILE *fd2;
@@ -86,7 +88,7 @@ int main(int argc, char* argv[]){
 				fwrite(buffer, 1, headers[i].length, fsdest);
 				printf("\t\tFileName: %s Length: %d offset: %d\n", headers[i].fileName, headers[i].length, headers[i].offset);
 			}
-			printf("\e[33,44mDONE\e[0m\n\n");
+			printf("[ \033[1;33mDONE\e[0m ]\n\n");	
 			fclose(fsdest);
 		}		
 	}	

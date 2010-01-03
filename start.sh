@@ -10,7 +10,7 @@ VERS="make vers"
 CLEAN="make clean"
 MAKE="make"
 MAKE_IMG="make img"
-MAKE_FS="make initfs"
+MAKE_FS="make filesystem"
 
 if [ "$1" != "--compile" ]; then
 
@@ -131,8 +131,8 @@ elif [ "$1" == "create_fs" ]; then
   echo ""
   utils/initfscp `find files/* -exec echo {} +;` initfs
   echo "done."
-  #$MAKE_FS
-  su -c "mount -o loop boot/grub.img boot/os && rm -rf boot/os/initfs && cp initfs boot/os/initfs && umount boot/os"
+  $MAKE_FS
+  #su -c "mount -o loop boot/grub.img boot/os && rm -rf boot/os/initfs && cp initfs boot/os/initfs && umount boot/os"
   echo "--------------------------------------------- "
   echo "FS Created and added to boot/grub.img"
   echo "---------------------------------------------"
@@ -182,8 +182,7 @@ if [ "$2" == "qemu" ] || [ "$2" == "bochs" ]; then
 	 echo ""
          utils/initfscp `find files/* -exec echo {} +;` initfs
          echo "done."
-         #$MAKE_FS
-         su -c "mount -o loop boot/grub.img boot/os && rm -rf boot/os/initfs && cp initfs boot/os/initfs && umount boot/os"
+         $MAKE_FS
          echo "--------------------------------------------- "
          echo "FS Created and added to boot/grub.img"
          echo "---------------------------------------------"
@@ -207,7 +206,7 @@ if [ "$2" == "qemu" ] || [ "$2" == "bochs" ]; then
 		  echo "----------------------->"                 
 	  fi  
 
-	$VERS && $CLEAN && $MAKE && $MAKE_IMG
+	$VERS && $CLEAN && $MAKE && $MAKE_IMG && $MAKE_FS
 	bochs -f .bochsrc -q
 	exit
 
@@ -215,7 +214,7 @@ fi
 
 elif [ "$2" == "floppy_install" ]; then
 
-  $VERS && $CLEAN && $MAKE && $MAKE_IMG
+  $VERS && $CLEAN && $MAKE && $MAKE_IMG && $MAKE_FS
   echo "---------------------- "
   echo "Installation in progres.."
   su -c "make install"
@@ -225,7 +224,7 @@ elif [ "$2" == "floppy_install" ]; then
 
 elif [ "$2" == "grub" ]; then
 
-  $VERS && $CLEAN && $MAKE && $MAKE_IMG
+  $VERS && $CLEAN && $MAKE && $MAKE_IMG && $MAKE_FS
   echo "--------------------------------------------- "
   echo "Launching grub installer script in progress.."
   su -c "python grub.py"
@@ -242,7 +241,7 @@ elif [ "$2" == "" ]; then
 
 
 elif [ "$2" == "create_iso" ]; then
-  $VERS && $CLEAN && $MAKE && $MAKE_IMG
+  $VERS && $CLEAN && $MAKE && $MAKE_IMG && $MAKE_FS
   echo "--------------------------------------------- "
   echo "Launching ISO Creation script in progress.."
   echo ""
