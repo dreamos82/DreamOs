@@ -139,6 +139,7 @@ void try_open(){
 	char *prova;
 	int i;
 	i=0;
+	prova = NULL;
 	while(i<50){
 		appoggio[i] = '\0';
 		i++;

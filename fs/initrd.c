@@ -53,7 +53,6 @@ DIR *initfs_opendir(const char *path){
 
 int initfs_open(const char *path, int flags, ...){
 	initrd_file_t *module_var;
-	int ifs_fd;	
 	int j = 0;
 	module_var = fs_headers;	
 	while (j < fs_specs->nfiles) {

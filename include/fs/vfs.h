@@ -38,7 +38,7 @@ struct directory_operations {
 
 struct super_node_operations {
 	/*Qui vanno i puntatori alle funzioni sul supernode*/
-	void (*open)(const char *, int );
+	int (*open)(const char *, int );
 	void (*close)(int);
 	int (*read)(int, void*, size_t);
 	int (*write)(int, void*, size_t);

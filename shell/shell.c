@@ -72,7 +72,7 @@ void shell()
 {
   char cmd[CMD_LEN];
   char *cmd_ptr;
-  char *user = kmalloc(USER_LEN);
+  //char *user = kmalloc(USER_LEN);
   
   static struct cmd shell_cmd[NUM_COM] = {
 	{ "aalogo",   aalogo      },
@@ -127,7 +127,7 @@ void shell()
         goto end;
 
     for (i = NUM_COM; i >= 0; --i) {
-        if(strcmp(argv[0], shell_cmd[i].cmdname) == NULL) {
+        if(strcmp(argv[0], shell_cmd[i].cmdname) == (int) NULL) {
             (*shell_cmd[i].h_func)();
             break;
         }

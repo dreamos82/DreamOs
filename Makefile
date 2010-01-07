@@ -7,6 +7,8 @@ VERSION = 0
 PATCHLEVEL = 2.0
 EXTRAVERSION = -trunk
 
+include Makefile.am
+
 CFLAGS = -nostdlib\
 	 -nostdinc\
 	 -fomit-frame-pointer\
@@ -65,10 +67,10 @@ dreamos.img: bl.img kernel.bin
 	mv kernel.bin dreamos.img
 
 bl.img : boot/multicatcher.S
-	nasm -f elf ./boot/multicatcher.S -o bl.img
+	$(ASM) -f elf ./boot/multicatcher.S -o bl.img
 
 kernel.bin: $(OBJ)
-	ld -static --oformat elf32-i386 --output=kernel.bin --script=kernel.lds bl.img $(OBJ) -Ttext 0x100000 -Map kernel.map
+	$(LD) -static --oformat elf32-i386 --output=kernel.bin --script=kernel.lds bl.img $(OBJ) -Ttext 0x100000 -Map kernel.map
 	make -f utils/Makefile
 
 kernel.o: kernel.c

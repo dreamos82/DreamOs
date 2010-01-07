@@ -422,7 +422,7 @@ void tester(){
 		return;
 	} else { 
 		for ( i = 0 ; i <= MAX_TEST ; i++) {
-			if ( (strcmp(argv[1], testing[i].cmd_testname) ) == NULL ) {
+			if ( (strcmp(argv[1], testing[i].cmd_testname) ) == (int) NULL ) {
 				 (testing[i].func)();
 				break;
 			} 

@@ -45,12 +45,15 @@ int open(const char *path, int oflags,  ...){
 	else {		
 		mpid = get_mountpoint_id(path);
 		fd_list[cur_fd].mountpoint_id = mpid;				
-		path = get_rel_path(mpid, path);
-		printf("Mpoint id: %d %s\n", fd_list[cur_fd].mountpoint_id, path);		
-		if(mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open != NULL)
-			mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open(path, oflags);
-		else 
+		path = get_rel_path(mpid, path);		
+		if(mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open != NULL){
+			fd_list[cur_fd].fs_spec_id = (int) mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open(path, oflags);
+			printf("Mpoint id: %d %s fs_spec_fd: %d\n", fd_list[cur_fd].mountpoint_id, path, fd_list[cur_fd].fs_spec_id);		
+		}
+		else {
 			printf("No OPEN services found here\n");		
+			return -1;
+		}
 	}	
 	va_end(ap);
 	return cur_fd++;
