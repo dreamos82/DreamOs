@@ -20,7 +20,6 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include <string.h>
-#include <stddef.h>
 #include <vfs.h>
 #include <kheap.h>
 

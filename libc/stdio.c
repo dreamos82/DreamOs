@@ -31,7 +31,6 @@
 #include <keyboard.h>
 #include <kheap.h>
 #include <debug.h>
-#include <string.h>
 
 #define LEFT 1
 #define RIGHT 0

@@ -17,7 +17,6 @@
  */
 
 #include <stdio.h>
-#include <stddef.h>
 #include <initrd.h>
 #include <multiboot.h>
 #include <unistd.h>

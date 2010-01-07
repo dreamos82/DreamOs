@@ -54,7 +54,7 @@ int main(int argc, char* argv[]){
 			i=0;
 			for(i=0; i< argc - 2; i++){
 				FILE *fd;
-				fd = fopen(argv[i+1], "r+");
+				fd = fopen(argv[i+1],"r+");
 				if(fd == NULL){
 					 printf("Error one or more files not found\n");
 					 // Debug
@@ -62,7 +62,10 @@ int main(int argc, char* argv[]){
 					 return -1;
 				 }
 				else {
-					strcpy(headers[i].fileName, argv[i+1]);
+					if ((strpbrk(argv[i+1], "/")) != NULL)
+						strcpy(headers[i].fileName, strtok(strrchr(argv[i+1],'/'), "/"));
+					else
+						strcpy(headers[i].fileName, argv[i+1]);
 					fseek(fd, 0, SEEK_END);
 					printf("\tFile %s Found! Size: %d\n", argv[i+1], ftell(fd));				
 					headers[i].length = ftell(fd);
