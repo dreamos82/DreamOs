@@ -27,14 +27,22 @@
 extern char *module_start;
 initrd_t *fs_specs;
 initrd_file_t* fs_headers;
+initrd_fd ird_descriptors[MAX_INITRD_DESCRIPTORS];
+unsigned int cur_irdfd;
 
 void dummy(){
 	printf("Qui solo per una prova\n");
 }	
 
 int initfs_init(){	
+	int i=0;
 	fs_specs = (initrd_t *) module_start;
 	fs_headers = (initrd_file_t *)(module_start + sizeof(initrd_t));
+	while (i<MAX_INITRD_DESCRIPTORS) {
+		ird_descriptors[i].file_descriptor = -1;
+		i++;
+	}
+	cur_irdfd = 0;
 	return fs_specs->nfiles;
 	//printf("Number of files present: %d\n", fs_specs->nfiles);		
 }
@@ -46,15 +54,18 @@ DIR *initfs_opendir(const char *path){
 
 int initfs_open(const char *path, int flags, ...){
 	initrd_file_t *module_var;
-	int ifs_fd;
-	ifs_fd = 0;
+	int ifs_fd;	
 	int j = 0;
 	module_var = fs_headers;	
 	while (j < fs_specs->nfiles) {
-		if(!strcmp(path, module_var[j].fileName)) printf("%s Found. Size: %d\n", path, module_var[j].length);
+		if(!strcmp(path, module_var[j].fileName)){
+				ird_descriptors[cur_irdfd].file_descriptor	= j;
+				printf("%s Found. Size: %d FS fd val: %d - ID File val: %d\n", path, module_var[j].length, cur_irdfd, ird_descriptors[cur_irdfd].file_descriptor);
+				return cur_irdfd++;
+		}
 		j++;
 	}
-	return ifs_fd;
+	return -1;	
 }
 
 ssize_t initfs_read(int fildes, void *buf, size_t nbyte){

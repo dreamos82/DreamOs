@@ -24,21 +24,33 @@
 
 #define FILENAME_LENGTH 64
 #define MAX_FILES 32
+#define MAX_INITRD_DESCRIPTORS 10
 
+/*! Contiene il numero dei files contenuti nel filesystem initrd.
+ */
 struct initrd_t{
-	int nfiles;
+	int nfiles; /*!< Numero Files letti*/
 };
 
+/*! Contiene le informazioni relative ai singoli files contenuti in initrd
+ */
 struct initrd_file_t{
-	int magic;
-	char fileName[FILENAME_LENGTH];
-	int  uid;
-	unsigned int offset;
-	unsigned int length;
+	int magic; /*!< Numero usato come delimitatore da settare a 0xBF*/
+	char fileName[FILENAME_LENGTH]; /*!< Nome del file*/
+	int  uid; /*!< User id del proprietario del file */
+	unsigned int offset; /*!< indirizzo relativo di partenza */
+	unsigned int length; /*!< Dimensione del File */
+};
+
+/*! File Descriptor relativo ai files aperti.
+ */
+struct initrd_fd{
+	int file_descriptor;
 };
 
 typedef struct initrd_t initrd_t;
 typedef struct initrd_file_t initrd_file_t;
+typedef struct initrd_fd initrd_fd;
 
 extern initrd_t* fs_specs;
 extern initrd_file_t* fs_headers;
