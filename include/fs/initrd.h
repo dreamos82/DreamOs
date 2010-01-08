@@ -26,13 +26,15 @@
 #define MAX_FILES 32
 #define MAX_INITRD_DESCRIPTORS 10
 
-/*! Contiene il numero dei files contenuti nel filesystem initrd.
+/*! \struct initrd_t
+    \brief Contiene il numero dei files contenuti nel filesystem initrd.
  */
 struct initrd_t{
 	int nfiles; /*!< Numero Files letti*/
 };
 
-/*! Contiene le informazioni relative ai singoli files contenuti in initrd
+/*! \struct initrd_file_t 
+    \brief Contiene le informazioni relative ai singoli files contenuti in initrd
  */
 struct initrd_file_t{
 	int magic; /*!< Numero usato come delimitatore da settare a 0xBF*/
@@ -42,7 +44,8 @@ struct initrd_file_t{
 	unsigned int length; /*!< Dimensione del File */
 };
 
-/*! File Descriptor relativo ai files aperti.
+/*! \struct initrd_fd 
+    \brief File Descriptor relativo ai files aperti.
  */
 struct initrd_fd{
 	int file_descriptor;

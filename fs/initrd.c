@@ -23,7 +23,7 @@
 #include <types.h>
 #include <string.h>
 
-extern char *module_start;
+char *module_start;
 initrd_t *fs_specs;
 initrd_file_t* fs_headers;
 initrd_fd ird_descriptors[MAX_INITRD_DESCRIPTORS];
@@ -59,7 +59,7 @@ int initfs_open(const char *path, int flags, ...){
 		if(!strcmp(path, module_var[j].fileName)){
 				ird_descriptors[cur_irdfd].file_descriptor	= j;
 				printf("%s Found. Size: %d FS fd val: %d - ID File val: %d\n", path, module_var[j].length, cur_irdfd, ird_descriptors[cur_irdfd].file_descriptor);
-				return cur_irdfd++;
+				return cur_irdfd++; 
 		}
 		j++;
 	}
@@ -67,6 +67,18 @@ int initfs_open(const char *path, int flags, ...){
 }
 
 ssize_t initfs_read(int fildes, void *buf, size_t nbyte){
-	printf("Hi i'm a dummy read... do you like me?\n");
+	char *file_start;
+	int lfd, file_size;	
+	int j=0;
+	lfd = ird_descriptors[fildes].file_descriptor;
+	file_size = fs_headers[lfd].length;
+	file_start = (char *) (module_start	+ fs_headers[lfd].offset);
+	printf("Hi i'm a dummy read... The file id is: %d\n", ird_descriptors[fildes].file_descriptor);
+	printf("try to read something...\n");
+	while(j<file_size){
+		putchar(file_start[j]);
+		j++;
+	}
+	putchar('\n');	
 	return nbyte;
 }

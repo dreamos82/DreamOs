@@ -28,6 +28,10 @@
 
 #define MAX_DIGITS_IN_INTEGER 11
 
+#ifndef EOF
+#define EOF (-1)
+#endif
+
 void putchar (char ch);
 int atoi (const char *);
 int printf (const char *, ...);
