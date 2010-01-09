@@ -40,7 +40,7 @@ int open(const char *path, int oflags,  ...){
 	va_start(ap, oflags);
 	
 	prova = va_arg(ap, int);
-	printf("Prova vale: %d e il path: %s e cur_fd: %d\n", prova,path,cur_fd);
+	//printf("Magic value: %d e il path: %s e cur_fd: %d\n", prova,path,cur_fd);
 	if(cur_fd >= _SC_OPEN_MAX) cur_fd=0;
 	else {		
 		mpid = get_mountpoint_id(path);
@@ -48,14 +48,15 @@ int open(const char *path, int oflags,  ...){
 		path = get_rel_path(mpid, path);		
 		if(mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open != NULL){
 			fd_list[cur_fd].fs_spec_id = (int) mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open(path, oflags);
-			printf("Mpoint id: %d %s fs_spec_fd: %d\n", fd_list[cur_fd].mountpoint_id, path, fd_list[cur_fd].fs_spec_id);		
+			//printf("Mpoint id: %d %s fs_spec_fd: %d\n", fd_list[cur_fd].mountpoint_id, path, fd_list[cur_fd].fs_spec_id);			
 		}
 		else {
 			printf("No OPEN services found here\n");		
+			va_end(ap);
 			return -1;
 		}
 	}	
-	va_end(ap);
+	va_end(ap)
 	return cur_fd++;
 }
 

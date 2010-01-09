@@ -29,7 +29,7 @@ ssize_t read(int fildes, void *buf, size_t nbyte){
 	int fs_fd;
 	mp_id = fd_list[fildes].mountpoint_id;
 	fs_fd = fd_list[fildes].fs_spec_id;
-	printf("Mpoint id: %d Fs_fd: %d\n", mp_id, fs_fd);
+	//printf("Mpoint id: %d Fs_fd: %d\n", mp_id, fs_fd);
 	if (mountpoint_list[mp_id].operations.read != NULL)
 		mountpoint_list[mp_id].operations.read(fs_fd, buf, 1);
 	else
