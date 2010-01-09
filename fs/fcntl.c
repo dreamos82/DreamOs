@@ -36,6 +36,7 @@ struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 int open(const char *path, int oflags,  ...){
 	int prova;
 	int mpid;
+	int ret_fd;
 	va_list ap;
 	va_start(ap, oflags);
 	
@@ -44,20 +45,27 @@ int open(const char *path, int oflags,  ...){
 	if(cur_fd >= _SC_OPEN_MAX) cur_fd=0;
 	else {		
 		mpid = get_mountpoint_id(path);		
-		fd_list[cur_fd].mountpoint_id = mpid;				
-		path = get_rel_path(mpid, path);		
+		if(mpid >-1) {
+			fd_list[cur_fd].mountpoint_id = mpid;				
+			path = get_rel_path(mpid, path);		
+		} else {
+			printf("That path doesn't exist\n");
+			va_end(ap);
+			return -1;
+		}
 		if( mpid > -1 && mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open > NULL){
 			fd_list[cur_fd].fs_spec_id = (int) mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open(path, oflags);
 			//printf("Mpoint id: %d %s fs_spec_fd: %d\n", fd_list[cur_fd].mountpoint_id, path, fd_list[cur_fd].fs_spec_id);			
 		}
 		else {
-			if(mpid>-1) printf("No OPEN services found here\n");		
-			else printf("That path doesn't exist\n");
+			if(mpid>-1) printf("No OPEN services found here\n");					
 			va_end(ap);
 			return -1;
 		}
 	}	
 	va_end(ap)
+	/*TODO: fare controlo dopo cur_fd del prossimo libero*/
+	ret_fd = cur_fd;	
 	return cur_fd++;
 }
 
