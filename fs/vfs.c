@@ -41,8 +41,8 @@ void vfs_init(){
 	printf(LNG_VFS); 	
 
 	while (j<_SC_OPEN_MAX){
-		fd_list[j].fs_spec_id = 0;
-		fd_list[j].mountpoint_id =0;
+		fd_list[j].fs_spec_id = -1;
+		fd_list[j].mountpoint_id =-1;
 		j++;
 	}
  	

@@ -43,15 +43,16 @@ int open(const char *path, int oflags,  ...){
 	//printf("Magic value: %d e il path: %s e cur_fd: %d\n", prova,path,cur_fd);
 	if(cur_fd >= _SC_OPEN_MAX) cur_fd=0;
 	else {		
-		mpid = get_mountpoint_id(path);
+		mpid = get_mountpoint_id(path);		
 		fd_list[cur_fd].mountpoint_id = mpid;				
 		path = get_rel_path(mpid, path);		
-		if(mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open != NULL){
+		if( mpid > -1 && mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open > NULL){
 			fd_list[cur_fd].fs_spec_id = (int) mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open(path, oflags);
 			//printf("Mpoint id: %d %s fs_spec_fd: %d\n", fd_list[cur_fd].mountpoint_id, path, fd_list[cur_fd].fs_spec_id);			
 		}
 		else {
-			printf("No OPEN services found here\n");		
+			if(mpid>-1) printf("No OPEN services found here\n");		
+			else printf("That path doesn't exist\n");
 			va_end(ap);
 			return -1;
 		}
