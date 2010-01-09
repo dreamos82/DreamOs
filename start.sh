@@ -145,8 +145,8 @@ elif [ "$1" == "" ]; then
   exit
 
 else
-  echo "Uhm? What the hell did you insert ? Lool! '$1' ?? I don't know what is it!"
-  echo "Please, read the help!!!"
+  echo "'$1' is not a command known to me."
+  echo "Please, read the help!"
   echo "----------------------->"
   echo "Usage: '$0 help'"
   exit
@@ -264,8 +264,8 @@ elif [ "$2" == "create_iso" ]; then
   exit
 
 else
-  echo "Uhm? What the hell did you insert ? '$2' ?? I don't know what is it!"
-  echo "Please, read the help!!!"
+  echo "'$2' is not a command known to me."
+  echo "Please, read the help!"
   echo "----------------------->"
   echo "Usage: '$0 help'"
   exit
