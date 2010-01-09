@@ -70,7 +70,7 @@ bl.img : boot/multicatcher.S
 	$(ASM) -f elf ./boot/multicatcher.S -o bl.img
 
 kernel.bin: $(OBJ)
-	$(LD) -static --oformat elf32-i386 --output=kernel.bin --script=kernel.lds bl.img $(OBJ) -Ttext 0x100000 -Map kernel.map
+	$(LD) -melf_i386 -static --oformat elf32-i386 --output=kernel.bin --script=kernel.lds bl.img $(OBJ) -Ttext 0x100000 -Map kernel.map
 	make -f utils/Makefile
 
 kernel.o: kernel.c

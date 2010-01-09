@@ -108,7 +108,7 @@ void help_tester()
 		"  -> try_printmem      - Print used locations of memory\n"
 		"  -> try_module        - Read the content of the memory zone loaded in module, aka initfs \n"
 		"  -> try_open          - Function to test open() & stdarg() \n"
-		"  -> try_fsinit          - Function to test the initialization of initrd\n"
+		"  -> try_fsinit        - Function to test the initialization of initrd\n"
 		);	
 }
 

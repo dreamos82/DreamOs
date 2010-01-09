@@ -4,7 +4,8 @@
 import sys
 import os
 import commands
-trunk = commands.getoutput("cat .svn/entries | head -n 4 | tail -n 1")
+#trunk = commands.getoutput("cat .svn/entries | head -n 4 | tail -n 1")
+trunk = "-svn"
 patchlevel = commands.getoutput("cat include/version.h | grep PATCHLEVEL | cut -b 21-23")
 
 if os.getuid() != 0:
@@ -47,7 +48,7 @@ print "Vuoi lo splash di DreamOS nel tuo Grub? (y/n):",
 answer2 = raw_input()
 
 if answer2 == 'y':
-
+	os.system("su -c 'cp boot/grub2.xpm.gz /boot/grub/grub2.xpm.gz'")
 	print "+--------------------------- INFO ------------------------------+"
 	print "| splashimage=" + partition + "/boot/grub/grub2.xpm.gz 			|"
 	print "| Title: DreamOS v0." + patchlevel + "-" + trunk +"                                     |"

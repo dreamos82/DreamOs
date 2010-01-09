@@ -29,6 +29,7 @@
 #include <ctype.h>
 #include <io.h>
 #include <pic8259.h>
+#include <shell.h>
 
 #define LSHIFT_BREAK 0x10E
 #define RSHIFT_BREAK 0x11A
@@ -194,16 +195,33 @@ void keyboard_isr (void)
 	last_tab++;
 	break;
 
-    /*case KEY_PGUP:
-        _kputs ("Tada");
-         _kscrollup();
-	break;*/
+    case KEY_UPARROW:
+	history_start();
+    	_ksetcursauto();
+	break;
 
-    /*case 813:
-        _kputs ("tutu");
-	_kscrolldown();
-	break;*/
+    case KEY_DOWNARROW:
+	break;
+	
+    case KEY_LEFTARROW:
+    	//_ksetcursor((_kgetline()), (_kgetcolumn() - 1));
+	break;
+	
+    case KEY_RIGHTARROW:
+    	//_ksetcursor((_kgetline()), (_kgetcolumn() + 1));
+	break;
 
+// Presente un bug qui che non permette il fix dei relativi tasti
+// se si decommenta, il sistema all'avvio va in panic e si riavvia
+/*    case KEY_ALT:
+	break;
+
+    case KEY_ALTGR:
+	break;
+*/	
+    case KEY_CTRL:
+	break;
+	
     default:
 	if (isdigit(key_it_map[sc]) && is_tab_pressed == 1)
 	    curmap = key_it_map;

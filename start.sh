@@ -206,7 +206,18 @@ if [ "$2" == "qemu" ] || [ "$2" == "bochs" ]; then
 		  echo "----------------------->"                 
 	  fi  
 
-	$VERS && $CLEAN && $MAKE && $MAKE_IMG && $MAKE_FS
+	 $VERS && $CLEAN && $MAKE && $MAKE_IMG
+	  
+	 echo "--------------------------------------------- "
+  	 echo "Launching FS Creating script in progress.."
+	 echo ""
+         utils/initfscp `find files/* -exec echo {} +;` initfs
+         echo "done."
+         $MAKE_FS
+         echo "--------------------------------------------- "
+         echo "FS Created and added to boot/grub.img"
+         echo "---------------------------------------------"
+         
 	bochs -f .bochsrc -q
 	exit
 

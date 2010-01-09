@@ -36,6 +36,8 @@
 #define KEY_TAB        0xf
 #define KEY_UPARROW    0x48
 #define KEY_DOWNARROW  0x50
+#define KEY_LEFTARROW  0x4B
+#define KEY_RIGHTARROW 0x4D
 #define KEY_PGUP       0x49
 #define KEY_PGDOWN     0x51
 #define EXTENDED       0xE0
@@ -46,6 +48,7 @@
 #define KEY_RSHIFT     0x36
 #define KEY_CTRL       0x1d
 #define KEY_ALT        0x38
+#define KEY_ALTGR      0x39
 
 #define NUM_LED        0x45
 #define SCROLL_LED     0x46

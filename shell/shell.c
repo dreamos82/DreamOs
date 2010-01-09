@@ -40,7 +40,6 @@
 #include <sys/utsname.h>
 
 #define NUM_COM 30
-
 userenv_t current_user;
 /*
  * Inserisce gli argomenti di un comando in un array di stringhe
@@ -48,6 +47,10 @@ userenv_t current_user;
  * argv[0] = nome del comando
  * argv[n] = opzioni successive
  */
+
+int count = 9, posiz = 9, c = 10;
+char *lastcmd[10] = {};
+    
 void options(char *com)
 {
   int i=0;
@@ -114,11 +117,16 @@ void shell()
   
   for (;;)
   {
+    for (c = 1 ; c <= 10 ; c++) {
+    	    lastcmd[c] = (char *)kmalloc(sizeof(char) * 30); 
+    }	    
     printf("%s~:%s# ", current_user.username, 
 				  current_user.cur_path,
 				  current_user.username);
     scanf("%254s",cmd);
-        
+    
+    history(cmd);
+   
     /* elimina eventuali spazi all'inizio del comando */
     for (i = 0, cmd_ptr = cmd; cmd[i] == ' '; i++, cmd_ptr++);
     
@@ -132,6 +140,7 @@ void shell()
             break;
         }
     }
+
     if (i<0)
       printf(LNG_UNKNOWN_CMD " %s\n", argv[0]);
 
@@ -140,5 +149,32 @@ end:
     for (--argc; argc>=0; argc--) {      
         free (argv[argc]);
     }
+    for (c = 1 ; c <= 10 ; c++) {
+    	    free(lastcmd[c]); 
+    }
   }
 }
+
+// History
+void history(char *cmd_pass) {
+    if ( count == 0 ) {
+		count = 10; 
+	}
+
+    strncpy(lastcmd[count], cmd_pass, strlen(cmd_pass));
+    
+    posiz = count;
+    count--;
+}
+
+void history_start(void) { 
+    static int sc;
+    count++;
+    if ( count == 0 || count > 9 ) {
+    	count = posiz;
+    }
+    if( (sc = inportb (0x60) ) == KEY_UPARROW ) {
+   		printf("\n%s", lastcmd[count]);
+    }  
+}
+
