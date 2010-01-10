@@ -21,6 +21,7 @@
 #define USER_LEN 24
 #define CMD_LEN 256
 #define CURPATH_LEN 256
+#define NUM_COM 30
 
 
 struct cmd {

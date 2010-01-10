@@ -53,7 +53,7 @@ void cd();
 void whoami();
 void tester();
 
-struct a_b {
+struct devel {
 	const char cmd_testname[CMD_LEN];
 	void (*func)(void);
 };

@@ -407,7 +407,7 @@ void whoami(){
 
 void tester(){
 	int i = 0;
-	struct a_b testing[MAX_TEST] = { 
+	struct devel testing[MAX_TEST] = { 
 					{ "try_kmalloc", try_kmalloc },
 					{ "try_strtok", try_strtok },
 					{ "do_fault", do_fault },

@@ -48,9 +48,9 @@ userenv_t current_user;
  * argv[n] = opzioni successive
  */
 
-int count = 9, posiz = 9, c = 10;
+int count = 9, posiz = 9, c = 10, limit = 1;
 char *lastcmd[10] = {};
-    
+
 void options(char *com)
 {
   int i=0;
@@ -75,8 +75,7 @@ void shell()
 {
   char cmd[CMD_LEN];
   char *cmd_ptr;
-  //char *user = kmalloc(USER_LEN);
-  
+ 
   static struct cmd shell_cmd[NUM_COM] = {
 	{ "aalogo",   aalogo      },
 	{ "clear",    _kclear     },
@@ -94,7 +93,7 @@ void shell()
 	{ "cd",       cd},
 	{ "whoami",   whoami},
 	{ "tester", tester},
-        };
+  };
 
   int i = 0;
 
@@ -168,13 +167,26 @@ void history(char *cmd_pass) {
 }
 
 void history_start(void) { 
-    static int sc;
+    static int sc_uparrow, sc_enter;
     count++;
+    int delete = 0, max_limit = strlen(lastcmd[count]);
+	
     if ( count == 0 || count > 9 ) {
     	count = posiz;
     }
-    if( (sc = inportb (0x60) ) == KEY_UPARROW ) {
-   		printf("\n%s", lastcmd[count]);
-    }  
+    
+    if (limit < max_limit) {
+		limit = max_limit;
+	}
+	
+    while ( delete <= limit) {
+		_kbackspace();
+		delete++;
+	}
+
+    if( (sc_uparrow = inportb (0x60) ) == KEY_UPARROW ) {
+   		printf("%s", lastcmd[count]); 
+	}
+       
 }
 
