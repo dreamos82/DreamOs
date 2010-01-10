@@ -55,6 +55,10 @@ int open(const char *path, int oflags,  ...){
 		}
 		if( mpid > -1 && mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open > NULL){
 			fd_list[cur_fd].fs_spec_id = (int) mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open(path, oflags);
+			if(fd_list[cur_fd].fs_spec_id == -1){
+				printf("No file's Found\n");
+				return -1;
+			}
 			//printf("Mpoint id: %d %s fs_spec_fd: %d\n", fd_list[cur_fd].mountpoint_id, path, fd_list[cur_fd].fs_spec_id);			
 		}
 		else {
@@ -65,7 +69,14 @@ int open(const char *path, int oflags,  ...){
 	}	
 	va_end(ap)
 	/*TODO: fare controlo dopo cur_fd del prossimo libero*/
-	ret_fd = cur_fd;	
+	ret_fd = cur_fd;
+	/*while(fd_list[++cur_fd].mountpoint_id != -1) {
+		if(cur_fd >= _SC_OPEN_MAX) cur_fd = 0;
+		else if(cur_fd == ret_fd) {
+			printf("No more file descriptors available\n");
+			return -1;
+		}
+	}*/
 	return cur_fd++;
 }
 
