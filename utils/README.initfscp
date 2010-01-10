@@ -1,9 +1,9 @@
 ----
 README
-initfscp
+initfscp - Autore: Aleksej
 ----
 
-initfscp e' un programma che serve per creare un'immagine contenente il file system utilizzato da DreamOS.
+initfscp e' un programma che serve a creare un'immagine contenente il file system utilizzato da DreamOS.
 Consente di inserirci dei files (massimo 32) all'interno. 
 Per far ciò digitare il comando "initfscp file1 file2 ... nomefs" dove:
 - "file1 file2 ..." sono i files che inseriremo nel filesystem,
@@ -14,4 +14,4 @@ così facendo initfscp genererà l'immagine disney.
 
 Altri comandi disponibili:
 --help (-h) per visualizzare una guida più sintetica.
---version (-v) per visualizzare la versione utilizzata di initfscp.
+--version (-v) per visualizzare la versione utilizzata attualmente di initfscp.
