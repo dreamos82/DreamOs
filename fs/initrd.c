@@ -54,11 +54,21 @@ DIR *initfs_opendir(const char *path){
 int initfs_open(const char *path, int flags, ...){
 	initrd_file_t *module_var;
 	int j = 0;
-	module_var = fs_headers;	
+	int ret_fd = -1;
+	module_var = fs_headers;
+	if(cur_irdfd >= MAX_INITRD_DESCRIPTORS) cur_irdfd=0;
 	while (j < fs_specs->nfiles) {
 		if(!strcmp(path, module_var[j].fileName)){
 				ird_descriptors[cur_irdfd].file_descriptor	= j;
 				printf("%s Found. Size: %d FS fd val: %d - ID File val: %d\n", path, module_var[j].length, cur_irdfd, ird_descriptors[cur_irdfd].file_descriptor);
+				ret_fd = cur_irdfd;
+				/*while(ird_descriptors[++cur_irdfd].file_descriptor != -1){
+					if(cur_irdfd >= MAX_INITRD_DESCRIPTORS) cur_irdfd = 0;
+					else if(cur_irdfd == ret_fd) {
+						printf("No more file descriptors available\n");
+						return -1;
+					}
+				}*/
 				return cur_irdfd++; 
 		}
 		j++;
@@ -80,4 +90,8 @@ ssize_t initfs_read(int fildes, void *buf, size_t nbyte){
 		j++;
 	}	
 	return nbyte;
+}
+
+int initrd_close(int fildes){
+	ird_descriptors[fildes].file_descriptor = -1;
 }

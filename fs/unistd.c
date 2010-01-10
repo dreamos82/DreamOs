@@ -37,9 +37,15 @@ ssize_t read(int fildes, void *buf, size_t nbyte){
 }
 
 int close(int fildes){
+	int mp_id;
+	int fs_fd;
+	mp_id = fd_list[fildes].mountpoint_id;
+	fs_fd = fd_list[fildes].fs_spec_id;
 	if (fd_list[fildes].fs_spec_id >= 0){
+		if(mountpoint_list[mp_id].operations.close !=NULL)
+			mountpoint_list[mp_id].operations.close(fs_fd);		
 		fd_list[fildes].fs_spec_id = -1;
-		fd_list[fildes].mountpoint_id = -1;
+		fd_list[fildes].mountpoint_id = -1;				
 		return 0;
 	}
 	else
