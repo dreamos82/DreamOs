@@ -45,7 +45,7 @@ int close(int fildes){
 		if(mountpoint_list[mp_id].operations.close !=NULL)
 			mountpoint_list[mp_id].operations.close(fs_fd);		
 		fd_list[fildes].fs_spec_id = -1;
-		fd_list[fildes].mountpoint_id = -1;				
+		fd_list[fildes].mountpoint_id = -1;
 		return 0;
 	}
 	else

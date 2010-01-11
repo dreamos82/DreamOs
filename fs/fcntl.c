@@ -41,42 +41,46 @@ int open(const char *path, int oflags,  ...){
 	va_start(ap, oflags);
 	
 	prova = va_arg(ap, int);
-	//printf("Magic value: %d e il path: %s e cur_fd: %d\n", prova,path,cur_fd);
-	if(cur_fd >= _SC_OPEN_MAX) cur_fd=0;
-	else {		
-		mpid = get_mountpoint_id(path);		
-		if(mpid >-1) {
-			fd_list[cur_fd].mountpoint_id = mpid;				
-			path = get_rel_path(mpid, path);		
-		} else {
-			printf("That path doesn't exist\n");
-			va_end(ap);
-			return -1;
-		}
-		if( mpid > -1 && mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open > NULL){
-			fd_list[cur_fd].fs_spec_id = (int) mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open(path, oflags);
-			if(fd_list[cur_fd].fs_spec_id == -1){
-				printf("No file's Found\n");
-				return -1;
-			}
-			//printf("Mpoint id: %d %s fs_spec_fd: %d\n", fd_list[cur_fd].mountpoint_id, path, fd_list[cur_fd].fs_spec_id);			
-		}
-		else {
-			if(mpid>-1) printf("No OPEN services found here\n");					
-			va_end(ap);
-			return -1;
-		}
-	}	
-	va_end(ap)
-	/*TODO: fare controlo dopo cur_fd del prossimo libero*/
-	ret_fd = cur_fd;
-	/*while(fd_list[++cur_fd].mountpoint_id != -1) {
-		if(cur_fd >= _SC_OPEN_MAX) cur_fd = 0;
-		else if(cur_fd == ret_fd) {
+	if(!(cur_fd < _SC_OPEN_MAX)) cur_fd=0;
+	//printf("Cur_fd: %d ",cur_fd);
+	while(fd_list[cur_fd].mountpoint_id != -1 && cur_fd < _SC_OPEN_MAX ) {				
+		if(cur_fd == ret_fd) {
 			printf("No more file descriptors available\n");
 			return -1;
-		}
+		}		
+		cur_fd++;
+	}
+	/*if(cur_fd == _SC_OPEN_MAX) {
+		printf("Error\n");
+		return -1;
 	}*/
-	return cur_fd++;
+	mpid = get_mountpoint_id(path);		
+	if(mpid >-1) {
+		fd_list[cur_fd].mountpoint_id = mpid;				
+		path = get_rel_path(mpid, path);		
+	} else {
+		printf("That path doesn't exist\n");
+		va_end(ap);
+		return -1;
+	}
+	if( mpid > -1 && mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open > NULL){
+		fd_list[cur_fd].fs_spec_id = (int) mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open(path, oflags);
+		if(fd_list[cur_fd].fs_spec_id == -1){
+			printf("No file's Found\n");
+			va_end(ap);
+			return -1;
+		}
+			//printf("Mpoint id: %d %s fs_spec_fd: %d\n", fd_list[cur_fd].mountpoint_id, path, fd_list[cur_fd].fs_spec_id);			
+	}
+	else {
+		if(mpid>-1) printf("No OPEN services found here\n");					
+		va_end(ap);
+		return -1;
+	}
+	va_end(ap)	
+	ret_fd = cur_fd;
+	cur_fd++;
+	//printf("ret_fd: %d\n",ret_fd);
+	return ret_fd;
 }
 

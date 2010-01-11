@@ -123,13 +123,6 @@ void try_module(){
 		i++;
 	}
 	printf("Total Files: %d\n", fs_head->nfiles);
-	//int j=0;
-	/*char* mod_address;
-	mod_address = module_start;	
-	while(j<74){
-		putchar(mod_address[j]);
-		j++;
-	}*/
 	_kputs("\n");
 }
 
