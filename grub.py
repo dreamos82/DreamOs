@@ -31,11 +31,11 @@ def sub_mount(mp, cwd):
 # Manca il controllo errori
 fd = open("/boot/grub/menu.lst", "a")
 
-print "Inserire la partizione dei sorgenti (ex. hda2):",
+print "Insert the source partition (ex. hda2):",
 pn = raw_input()
 partition = grub_hd(pn)
 
-print "Inserire il mountpoint:",
+print "Insert the mountpoint:",
 mp = raw_input()
 cwd = os.getcwd() + "/dreamos.img"
 initFS = os.getcwd() + "fs/initfs"
@@ -44,7 +44,7 @@ if mp == "/":
 else:
 	cwd = sub_mount(mp, cwd)
 	
-print "Vuoi lo splash di DreamOS nel tuo Grub? (y/n):",
+print "Do you want the DreamOS splash in your grub? (y/n):",
 answer2 = raw_input()
 
 if answer2 == 'y':
@@ -57,7 +57,7 @@ if answer2 == 'y':
 	print "| Module: " + initFS +" |"
 	print "+---------------------------------------------------------------+"
 
-	print "Procedere alla scrittura? (y/n):",
+	print "Proceed to the writing? (y/n):",
 answer = raw_input()
 
 if answer == 'y':
@@ -77,7 +77,7 @@ if answer == 'y':
 
 
 elif answer == 'n':
-	print "Ok, bye :)"
+	print "Ok, aborting."
 	
 elif answer2 == 'n':
 	print "+--------------------------- INFO ------------------------------+"
@@ -87,7 +87,7 @@ elif answer2 == 'n':
 	print "| Module: " + initFS +"          |"
 	print "+---------------------------------------------------------------+"
 
-	print "Procedere alla scrittura? (y/n):",
+	print "Proceed to the writing? (y/n):",
 answer3 = raw_input()
 
 if answer3 == 'y':
@@ -105,4 +105,4 @@ if answer3 == 'y':
         print "[+] Done."
 
 elif answer3 == 'n':
-	print "Ok, ahahah :)"
+	print "Ok, aborting."
