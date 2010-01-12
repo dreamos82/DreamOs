@@ -94,7 +94,7 @@ void poweroff()
   printf ("Poweroff...\n");
   
   asm("cli");
-  printf("E' ora possibile spegnere il computer.\n");
+  printf("Now you can shut down the PC.\n");
   while(1);
 }
 
