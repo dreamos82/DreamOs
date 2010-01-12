@@ -38,7 +38,7 @@ partition = grub_hd(pn)
 print "Insert the mountpoint:",
 mp = raw_input()
 cwd = os.getcwd() + "/dreamos.img"
-initFS = os.getcwd() + "fs/initfs"
+initFS = os.getcwd() + "/initfs"
 if mp == "/":
 	path = cwd
 else:
@@ -93,7 +93,7 @@ answer3 = raw_input()
 if answer3 == 'y':
 	fd.write("\ntitle\tDreamOS v0." + patchlevel + "-" + trunk +"")
 	fd.write("\nroot\t" + partition)
-	fd.write("\nkernel\t" + cwd + "\tmodule\t" + initFS)
+	fd.write("\nkernel\t" + cwd + "\nmodule\t" + initFS)
 	fd.write("\nboot\n")
 	fd.close()
 	print ""

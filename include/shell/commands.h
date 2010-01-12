@@ -27,8 +27,8 @@
 #include <kheap.h>
 #define MAX_TEST 10
 
-int argc;
-char **argv;
+extern int argc;
+extern char **argv;
 extern heap_t *kheap;
 
 void aalogo();

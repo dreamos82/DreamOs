@@ -41,6 +41,8 @@
 
 #define NUM_COM 30
 userenv_t current_user;
+int argc;
+char **argv;
 /*
  * Inserisce gli argomenti di un comando in un array di stringhe
  * argc = numero degli argomenti
@@ -52,7 +54,7 @@ int count = 9, posiz = 9, c = 10, limit = 1;
 char *lastcmd[10] = {};
 
 void options(char *com)
-{
+{  
   int i=0;
   argc=0;
 
@@ -62,7 +64,7 @@ void options(char *com)
     while (*com != ' ') {
       *(argv[argc] + i) = *com++;
       i++;
-    }
+    } 
     *(argv[argc] + i) = '\0';
     argc++;
     i=0;
@@ -116,15 +118,15 @@ void shell()
   
   for (;;)
   {
-    for (c = 1 ; c <= 10 ; c++) {
+    /*for (c = 1 ; c <= 10 ; c++) {
     	    lastcmd[c] = (char *)kmalloc(sizeof(char) * 30); 
-    }	    
+    }*/	    
     printf("%s~:%s# ", current_user.username, 
 				  current_user.cur_path,
 				  current_user.username);
     scanf("%254s",cmd);
     
-    history(cmd);
+    //history(cmd);
    
     /* elimina eventuali spazi all'inizio del comando */
     for (i = 0, cmd_ptr = cmd; cmd[i] == ' '; i++, cmd_ptr++);
@@ -148,9 +150,9 @@ end:
     for (--argc; argc>=0; argc--) {      
         free (argv[argc]);
     }
-    for (c = 1 ; c <= 10 ; c++) {
+    /*for (c = 1 ; c <= 10 ; c++) {
     	    free(lastcmd[c]); 
-    }
+    }*/
   }
 }
 

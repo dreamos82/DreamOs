@@ -37,13 +37,13 @@ char *strncpy (char *dest, register const char *src, register size_t n)
 	do {
 		if ((*d++ = *s++) == 0) {
 			while (--n != 0)
-				*d++ = 0;
+				*d++ = '\0';
 				break;
 			}
 		} while (--n != 0);
 	}
 	return dest;
-}
+ }
 
 char *strcpy (char *dest, const char *src)
 {

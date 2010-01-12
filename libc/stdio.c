@@ -258,9 +258,9 @@ int scanf (const char *format, ...)
 		s_ptr = va_arg (scan, char *);
 
                 if (nmax == 0 || strlen(input) <= nmax)
-		  s_ptr = strncpy (s_ptr, input, strlen (input));
+					s_ptr = strncpy (s_ptr, input, strlen (input));
                 else
-                  s_ptr = strncpy (s_ptr, input, nmax);
+					s_ptr = strncpy (s_ptr, input, nmax);
 		break;
 
 	    case 'd':
