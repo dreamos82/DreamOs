@@ -102,7 +102,9 @@ void shell()
   memset(cmd, '\0', CMD_LEN);
   memset(current_user.username, '\0', USER_LEN);
   memset(current_user.cur_path, '\0', CURPATH_LEN);
+  _kcolor(BRIGHT_BLUE);
   printf(LNG_WELCOME);
+  _kcolor(WHITE);
   
   do {		
     printf(LNG_USER);
@@ -120,10 +122,11 @@ void shell()
   {
     /*for (c = 1 ; c <= 10 ; c++) {
     	    lastcmd[c] = (char *)kmalloc(sizeof(char) * 30); 
-    }*/	    
-    printf("%s~:%s# ", current_user.username, 
-				  current_user.cur_path,
-				  current_user.username);
+    }*/
+    _kcolor(9);	    
+    printf("%s", current_user.username);
+    _kcolor(15);
+	printf("~:%s# ", current_user.cur_path);
     scanf("%254s",cmd);
     
     //history(cmd);

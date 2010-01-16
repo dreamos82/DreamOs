@@ -219,6 +219,7 @@ void _ksetcursauto()
 void _kprintOK() {
     _kgoto(60, _kgetline());
     _kputs("\033\001 [\033\012OK\033\001]\033\007\n");
+    _kcolor(WHITE);
 }
 
 /*

@@ -29,20 +29,20 @@ userenv_t current_user;
 
 void aalogo()
 {
-  _kcolor (4);
+  _kcolor (BRIGHT_GREEN);
   printf("\t\t ____           _____          _____ _____\n");
   printf("\t\t|    \\ ___ ___ |  _  | _______|     |   __|\n");
   printf("\t\t|  |  |  _| -_|| |_| ||       |  |  |__   |\n");
   printf("\t\t|____/|_| |___||_| |_||_|\134_/|_|_____|_____|\n");
-  _kcolor (6);
+  _kcolor (WHITE);
   printf("\t\tVersion: \"%s %s.%s%s\"\n", NAME, VERSION, PATCHLEVEL, EXTRAVERSION);
-  _kcolor(7);
+  //_kcolor(WHITE);
   logo();
 }
 
 void logo()
 {
-  _kcolor (5);
+  _kcolor (BRIGHT_BLUE);
   printf("\n");
   printf("\t\t\t The Dream Operating System \n"
 	 "\t\t           v%s.%s%s %s      \n\n"
@@ -52,7 +52,7 @@ void logo()
 	 VERSION, PATCHLEVEL, EXTRAVERSION, REV_NUM);
 	
   printf("\n\n\n\n");
-  _kcolor(7);
+  _kcolor(WHITE);
 }
 
 void help()
@@ -138,10 +138,10 @@ void uname_info()
 
   // CPU Info
   _kputs (LNG_CPU);
-  _kcolor (4);
+  _kcolor (BRIGHT_RED);
   _kgoto (61, _kgetline());
   _kputs (cpu_vendor);
-  _kcolor(7);
+  _kcolor(WHITE);
   printf("\n");
 
   // Memory RAM Info
@@ -187,19 +187,21 @@ void printmem(void)
 */
 void credits(void)
 {
-  _kcolor('\011');
+  _kcolor(BRIGHT_BLUE);
   _kputs("DreamOS Credits\n\n");                
   _kputs("Main Developers:\n");
-  _kcolor('\012');
+  _kcolor(GREEN);
    printf(  "Finarfin - Ivan (Founder)\n\n");
-  _kcolor('\011');
+  _kcolor(BRIGHT_BLUE);
   _kputs("Developers:\n");
-  _kcolor('\012');
+  _kcolor(GREEN);
   _kputs("Lord Osiris - Diego Stamigni \n\n");
-  _kcolor('\011');
+  _kcolor(BRIGHT_BLUE);
   _kputs("Contributors:\n");
-  _kcolor('\012');
-  _kputs("vinc94\n"
+  _kcolor(GREEN);
+  _kputs("N3m3s1s\n"
+			"Blackz\n"
+		    "vinc94\n"
 	  		"tk0\n"
 	  		"DT\n"
          	"Celeron\n"
@@ -207,7 +209,7 @@ void credits(void)
          	"m0nt0\n"
 			"shainer\n"
          	"and many others (3 or 4 :P)\n\n");
-  _kcolor('\007');
+  _kcolor(WHITE);
 }
 
 void sleep_cmd(void)
@@ -357,7 +359,7 @@ void ls ( ) {
 	i = 0;
 	while( i < j ) {
 		if (argc == 1) {
-			_kcolor(1);
+			_kcolor(BRIGHT_BLUE);
 			printf("%s   ", mountpoint_list[i].mountpoint);
 		}
 		else {
@@ -367,13 +369,13 @@ void ls ( ) {
 							current_user.username,
 							mountpoint_list[i].gid, 
 							current_user.username);
-				_kcolor(1);
+				_kcolor(BRIGHT_BLUE);
 				printf("%s\n", mountpoint_list[i].mountpoint);
-				_kcolor(7);
+				_kcolor(WHITE);
 		}
 		i++; 
 	}
-	_kcolor(7);
+	_kcolor(WHITE);
 	printf(" -->   Total: %d\n", j);
 }
 

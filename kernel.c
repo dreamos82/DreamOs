@@ -63,14 +63,14 @@ int main_loop(struct multiboot_info *boot_info)
     syscall_init();
     module_start = *((unsigned int*)boot_info->mods_addr);
 	module_end = *((unsigned int*)(boot_info->mods_addr+4));
-    _kcolor('\012');
+    _kcolor(BRIGHT_GREEN);
     _kputs(DREAMOS_VER);
-    _kcolor('\007');
+    _kcolor(WHITE);
     _kputs(LNG_SITE);
-    _kcolor('\011');
+    _kcolor(BRIGHT_BLUE);
     _kputs(SITEURL);
     _kputs("\n");
-    _kcolor('\007');
+    _kcolor(WHITE);
     _kputs("\n");    
     _kputs(LNG_GDT);
     init_gdt();

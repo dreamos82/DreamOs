@@ -104,9 +104,8 @@ heap_t* make_heap(unsigned int size)
     new_heap->used_list = NULL;
     new_heap->free_nodes = NULL;
     printf("  First heap created...\n");   
-    printf("  Size: %d\n"
-	   "  Tot mem: %d\n"
-	   "  Start address: %x\n", (new_heap->free_list)->size, tot_mem, new_heap);	    
+    printf("  Size: %d "
+	   "  Tot mem: %d\n", (new_heap->free_list)->size, tot_mem);	    
 	apic_node = alloc_node();
 	apic_node->start_address = 0xFEC00000;
 	apic_node->size = 4096;
