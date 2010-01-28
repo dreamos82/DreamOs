@@ -41,7 +41,7 @@ int open(const char *path, int oflags,  ...){
 	va_start(ap, oflags);
 	
 	prova = va_arg(ap, int);
-	if(!(cur_fd < _SC_OPEN_MAX)) cur_fd=0;
+	//if(!(cur_fd < _SC_OPEN_MAX)) cur_fd=0;
 	//printf("Cur_fd: %d ",cur_fd);
 	while(fd_list[cur_fd].mountpoint_id != -1 && cur_fd < _SC_OPEN_MAX ) {				
 		if(cur_fd == ret_fd) {
@@ -79,7 +79,7 @@ int open(const char *path, int oflags,  ...){
 	}
 	va_end(ap)	
 	ret_fd = cur_fd;
-	cur_fd++;
+	if(cur_fd++ >= _SC_OPEN_MAX) cur_fd=0;
 	//printf("ret_fd: %d\n",ret_fd);
 	return ret_fd;
 }
