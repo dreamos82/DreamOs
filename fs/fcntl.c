@@ -39,22 +39,27 @@ int open(const char *path, int oflags,  ...){
 	int ret_fd;
 	va_list ap;
 	va_start(ap, oflags);
-	
+	ret_fd = 0;
+	while(ret_fd < _SC_OPEN_MAX){
+		if(fd_list[ret_fd].mountpoint_id == -1) printf("%d ", ret_fd);		
+		ret_fd++;
+	}
 	prova = va_arg(ap, int);
-	//if(!(cur_fd < _SC_OPEN_MAX)) cur_fd=0;
-	//printf("Cur_fd: %d ",cur_fd);
-	while(fd_list[cur_fd].mountpoint_id != -1 && cur_fd < _SC_OPEN_MAX ) {				
-		if(cur_fd == ret_fd) {
-			printf("No more file descriptors available\n");
-			return -1;
-		}		
+	if(cur_fd == _SC_OPEN_MAX) {
+		printf("Cur_fd reset\n");
+		cur_fd = 0;
+		//printf("No more file descriptors available\n");
+		//return -1;
+	}
+	while(fd_list[cur_fd].mountpoint_id != -1 && cur_fd < _SC_OPEN_MAX){
 		cur_fd++;
 	}
-	/*if(cur_fd == _SC_OPEN_MAX) {
-		printf("Error\n");
+	if(cur_fd == _SC_OPEN_MAX) {
+		printf("No more file descriptors available\n");
 		return -1;
-	}*/
+	}
 	mpid = get_mountpoint_id(path);		
+	printf("Cur_fd: %d\n",cur_fd);
 	if(mpid >-1) {
 		fd_list[cur_fd].mountpoint_id = mpid;				
 		path = get_rel_path(mpid, path);		
@@ -79,8 +84,8 @@ int open(const char *path, int oflags,  ...){
 	}
 	va_end(ap)	
 	ret_fd = cur_fd;
-	if(cur_fd++ >= _SC_OPEN_MAX) cur_fd=0;
-	//printf("ret_fd: %d\n",ret_fd);
+	cur_fd++;
+	
 	return ret_fd;
 }
 

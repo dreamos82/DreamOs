@@ -22,7 +22,7 @@
 #include <types.h>
 #include <stddef.h>
 
-#define _SC_OPEN_MAX 10
+#define _SC_OPEN_MAX 4
 
 ssize_t read(int , void *, size_t);
 int close(int);
