@@ -87,6 +87,7 @@ ssize_t initfs_read(int fildes, void *buf, size_t nbyte){
 	//printf("try to read something...\n");
 	while(j<file_size){
 		putchar(file_start[j]);
+		//buf[j] = file_start[j];		
 		j++;
 	}	
 	return nbyte;

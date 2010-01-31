@@ -142,7 +142,7 @@ void try_open(){
 	i = open(appoggio, O_RDONLY, 42);
 	if(i>-1) {
 		read(i, prova, 1);	
-		//if(i!=2)close(i);
+		close(i);
 	}
 	printf("\n");
 }
