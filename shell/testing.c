@@ -128,10 +128,10 @@ void try_module(){
 
 void try_open(){
 	char appoggio[50];
-	char *prova;
+	char prova[50];
 	int i;
 	i=0;
-	prova = NULL;
+	//prova = NULL;
 	while(i<50){
 		appoggio[i] = '\0';
 		i++;
