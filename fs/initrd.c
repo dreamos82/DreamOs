@@ -69,7 +69,7 @@ int initfs_open(const char *path, int flags, ...){
 	return -1;	
 }
 
-ssize_t initfs_read(int fildes, void *buf, size_t nbyte){
+ssize_t initfs_read(int fildes, char *buf, size_t nbyte){
 	char *file_start;
 	int lfd, file_size;	
 	int j=0;
@@ -80,10 +80,10 @@ ssize_t initfs_read(int fildes, void *buf, size_t nbyte){
 	//printf("try to read something...\n");
 	while(j<file_size){
 		putchar(file_start[j]);
-		//buf[j] = file_start[j];			
+		buf[j] = file_start[j];			
 		j++;
 	}
-	//buf[j] = '\0';
+	buf[j] = '\0';
 	return nbyte;
 }
 

@@ -130,8 +130,7 @@ void try_open(){
 	char appoggio[50];
 	char prova[50];
 	int i;
-	i=0;
-	//prova = NULL;
+	i=0;	
 	while(i<50){
 		appoggio[i] = '\0';
 		i++;
@@ -141,7 +140,8 @@ void try_open(){
 	scanf("%s", appoggio);	
 	i = open(appoggio, O_RDONLY, 42);
 	if(i>-1) {
-		read(i, prova, 1);	
+		read(i, prova, 1);
+		printf("\n%s\n", prova);
 		close(i);
 	}
 	printf("\n");
