@@ -434,3 +434,7 @@ void tester(){
 		}
 	}
 }
+
+void pwd(){
+	printf("%s\n", current_user.cur_path );
+}

@@ -79,7 +79,7 @@ ssize_t initfs_read(int fildes, char *buf, size_t nbyte){
 	//printf("Hi i'm a dummy read... The file id is: %d\n", ird_descriptors[fildes].file_descriptor);
 	//printf("try to read something...\n");
 	while(j<file_size){
-		putchar(file_start[j]);
+		//putchar(file_start[j]);
 		buf[j] = file_start[j];			
 		j++;
 	}
