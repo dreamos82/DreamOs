@@ -27,7 +27,7 @@ struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 
 DIR *opendir(const char *path){
 	int mpoint_id = 0;
-	char* rel_path;
+	char* rel_path;	
 
 	mpoint_id = get_mountpoint_id((char*)path);
 	rel_path = get_rel_path(mpoint_id, path);	

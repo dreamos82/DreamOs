@@ -47,8 +47,9 @@ int initfs_init(){
 }
 
 DIR *initfs_opendir(const char *path){
+	DIR* pdir = NULL;
 	printf("Sono una dummy_opendir, ti piaccio? path: %s\n", path);
-	return NULL;
+	return pdir;
 }
 
 int initfs_open(const char *path, int flags, ...){
