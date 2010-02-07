@@ -28,18 +28,27 @@ struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 DIR *opendir(const char *path){
 	int mpoint_id = 0;
 	char* rel_path;	
+	DIR* pdir;
 
 	mpoint_id = get_mountpoint_id((char*)path);
 	rel_path = get_rel_path(mpoint_id, path);	
 	printf("%d - %s\n", mpoint_id, rel_path);
 	if(mountpoint_list[mpoint_id].dir_op.opendir_f!=NULL) {
-		return mountpoint_list[mpoint_id].dir_op.opendir_f(rel_path);
+		pdir = mountpoint_list[mpoint_id].dir_op.opendir_f(rel_path);
+		pdir->handle = mpoint_id;
 	}
 	else {
 		printf("Could not open_dir no function found\n");
 		return NULL;
 	}
 	return NULL;
+}
+
+struct dirent *readdir(DIR *dirp){
+	if(mountpoint_list[dirp->handle].dir_op.readdir_f!=NULL){
+		printf("Trovata readdir\n");
+	}
+	else printf("No readdir - No party\n");
 }
 
 int closedir(DIR *dirp){

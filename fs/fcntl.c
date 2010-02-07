@@ -20,6 +20,7 @@
 #include <fcntl.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <kheap.h>
 
 int cur_fd;
 file_descriptor_t fd_list[_SC_OPEN_MAX];
@@ -83,7 +84,7 @@ int open(const char *path, int oflags,  ...){
 	va_end(ap)	
 	ret_fd = cur_fd;
 	cur_fd++;
-	
+	free(path);
 	return ret_fd;
 }
 

@@ -48,8 +48,26 @@ int initfs_init(){
 
 DIR *initfs_opendir(const char *path){
 	DIR* pdir = NULL;
-	printf("Sono una dummy_opendir, ti piaccio? path: %s\n", path);
-	return pdir;
+	initrd_file_t *module_var;
+	module_var = fs_headers;
+	if(!strcmp(path, "/") || path[0]== '\0'){
+		printf("Directory found\n");
+		pdir = kmalloc(sizeof(DIR));
+		strcpy(pdir->path, path);
+		pdir->handle = 0x01;
+		pdir->entry.d_ino = 0x00;
+		strcpy(pdir->entry.d_name, module_var[0].fileName);
+		printf("First occorrency: %s\n", pdir->entry.d_name);
+		return pdir;
+	}
+	else {
+		printf("Sono una dummy_opendir, ti piaccio? path: %s\n", path);	
+		return NULL;
+	}
+}
+
+struct dirent *initrd_readdir(DIR *dirp){
+	printf("Placeholder for futre readdir of initrd\n");
 }
 
 int initfs_open(const char *path, int flags, ...){

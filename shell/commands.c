@@ -74,6 +74,7 @@ void help()
 	"cd            - Change dir - not complete-\n"
 	"whoami        - Show the current user name\n"
 	"tester        - Try some functions, 'tester --help' for more info'\n"
+	"pwd           - Print current working directory\n"
 	);
 }
 
@@ -381,6 +382,7 @@ void ls ( ) {
 
 void cd( ){
 	char *relpath;	
+	DIR *dirp;
 	if(argc != 2) {
 		printf("Bad usage. Try 'ls -l' and then 'cd dir'.\n");
 		return;
@@ -400,7 +402,8 @@ void cd( ){
 			free(relpath);
 		}
 	}
-	opendir(argv[1]);
+	dirp = opendir(argv[1]);
+	readdir(dirp);
 }
 
 void whoami(){

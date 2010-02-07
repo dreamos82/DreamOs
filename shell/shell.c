@@ -56,12 +56,11 @@ char *lastcmd[10] = {};
 void options(char *com)
 {  
   int i=0;
-  argc=0;
-
+  argc=0;  
   for (; *com; com++)
   {    
     argv[argc] = (char *)kmalloc(sizeof(char) * 30);
-    while (*com != ' ') {
+    while (*com != ' ' && *com != '\0') {
       *(argv[argc] + i) = *com++;
       i++;
     } 
@@ -102,7 +101,7 @@ void shell()
 
   memset(cmd, '\0', CMD_LEN);
   memset(current_user.username, '\0', USER_LEN);
-  memset(current_user.cur_path, '\0', CURPATH_LEN);
+  memset(current_user.cur_path, '\0', CURPATH_LEN);  
   _kcolor(BRIGHT_BLUE);
   printf(LNG_WELCOME);
   _kcolor(WHITE);
@@ -124,17 +123,21 @@ void shell()
     /*for (c = 1 ; c <= 10 ; c++) {
     	    lastcmd[c] = (char *)kmalloc(sizeof(char) * 30); 
     }*/
+    int cmdclean = 0;
+    while(cmdclean<CMD_LEN){
+		cmd[cmdclean] = '\0';
+		cmdclean++;
+	}	
     _kcolor(9);	    
     printf("%s", current_user.username);
     _kcolor(15);
 	printf("~:%s# ", current_user.cur_path);
-    scanf("%254s",cmd);
-    
+    scanf("%30s",cmd);        
     //history(cmd);
    
     /* elimina eventuali spazi all'inizio del comando */
     for (i = 0, cmd_ptr = cmd; cmd[i] == ' '; i++, cmd_ptr++);
-    
+    //printf("%s\n", cmd_ptr);
     options (cmd_ptr);
     if (strlen(argv[0]) == 0)
         goto end;
@@ -150,7 +153,7 @@ void shell()
       printf(LNG_UNKNOWN_CMD " %s\n", argv[0]);
 
 end:
-    memset(cmd, 0, strlen(cmd));
+    memset(cmd, 0, CMD_LEN);    
     for (--argc; argc>=0; argc--) {      
         free (argv[argc]);
     }
