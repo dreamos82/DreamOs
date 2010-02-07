@@ -53,7 +53,7 @@ void vfs_init(){
  		mountpoint_list[i].pmask = 0;
  		mountpoint_list[i].dev_id = 0;
 	 	mountpoint_list[i].start_address = 0;	 	
-	 	mountpoint_list[i].dir_op.opendir_f = fake_opendir;
+	 	mountpoint_list[i].dir_op.opendir_f = NULL;
 		mountpoint_list[i].operations.open = NULL;
 		mountpoint_list[i].operations.close = NULL;
 		mountpoint_list[i].operations.read = NULL;

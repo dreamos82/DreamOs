@@ -116,7 +116,7 @@ void shell()
   aalogo();
   printf("\n\n\n\n");
   argc=1;  
-  strcpy(current_user.cur_path, "/");
+  strcpy(current_user.cur_path, "/root");
   
   for (;;)
   {

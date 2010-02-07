@@ -353,31 +353,46 @@ void  drv_load(void)
 
 void ls ( ) {
 	int i=0, j=0;
+	//int flag = 0;
+	DIR *dirp;
 	while ( strcmp(mountpoint_list[i].mountpoint, "") ) {
          	j++;
 		i++;
 	}
-	i = 0;
-	while( i < j ) {
-		if (argc == 1) {
-			_kcolor(BRIGHT_BLUE);
-			printf("%s   ", mountpoint_list[i].mountpoint);
+	i = 0;	
+	//if(if argc > 1 && strcmp(argv[1], "-l") == 0) flag =1;
+	dirp = opendir(current_user.cur_path);
+	if(dirp!=NULL){
+		struct dirent* cur_dir_entry;
+		cur_dir_entry = readdir(dirp);
+		while(cur_dir_entry!=NULL){			
+			printf("%s\n", cur_dir_entry->d_name);
+			cur_dir_entry = readdir(dirp);
 		}
-		else {
-			if  ( (_kstrncmp(argv[1], "-l", 2) ) == 0 )
-				printf("uid=%d(%s), gid=%d(%s) - ", 
+		closedir(dirp);
+		printf("\n");
+	} else {
+		while( i < j ) {
+			if (argc == 1) {
+				_kcolor(BRIGHT_BLUE);
+				printf("%s   ", mountpoint_list[i].mountpoint);
+			}
+			else {
+				if  ( (_kstrncmp(argv[1], "-l", 2) ) == 0 )
+					printf("uid=%d(%s), gid=%d(%s) - ", 
 							mountpoint_list[i].uid,
 							current_user.username,
 							mountpoint_list[i].gid, 
 							current_user.username);
-				_kcolor(BRIGHT_BLUE);
-				printf("%s\n", mountpoint_list[i].mountpoint);
-				_kcolor(WHITE);
+					_kcolor(BRIGHT_BLUE);
+					printf("%s\n", mountpoint_list[i].mountpoint);
+					_kcolor(WHITE);
+			}
+			i++; 
 		}
-		i++; 
+		_kcolor(WHITE);
+		printf(" -->   Total: %d\n", j);
 	}
-	_kcolor(WHITE);
-	printf(" -->   Total: %d\n", j);
 }
 
 void cd( ){
@@ -403,14 +418,15 @@ void cd( ){
 			free(relpath);
 		}
 	}
-	dirp = opendir(argv[1]);
+	/*dirp = opendir(argv[1]);
 	if(dirp!=NULL){
 		prova = readdir(dirp);
 		while(prova!=NULL){
 			printf("%s\n", prova->d_name);
 			prova = readdir(dirp);
 		}
-	}
+		closedir(dirp);
+	}*/
 }
 
 void whoami(){

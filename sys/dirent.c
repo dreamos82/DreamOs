@@ -39,7 +39,7 @@ DIR *opendir(const char *path){
 		return pdir;
 	}
 	else {
-		printf("Could not open_dir no function found\n");
+		//printf("Could not open_dir no function found\n");
 		return NULL;
 	}
 	return NULL;
@@ -52,10 +52,11 @@ struct dirent *readdir(DIR *dirp){
 		return mountpoint_list[dirp->handle].dir_op.readdir_f(dirp);
 	}
 	else printf("No readdir - No party\n");
+	return NULL;
 }
 
 int closedir(DIR *dirp){
-	printf("Closing directory\n");
+	//printf("Closing directory\n");
 	free(dirp);
 	return 0;
 }

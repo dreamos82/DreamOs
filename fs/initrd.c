@@ -51,7 +51,7 @@ DIR *initfs_opendir(const char *path){
 	initrd_file_t *module_var;
 	module_var = fs_headers;
 	if(!strcmp(path, "/") || path[0]== '\0'){
-		printf("Directory found\n");
+		//printf("Directory found\n");
 		pdir = kmalloc(sizeof(DIR));
 		strcpy(pdir->path, path);
 		pdir->handle = 0x01;
