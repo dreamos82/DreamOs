@@ -383,6 +383,7 @@ void ls ( ) {
 void cd( ){
 	char *relpath;	
 	DIR *dirp;
+	struct dirent* prova;
 	if(argc != 2) {
 		printf("Bad usage. Try 'ls -l' and then 'cd dir'.\n");
 		return;
@@ -403,7 +404,11 @@ void cd( ){
 		}
 	}
 	dirp = opendir(argv[1]);
-	readdir(dirp);
+	prova = readdir(dirp);
+	while(prova!=NULL){
+		printf("%s\n", prova->d_name);
+		prova = readdir(dirp);
+	}
 }
 
 void whoami(){

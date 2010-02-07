@@ -60,7 +60,7 @@ extern initrd_file_t* fs_headers;
 void dummy();
 int initfs_init();
 DIR *initfs_opendir(const char *);
-struct dirent *readdir(DIR *);
+struct dirent *initrd_readdir(DIR *);
 int initfs_open(const char *, int, ...);
 ssize_t initfs_read(int, char *, size_t);
 int initrd_close(int);

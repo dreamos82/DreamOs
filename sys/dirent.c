@@ -36,6 +36,7 @@ DIR *opendir(const char *path){
 	if(mountpoint_list[mpoint_id].dir_op.opendir_f!=NULL) {
 		pdir = mountpoint_list[mpoint_id].dir_op.opendir_f(rel_path);
 		pdir->handle = mpoint_id;
+		return pdir;
 	}
 	else {
 		printf("Could not open_dir no function found\n");
@@ -45,8 +46,10 @@ DIR *opendir(const char *path){
 }
 
 struct dirent *readdir(DIR *dirp){
+	//printf("Handle: %d\n", dirp->handle);
 	if(mountpoint_list[dirp->handle].dir_op.readdir_f!=NULL){
-		printf("Trovata readdir\n");
+		//printf("Trovata readdir\n");
+		return mountpoint_list[dirp->handle].dir_op.readdir_f(dirp);
 	}
 	else printf("No readdir - No party\n");
 }

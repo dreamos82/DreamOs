@@ -55,9 +55,10 @@ DIR *initfs_opendir(const char *path){
 		pdir = kmalloc(sizeof(DIR));
 		strcpy(pdir->path, path);
 		pdir->handle = 0x01;
+		pdir->cur_entry = 0x00;
 		pdir->entry.d_ino = 0x00;
 		strcpy(pdir->entry.d_name, module_var[0].fileName);
-		printf("First occorrency: %s\n", pdir->entry.d_name);
+		//printf("First occorrency: %s\n", pdir->entry.d_name);
 		return pdir;
 	}
 	else {
@@ -67,7 +68,21 @@ DIR *initfs_opendir(const char *path){
 }
 
 struct dirent *initrd_readdir(DIR *dirp){
-	printf("Placeholder for futre readdir of initrd\n");
+	initrd_file_t *fs_type;
+	struct dirent *cur_dir;
+	int nfiles;	
+	nfiles = fs_specs->nfiles;
+	if(dirp->cur_entry < nfiles){	
+		fs_type = (initrd_file_t *)(module_start + sizeof(initrd_t));	
+		dirp->entry.d_ino =  dirp->cur_entry;
+		strcpy(dirp->entry.d_name, fs_type[dirp->cur_entry].fileName);	
+		//printf("%s\n", dirp->entry.d_name);
+		dirp->cur_entry++;
+		//printf("Placeholder for future readdir of initrd Number of files: %d\n", dirp->cur_entry);
+		return &(dirp->entry);
+	}
+	else return NULL;
+	return NULL;
 }
 
 int initfs_open(const char *path, int flags, ...){

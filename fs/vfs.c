@@ -68,6 +68,7 @@ void vfs_init(){
  	mountpoint_list[0].dev_id = 0;
  	mountpoint_list[0].start_address = module_start;
  	mountpoint_list[0].dir_op.opendir_f = initfs_opendir;
+ 	mountpoint_list[0].dir_op.readdir_f = initrd_readdir;
  	mountpoint_list[0].operations.open = initfs_open;
  	mountpoint_list[0].operations.close = initrd_close;
  	mountpoint_list[0].operations.read = initfs_read;
