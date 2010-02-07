@@ -32,7 +32,7 @@ DIR *opendir(const char *path){
 
 	mpoint_id = get_mountpoint_id((char*)path);
 	rel_path = get_rel_path(mpoint_id, path);	
-	printf("%d - %s\n", mpoint_id, rel_path);
+	//printf("%d - %s\n", mpoint_id, rel_path);
 	if(mountpoint_list[mpoint_id].dir_op.opendir_f!=NULL) {
 		pdir = mountpoint_list[mpoint_id].dir_op.opendir_f(rel_path);
 		pdir->handle = mpoint_id;

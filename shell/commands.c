@@ -404,10 +404,12 @@ void cd( ){
 		}
 	}
 	dirp = opendir(argv[1]);
-	prova = readdir(dirp);
-	while(prova!=NULL){
-		printf("%s\n", prova->d_name);
+	if(dirp!=NULL){
 		prova = readdir(dirp);
+		while(prova!=NULL){
+			printf("%s\n", prova->d_name);
+			prova = readdir(dirp);
+		}
 	}
 }
 
