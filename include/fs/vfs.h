@@ -65,6 +65,7 @@ struct mountpoint_t {
 struct file_descriptor {
 	int fs_spec_id; /**< Il descrittore del file interno del FileSystem*/
 	int mountpoint_id; /**< L'id del mountpoint nel quale si trova il file */
+	int offset; /**< Offset per lettura file, per la prossima read*/
 };
 
 //extern struct inode *root;

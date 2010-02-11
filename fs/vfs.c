@@ -43,6 +43,7 @@ void vfs_init(){
 	while (j < _SC_OPEN_MAX){
 		fd_list[j].fs_spec_id = -1;
 		fd_list[j].mountpoint_id = -1;
+		fd_list[j].offset = 0;
 		j++;
 	}
  	

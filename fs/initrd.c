@@ -112,6 +112,7 @@ ssize_t initfs_read(int fildes, char *buf, size_t nbyte){
 	file_start = (char *) (module_start	+ fs_headers[lfd].offset);
 	//printf("Hi i'm a dummy read... The file id is: %d\n", ird_descriptors[fildes].file_descriptor);
 	//printf("try to read something...\n");
+	if(nbyte == 0) return 0;
 	while(j<file_size){
 		//putchar(file_start[j]);
 		buf[j] = file_start[j];			

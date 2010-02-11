@@ -78,10 +78,12 @@ int open(const char *path, int oflags,  ...){
 	}
 	else {
 		if(mpid>-1) printf("No OPEN services found here\n");					
+		//fd_list[cur_fd].mountpoint_id = -1; //Controllare se va messa
 		va_end(ap);
 		return -1;
 	}
 	va_end(ap)	
+	fd_list[cur_fd].offset = 0;
 	ret_fd = cur_fd;
 	cur_fd++;
 	free(path);

@@ -31,7 +31,7 @@ ssize_t read(int fildes, void *buf, size_t nbyte){
 	fs_fd = fd_list[fildes].fs_spec_id;
 	//printf("Mpoint id: %d Fs_fd: %d\n", mp_id, fs_fd);
 	if (mountpoint_list[mp_id].operations.read != NULL)
-		mountpoint_list[mp_id].operations.read(fs_fd,(char *) buf, 1);
+		mountpoint_list[mp_id].operations.read(fs_fd,(char *) buf, nbyte);
 	else
 		printf("No READ Found for that file system\n");
 }
