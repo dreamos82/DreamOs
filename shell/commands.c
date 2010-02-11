@@ -351,7 +351,7 @@ void  drv_load(void)
 	
 }
 
-void ls ( ) {
+void ls() {
 	int i=0, j=0;
 	//int flag = 0;
 	DIR *dirp;
@@ -363,6 +363,12 @@ void ls ( ) {
 	//if(if argc > 1 && strcmp(argv[1], "-l") == 0) flag =1;
 	dirp = opendir(current_user.cur_path);
 	if(dirp!=NULL){
+		/*while(i<j){
+			if(strcmp(mountpoint_list[i].mountpoint, current_user.cur_path)){
+				
+			}
+			i++;
+		}*/
 		struct dirent* cur_dir_entry;
 		cur_dir_entry = readdir(dirp);
 		while(cur_dir_entry!=NULL){			

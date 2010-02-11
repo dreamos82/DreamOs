@@ -25,6 +25,13 @@
 
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 
+/**
+  * @author Ivan Gualandri
+  * @param char* path percorso del file da aprire
+  * @return DIR* puntatore alla cartella aperta se esiste, NULL altrimenti
+  *
+  * Dato un path contenente una cartella viene aperta se presente, e si torna il puntatore a DIR*
+  */
 DIR *opendir(const char *path){
 	int mpoint_id = 0;
 	char* rel_path;	
@@ -45,9 +52,18 @@ DIR *opendir(const char *path){
 	return NULL;
 }
 
+/**
+  * @author Ivan Gualandri
+  * @param DIR* dirp la cartella aperta
+  * @return struct dirent Struttura dati contenente il prossimo elemento della cartella. 
+  * 
+  * ad ogni chiamata su dirp torna il successivo elemento presente in quel path. Se non ve ne sono piu torna NULL
+  *  
+  */
 struct dirent *readdir(DIR *dirp){
 	//printf("Handle: %d\n", dirp->handle);
-	if(mountpoint_list[dirp->handle].dir_op.readdir_f!=NULL){
+	if(dirp == NULL) return NULL;
+	else if(mountpoint_list[dirp->handle].dir_op.readdir_f!=NULL){
 		//printf("Trovata readdir\n");
 		return mountpoint_list[dirp->handle].dir_op.readdir_f(dirp);
 	}
@@ -55,6 +71,12 @@ struct dirent *readdir(DIR *dirp){
 	return NULL;
 }
 
+/**
+  * @author Ivan Gualandri
+  * @param DIR* dirp
+  *
+  * Dato un puntatore a DIR lo chiude liberando le strutture dati.
+  */
 int closedir(DIR *dirp){
 	//printf("Closing directory\n");
 	free(dirp);

@@ -23,7 +23,11 @@
 
 int main(int argc, char* argv[]){
 	unsigned int offset;
-	if(argc <= 1) usage(argv[0]);
+	if(argc <= 1) {
+		if(argv[0][0] == '.')
+		version(argv[0]+2);
+		usage(argv[0]);		
+	}
 	else {
 		if(!strcmp(argv[1], "--version") || !strcmp(argv[1], "-v")) version(argv[0]+2);
 		else if(!strcmp(argv[1], "--help") || !strcmp(argv[1], "-h")) usage(argv[0]);
