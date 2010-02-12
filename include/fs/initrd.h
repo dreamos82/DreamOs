@@ -39,6 +39,7 @@ struct initrd_t{
 struct initrd_file_t{
 	int magic; /*!< Numero usato come delimitatore da settare a 0xBF*/
 	char fileName[FILENAME_LENGTH]; /*!< Nome del file*/
+	short int file_type;
 	int  uid; /*!< User id del proprietario del file */
 	unsigned int offset; /*!< indirizzo relativo di partenza */
 	unsigned int length; /*!< Dimensione del File */

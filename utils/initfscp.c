@@ -47,6 +47,7 @@ int main(int argc, char* argv[]){
 			for (i=0; i<MAX_FILES; i++){
 				headers[i].magic = 0xBF;
 				strcpy(headers[i].fileName, "");
+				headers[i].file_type = 0;
 				headers[i].uid = 0;
 				headers[i].offset = 0;
 				headers[i].length = 0;
@@ -72,6 +73,7 @@ int main(int argc, char* argv[]){
 						strcpy(headers[i].fileName, argv[i+1]);
 					fseek(fd, 0, SEEK_END);
 					printf("\tFile %s Found! Size: %d\n", argv[i+1], ftell(fd));				
+					headers[i].file_type = FS_FILE;					
 					headers[i].length = ftell(fd);
 					headers[i].offset = offset;
 					fclose(fd);

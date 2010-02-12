@@ -23,11 +23,15 @@
 
 #define FILENAME_LENGTH 64
 #define MAX_FILES 32
-#define INITFSCP_VER "0.1"
+#define INITFSCP_VER "0.2"
+
+#define FS_FILE 0x01
+#define FS_DIRECTORY 0x02
 
 struct initrd_file_t{
 	int magic;
 	char fileName[FILENAME_LENGTH];
+	short int file_type;
 	int  uid;
 	unsigned int offset;
 	unsigned int length;

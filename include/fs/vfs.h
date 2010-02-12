@@ -28,6 +28,7 @@
 
 #define FS_FILE 0x01
 #define FS_DIRECTORY 0x02
+#define FS_MOUNTPOINT 0x03
 
 
 struct directory_operations {

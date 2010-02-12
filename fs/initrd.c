@@ -22,6 +22,7 @@
 #include <unistd.h>
 #include <types.h>
 #include <string.h>
+#include <vfs.h>
 
 char *module_start;
 initrd_t *fs_specs;
@@ -93,6 +94,8 @@ int initfs_open(const char *path, int flags, ...){
 	if(cur_irdfd >= MAX_INITRD_DESCRIPTORS) cur_irdfd=0;
 	while (j < fs_specs->nfiles) {
 		if(!strcmp(path, module_var[j].fileName)){
+				if(module_var[j].file_type == FS_DIRECTORY || module_var[j].file_type == FS_MOUNTPOINT)
+					return -1;
 				ird_descriptors[cur_irdfd].file_descriptor	= j;
 				printf("%s Found. Size: %d FS fd val: %d - ID File val: %d\n", path, module_var[j].length, cur_irdfd, ird_descriptors[cur_irdfd].file_descriptor);
 				ret_fd = cur_irdfd;				
