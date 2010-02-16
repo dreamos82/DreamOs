@@ -128,7 +128,7 @@ void try_module(){
 
 void try_open(){
 	char appoggio[50];
-	char prova[50];
+	char prova;
 	int i;
 	i=0;	
 	while(i<50){
@@ -140,8 +140,12 @@ void try_open(){
 	scanf("%s", appoggio);	
 	i = open(appoggio, O_RDONLY, 42);
 	if(i>-1) {
-		read(i, prova, 1);
-		printf("\n%s\n", prova);
+		int j=0;		
+		while(read(i, &prova, 1)!=0) {
+			putchar(prova);			
+			j++;
+		}
+		//printf("\n%s\n", prova);
 		close(i);
 	}
 	printf("\n");

@@ -23,10 +23,11 @@
 
 #define FILENAME_LENGTH 64
 #define MAX_FILES 32
-#define INITFSCP_VER "0.2"
+#define INITFSCP_VER "0.2.1"
 
 #define FS_FILE 0x01
 #define FS_DIRECTORY 0x02
+#define FS_MOUNTPOINT 0x03
 
 struct initrd_file_t{
 	int magic;

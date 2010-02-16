@@ -23,6 +23,7 @@
 #include <types.h>
 #include <string.h>
 #include <vfs.h>
+#include <kheap.h>
 
 char *module_start;
 initrd_t *fs_specs;
@@ -40,6 +41,7 @@ int initfs_init(){
 	fs_headers = (initrd_file_t *)(module_start + sizeof(initrd_t));
 	while (i<MAX_INITRD_DESCRIPTORS) {
 		ird_descriptors[i].file_descriptor = -1;
+		ird_descriptors[i].cur_pos = 0;
 		i++;
 	}
 	cur_irdfd = 0;
@@ -69,10 +71,10 @@ DIR *initfs_opendir(const char *path){
 }
 
 struct dirent *initrd_readdir(DIR *dirp){
-	initrd_file_t *fs_type;
-	struct dirent *cur_dir;
+	initrd_file_t *fs_type;	
 	int nfiles;	
 	nfiles = fs_specs->nfiles;
+	//printf("%d nfiles\n", nfiles);
 	if(dirp->cur_entry < nfiles){	
 		fs_type = (initrd_file_t *)(module_start + sizeof(initrd_t));	
 		dirp->entry.d_ino =  dirp->cur_entry;
@@ -109,22 +111,27 @@ int initfs_open(const char *path, int flags, ...){
 ssize_t initfs_read(int fildes, char *buf, size_t nbyte){
 	char *file_start;
 	int lfd, file_size;	
-	int j=0;
+	int j=0;	
+	int read_pos = 0;
 	lfd = ird_descriptors[fildes].file_descriptor;
+	read_pos = ird_descriptors[fildes].cur_pos;
 	file_size = fs_headers[lfd].length;
 	file_start = (char *) (module_start	+ fs_headers[lfd].offset);
-	//printf("Hi i'm a dummy read... The file id is: %d\n", ird_descriptors[fildes].file_descriptor);
-	//printf("try to read something...\n");
-	if(nbyte == 0) return 0;
-	while(j<file_size){
-		//putchar(file_start[j]);
-		buf[j] = file_start[j];			
+	//printf("cur_pos val: %d\n", ird_descriptors[fildes].cur_pos);
+	if(nbyte == 0) return 0;	
+	while(j<nbyte && read_pos<file_size){
+		//putchar(file_start[j]);		
+		*buf++ = file_start[read_pos];			
+		read_pos++;
 		j++;
-	}
-	buf[j] = '\0';
+	}			
+	ird_descriptors[fildes].cur_pos = read_pos;		
+	if(read_pos == file_size) return 0;
 	return nbyte;
 }
 
 int initrd_close(int fildes){
 	ird_descriptors[fildes].file_descriptor = -1;
+	ird_descriptors[fildes].cur_pos = 0;
+	return 0;
 }

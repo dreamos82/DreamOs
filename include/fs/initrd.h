@@ -50,6 +50,7 @@ struct initrd_file_t{
  */
 struct initrd_fd{
 	int file_descriptor;
+	int cur_pos;
 };
 
 typedef struct initrd_t initrd_t;

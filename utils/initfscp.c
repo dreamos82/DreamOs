@@ -36,6 +36,7 @@ int main(int argc, char* argv[]){
 			int nfiles;
 			nfiles = argc - 2;
 			int i=0;
+			int j=0;
 			FILE *fsdest;
 			fsdest = fopen(argv[argc-1], "w");
 			if(fsdest == NULL) printf("Could not create FileSystem\n");
@@ -53,34 +54,47 @@ int main(int argc, char* argv[]){
 				headers[i].length = 0;
 			}			
 			printf("[ \033[1;33mDONE\e[0m ]\n\n");	
+			i=0;
+			while(!strcmp(argv[j+1], "-m") || !strcmp(argv[j+1], "--mountpoint")){
+				printf("Adding mountpoint: %s\n", argv[j+2]);
+				strcpy(headers[i].fileName, argv[j+2]);
+				headers[i].file_type = FS_MOUNTPOINT;
+				headers[i].uid = 0;
+				headers[i].offset = 0;
+				headers[i].length = 0;
+				j+=2;
+				i++;
+			}
+			printf("Number of mountpoints: %d\n", j/2);
+			nfiles = nfiles - j;
 			printf("Number of files to copy %d\n", nfiles);
 			printf("FileSystem name: %s\n\n", argv[argc-1]);
 			printf("Creating File headers\n");			
-			i=0;
-			for(i=0; i< argc - 2; i++){
+			i=0;			
+			for(i=0; i+j< argc - 2; i++){
 				FILE *fd;
-				fd = fopen(argv[i+1],"r+");
+				fd = fopen(argv[i+j+1],"r+");
 				if(fd == NULL){
 					 printf("Error one or more files not found\n");
 					 // Debug
-      					 printf("Name of file: -->%s<--\n",argv[i+1]);
+      					 printf("Name of file: -->%s<--\n",argv[i+j+1]);
 					 return -1;
 				 }
 				else {
-					if ((strpbrk(argv[i+1], "/")) != NULL)
-						strcpy(headers[i].fileName, strtok(strrchr(argv[i+1],'/'), "/"));
+					if ((strpbrk(argv[i+j+1], "/")) != NULL)
+						strcpy(headers[i+(j/2)].fileName, strtok(strrchr(argv[i+j+1],'/'), "/"));
 					else
-						strcpy(headers[i].fileName, argv[i+1]);
+						strcpy(headers[i+(j/2)].fileName, argv[i+j+1]);
 					fseek(fd, 0, SEEK_END);
-					printf("\tFile %s Found! Size: %d\n", argv[i+1], ftell(fd));				
-					headers[i].file_type = FS_FILE;					
-					headers[i].length = ftell(fd);
-					headers[i].offset = offset;
+					printf("\tFile %s Found! Size: %d\n", argv[i+j+1], ftell(fd));				
+					headers[i+(j/2)].file_type = FS_FILE;					
+					headers[i+(j/2)].length = ftell(fd);
+					headers[i+(j/2)].offset = offset;
 					fclose(fd);
-					offset += headers[i].length;
+					offset += headers[i+(j/2)].length;
 				}				
 			}
-
+			nfiles = nfiles+(j/2);
 			printf("[ \033[1;33mDONE\e[0m ]\n\n");		
 			i=0;
 			printf("Copying headers to %s filesystem  ", argv[argc-1]);		
@@ -88,14 +102,14 @@ int main(int argc, char* argv[]){
 			fwrite(headers, sizeof(struct initrd_file_t), 32, fsdest);
 			printf("[ \033[1;33mDONE\e[0m ]\n\n");	
 			printf("Copying data to %s filesystem\n", argv[argc-1]);		
-			for(i=0; i<argc - 2; i++){
+			for(i=0; i+j<argc - 2; i++){
 				FILE *fd2;
 				char *buffer;
-				fd2=fopen(argv[i+1], "r+");
-				buffer = (unsigned char*) malloc(headers[i].length);
-				fread(buffer, 1, headers[i].length, fd2);
-				fwrite(buffer, 1, headers[i].length, fsdest);
-				printf("\t\tFileName: %s Length: %d offset: %d\n", headers[i].fileName, headers[i].length, headers[i].offset);
+				fd2=fopen(argv[i+j+1], "r+");
+				buffer = (unsigned char*) malloc(headers[i+(j/2)].length);
+				fread(buffer, 1, headers[i+(j/2)].length, fd2);
+				fwrite(buffer, 1, headers[i+(j/2)].length, fsdest);
+				printf("\t\tFileName: %s Length: %d offset: %d\n", headers[i+(j/2)].fileName, headers[i+(j/2)].length, headers[i+(j/2)].offset);
 			}
 			printf("[ \033[1;33mDONE\e[0m ]\n\n");	
 			fclose(fsdest);
@@ -105,9 +119,10 @@ int main(int argc, char* argv[]){
 
 void usage(char *prgname){
 	printf("Usage:\n %s --help for this screen\n", prgname);
-	printf(" %s file1 file2 ... fsname\n", prgname);
+	printf(" %s [options] file1 file2 ... fsname\n", prgname);
 	printf("      file1 file2 ... are source files\n");
 	printf("      and fsname is the file that contains the initfs\n");
+	printf("      where [options] are: -m mountpointname\n");
 }
 
 void version(char *prgname){
