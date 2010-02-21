@@ -45,7 +45,7 @@ return;
 /**
  *  Send cmd to bochs port
  */
-static inline void dbg_bochs_send_cmd( const int port, const int cmd )
+inline void dbg_bochs_send_cmd( const int port, const int cmd )
 {
 #if defined(BOCHS_DEBUG)
     outportb(port, cmd);

@@ -86,7 +86,7 @@ int main(int argc, char* argv[]){
 					else
 						strcpy(headers[i+(j/2)].fileName, argv[i+j+1]);
 					fseek(fd, 0, SEEK_END);
-					printf("\tFile %s Found! Size: %d\n", argv[i+j+1], ftell(fd));				
+					printf("\tFile %s Found! Size: %ld\n", argv[i+j+1], ftell(fd));				
 					headers[i+(j/2)].file_type = FS_FILE;					
 					headers[i+(j/2)].length = ftell(fd);
 					headers[i+(j/2)].offset = offset;

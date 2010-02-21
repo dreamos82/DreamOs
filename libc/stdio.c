@@ -47,7 +47,7 @@ int puts(char *s)
 {
   while( *s != 0 ) {
 	if (last_Xz && last_Yz) _kscrolldown ();
-	*VIDEO_PTRZ++ = s;
+	*VIDEO_PTRZ++ = *s;
 	*VIDEO_PTRZ++ = VIDEO_CLRZ;
 	_kshiftAll();
 	_ksetcursauto();
