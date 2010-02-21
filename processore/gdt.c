@@ -49,7 +49,7 @@ void init_gdt(){
 	add_GDTseg(0,0,0,0,0);
 	add_GDTseg(1,0x00000000,0x000FFFFF, PRESENT|KERNEL|CODE|0x0A,GRANULARITY);
 	add_GDTseg(2,0x00000000,0x000FFFFF, PRESENT|KERNEL|DATA|0x02,GRANULARITY);
-	set_gdtr(Gdt_Table, 0xFFFFF, 1, 2);	
+	set_gdtr(Gdt_Table, 0xFFFF, 1, 2);	
 }
 /**
   * @author Ivan Gualandri

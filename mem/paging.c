@@ -42,10 +42,10 @@ extern heap_t *kheap;
 
 void init_paging(){
     int i;
-    unsigned int apic_location;
+    //unsigned int apic_location;
     printf(LNG_PAGING);
     _kprintOK();    
-	apic_location = create_pageTable();
+	//apic_location = create_pageTable();
     current_page_dir = create_pageDir();
     #ifdef DEBUG
     printf("Pd baseAddress: %d\n", (unsigned int) current_page_dir);
@@ -72,11 +72,11 @@ void init_paging(){
         i++;
     }
     //apic_location = request_pages(1, NOT_ADD_LIST);	
-	set_pagedir_entry(1019, (unsigned int) apic_location, PD_PRESENT|SUPERVISOR, 0);	
+	//set_pagedir_entry(1019, (unsigned int) apic_location, PD_PRESENT|SUPERVISOR, 0);	
            
     load_pdbr((unsigned int)current_page_dir);
-	set_pagetable_entry_ric(1019, 512 ,0xFEE00000, SUPERVISOR|PD_PRESENT|WRITE, 0);
-	set_pagetable_entry_ric(1019, 0 ,0xFEC00000, SUPERVISOR|PD_PRESENT|WRITE, 0);
+	//set_pagetable_entry_ric(1019, 512 ,0xFEE00000, SUPERVISOR|PD_PRESENT|WRITE, 0);
+	//set_pagetable_entry_ric(1019, 0 ,0xFEC00000, SUPERVISOR|PD_PRESENT|WRITE, 0);
     kheap = make_heap(tot_mem - ((unsigned int) &end));
 }
 
@@ -165,7 +165,7 @@ void set_pagetable_entry(int pos, unsigned int base, unsigned char opt1, unsigne
   */
 void set_pagetable_entry_ric(int pd_entry, int pt_entry ,unsigned int base, unsigned char opt1, unsigned char opt2){
     unsigned int *mod_address;    
-    mod_address = (0XFFC00000|(pd_entry<<12))+(pt_entry*4);
+    mod_address = (unsigned int *)((0XFFC00000|(pd_entry<<12))+(pt_entry*4));
     *mod_address = (base&0xFFFFF000)|opt1|opt2;
     #ifdef DEBUG
     printf("value for entry n.: %d is: %d\n", pt_entry,*mod_address);

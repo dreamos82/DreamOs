@@ -176,7 +176,7 @@ void history(char *cmd_pass) {
 }
 
 void history_start(void) { 
-    static int sc_uparrow, sc_enter;
+    static int sc_uparrow;
     count++;
     int delete = 0, max_limit = strlen(lastcmd[count]);
 	

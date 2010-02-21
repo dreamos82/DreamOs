@@ -41,9 +41,12 @@
 #include <shell.h>
 #include <syscall.h>
 #include <kheap.h>
-#include <debug.h>
 #include <vfs.h>
 #include <initrd.h>
+
+#ifdef BOCHS_DEBUG
+#include <debug.h>
+#endif
 
 unsigned int *current_page_table;
 extern unsigned int end;
@@ -61,7 +64,7 @@ int main_loop(struct multiboot_info *boot_info)
 {
     _kclear();
     syscall_init();
-    module_start = *((unsigned int*)boot_info->mods_addr);
+    module_start = (char*) *((unsigned int*)boot_info->mods_addr);
 	module_end = *((unsigned int*)(boot_info->mods_addr+4));
     _kcolor(BRIGHT_GREEN);
     _kputs(DREAMOS_VER);
@@ -110,7 +113,7 @@ int main_loop(struct multiboot_info *boot_info)
 		printf("[+] Address: 0x%x\n", &end);		   	        
 		printf("\n\n");
 #ifdef BOCHS_DEBUG
-		dbg_bochs_print("DreamOS Debug String for Bochs\n");
+		dbg_bochs_print((const unsigned char*)"DreamOS Debug String for Bochs\n");
 #endif
 		shell();
 

@@ -156,7 +156,7 @@ void *memmove(void * dest, const void *src, size_t count)
  */
 char *strdup (const char *s)
 {
-    char *ret;
+    char *ret = NULL;
     int i=0;
 
     for (i=0; s[i]; i++)

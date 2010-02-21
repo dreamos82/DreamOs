@@ -39,9 +39,9 @@ struct directory_operations {
 
 struct super_node_operations {
 	/*Qui vanno i puntatori alle funzioni sul supernode*/
-	int (*open)(const char *, int );
-	void (*close)(int);
-	int (*read)(int, void*, size_t);
+	int (*open)(const char *, int, ... );
+	int (*close)(int);
+	ssize_t (*read)(int, char*, size_t);
 	int (*write)(int, void*, size_t);
 };
 
@@ -79,7 +79,7 @@ extern struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 //void open_vfs (struct inode *);
 //void close (int);
 int get_mountpoint_id(char *);
-char* get_rel_path(int, char*);
+char* get_rel_path(int, const char*);
 int open_dir(char *);
 int read (int, void*, size_t);
 int write (int, void*, size_t);

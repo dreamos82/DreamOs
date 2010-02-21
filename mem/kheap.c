@@ -314,7 +314,7 @@ void print_heap_list (heap_node_t *list)
   * @param node Node in free_list or used_list to be freed 
   */
 void free_node(heap_node_t* toadd){    
-    toadd->start_address = NULL;
+    toadd->start_address = (unsigned int)NULL;
     toadd->size = 0;    
     toadd->next = kheap->free_nodes;
     kheap->free_nodes = toadd;        

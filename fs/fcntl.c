@@ -57,7 +57,7 @@ int open(const char *path, int oflags,  ...){
 		printf("No more file descriptors available\n");
 		return -1;
 	}
-	mpid = get_mountpoint_id(path);		
+	mpid = get_mountpoint_id((char*) path);		
 	//printf("Cur_fd: %d\n",cur_fd);
 	if(mpid >-1) {
 		fd_list[cur_fd].mountpoint_id = mpid;				
@@ -67,7 +67,7 @@ int open(const char *path, int oflags,  ...){
 		va_end(ap);
 		return -1;
 	}
-	if( mpid > -1 && mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open > NULL){
+	if( mpid > -1 && mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open != NULL){
 		fd_list[cur_fd].fs_spec_id = (int) mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open(path, oflags);
 		if(fd_list[cur_fd].fs_spec_id == -1){
 			printf("No file's Found\n");
@@ -86,7 +86,7 @@ int open(const char *path, int oflags,  ...){
 	fd_list[cur_fd].offset = 0;
 	ret_fd = cur_fd;
 	cur_fd++;
-	free(path);
+	free((void*)path);
 	return ret_fd;
 }
 

@@ -402,9 +402,7 @@ void ls() {
 }
 
 void cd( ){
-	char *relpath;	
-	DIR *dirp;
-	struct dirent* prova;
+	char *relpath;		
 	if(argc != 2) {
 		printf("Bad usage. Try 'ls -l' and then 'cd dir'.\n");
 		return;

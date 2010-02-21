@@ -30,7 +30,7 @@
 #include <string.h>
 #include <keyboard.h>
 #include <kheap.h>
-#include <debug.h>
+//#include <debug.h>
 
 #define LEFT 1
 #define RIGHT 0
@@ -54,6 +54,7 @@ int puts(char *s)
 	 s++;
   }
    _knewline();
+   return 1;
 }
 
 /*

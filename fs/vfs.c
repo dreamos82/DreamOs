@@ -30,6 +30,7 @@
 
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 file_descriptor_t fd_list[_SC_OPEN_MAX];
+char *module_start;
 int cur_fd;
 
 void vfs_init(){
@@ -67,12 +68,12 @@ void vfs_init(){
  	mountpoint_list[0].gid = 0;
  	mountpoint_list[0].pmask = 0;
  	mountpoint_list[0].dev_id = 0;
- 	mountpoint_list[0].start_address = module_start;
+ 	mountpoint_list[0].start_address = (unsigned int) module_start;
  	mountpoint_list[0].dir_op.opendir_f = initfs_opendir;
  	mountpoint_list[0].dir_op.readdir_f = initrd_readdir;
- 	mountpoint_list[0].operations.open = initfs_open;
- 	mountpoint_list[0].operations.close = initrd_close;
- 	mountpoint_list[0].operations.read = initfs_read;
+ 	mountpoint_list[0].operations.open = &initfs_open;
+ 	mountpoint_list[0].operations.close = &initrd_close;
+ 	mountpoint_list[0].operations.read = &initfs_read;
  	//mountpoint_list[0].operations = kmalloc(sizeof(struct super_node_operations));
 
 	strcpy(mountpoint_list[1].mountpoint,"/dev"); 	
@@ -116,7 +117,7 @@ int get_mountpoint_id(char *path){
                return last;
 }
 
-char *get_rel_path(int mountpoint_id, char* path){
+char *get_rel_path(int mountpoint_id, const char* path){
 	int rel_size = 0;
 	int j=0;
 	char *tmp_path;

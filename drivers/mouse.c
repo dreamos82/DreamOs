@@ -122,7 +122,7 @@ unsigned char mouse_read()
 	return inportb(0x60);
 }
 
-void mouse_IRQhandler(struct regs *a_r)
+void mouse_IRQhandler()
 {
 	static unsigned char cycle = 0;
 	static char mouse_bytes[3];

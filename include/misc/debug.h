@@ -71,4 +71,5 @@
 
 void dbg_bochs_print( const unsigned char * );
 static inline void dbg_bochs_send_cmd( const int, const int );
+
 #endif /* ! _DEBUG_H */

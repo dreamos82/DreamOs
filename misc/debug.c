@@ -39,6 +39,7 @@ void dbg_bochs_print( const unsigned char *msg )
     for ( i = 0; msg[i] != '\0'; i++ )
         outportb(0xE9, msg[i]);
 #endif
+return;
 }
 
 /**
@@ -49,4 +50,5 @@ static inline void dbg_bochs_send_cmd( const int port, const int cmd )
 #if defined(BOCHS_DEBUG)
     outportb(port, cmd);
 #endif
+return;
 }
