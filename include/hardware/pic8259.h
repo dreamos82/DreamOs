@@ -41,6 +41,8 @@
 
 #define EOI 0x20
 
+#define IRQ_NUM 16
+
 
 typedef enum irq_types{
     TIMER,

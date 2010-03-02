@@ -29,7 +29,7 @@
 #include <8253.h>
 #include <bitops.h>
 
-IRQ_s *shareHandler[16];
+IRQ_s *shareHandler[IRQ_NUM];
 // IRQ_s shareHandler[16];
 // IRQ_s *tmpHandler;
 byte master_cur_mask;
@@ -85,11 +85,14 @@ void init_IRQ(){
     enable_IRQ(TIMER);
     enable_IRQ(TO_SLAVE_PIC);
    
+    init_idt();
+    init_gdt();
+
     setup_IRQ();
     asm("sti");
                     
     i=0;
-    while(i<16){
+    while(i<IRQ_NUM){
         shareHandler[i] = NULL;
         i++;
     }
