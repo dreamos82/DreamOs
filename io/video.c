@@ -46,10 +46,22 @@ void _kputc(char c)
 {
     /* Print a character on the screen*/
   if (last_x && last_y) _kscrolldown ();
+  if(c=='\n')
+      _knewline();
+    else if(c=='\033') {
+      asm("nop");
+    } else if (c=='\t')
+      _ktab();
+    else if(c=='\b')
+      _kbackspace();
+    else if (c=='\r')
+      _kminline();
+    else {
   *VIDEO_PTR++ = c;
   *VIDEO_PTR++ = VIDEO_CLR;
+    }
   _kshiftAll();
-  _ksetcursauto();
+  _ksetcursauto();            
 /*
   while(c != 0) {
 	if ( c=='\n' )

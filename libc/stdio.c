@@ -66,8 +66,8 @@ void putchar (char ch)
 	char s[2];
 	s[0] = ch;
 	s[1] = '\0';
-	_kputs(s);
-	//_kputc(ch); 
+	//_kputs(s);
+	_kputc(ch); 
 
 }
 

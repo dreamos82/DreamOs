@@ -41,7 +41,7 @@ int main(int argc, char* argv[]){
 			fsdest = fopen(argv[argc-1], "w");
 			if(fsdest == NULL) printf("Could not create FileSystem\n");
 			printf("Welcome to Dreamos initfs file copier tool\n");
-			printf("Size of headers: %d %d\n\n", sizeof(struct initrd_file_t)*32, sizeof(initrd_file_t));
+			printf("Size of headers: %ld %ld\n\n", sizeof(struct initrd_file_t)*32, sizeof(initrd_file_t));
 			printf("Clearing headers structures ");
 			offset = sizeof(struct initrd_file_t) * 32 + sizeof(int);
 			
