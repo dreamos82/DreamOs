@@ -213,12 +213,13 @@ void keyboard_isr (void)
 
 // Presente un bug qui che non permette il fix dei relativi tasti
 // se si decommenta, il sistema all'avvio va in panic e si riavvia
-/*    case KEY_ALT:
+    case KEY_ALT:
+		//_kputs("Alt key pressed, nothing to be done\n");
 	break;
 
-    case KEY_ALTGR:
-	break;
-*/	
+    /*case KEY_ALTGR:
+	break;*/
+	
     case KEY_CTRL:
 	break;
 	
