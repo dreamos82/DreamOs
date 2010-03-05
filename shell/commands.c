@@ -370,9 +370,11 @@ void ls() {
 			i++;
 		}*/
 		struct dirent* cur_dir_entry;
-		cur_dir_entry = readdir(dirp);
+		cur_dir_entry = readdir(dirp);		
 		while(cur_dir_entry!=NULL){			
+			if(cur_dir_entry->d_type == FS_MOUNTPOINT) _kcolor(BRIGHT_GREEN);
 			printf("%s\n", cur_dir_entry->d_name);
+			_kcolor(WHITE);			
 			cur_dir_entry = readdir(dirp);
 		}
 		closedir(dirp);
@@ -403,20 +405,29 @@ void ls() {
 
 void cd( ){
 	char *relpath;		
+	DIR *dirp=NULL;
 	if(argc != 2) {
 		printf("Bad usage. Try 'ls -l' and then 'cd dir'.\n");
 		return;
 	} else {
 		int i=0;
 		int rel_size = 0;		
-		i = get_mountpoint_id(argv[1]);		
+		i = get_mountpoint_id(argv[1]);
+		dirp=opendir(argv[1]);
+		if(dirp!=NULL){
+			printf("good\n");
+			closedir(dirp);
+		}
+		else printf("bad\n");
 		//printf("path: %s\n", argv[1]);
 		rel_size = strlen(argv[1]) - strlen(mountpoint_list[i].mountpoint);
 		if(i == -1) {			
 			printf("cd: %s: No such file or directory\n", argv[1]);
 			return;
 		}
-		else strcpy(current_user.cur_path, argv[1]);
+		else {
+			strcpy(current_user.cur_path, argv[1]);
+		}
 		if(rel_size >0){
 			relpath = get_rel_path(i, argv[1]);
 			free(relpath);

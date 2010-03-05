@@ -78,6 +78,7 @@ struct dirent *initrd_readdir(DIR *dirp){
 	if(dirp->cur_entry < nfiles){	
 		fs_type = (initrd_file_t *)(module_start + sizeof(initrd_t));	
 		dirp->entry.d_ino =  dirp->cur_entry;
+		dirp->entry.d_type = fs_type[dirp->cur_entry].file_type;
 		strcpy(dirp->entry.d_name, fs_type[dirp->cur_entry].fileName);	
 		//printf("%s\n", dirp->entry.d_name);
 		dirp->cur_entry++;

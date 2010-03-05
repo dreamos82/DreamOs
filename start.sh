@@ -129,7 +129,7 @@ elif [ "$1" == "create_fs" ]; then
   echo "--------------------------------------------- "
   echo "Launching FS Creating script in progress.."
   echo ""
-  utils/initfscp `find files/* -exec echo {} +;` initfs
+  utils/initfscp -m mp -m test `find files/* -exec echo {} +;` initfs
   echo "done."
   $MAKE_FS
   #su -c "mount -o loop boot/grub.img boot/os && rm -rf boot/os/initfs && cp initfs boot/os/initfs && umount boot/os"

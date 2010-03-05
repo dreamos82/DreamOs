@@ -28,6 +28,7 @@
 */
 struct dirent {
 	ino_t d_ino;
+	int d_type;
 	char d_name[NAME_MAX+1];
 };
 
