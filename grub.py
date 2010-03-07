@@ -64,7 +64,7 @@ if answer == 'y':
 	fd.write("\nsplashimage=" + partition + "/boot/grub/grub2.xpm.gz\n\n")
 	fd.write("\ntitle\tDreamOS v0." + patchlevel + "-" + trunk +"")
 	fd.write("\nroot\t" + partition)
-	fd.write("\nkernel\t" + cwd + "\tmodule\t" + initFS)
+	fd.write("\nkernel\t" + cwd + "\nmodule\t" + initFS)
 	fd.write("\nboot\n")
 	fd.close()
 	print ""

@@ -105,7 +105,7 @@ elif [ "$1" == "grub" ]; then
   echo "Creating backup of menu.lst (/boot/grub/menu.lst_backup) .."
   su -c "cp /boot/grub/menu.lst /boot/grub/menu.lst_backup"
   echo "done.."
-  echo "Launching grub installer script in progress.."
+  echo "Launching grub installer script ..."
   echo ""
   su -c "python grub.py"
   echo "done."
@@ -115,7 +115,7 @@ elif [ "$1" == "grub" ]; then
 elif [ "$1" == "create_iso" ]; then
 
   echo "--------------------------------------------- "
-  echo "Launching ISO Creating script in progress.."
+  echo "Launching ISO Creating script ..."
   echo ""
   mkisofs -o ISO/dreamos-image.iso -A DreamOS -b boot/grub.img `pwd`
   echo "done."
@@ -178,7 +178,7 @@ if [ "$2" == "qemu" ] || [ "$2" == "bochs" ]; then
 	 $VERS && $CLEAN && $MAKE && $MAKE_IMG
 	  
 	 echo "--------------------------------------------- "
-  	 echo "Launching FS Creating script in progress.."
+  	 echo "Launching FS Creating script ..."
 	 echo ""
          utils/initfscp `find files/* -exec echo {} +;` initfs
          echo "done."
@@ -209,7 +209,7 @@ if [ "$2" == "qemu" ] || [ "$2" == "bochs" ]; then
 	 $VERS && $CLEAN && $MAKE && $MAKE_IMG
 	  
 	 echo "--------------------------------------------- "
-  	 echo "Launching FS Creating script in progress.."
+  	 echo "Launching FS Creating script ..."
 	 echo ""
          utils/initfscp `find files/* -exec echo {} +;` initfs
          echo "done."
@@ -237,7 +237,7 @@ elif [ "$2" == "grub" ]; then
 
   $VERS && $CLEAN && $MAKE && $MAKE_IMG && $MAKE_FS
   echo "--------------------------------------------- "
-  echo "Launching grub installer script in progress.."
+  echo "Launching grub installer script in ..."
   su -c "python grub.py"
   echo "done."
   echo "--------------------------------------------- "
@@ -245,7 +245,7 @@ elif [ "$2" == "grub" ]; then
 
 
 elif [ "$2" == "" ]; then
-  echo "Error: No command inserted!"
+  echo "Error: No commands inserted!"
   echo "----------------------->"
   echo "Usage: '$0 help'"
   exit
@@ -254,7 +254,7 @@ elif [ "$2" == "" ]; then
 elif [ "$2" == "create_iso" ]; then
   $VERS && $CLEAN && $MAKE && $MAKE_IMG && $MAKE_FS
   echo "--------------------------------------------- "
-  echo "Launching ISO Creation script in progress.."
+  echo "Launching ISO Creation script..."
   echo ""
   mkisofs -o ISO/dreamos-image.iso -A DreamOS -b boot/grub.img `pwd`
   echo "done."

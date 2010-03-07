@@ -403,6 +403,14 @@ void ls() {
 	}
 }
 
+void cat(){
+	if(argc==1) 
+		printf("Usage:\n\t cat filename\nfor read a file\n");
+	else {
+		if(argc<3) printf("File to open: %s\n", argv[1]);
+	}
+}
+
 void cd( ){
 	char *relpath;		
 	DIR *dirp=NULL;
@@ -414,11 +422,10 @@ void cd( ){
 		int rel_size = 0;		
 		i = get_mountpoint_id(argv[1]);
 		dirp=opendir(argv[1]);
-		if(dirp!=NULL){
-			printf("good\n");
+		if(dirp!=NULL){			
 			closedir(dirp);
 		}
-		else printf("bad\n");
+		//else printf("bad\n");
 		//printf("path: %s\n", argv[1]);
 		rel_size = strlen(argv[1]) - strlen(mountpoint_list[i].mountpoint);
 		if(i == -1) {			
