@@ -100,7 +100,7 @@ int initfs_open(const char *path, int flags, ...){
 				if(module_var[j].file_type == FS_DIRECTORY || module_var[j].file_type == FS_MOUNTPOINT)
 					return -1;
 				ird_descriptors[cur_irdfd].file_descriptor	= j;
-				printf("%s Found. Size: %d FS fd val: %d - ID File val: %d\n", path, module_var[j].length, cur_irdfd, ird_descriptors[cur_irdfd].file_descriptor);
+				//printf("%s Found. Size: %d FS fd val: %d - ID File val: %d\n", path, module_var[j].length, cur_irdfd, ird_descriptors[cur_irdfd].file_descriptor);
 				ret_fd = cur_irdfd;				
 				return cur_irdfd++; 
 		}

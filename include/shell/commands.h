@@ -53,7 +53,7 @@ void cd();
 void whoami();
 void tester();
 void pwd();	
-void cat();
+void more();
 
 struct devel {
 	const char cmd_testname[CMD_LEN];

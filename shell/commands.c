@@ -23,6 +23,7 @@
 #include <mouse.h>
 #include <vfs.h>
 #include <testing.h>
+#include <fcntl.h>
 
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 userenv_t current_user;
@@ -403,11 +404,26 @@ void ls() {
 	}
 }
 
-void cat(){
+void more(){
 	if(argc==1) 
-		printf("Usage:\n\t cat filename\nfor read a file\n");
+		printf("Usage:\n\t more filename\nfor read a file\n");
 	else {
-		if(argc<3) printf("File to open: %s\n", argv[1]);
+		if(argc<3) {
+			int i;
+			char buf;
+			//printf("File to open: %s\n", argv[1]);
+			i = open(argv[1], O_RDONLY, 42);
+			if(i>-1) {
+				int j=0;		
+				while(read(i, &buf, 1)!=NULL) {
+					putchar(buf);			
+					j++;
+				}	
+				putchar('\n');			
+				close(i);
+			}		
+		}
+		else printf("too many arguments\n");
 	}
 }
 

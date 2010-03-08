@@ -95,7 +95,7 @@ void shell()
 	{ "whoami",   whoami},
 	{ "tester", tester},	
 	{ "pwd", pwd},
-	{ "cat", cat},
+	{ "more", more},
   };
 
   int i = 0;
