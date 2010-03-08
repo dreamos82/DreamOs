@@ -415,7 +415,7 @@ void more(){
 			i = open(argv[1], O_RDONLY, 42);
 			if(i>-1) {
 				int j=0;		
-				while(read(i, &buf, 1)!=NULL) {
+				while(read(i, &buf, 1)!= (int) NULL) {
 					putchar(buf);			
 					j++;
 				}	
