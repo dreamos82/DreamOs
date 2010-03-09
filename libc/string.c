@@ -252,8 +252,7 @@ char *strtok(char *s, const char *delim)
 char *strncat (char *dest, const char *src, size_t n)
 {
     size_t dlen = strlen (dest);
-    int i;
-
+    int i;	
     for (i=0; i<n && src[i]; i++)
 	dest[dlen+i] = src[i];
     dest[dlen+i] = '\0';

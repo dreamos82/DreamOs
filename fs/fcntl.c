@@ -20,11 +20,14 @@
 #include <fcntl.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <string.h>
 #include <kheap.h>
+#include <shell.h>
 
 int cur_fd;
 file_descriptor_t fd_list[_SC_OPEN_MAX];
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
+userenv_t current_user;
 
 /**
   * @author Ivan Gualandri
@@ -40,7 +43,7 @@ int open(const char *path, int oflags,  ...){
 	int ret_fd;
 	va_list ap;
 	va_start(ap, oflags);
-	ret_fd = 0;
+	ret_fd = 0;	
 	while(ret_fd < _SC_OPEN_MAX){
 		//if(fd_list[ret_fd].mountpoint_id == -1) printf("%d ", ret_fd);		
 		ret_fd++;
@@ -57,7 +60,15 @@ int open(const char *path, int oflags,  ...){
 		printf("No more file descriptors available\n");
 		return -1;
 	}
-	mpid = get_mountpoint_id((char*) path);		
+	if(path[0]!='/') {
+		char abspath[CURPATH_LEN];
+		memset(abspath, '\0', CURPATH_LEN);
+		strcpy(abspath, current_user.cur_path);
+		strncat(abspath, path, strlen(path));
+		//printf("abspath: %s\n", abspath);		
+		path = abspath;
+	}	
+	else mpid = get_mountpoint_id((char*) path);		
 	//printf("Cur_fd: %d\n",cur_fd);
 	if(mpid >-1) {
 		fd_list[cur_fd].mountpoint_id = mpid;				
@@ -68,7 +79,7 @@ int open(const char *path, int oflags,  ...){
 		return -1;
 	}
 	if( mpid > -1 && mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open != NULL){
-		fd_list[cur_fd].fs_spec_id = (int) mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open(path, oflags);
+			fd_list[cur_fd].fs_spec_id = (int) mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open(path, oflags);
 		if(fd_list[cur_fd].fs_spec_id == -1){
 			printf("No file's Found\n");
 			va_end(ap);

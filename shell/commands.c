@@ -76,6 +76,7 @@ void help()
 	"whoami        - Show the current user name\n"
 	"tester        - Try some functions, 'tester --help' for more info'\n"
 	"pwd           - Print current working directory\n"
+	"more		   - read content of a file\n"
 	);
 }
 
