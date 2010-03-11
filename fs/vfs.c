@@ -27,6 +27,7 @@
 #include <initrd.h>
 #include <dirent.h>
 #include <kernel.h>
+#include <shell.h>
 
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 file_descriptor_t fd_list[_SC_OPEN_MAX];
@@ -105,6 +106,21 @@ void vfs_init(){
 int get_mountpoint_id(char *path){
        int i = 0;
        int last=-1;
+       /*ùif(path[0] != '/' ) {
+		   char abspath[CURPATH_LEN];
+		   int abs_size = 0;
+		   abs_size = strlen(current_user.cur_path);
+		   memset(abspath, '\0', CURPATH_LEN);
+		   strcpy(abspath, current_user.cur_path);
+		   if(abspath[abs_size-1] == '/')
+			strncat(abspath, path, strlen(path));
+			else {
+			strncat(abspath, "/", strlen(path));
+			strncat(abspath, path, strlen(path));
+			}		
+		   //printf("abspath: %s\n", abspath);		
+		   path = abspath;
+	   }*/
        while(i<MAX_MOUNTPOINT ){
                        if(!_kstrncmp(path, mountpoint_list[i].mountpoint, strlen(mountpoint_list[i].mountpoint))) {                 
 							   if(strlen(mountpoint_list[i].mountpoint) > strlen(mountpoint_list[last].mountpoint) && i>0)  

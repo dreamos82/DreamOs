@@ -22,9 +22,10 @@
 #include <string.h>
 #include <vfs.h>
 #include <kheap.h>
+#include <shell.h>
 
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
-
+userenv_t current_user;
 /**
   * @author Ivan Gualandri
   * @param char* path percorso del file da aprire
@@ -36,7 +37,22 @@ DIR *opendir(const char *path){
 	int mpoint_id = 0;
 	char* rel_path;	
 	DIR* pdir;
-
+	if(path[0]!='/') {
+		char abspath[CURPATH_LEN];
+		int abs_size = 0;
+		abs_size = strlen(current_user.cur_path);
+		memset(abspath, '\0', CURPATH_LEN);
+		strcpy(abspath, current_user.cur_path);
+		if(abspath[abs_size-1] == '/')
+			strncat(abspath, path, strlen(path));
+		else {
+			strncat(abspath, "/", strlen(path));
+			strncat(abspath, path, strlen(path));
+		}	
+		//printf("abspath: %s\n", abspath);
+		path = abspath;
+	}
+	//printf("%s\n", path);
 	mpoint_id = get_mountpoint_id((char*)path);
 	rel_path = get_rel_path(mpoint_id, path);	
 	//printf("%d - %s\n", mpoint_id, rel_path);

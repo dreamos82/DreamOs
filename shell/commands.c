@@ -430,15 +430,31 @@ void more(){
 
 void cd( ){
 	char *relpath;		
-	DIR *dirp=NULL;
+	char abspath[CURPATH_LEN];
+	DIR *dirp=NULL;	
 	if(argc != 2) {
 		printf("Bad usage. Try 'ls -l' and then 'cd dir'.\n");
 		return;
 	} else {
 		int i=0;
-		int rel_size = 0;		
-		i = get_mountpoint_id(argv[1]);
-		dirp=opendir(argv[1]);
+		int rel_size = 0;
+		memset(abspath, '\0', CURPATH_LEN);				
+		if(argv[1][0] == '/') {
+			i = get_mountpoint_id(argv[1]);
+			strcpy(abspath, argv[1]);
+			dirp=opendir(argv[1]);
+		}
+		else {			
+			int abs_size = 0;			
+			strcpy(abspath, current_user.cur_path);
+			if(abspath[abs_size-1] == '/')
+				strncat(abspath, argv[1], strlen(argv[1]));
+			else {
+				strncat(abspath, "/", strlen(argv[1]));
+				strncat(abspath, argv[1], strlen(argv[1]));
+			}	
+			dirp=opendir(abspath);			
+		}		
 		if(dirp!=NULL){			
 			closedir(dirp);
 		}
@@ -450,12 +466,12 @@ void cd( ){
 			return;
 		}
 		else {
-			strcpy(current_user.cur_path, argv[1]);
+			strcpy(current_user.cur_path, abspath);
 		}
-		if(rel_size >0){
+		/*if(rel_size >0){
 			relpath = get_rel_path(i, argv[1]);
 			free(relpath);
-		}
+		}*/
 	}
 	/*dirp = opendir(argv[1]);
 	if(dirp!=NULL){
