@@ -37,21 +37,7 @@ DIR *opendir(const char *path){
 	int mpoint_id = 0;
 	char* rel_path;	
 	DIR* pdir;
-	if(path[0]!='/') {
-		char abspath[CURPATH_LEN];
-		int abs_size = 0;
-		abs_size = strlen(current_user.cur_path);
-		memset(abspath, '\0', CURPATH_LEN);
-		strcpy(abspath, current_user.cur_path);
-		if(abspath[abs_size-1] == '/')
-			strncat(abspath, path, strlen(path));
-		else {
-			strncat(abspath, "/", strlen(path));
-			strncat(abspath, path, strlen(path));
-		}	
-		//printf("abspath: %s\n", abspath);
-		path = abspath;
-	}
+	path=get_abs_path((char*)path);
 	//printf("%s\n", path);
 	mpoint_id = get_mountpoint_id((char*)path);
 	rel_path = get_rel_path(mpoint_id, path);	

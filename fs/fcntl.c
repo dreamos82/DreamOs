@@ -60,15 +60,8 @@ int open(const char *path, int oflags,  ...){
 		printf("No more file descriptors available\n");
 		return -1;
 	}
-	if(path[0]!='/') {
-		char abspath[CURPATH_LEN];
-		memset(abspath, '\0', CURPATH_LEN);
-		strcpy(abspath, current_user.cur_path);
-		strncat(abspath, path, strlen(path));
-		//printf("abspath: %s\n", abspath);		
-		path = abspath;
-	}	
-	else mpid = get_mountpoint_id((char*) path);		
+	path=get_abs_path((char*) path);
+    mpid = get_mountpoint_id((char*) path);		
 	//printf("Cur_fd: %d\n",cur_fd);
 	if(mpid >-1) {
 		fd_list[cur_fd].mountpoint_id = mpid;				

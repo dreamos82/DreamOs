@@ -106,21 +106,6 @@ void vfs_init(){
 int get_mountpoint_id(char *path){
        int i = 0;
        int last=-1;
-       /*ùif(path[0] != '/' ) {
-		   char abspath[CURPATH_LEN];
-		   int abs_size = 0;
-		   abs_size = strlen(current_user.cur_path);
-		   memset(abspath, '\0', CURPATH_LEN);
-		   strcpy(abspath, current_user.cur_path);
-		   if(abspath[abs_size-1] == '/')
-			strncat(abspath, path, strlen(path));
-			else {
-			strncat(abspath, "/", strlen(path));
-			strncat(abspath, path, strlen(path));
-			}		
-		   //printf("abspath: %s\n", abspath);		
-		   path = abspath;
-	   }*/
        while(i<MAX_MOUNTPOINT ){
                        if(!_kstrncmp(path, mountpoint_list[i].mountpoint, strlen(mountpoint_list[i].mountpoint))) {                 
 							   if(strlen(mountpoint_list[i].mountpoint) > strlen(mountpoint_list[last].mountpoint) && i>0)  
@@ -149,4 +134,22 @@ char *get_rel_path(int mountpoint_id, const char* path){
 		tmp_path[j]='\0';
 	}	
 	return tmp_path;
+}
+
+char *get_abs_path(char *path){
+		if(path[0]!='/') {
+		char abspath[CURPATH_LEN];
+		int abs_size = 0;
+		abs_size = strlen(current_user.cur_path);
+		memset(abspath, '\0', CURPATH_LEN);
+		strcpy(abspath, current_user.cur_path);
+		if(abspath[abs_size-1] == '/')
+			strncat(abspath, path, strlen(path));
+		else {
+			strncat(abspath, "/", strlen(path));
+			strncat(abspath, path, strlen(path));
+		}			
+		return abspath;
+	}
+	else return path;
 }
