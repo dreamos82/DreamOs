@@ -24,7 +24,7 @@
 
 #define FILENAME_LENGTH 64
 #define MAX_FILES 32
-#define MAX_INITRD_DESCRIPTORS 10
+#define MAX_INITRD_DESCRIPTORS _SC_OPEN_MAX
 
 /*! \struct initrd_t
     \brief Contiene il numero dei files contenuti nel filesystem initrd.

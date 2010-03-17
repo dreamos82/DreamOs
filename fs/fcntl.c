@@ -78,6 +78,7 @@ int open(const char *path, int oflags,  ...){
 			va_end(ap);
 			return -1;
 		}
+		//printf("%d---%d---", cur_fd, fd_list[cur_fd].fs_spec_id);
 			//printf("Mpoint id: %d %s fs_spec_fd: %d\n", fd_list[cur_fd].mountpoint_id, path, fd_list[cur_fd].fs_spec_id);			
 	}
 	else {

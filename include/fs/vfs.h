@@ -24,7 +24,7 @@
 #include <use.h>
 
 #define MAX_MOUNTPOINT 10
-#define MAX_FD 255
+#define MAX_FD _SC_OPEN_MAX
 
 #define FS_FILE 0x01
 #define FS_DIRECTORY 0x02

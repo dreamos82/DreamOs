@@ -52,7 +52,7 @@ char **argv;
 
 int count = 9, posiz = 9, c = 10, limit = 1;
 char *lastcmd[10] = {};
-
+int hist_press = 0;
 void options(char *com)
 {  
   int i=0;
@@ -121,9 +121,9 @@ void shell()
   
   for (;;)
   {
-    /*for (c = 1 ; c <= 10 ; c++) {
+    for (c = 1 ; c <= 10 ; c++) {
     	    lastcmd[c] = (char *)kmalloc(sizeof(char) * 30); 
-    }*/
+    }
     int cmdclean = 0;
     while(cmdclean<CMD_LEN){
 		cmd[cmdclean] = '\0';
@@ -134,7 +134,7 @@ void shell()
     _kcolor(15);
 	printf("~:%s# ", current_user.cur_path);
     scanf("%30s",cmd);        
-    //history(cmd);
+    history(cmd);
    
     /* elimina eventuali spazi all'inizio del comando */
     for (i = 0, cmd_ptr = cmd; cmd[i] == ' '; i++, cmd_ptr++);
@@ -158,9 +158,9 @@ end:
     for (--argc; argc>=0; argc--) {      
         free (argv[argc]);
     }
-    /*for (c = 1 ; c <= 10 ; c++) {
+    for (c = 1 ; c <= 10 ; c++) {
     	    free(lastcmd[c]); 
-    }*/
+    }
   }
 }
 

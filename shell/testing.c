@@ -139,6 +139,7 @@ void try_open(){
 	
 	scanf("%s", appoggio);	
 	i = open(appoggio, O_RDONLY, 42);
+	printf("%d\n", i);
 	if(i>-1) {
 		int j=0;		
 		while(read(i, &prova, 1)!=0) {

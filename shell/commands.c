@@ -457,8 +457,7 @@ void cd( ){
 		}		
 		if(dirp!=NULL){			
 			closedir(dirp);
-		}
-		//else printf("bad\n");
+		}		
 		//printf("path: %s\n", argv[1]);
 		rel_size = strlen(argv[1]) - strlen(mountpoint_list[i].mountpoint);
 		if(i == -1) {			
@@ -473,15 +472,6 @@ void cd( ){
 			free(relpath);
 		}*/
 	}
-	/*dirp = opendir(argv[1]);
-	if(dirp!=NULL){
-		prova = readdir(dirp);
-		while(prova!=NULL){
-			printf("%s\n", prova->d_name);
-			prova = readdir(dirp);
-		}
-		closedir(dirp);
-	}*/
 }
 
 void whoami(){

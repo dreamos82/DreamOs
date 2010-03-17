@@ -94,7 +94,12 @@ int initfs_open(const char *path, int flags, ...){
 	int j = 0;
 	int ret_fd = -1;
 	module_var = fs_headers;
-	if(cur_irdfd >= MAX_INITRD_DESCRIPTORS) cur_irdfd=0;
+	if(cur_irdfd >= MAX_INITRD_DESCRIPTORS) {
+		int i=0;
+		cur_irdfd=0;
+		while(ird_descriptors[i].file_descriptor!=-1 && i < MAX_INITRD_DESCRIPTORS) i++;			
+		cur_irdfd = i;
+	}
 	while (j < fs_specs->nfiles) {
 		if(!strcmp(path, module_var[j].fileName)){
 				if(module_var[j].file_type == FS_DIRECTORY || module_var[j].file_type == FS_MOUNTPOINT)
@@ -102,6 +107,8 @@ int initfs_open(const char *path, int flags, ...){
 				ird_descriptors[cur_irdfd].file_descriptor	= j;
 				//printf("%s Found. Size: %d FS fd val: %d - ID File val: %d\n", path, module_var[j].length, cur_irdfd, ird_descriptors[cur_irdfd].file_descriptor);
 				ret_fd = cur_irdfd;				
+				//printf("ret_fd: %d --- %d\n", cur_irdfd, j);
+				ird_descriptors[cur_irdfd].cur_pos = 0;
 				return cur_irdfd++; 
 		}
 		j++;
