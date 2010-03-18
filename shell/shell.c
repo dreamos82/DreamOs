@@ -43,6 +43,9 @@
 userenv_t current_user;
 int argc;
 char **argv;
+int hst_flag;
+char cmd[CMD_LEN];
+
 /*
  * Inserisce gli argomenti di un comando in un array di stringhe
  * argc = numero degli argomenti
@@ -74,7 +77,7 @@ void options(char *com)
 /* corpo della shell */
 void shell()
 {
-  char cmd[CMD_LEN];
+  
   char *cmd_ptr;
  
   static struct cmd shell_cmd[NUM_COM] = {
@@ -99,7 +102,7 @@ void shell()
   };
 
   int i = 0;
-
+  hst_flag = 0;
   memset(cmd, '\0', CMD_LEN);
   memset(current_user.username, '\0', USER_LEN);
   memset(current_user.cur_path, '\0', CURPATH_LEN);  
@@ -196,6 +199,12 @@ void history_start(void) {
 
     if( (sc_uparrow = inportb (0x60) ) == KEY_UPARROW ) {
    		printf("%s", lastcmd[count]); 
+   		int cmdclean = 0;
+		while(cmdclean<CMD_LEN){
+			cmd[cmdclean] = '\0';
+			cmdclean++;
+		}	
+   		strcpy(cmd, lastcmd[count]);
 	}
        
 }
