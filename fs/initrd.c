@@ -127,8 +127,7 @@ ssize_t initfs_read(int fildes, char *buf, size_t nbyte){
 	file_start = (char *) (module_start	+ fs_headers[lfd].offset);
 	//printf("cur_pos val: %d\n", ird_descriptors[fildes].cur_pos);
 	if(nbyte == 0) return 0;	
-	while(j<nbyte && read_pos<file_size){
-		//putchar(file_start[j]);		
+	while(j<nbyte && read_pos<file_size){		
 		*buf++ = file_start[read_pos];			
 		read_pos++;
 		j++;

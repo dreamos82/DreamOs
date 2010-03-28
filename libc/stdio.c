@@ -63,9 +63,15 @@ int puts(char *s)
 
 void putchar (char ch)
 {
-	char s[2];
+	/*asm (
+		"movl $0x0, %%eax\n"
+		"movl %0, %%ecx\n"
+		"int $80\n\t"
+		::"g" (ch) );*/
+	/*char s[2];
 	s[0] = ch;
 	s[1] = '\0';
+	*/
 	//_kputs(s);
 	_kputc(ch); 
 

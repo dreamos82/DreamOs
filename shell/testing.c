@@ -155,3 +155,18 @@ void try_open(){
 void try_fsinit(){
 	printf("Number of files present: %d\n", initfs_init());
 }
+
+void try_syscall(){
+	printf("Trying sysputch:\n");
+	int i;
+	//i='A';
+    for(i='A';i<='Z';i++) {
+		asm(
+			"movl %0, %%ecx\n"
+			"movl $0x0, %%eax\n"
+			"int $80\n"
+			: : "g"(i)	
+		);	
+	}
+	printf("\n");
+}

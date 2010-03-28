@@ -487,6 +487,7 @@ void tester(){
 					{ "try_printmem", try_printmem },
 					{ "try_module", try_module },
 					{ "try_open", try_open},					
+					{ "try_syscall", try_syscall},
 					{ "--help", help_tester },
 					};
 	if (argc != 2) {

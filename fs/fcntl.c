@@ -50,9 +50,7 @@ int open(const char *path, int oflags,  ...){
 	}
 	prova = va_arg(ap, int);
 	if(cur_fd == _SC_OPEN_MAX) cur_fd = 0;
-		//printf("Cur_fd reset\n");
 		//printf("No more file descriptors available\n");
-		//return -1;
 	while(fd_list[cur_fd].mountpoint_id != -1 && cur_fd < _SC_OPEN_MAX){
 		cur_fd++;
 	}
@@ -78,12 +76,9 @@ int open(const char *path, int oflags,  ...){
 			va_end(ap);
 			return -1;
 		}
-		//printf("%d---%d---", cur_fd, fd_list[cur_fd].fs_spec_id);
-			//printf("Mpoint id: %d %s fs_spec_fd: %d\n", fd_list[cur_fd].mountpoint_id, path, fd_list[cur_fd].fs_spec_id);			
 	}
 	else {
 		if(mpid>-1) printf("No OPEN services found here\n");					
-		//fd_list[cur_fd].mountpoint_id = -1; //Controllare se va messa
 		va_end(ap);
 		return -1;
 	}
