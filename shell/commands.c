@@ -82,11 +82,13 @@ void help()
 
 void echo()
 {
+	int i = argc;
+	int j = 0;
     if ( argc == 1 ) {
          printf("");
     } else {
-		while ( --argc > 0 ) {
-		printf("%s ",*++argv);
+		while ( --i > 0 ) {
+		printf("%s ",argv[++j]);
 		}
 	}
     printf("\n");
@@ -209,8 +211,7 @@ void credits(void)
 	  		"DT\n"
          	"Celeron\n"
 	 		"Hamcha\n"
-         	"m0nt0\n"
-			"shainer\n"
+         	"m0nt0\n"			
          	"and many others (3 or 4 :P)\n\n");
   _kcolor(WHITE);
 }
