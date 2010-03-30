@@ -84,6 +84,7 @@ int open(const char *path, int oflags,  ...){
 	}
 	va_end(ap)	
 	fd_list[cur_fd].offset = 0;
+	fd_list[cur_fd].flags_mask = oflags;
 	ret_fd = cur_fd;
 	cur_fd++;
 	free((void*)path);

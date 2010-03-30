@@ -430,7 +430,7 @@ void more(){
 }
 
 void cd( ){
-	char *relpath;		
+	//char *relpath;		
 	char abspath[CURPATH_LEN];
 	DIR *dirp=NULL;	
 	if(argc != 2) {

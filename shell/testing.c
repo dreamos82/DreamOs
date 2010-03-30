@@ -108,6 +108,7 @@ void help_tester()
 		"  -> try_printmem      - Print used locations of memory\n"
 		"  -> try_module        - Read the content of the memory zone loaded in module, aka initfs \n"
 		"  -> try_open          - Function to test open() & stdarg() \n"		
+		"  -> try_syscall	    - Try some syscall functions\n"
 		);	
 }
 
@@ -157,9 +158,8 @@ void try_fsinit(){
 }
 
 void try_syscall(){
-	printf("Trying sysputch:\n");
 	int i;
-	//i='A';
+	printf("Trying sysputch:\n");	
     for(i='A';i<='Z';i++) {
 		asm(
 			"movl %0, %%ecx\n"

@@ -60,7 +60,7 @@ void syscall_handler()
      int eax=0;
      int ebx=0, ecx=0, edx=0;
      int arguments[3] = {0,0,0};
-	 int reg=5;	 
+	 
      asm ("cli");	 
      asm ("movl %%eax, %0\n\t"
 	  "movl %%ecx, %1\n\t"
