@@ -61,7 +61,8 @@ OBJ = kernel.o\
       shell/commands.o\
       shell/testing.o\
       sys/utsname.o\
-      sys/dirent.o
+      sys/dirent.o\
+      sys/stat.o
 
 dreamos.img: bl.img kernel.bin
 	mv kernel.bin dreamos.img
@@ -104,6 +105,7 @@ shell/shell.o: shell/shell.c
 shell/commands.o: shell/commands.c
 sys/utsname.o: sys/utsname.c
 sys/dirent.o: sys/dirent.c
+sys/stat.o: sys/stat.c
 
 utils:
 	make -f utils/Makefile

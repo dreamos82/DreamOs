@@ -490,6 +490,7 @@ void tester(){
 					{ "try_open", try_open},					
 					{ "try_syscall", try_syscall},
 					{ "show_fd", show_fd},
+					{ "test_stat", test_stat},
 					{ "--help", help_tester },
 					};
 	if (argc != 2) {

@@ -21,6 +21,7 @@
 
 #include <dirent.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 #define FILENAME_LENGTH 64
 #define MAX_FILES 32
@@ -65,5 +66,6 @@ DIR *initfs_opendir(const char *);
 struct dirent *initrd_readdir(DIR *);
 int initfs_open(const char *, int, ...);
 ssize_t initfs_read(int, char *, size_t);
+int initrd_stat(char* path, struct stat *buf);
 int initrd_close(int);
 #endif

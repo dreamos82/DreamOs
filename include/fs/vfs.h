@@ -22,6 +22,7 @@
 #include <stddef.h>
 #include <unistd.h>
 #include <use.h>
+#include <sys/stat.h>
 
 #define MAX_MOUNTPOINT 10
 #define MAX_FD _SC_OPEN_MAX
@@ -45,6 +46,10 @@ struct super_node_operations {
 	int (*write)(int, void*, size_t);
 };
 
+struct stat_operations{
+	int (*stat)(char*, struct stat*);
+};
+
 /*!  \struct mountpoint_t
      \brief Struttura dati che contiene le informazioni sui files system montati
  */
@@ -57,10 +62,11 @@ struct mountpoint_t {
 		int dev_id; /**< Device ID*/		
 		struct super_node_operations operations;
 		struct directory_operations dir_op;
+		struct stat_operations stat_op;
 };
 
 /*!  \struct file_descriptor
-     \brief Struttura dati che le informazioni su di un file aperto
+     \brief Struttura dati che contiene le informazioni su di un file aperto
  */
 
 struct file_descriptor {

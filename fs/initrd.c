@@ -24,6 +24,7 @@
 #include <string.h>
 #include <vfs.h>
 #include <kheap.h>
+#include <sys/stat.h>
 
 char *module_start;
 initrd_t *fs_specs;
@@ -135,6 +136,11 @@ ssize_t initfs_read(int fildes, char *buf, size_t nbyte){
 	ird_descriptors[fildes].cur_pos = read_pos;		
 	if(read_pos == file_size) return 0;
 	return nbyte;
+}
+
+int initrd_stat(char* path, struct stat *buf){
+	printf("Initrd stat function\n");
+	return 0;
 }
 
 int initrd_close(int fildes){

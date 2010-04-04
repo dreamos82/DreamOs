@@ -182,3 +182,12 @@ void show_fd(){
 	}
 	printf("\n");
 }
+
+void test_stat(){
+	struct stat *stats;
+	printf("Testing stat functions\n");
+	stats = (struct stat*) kmalloc(sizeof(struct stat));
+	stat("/README", stats);
+	printf("%d\n", stats->st_dev);	
+	free(stats);	
+}

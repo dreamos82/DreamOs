@@ -54,6 +54,7 @@ void vfs_init(){
 		mountpoint_list[i].operations.close = NULL;
 		mountpoint_list[i].operations.read = NULL;
 		mountpoint_list[i].operations.write = NULL;
+		mountpoint_list[i].stat_op.stat = NULL;
  		i++;
 	}
 	
@@ -68,6 +69,7 @@ void vfs_init(){
  	mountpoint_list[0].operations.open = &initfs_open;
  	mountpoint_list[0].operations.close = &initrd_close;
  	mountpoint_list[0].operations.read = &initfs_read;
+ 	mountpoint_list[0].stat_op.stat = initrd_stat;
  	//mountpoint_list[0].operations = kmalloc(sizeof(struct super_node_operations));
 
 	strcpy(mountpoint_list[1].mountpoint,"/dev"); 	
