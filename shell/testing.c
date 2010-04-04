@@ -27,9 +27,11 @@
 #include <kernel.h>
 #include <fcntl.h>
 #include <initrd.h>
+#include <unistd.h>
 
 //multiboot_info_t *boot_informations;
 char *module_start;
+file_descriptor_t fd_list[_SC_OPEN_MAX];
 
 void try_strtok()
 {
@@ -167,6 +169,16 @@ void try_syscall(){
 			"int $80\n"
 			: : "g"(i)	
 		);	
+	}
+	printf("\n");
+}
+
+void show_fd(){
+	int i=0;
+	while(i < _SC_OPEN_MAX){
+		if(fd_list[i].mountpoint_id == -1) printf("-1\n");
+		else printf("+%d\n", fd_list[i].mountpoint_id);
+		i++;
 	}
 	printf("\n");
 }

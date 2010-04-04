@@ -27,5 +27,6 @@ void try_module();
 void try_open();
 void try_fsinit();
 void try_syscall();
+void show_fd();
 
 #endif

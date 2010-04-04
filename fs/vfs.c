@@ -41,13 +41,6 @@ void vfs_init(){
 	cur_fd=0;
 	
 	printf(LNG_VFS); 	
-
-	while (j < _SC_OPEN_MAX){
-		fd_list[j].fs_spec_id = -1;
-		fd_list[j].mountpoint_id = -1;
-		fd_list[j].offset = 0;
-		j++;
-	}
  	
  	while(i<MAX_MOUNTPOINT) {
  		strcpy(mountpoint_list[i].mountpoint,"");
@@ -100,6 +93,13 @@ void vfs_init(){
  	mountpoint_list[3].dev_id = 0;
  	mountpoint_list[3].start_address = 0;
  	//mountpoint_list[3].operations = kmalloc(sizeof(struct super_node_operations));
+ 	
+ 		while (j < _SC_OPEN_MAX){
+		fd_list[j].fs_spec_id = -1;
+		fd_list[j].mountpoint_id = -1;
+		fd_list[j].offset = 0;
+		j++;
+	}
 
 }
 

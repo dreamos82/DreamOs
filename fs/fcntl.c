@@ -44,14 +44,16 @@ int open(const char *path, int oflags,  ...){
 	va_list ap;
 	va_start(ap, oflags);
 	ret_fd = 0;	
-	while(ret_fd < _SC_OPEN_MAX){
+	/*while(ret_fd < _SC_OPEN_MAX){
 		//if(fd_list[ret_fd].mountpoint_id == -1) printf("%d ", ret_fd);		
 		ret_fd++;
-	}
+	}*/
 	prova = va_arg(ap, int);
-	if(cur_fd == _SC_OPEN_MAX) cur_fd = 0;
-		//printf("No more file descriptors available\n");
+	cur_fd=0;
+	if(cur_fd == _SC_OPEN_MAX) cur_fd = 0;			
+
 	while(fd_list[cur_fd].mountpoint_id != -1 && cur_fd < _SC_OPEN_MAX){
+		//printf("%d %d\n", cur_fd, fd_list[cur_fd].mountpoint_id);		
 		cur_fd++;
 	}
 	if(cur_fd == _SC_OPEN_MAX) {

@@ -489,6 +489,7 @@ void tester(){
 					{ "try_module", try_module },
 					{ "try_open", try_open},					
 					{ "try_syscall", try_syscall},
+					{ "show_fd", show_fd},
 					{ "--help", help_tester },
 					};
 	if (argc != 2) {
