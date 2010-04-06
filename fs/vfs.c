@@ -120,6 +120,14 @@ int get_mountpoint_id(char *path){
                return last;
 }
 
+/**
+  * @author Ivan Gualandri
+  * @param int mountpoint_id id del punto di mountpoint del file
+  * @param char* path percorso del file da aprire
+  *
+  * Dato un path viene estratto il percorso relativo, escluso il mountpoint.
+  * @return path senza la parte relativa al mountpoint.
+  */
 char *get_rel_path(int mountpoint_id, const char* path){
 	int rel_size = 0;
 	int j=0;
@@ -138,6 +146,14 @@ char *get_rel_path(int mountpoint_id, const char* path){
 	return tmp_path;
 }
 
+/**
+  * @author Ivan Gualandri
+  * @param char* path percorso del file da aprire  
+  *
+  * Dato un path ne estrae il percorso assoluto (a partire da quello corrente)
+  * @return Path assoluto
+  * @todo Inserire gestione flags
+  */
 char *get_abs_path(char *path){
 		if(path[0]!='/') {
 		char abspath[CURPATH_LEN];

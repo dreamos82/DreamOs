@@ -28,8 +28,13 @@ int stat(const char *path, struct stat *buf){
 	mp_id = get_mountpoint_id((char*) path);	
 	printf("%d\n", mp_id);
 	buf->st_dev = mp_id;
-	if(mountpoint_list[mp_id].stat_op.stat!=NULL) mountpoint_list[mp_id].stat_op.stat((char*)path, buf);
+	if(mountpoint_list[mp_id].stat_op.stat!=NULL) {
+		path = get_rel_path(mp_id, path);
+		printf("Absolute path: %s\n", path);
+		mountpoint_list[mp_id].stat_op.stat((char*)path, buf);	
+	}
 	else printf("Null\n");
+	printf("%d\n", buf->st_uid);
 	return 0;
 }
 

@@ -44,10 +44,7 @@ int open(const char *path, int oflags,  ...){
 	va_list ap;
 	va_start(ap, oflags);
 	ret_fd = 0;	
-	/*while(ret_fd < _SC_OPEN_MAX){
-		//if(fd_list[ret_fd].mountpoint_id == -1) printf("%d ", ret_fd);		
-		ret_fd++;
-	}*/
+	
 	prova = va_arg(ap, int);
 	cur_fd=0;
 	if(cur_fd == _SC_OPEN_MAX) cur_fd = 0;			

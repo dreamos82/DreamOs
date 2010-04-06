@@ -140,6 +140,7 @@ ssize_t initfs_read(int fildes, char *buf, size_t nbyte){
 
 int initrd_stat(char* path, struct stat *buf){
 	printf("Initrd stat function\n");
+	buf->st_uid = 33;	
 	return 0;
 }
 
