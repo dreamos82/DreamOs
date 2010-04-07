@@ -188,6 +188,8 @@ void test_stat(){
 	printf("Testing stat functions\n");
 	stats = (struct stat*) kmalloc(sizeof(struct stat));
 	stat("/README", stats);
-	printf("%d\n", stats->st_dev);	
+	printf("Device_id: %d\n", stats->st_dev);	
+	printf("Size: %d\n", stats->st_size);
+	printf("Uid: %d\n", stats->st_uid);
 	free(stats);	
 }

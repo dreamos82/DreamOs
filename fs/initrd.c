@@ -139,8 +139,21 @@ ssize_t initfs_read(int fildes, char *buf, size_t nbyte){
 }
 
 int initrd_stat(char* path, struct stat *buf){
-	printf("Initrd stat function\n");
-	buf->st_uid = 33;	
+	int i;
+	initrd_file_t *module_var;
+	module_var = fs_headers;
+	i=0;
+	while(i<MAX_INITRD_DESCRIPTORS){
+		if(!strcmp(path, module_var[i].fileName)) {
+			printf("Found\n");		
+			buf->st_uid = module_var[i].uid;
+			buf->st_size = module_var[i].length;
+			break;
+		}
+		i++;
+	}
+	printf("Initrd stat function\n");	
+	//buf->st_uid = 33;	
 	return 0;
 }
 

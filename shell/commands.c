@@ -24,6 +24,7 @@
 #include <vfs.h>
 #include <testing.h>
 #include <fcntl.h>
+#include <stat.h>
 
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 userenv_t current_user;
@@ -356,16 +357,16 @@ void  drv_load(void)
 
 void ls() {
 	int i=0, j=0;
-	//int flag = 0;
+	int flag = 0;
 	DIR *dirp;
 	while ( strcmp(mountpoint_list[i].mountpoint, "") ) {
          	j++;
 		i++;
 	}
-	i = 0;	
-	//if(if argc > 1 && strcmp(argv[1], "-l") == 0) flag =1;
+	i = 0;		
 	dirp = opendir(current_user.cur_path);
 	if(dirp!=NULL){
+		if(argc > 1 && strcmp(argv[1], "-l") == 0) flag =1;
 		/*while(i<j){
 			if(strcmp(mountpoint_list[i].mountpoint, current_user.cur_path)){
 				
@@ -374,7 +375,8 @@ void ls() {
 		}*/
 		struct dirent* cur_dir_entry;
 		cur_dir_entry = readdir(dirp);		
-		while(cur_dir_entry!=NULL){			
+		while(cur_dir_entry!=NULL){
+			//struct stat 			
 			if(cur_dir_entry->d_type == FS_MOUNTPOINT) _kcolor(BRIGHT_GREEN);
 			printf("%s\n", cur_dir_entry->d_name);
 			_kcolor(WHITE);			

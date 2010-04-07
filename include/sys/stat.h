@@ -29,6 +29,8 @@ struct stat {
 	
 	uid_t     st_uid; /**< user id del file*/	
 	gid_t     st_gid; /**< group id del file*/
+	
+	off_t	  st_size; /**< Dimensione del file */
 };
 
 
