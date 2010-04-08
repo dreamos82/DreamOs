@@ -41,6 +41,7 @@ int open(const char *path, int oflags,  ...){
 	int prova;
 	int mpid;
 	int ret_fd;
+	int error = 0;
 	va_list ap;
 	va_start(ap, oflags);
 	ret_fd = 0;	
@@ -57,7 +58,7 @@ int open(const char *path, int oflags,  ...){
 		printf("No more file descriptors available\n");
 		return -1;
 	}
-	path=get_abs_path((char*) path);
+	error = get_abs_path((char*) path);
     mpid = get_mountpoint_id((char*) path);		
 	//printf("Cur_fd: %d\n",cur_fd);
 	if(mpid >-1) {

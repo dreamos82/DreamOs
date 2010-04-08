@@ -35,9 +35,11 @@ userenv_t current_user;
   */
 DIR *opendir(const char *path){
 	int mpoint_id = 0;
+	int error = 0;
+	//char tmp_path[CURPATH_LEN];
 	char* rel_path;	
 	DIR* pdir;
-	path=get_abs_path((char*)path);
+	error=get_abs_path((char*)path);
 	//printf("%s\n", path);
 	mpoint_id = get_mountpoint_id((char*)path);
 	rel_path = get_rel_path(mpoint_id, path);	

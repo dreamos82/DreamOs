@@ -90,7 +90,7 @@ char* get_rel_path(int, const char*);
 int open_dir(char *);
 int read (int, void*, size_t);
 int write (int, void*, size_t);
-char *get_abs_path(char *);
+int get_abs_path(char *);
 void vfs_init();
 
 #endif
