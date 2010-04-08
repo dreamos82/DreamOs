@@ -378,6 +378,11 @@ void ls() {
 		while(cur_dir_entry!=NULL){
 			//struct stat 			
 			if(cur_dir_entry->d_type == FS_MOUNTPOINT) _kcolor(BRIGHT_GREEN);
+			if(flag==1){
+				struct stat tmp_stat;
+				stat(cur_dir_entry->d_name, &tmp_stat);
+				printf("uid=%d(%s) - size:  %d ", tmp_stat.st_uid, "root", tmp_stat.st_size);
+			}
 			printf("%s\n", cur_dir_entry->d_name);
 			_kcolor(WHITE);			
 			cur_dir_entry = readdir(dirp);
