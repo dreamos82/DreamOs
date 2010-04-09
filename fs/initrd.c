@@ -142,11 +142,9 @@ int initrd_stat(char* path, struct stat *buf){
 	int i;
 	initrd_file_t *module_var;
 	module_var = fs_headers;
-	i=0;
-	//printf("Path: %s\n", path);
-	while(i<MAX_INITRD_DESCRIPTORS){	
-		if(!strcmp(path, module_var[i].fileName)) {
-			//printf("Found\n");		
+	i=0;	
+	while(i<MAX_FILES){			
+		if(!strcmp(path, module_var[i].fileName)) {			
 			buf->st_uid = module_var[i].uid;
 			buf->st_size = module_var[i].length;
 			break;
