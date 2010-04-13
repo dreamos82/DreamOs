@@ -88,8 +88,8 @@ extern struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 int get_mountpoint_id(char *);
 char* get_rel_path(int, const char*);
 int open_dir(char *);
-int read (int, void*, size_t);
-int write (int, void*, size_t);
+//int read (int, void*, size_t);
+//int write (int, void*, size_t);
 int get_abs_path(char *);
 void vfs_init();
 

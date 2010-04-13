@@ -37,6 +37,11 @@ ssize_t read(int fildes, void *buf, size_t nbyte){
 	return 0;
 }
 
+ssize_t write(int fildes, const void *buf, size_t nbyte){
+	printf("placeholder for write, coming soon,\n stay tuned\n");
+	return 0;
+}
+
 int close(int fildes){
 	int mp_id;
 	int fs_fd;

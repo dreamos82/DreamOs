@@ -153,7 +153,8 @@ int initrd_stat(char* path, struct stat *buf){
 	}
 	//printf("Initrd stat function\n");	
 	//buf->st_uid = 33;	
-	return 0;
+	if(i==MAX_FILES) return -1;
+	else return 0;
 }
 
 int initrd_close(int fildes){

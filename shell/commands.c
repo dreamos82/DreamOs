@@ -454,6 +454,7 @@ void cd( ){
 		}
 		else {			
 			int abs_size = 0;			
+			abs_size = strlen(current_user.cur_path);
 			strcpy(abspath, current_user.cur_path);
 			if(abspath[abs_size-1] == '/')
 				strncat(abspath, argv[1], strlen(argv[1]));

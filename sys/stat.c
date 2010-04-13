@@ -39,7 +39,7 @@ int stat(const char *path, struct stat *buf){
 	
 	mp_id = get_mountpoint_id((char*) tmp_path);
 	if(mp_id == -1) {
-		printf("No file\n");
+		//printf("No file\n");
 		return -1;
 	}
 	//printf("%d\n", mp_id);
