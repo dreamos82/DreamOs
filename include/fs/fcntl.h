@@ -25,6 +25,9 @@
 #define O_WRONLY    00000001
 #define O_RDWR      00000002
 
+#define O_CREAT		00000004
+
+
 int  creat(const char *, mode_t);
 int  fcntl(int, int, ...);
 int  open(const char *, int, ...);

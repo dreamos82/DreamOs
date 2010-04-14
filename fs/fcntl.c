@@ -49,6 +49,10 @@ int open(const char *path, int oflags,  ...){
 	prova = va_arg(ap, int);
 	cur_fd=0;
 	if(cur_fd == _SC_OPEN_MAX) cur_fd = 0;			
+	if(oflags&O_CREAT) {
+		printf("O_CREAT Flag\n");
+		return -1;
+	}
 
 	while(fd_list[cur_fd].mountpoint_id != -1 && cur_fd < _SC_OPEN_MAX){
 		//printf("%d %d\n", cur_fd, fd_list[cur_fd].mountpoint_id);		

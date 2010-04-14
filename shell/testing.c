@@ -156,7 +156,8 @@ void try_open(){
 }
 
 void try_fsinit(){
-	printf("Number of files present: %d\n", initfs_init());
+	//printf("Number of files present: %d\n", initfs_init());
+	open("pippo", O_RDWR|O_CREAT);
 }
 
 void try_syscall(){
