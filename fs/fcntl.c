@@ -42,17 +42,16 @@ int open(const char *path, int oflags,  ...){
 	int mpid;
 	int ret_fd;
 	int error = 0;
+	char *newpath;
 	va_list ap;
 	va_start(ap, oflags);
 	ret_fd = 0;	
-	
+	//printf("Path: %s\n", path);	
 	prova = va_arg(ap, int);
+	newpath = kmalloc(CURPATH_LEN * sizeof(char));
+	memset(newpath, '\0', CURPATH_LEN);
 	cur_fd=0;
 	if(cur_fd == _SC_OPEN_MAX) cur_fd = 0;			
-	if(oflags&O_CREAT) {
-		printf("O_CREAT Flag\n");
-		return -1;
-	}
 
 	while(fd_list[cur_fd].mountpoint_id != -1 && cur_fd < _SC_OPEN_MAX){
 		//printf("%d %d\n", cur_fd, fd_list[cur_fd].mountpoint_id);		
@@ -62,19 +61,21 @@ int open(const char *path, int oflags,  ...){
 		printf("No more file descriptors available\n");
 		return -1;
 	}
-	error = get_abs_path((char*) path);
-    mpid = get_mountpoint_id((char*) path);		
+	strcpy(newpath, path);	
+	error = get_abs_path((char*) newpath);
+	//printf("After get_abs: %s %s\n", newpath, current_user.cur_path);
+    mpid = get_mountpoint_id((char*) newpath);		
 	//printf("Cur_fd: %d\n",cur_fd);
 	if(mpid >-1) {
 		fd_list[cur_fd].mountpoint_id = mpid;				
-		path = get_rel_path(mpid, path);		
+		newpath = get_rel_path(mpid, (char *)newpath);		
 	} else {
 		printf("That path doesn't exist\n");
 		va_end(ap);
 		return -1;
 	}
 	if( mpid > -1 && mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open != NULL){
-			fd_list[cur_fd].fs_spec_id = (int) mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open(path, oflags);
+			fd_list[cur_fd].fs_spec_id = (int) mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open(newpath, oflags);
 		if(fd_list[cur_fd].fs_spec_id == -1){
 			printf("No file's Found\n");
 			va_end(ap);
@@ -91,7 +92,7 @@ int open(const char *path, int oflags,  ...){
 	fd_list[cur_fd].flags_mask = oflags;
 	ret_fd = cur_fd;
 	cur_fd++;
-	free((void*)path);
+	free(newpath);
 	return ret_fd;
 }
 

@@ -155,7 +155,7 @@ void try_open(){
 	printf("\n");
 }
 
-void try_fsinit(){
+void try_ocreat(){
 	//printf("Number of files present: %d\n", initfs_init());
 	open("pippo", O_RDWR|O_CREAT);
 }

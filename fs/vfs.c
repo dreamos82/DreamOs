@@ -151,14 +151,15 @@ char *get_rel_path(int mountpoint_id, const char* path){
   * @param char* path percorso del file da aprire  
   *
   * Dato un path ne estrae il percorso assoluto (a partire da quello corrente)
-  * @return Path assoluto  
+  * @return error code  
   */
 int get_abs_path(char *path){
-		if(path[0]!='/') {
+		if(path[0]!='/') {			
 		char abspath[CURPATH_LEN];
 		int abs_size = 0;
-		abs_size = strlen(current_user.cur_path);
+		abs_size = strlen(current_user.cur_path);		
 		memset(abspath, '\0', CURPATH_LEN);
+		//printf("Abs: %s\n", abspath);
 		strcpy(abspath, current_user.cur_path);
 		if(abspath[abs_size-1] == '/')
 			strncat(abspath, path, strlen(path));

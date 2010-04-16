@@ -24,6 +24,7 @@
 #include <string.h>
 #include <vfs.h>
 #include <kheap.h>
+#include <fcntl.h>
 #include <sys/stat.h>
 
 char *module_start;
@@ -101,8 +102,22 @@ int initfs_open(const char *path, int flags, ...){
 		while(ird_descriptors[i].file_descriptor!=-1 && i < MAX_INITRD_DESCRIPTORS) i++;			
 		cur_irdfd = i;
 	}
-	while (j < fs_specs->nfiles) {
-		if(!strcmp(path, module_var[j].fileName)){
+	if(flags&O_CREAT) {
+		printf("O_CREAT Flag\n");
+		if(fs_specs->nfiles < MAX_FILES ){			
+			module_var[fs_specs->nfiles].magic=0xBF;
+			strcpy(module_var[fs_specs->nfiles].fileName, path);
+			module_var[fs_specs->nfiles].file_type = FS_FILE;
+			module_var[fs_specs->nfiles].uid = 1;
+			module_var[fs_specs->nfiles].offset = 0;
+			fs_specs->nfiles++;
+			return cur_irdfd++; 
+		}
+		return -1;
+	}
+	else {
+		while (j < fs_specs->nfiles) {
+			if(!strcmp(path, module_var[j].fileName)){
 				if(module_var[j].file_type == FS_DIRECTORY || module_var[j].file_type == FS_MOUNTPOINT)
 					return -1;
 				ird_descriptors[cur_irdfd].file_descriptor	= j;
@@ -111,8 +126,9 @@ int initfs_open(const char *path, int flags, ...){
 				//printf("ret_fd: %d --- %d\n", cur_irdfd, j);
 				ird_descriptors[cur_irdfd].cur_pos = 0;
 				return cur_irdfd++; 
+			}
+			j++;
 		}
-		j++;
 	}
 	return -1;	
 }

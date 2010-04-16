@@ -25,7 +25,7 @@ void do_fault();
 void help_tester();
 void try_module();
 void try_open();
-void try_fsinit();
+void try_ocreat();
 void try_syscall();
 void show_fd();
 void test_stat();

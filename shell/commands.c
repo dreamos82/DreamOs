@@ -494,7 +494,7 @@ void tester(){
 					{ "try_strtok", try_strtok },
 					{ "do_fault", do_fault },
 					{ "try_printmem", try_printmem },
-					{ "try_ocreat", try_fsinit },
+					{ "try_ocreat", try_ocreat },
 					{ "try_open", try_open},					
 					{ "try_syscall", try_syscall},
 					{ "show_fd", show_fd},
