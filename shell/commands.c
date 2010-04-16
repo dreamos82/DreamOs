@@ -60,25 +60,12 @@ void logo()
 void help()
 {
   printf ("Available commands:\n");
-  printf(
-	"help          - See the 'help' list to learn the DreamOS commands now available\n"
-	"clear         - Clear the screen\n"
-	"poweroff      - Turn off the machine\n"
-	"aalogo        - Show an ascii art logo\n"
-	"uname         - Print kernel version, try uname --help for more info\n"
-	"credits       - Show DreamOS credits\n"
-	"sleep         - pause DreamOS for a particular number of seconds\n"
-	"cpuid         - Show cpu identification informations\n"
-	"date          - Show date and time\n"
-	"echo          - Print some lines of text\n"
-	"drv_load      - Tool to load and kill drivers\n"
-	"ls            - Tool for listing dir - not complete-\n"
-	"cd            - Change dir - not complete-\n"
-	"whoami        - Show the current user name\n"
-	"tester        - Try some functions, 'tester --help' for more info'\n"
-	"pwd           - Print current working directory\n"
-	"more		   - read content of a file\n"
-	);
+  int i=0;
+  while(i<DEF_COM)
+  {
+	printf("%s   %s\n", shell_cmd[i].cmdname, shell_cmd[i].cmddesc);
+	i++;
+  }
 }
 
 void echo()
