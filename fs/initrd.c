@@ -47,8 +47,9 @@ int initfs_init(){
 		i++;
 	}
 	cur_irdfd = 0;
+	printf("Number of files present: %d\n", fs_specs->nfiles);		
 	return fs_specs->nfiles;
-	//printf("Number of files present: %d\n", fs_specs->nfiles);		
+	
 }
 
 DIR *initfs_opendir(const char *path){

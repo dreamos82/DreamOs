@@ -27,9 +27,9 @@
 
 
 struct cmd {
-	const char cmdname[CMD_LEN];
+	char cmdname[CMD_LEN];
 	void (*h_func)(void);
-	const char cmddesc[DESC_LEN];
+	char cmddesc[DESC_LEN];
 };
 
 struct user_env {
@@ -38,9 +38,10 @@ struct user_env {
 };
 
 //extern char cur_path[256];
-struct cmd shell_cmd[NUM_COM];
+//extern struct cmd shell_cmd[NUM_COM];
 typedef struct user_env userenv_t;
 extern userenv_t current_user;
+void shell_init();
 void shell(void);
 void history (char *);
 void history_start(void);

@@ -33,6 +33,7 @@ CFLAGS = -nostdlib\
 
 OBJ = kernel.o\
       io/video.o\
+      shell/shell.o\
       drivers/keyboard.o\
       drivers/mouse.o\
 	  fs/vfs.o\
@@ -57,7 +58,6 @@ OBJ = kernel.o\
       misc/debug.o \
       system/syscall.o\
       hardware/8253.o\
-      shell/shell.o\
       shell/commands.o\
       shell/testing.o\
       sys/utsname.o\

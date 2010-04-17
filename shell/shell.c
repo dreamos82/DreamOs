@@ -45,7 +45,7 @@ int argc;
 char **argv;
 int hst_flag;
 char cmd[CMD_LEN];
-struct cmd shell_cmd[NUM_COM] = {
+/*struct cmd shell_cmd[NUM_COM] = {
  { "aalogo",   aalogo,    "  Show an ascii art logo" },
  { "clear",    _kclear,   "   Clear the screen" },
  { "poweroff", poweroff,  "Turn off the machine" },
@@ -64,7 +64,7 @@ struct cmd shell_cmd[NUM_COM] = {
  { "tester",   tester,    "  Try some functions, 'tester --help' for more info'" },	
  { "pwd",      pwd,       "     Print current working directory" },
  { "more",     more,      "    Read content of a file" },
-};
+};*/
 /*
  * Inserisce gli argomenti di un comando in un array di stringhe
  * argc = numero degli argomenti
@@ -99,6 +99,26 @@ void shell()
   
   char *cmd_ptr;
  
+  static struct cmd shell_cmd[NUM_COM] = {
+	{ "aalogo",   aalogo      },
+	{ "clear",    _kclear     },
+	{ "poweroff", poweroff    },
+	{ "uname",    uname_cmd   },
+	{ "credits",  credits     },
+	{ "sleep",    sleep_cmd   },
+	{ "cpuid",    cpuid 	  },
+	{ "date",     date 	  },
+	{ "echo",     echo 	  },
+	{ "help",     help	  },
+	{ "answer",   answer  },
+	{ "drv_load", drv_load},
+	{ "ls",       ls},
+	{ "cd",       cd},
+	{ "whoami",   whoami},
+	{ "tester", tester},	
+	{ "pwd", pwd},
+	{ "more", more},
+  };
 
 
   int i = 0;
