@@ -36,9 +36,8 @@
 
 unsigned int *current_page_dir;
 unsigned int *current_page_table;
-extern size_t tot_mem;
-extern unsigned int end;
-extern heap_t *kheap;
+size_t tot_mem;
+unsigned int end;
 
 void init_paging(){
     int i;

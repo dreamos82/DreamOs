@@ -121,7 +121,7 @@
          popl %ecx;\
          popl %eax;"       
 
-extern IRQ_s *shareHandler[16];
+extern IRQ_s *shareHandler[IRQ_NUM];
 
 extern void (*IntTable[IDT_SIZE])();
 void init_funcTable();

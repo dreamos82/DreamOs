@@ -33,7 +33,7 @@
 
 // #define DEBUG 1
 void (*IntTable[IDT_SIZE])();
-IRQ_s *shareHandler[16];
+IRQ_s *shareHandler[IRQ_NUM];
 
 /** @author Ivan Gualandri
  *  @return none

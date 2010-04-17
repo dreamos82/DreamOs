@@ -21,7 +21,6 @@
 #include <fcntl.h>
 #include <vfs.h>
 
-struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 file_descriptor_t fd_list[_SC_OPEN_MAX];
 
 ssize_t read(int fildes, void *buf, size_t nbyte){

@@ -25,9 +25,6 @@
 #include <shell.h>
 
 int cur_fd;
-file_descriptor_t fd_list[_SC_OPEN_MAX];
-struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
-userenv_t current_user;
 
 /**
   * @author Ivan Gualandri

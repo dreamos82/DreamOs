@@ -23,7 +23,7 @@
 #include <string.h>
 #include <sys/stat.h>
 
-struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
+//struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 
 int stat(const char *path, struct stat *buf){
 	char tmp_path[CURPATH_LEN];	

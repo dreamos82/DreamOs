@@ -26,8 +26,8 @@
 #include <fcntl.h>
 #include <stat.h>
 
-struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
-userenv_t current_user;
+int argc;
+char **argv;
 
 void aalogo()
 {

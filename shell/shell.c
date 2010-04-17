@@ -41,8 +41,6 @@
 
 #define NUM_COM 30
 userenv_t current_user;
-int argc;
-char **argv;
 int hst_flag;
 char cmd[CMD_LEN];
 /*struct cmd shell_cmd[NUM_COM] = {

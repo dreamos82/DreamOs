@@ -32,14 +32,10 @@
 #define KHEAP_LIST_ADDRESS 0xC0000000
 
 // #define DEBUG 1
-extern unsigned int end;
-extern size_t tot_mem;
 heap_t *kheap;
 heap_t *kheap_tmp;
 unsigned int address_cur = (unsigned int) &end;
 unsigned int node_address;
-char *module_start;
-unsigned int module_end;
 
 void* kmalloc(unsigned int size)
 {

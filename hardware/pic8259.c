@@ -29,7 +29,7 @@
 #include <8253.h>
 #include <bitops.h>
 
-IRQ_s *shareHandler[IRQ_NUM];
+//IRQ_s *shareHandler[IRQ_NUM];
 // IRQ_s shareHandler[16];
 // IRQ_s *tmpHandler;
 byte master_cur_mask;

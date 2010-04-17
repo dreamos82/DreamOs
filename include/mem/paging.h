@@ -25,6 +25,7 @@
 #ifndef PAGING_H
 #define PAGING_H
 
+#include <stddef.h>
 #define PD_LIMIT 0x400
 #define PT_LIMIT 0x400
 
@@ -61,6 +62,8 @@ typedef struct pg_dir {
 
 extern unsigned int *current_page_dir;
 extern unsigned int *current_page_table;
+extern unsigned int end;
+extern size_t tot_mem;
 void init_paging();
 unsigned int* create_pageDir();
 unsigned int* create_pageTable();

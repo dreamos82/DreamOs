@@ -24,8 +24,6 @@
 #include <kheap.h>
 #include <shell.h>
 
-struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
-userenv_t current_user;
 /**
   * @author Ivan Gualandri
   * @param char* path percorso del file da aprire

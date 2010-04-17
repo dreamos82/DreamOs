@@ -30,9 +30,9 @@
 
 extern multiboot_info_t *boot_informations;
 //extern char *module_start;
+extern char *module_start;
 extern unsigned int module_end;
 asmlinkage void _start(struct multiboot_info*);
-extern char *module_start;
 int main_loop(struct multiboot_info*);
 
 #define DREAMOS_VER "DreamOS ver 0.2.0 - trunk"
