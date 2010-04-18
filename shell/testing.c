@@ -156,8 +156,12 @@ void try_open(){
 }
 
 void try_ocreat(){
+	int fd=0;
 	//printf("Number of files present: %d\n", initfs_init());
-	open("pippo", O_RDWR|O_CREAT);
+	fd = open("pippo", O_RDWR|O_CREAT);	
+	if(fd>=0) write(fd, "buffo buffer", sizeof("buffo buffer"));
+	else printf("Error?\n");
+	close(fd);	
 }
 
 void try_syscall(){

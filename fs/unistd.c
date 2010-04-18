@@ -21,7 +21,7 @@
 #include <fcntl.h>
 #include <vfs.h>
 
-file_descriptor_t fd_list[_SC_OPEN_MAX];
+//file_descriptor_t fd_list[_SC_OPEN_MAX];
 
 ssize_t read(int fildes, void *buf, size_t nbyte){
 	int mp_id = 0;
@@ -37,7 +37,9 @@ ssize_t read(int fildes, void *buf, size_t nbyte){
 }
 
 ssize_t write(int fildes, const void *buf, size_t nbyte){
+	if(fd_list[fildes].flags_mask&O_RDWR) printf("allright, let's go\n");
 	printf("placeholder for write, coming soon,\n stay tuned\n");
+	printf("Oh i received something: %s\n", buf);
 	return 0;
 }
 

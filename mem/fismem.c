@@ -44,7 +44,7 @@ void init_mem(){
 //     int remainder=0;
     mem_info = mem_info_root;
     while(i<BITMAP_SIZE){
-        if(i<64)mem_bitmap.mem_map[i] = 0xFFFFFFFF;
+        if(i<32)mem_bitmap.mem_map[i] = 0xFFFFFFFF;
         else mem_bitmap.mem_map[i] = 0x00000000;
         i++;
     }
