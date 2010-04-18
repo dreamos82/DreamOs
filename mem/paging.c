@@ -36,38 +36,40 @@
 
 unsigned int *current_page_dir;
 unsigned int *current_page_table;
-unsigned int *second_pagedir;
+//unsigned int *third_pagetable;
 unsigned int *second_pagetable;
 size_t tot_mem;
 unsigned int end;
 
 void init_paging(){
-    int i;
-    //unsigned int apic_location;
+    int i;    
     printf(LNG_PAGING);
-    _kprintOK();    
-	//apic_location = create_pageTable();
+    _kprintOK();    	
     current_page_dir = create_pageDir();  
-    second_pagedir = create_pageDir();  
-    //second_pagetable = create_pageTable();
+    second_pagetable = create_pageTable();      
+    //third_pagetable = create_pageTable();      
     #ifdef DEBUG
     printf("Pd baseAddress: %d\n", (unsigned int) current_page_dir);
     #endif
     i=0;    
     while(i<PD_LIMIT){
-        current_page_dir[i] = 0x00000000;
-        second_pagedir[i] = 0x00000000;
+        current_page_dir[i] = 0x00000000;        
         i++;
     }    
     set_pagedir_entry(1023, (unsigned int)current_page_dir, PD_PRESENT|SUPERVISOR, 0);    
     current_page_table=create_pageTable();
+    second_pagetable = create_pageTable();
+    //third_pagetable = create_pageTable();
     i=0;
     while(i<PT_LIMIT){
         current_page_table[i] = 0x00000000;
+        second_pagetable[i] = 0x00000000;
+        //third_pagetable[i] = 0x00000000;
         i++;
     }
     set_pagedir_entry(0, (unsigned int)current_page_table, PD_PRESENT|SUPERVISOR|WRITE,0);    
     set_pagedir_entry(1, (unsigned int)second_pagetable, PD_PRESENT|SUPERVISOR|WRITE,0);    
+    //set_pagedir_entry(2, (unsigned int)third_pagetable, PD_PRESENT|SUPERVISOR|WRITE,0);    
     i=0;
     while(i<PT_LIMIT){
         set_pagetable_entry(i,i*0x1000,SUPERVISOR|PD_PRESENT|WRITE,0);        
