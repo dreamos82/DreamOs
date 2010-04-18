@@ -85,12 +85,13 @@ heap_t* make_heap(unsigned int size)
 	heap_node_t* module_node;
 
     new_heap = (heap_t*)KHEAP_LIST_ADDRESS;
-    node_address = KHEAP_LIST_ADDRESS + sizeof(heap_t);
+    node_address = KHEAP_LIST_ADDRESS + sizeof(heap_t);        
 //     new_heap = (heap_t*)kmalloc(sizeof(heap_t));
 //     first_node = (heap_node_t*)alloc_node();
-    first_node = (heap_node_t*)node_address;
-    node_address = node_address + sizeof(heap_node_t);
+    first_node = (heap_node_t*)node_address;    
+    node_address = node_address + sizeof(heap_node_t);    
     first_node->start_address = (unsigned int)&end;
+    //printf("Test\n");
     first_node->size = size;
     first_node->next = NULL;
 
@@ -98,7 +99,7 @@ heap_t* make_heap(unsigned int size)
     new_heap->max_size = tot_mem-(unsigned int) &end;
     new_heap->free_list = first_node;
     new_heap->used_list = NULL;
-    new_heap->free_nodes = NULL;
+    new_heap->free_nodes = NULL;    
     printf("  First heap created...\n");   
     printf("  Size: %d "
 	   "  Tot mem: %d\n", (new_heap->free_list)->size, tot_mem);	    

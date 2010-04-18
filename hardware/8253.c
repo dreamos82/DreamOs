@@ -43,9 +43,8 @@ void configure_PIT ()
     ticks = seconds = 0;
     outportb (PIT_COMREG,0x37);
     outportb (PIT_DATAREG0,divisor & 0xFF);
-    outportb (PIT_DATAREG0,divisor >> 8);
+    outportb (PIT_DATAREG0,divisor >> 8);    
     asm ("sti");
-
 }
 
 unsigned int sleep (unsigned int secs)

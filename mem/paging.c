@@ -36,6 +36,8 @@
 
 unsigned int *current_page_dir;
 unsigned int *current_page_table;
+unsigned int *second_pagedir;
+unsigned int *second_pagetable;
 size_t tot_mem;
 unsigned int end;
 
@@ -45,16 +47,19 @@ void init_paging(){
     printf(LNG_PAGING);
     _kprintOK();    
 	//apic_location = create_pageTable();
-    current_page_dir = create_pageDir();
+    current_page_dir = create_pageDir();  
+    second_pagedir = create_pageDir();  
+    //second_pagetable = create_pageTable();
     #ifdef DEBUG
     printf("Pd baseAddress: %d\n", (unsigned int) current_page_dir);
     #endif
     i=0;    
     while(i<PD_LIMIT){
         current_page_dir[i] = 0x00000000;
+        second_pagedir[i] = 0x00000000;
         i++;
-    }
-    set_pagedir_entry(1023, (unsigned int)current_page_dir, PD_PRESENT|SUPERVISOR, 0);
+    }    
+    set_pagedir_entry(1023, (unsigned int)current_page_dir, PD_PRESENT|SUPERVISOR, 0);    
     current_page_table=create_pageTable();
     i=0;
     while(i<PT_LIMIT){
@@ -62,21 +67,22 @@ void init_paging(){
         i++;
     }
     set_pagedir_entry(0, (unsigned int)current_page_table, PD_PRESENT|SUPERVISOR|WRITE,0);    
+    set_pagedir_entry(1, (unsigned int)second_pagetable, PD_PRESENT|SUPERVISOR|WRITE,0);    
     i=0;
     while(i<PT_LIMIT){
-        set_pagetable_entry(i,i*0x1000,SUPERVISOR|PD_PRESENT|WRITE,0);
+        set_pagetable_entry(i,i*0x1000,SUPERVISOR|PD_PRESENT|WRITE,0);        
         #ifdef DEBUG
         if(i<10) printf("cpt: %d\n", current_page_table[i]);
         #endif
         i++;
-    }
+    }   
     //apic_location = request_pages(1, NOT_ADD_LIST);	
 	//set_pagedir_entry(1019, (unsigned int) apic_location, PD_PRESENT|SUPERVISOR, 0);	
            
     load_pdbr((unsigned int)current_page_dir);
 	//set_pagetable_entry_ric(1019, 512 ,0xFEE00000, SUPERVISOR|PD_PRESENT|WRITE, 0);
-	//set_pagetable_entry_ric(1019, 0 ,0xFEC00000, SUPERVISOR|PD_PRESENT|WRITE, 0);
-    kheap = make_heap(tot_mem - ((unsigned int) &end));
+	//set_pagetable_entry_ric(1019, 0 ,0xFEC00000, SUPERVISOR|PD_PRESENT|WRITE, 0);	
+    kheap = make_heap(tot_mem - ((unsigned int) &end));    
 }
 
 /**
@@ -229,10 +235,11 @@ void page_fault_handler (int ecode)
     unsigned int pd_entry, pt_entry;
     unsigned int *new_pt;
 	void *new_p;
-
+    //printf("Test\n");
         /* Ricava l'indirizzo che ha causato l'eccezione */
     asm ("movl %%cr2, %0":"=r" (fault_addr));
-
+	//printf("Fault addr: %d\n", fault_addr); 
+	//while(1);
     if ((ecode & PF_MASK) == 2 || (ecode & PF_MASK) == 0) {
     pdir = BITRANGE (fault_addr, 22, 31);
     ptable = BITRANGE (fault_addr, 12, 21);

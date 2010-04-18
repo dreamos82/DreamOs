@@ -44,12 +44,12 @@ void init_mem(){
 //     int remainder=0;
     mem_info = mem_info_root;
     while(i<BITMAP_SIZE){
-        if(i<16)mem_bitmap.mem_map[i] = 0xFFFFFFFF;
+        if(i<32)mem_bitmap.mem_map[i] = 0xFFFFFFFF;
         else mem_bitmap.mem_map[i] = 0x00000000;
         i++;
     }
-	mem_bitmap.mem_map[0xf7f0] = 0x00000001;
-	mem_bitmap.mem_map[0x7f60] = 0x00000001;
+	//mem_bitmap.mem_map[0xf7f0] = 0x00000001;
+	//mem_bitmap.mem_map[0x7f60] = 0x00000001;
     i=0;    
     bmp_elements = (tot_mem/4096)/32;    
     //     printf("bmp_elements: %d\n", bmp_elements);
