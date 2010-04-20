@@ -302,12 +302,15 @@ void _kntos(char *buffer,unsigned int num, int base)
      _kntohex (buffer, num);
   else {
     if (num == 0)
-      *p++ = 48;
-
+      *p++ = '0';
+	else if(num<0) {
+		num=(~num)+1;
+		*p++='-';
+	}
     while(num > 0)
     {
       mod = num % base;
-      *p++ = mod + 48;
+      *p++ = mod + '0';
       num = num / base;
     }
 

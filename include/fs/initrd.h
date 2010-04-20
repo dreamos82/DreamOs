@@ -66,6 +66,7 @@ DIR *initfs_opendir(const char *);
 struct dirent *initrd_readdir(DIR *);
 int initfs_open(const char *, int, ...);
 ssize_t initfs_read(int, char *, size_t);
-int initrd_stat(char* path, struct stat *buf);
+int initrd_stat(char*, struct stat*);
+ssize_t initrd_write(int, const void*, size_t);
 int initrd_close(int);
 #endif

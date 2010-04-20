@@ -174,6 +174,10 @@ int initrd_stat(char* path, struct stat *buf){
 	else return 0;
 }
 
+ssize_t initrd_write(int fildes, const void *buf, size_t nbyte){
+	printf("Please wait, im writing the world...\n");
+}
+
 int initrd_close(int fildes){
 	ird_descriptors[fildes].file_descriptor = -1;
 	ird_descriptors[fildes].cur_pos = 0;

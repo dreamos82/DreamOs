@@ -38,7 +38,7 @@ struct user_env {
 };
 
 //extern char cur_path[256];
-//extern struct cmd shell_cmd[NUM_COM];
+extern struct cmd shell_cmd[NUM_COM];
 typedef struct user_env userenv_t;
 extern userenv_t current_user;
 void shell_init();

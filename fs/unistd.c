@@ -37,9 +37,19 @@ ssize_t read(int fildes, void *buf, size_t nbyte){
 }
 
 ssize_t write(int fildes, const void *buf, size_t nbyte){
-	if(fd_list[fildes].flags_mask&O_RDWR) printf("allright, let's go\n");
-	printf("placeholder for write, coming soon,\n stay tuned\n");
-	printf("Oh i received something: %s\n", buf);
+	int mp_id = 0;
+	int fs_fd = 0;
+	mp_id = fd_list[fildes].mountpoint_id;
+	fs_fd = fd_list[fildes].fs_spec_id;
+	if(fd_list[fildes].flags_mask&O_RDWR) {		
+		printf("allright, let's go\n");
+		printf("placeholder for write, coming soon,\n stay tuned\n");
+		printf("Oh i received something: %s\n", buf);
+		if((ssize_t*)mountpoint_list[fd_list[fildes].mountpoint_id].operations.write!=NULL)
+			mountpoint_list[fd_list[fildes].mountpoint_id].operations.write(fs_fd, buf, nbyte);
+		else return -1;
+	}
+	else return -1;
 	return 0;
 }
 
