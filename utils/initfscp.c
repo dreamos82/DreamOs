@@ -44,7 +44,7 @@ int main(int argc, char* argv[]){
 			printf("Size of headers: %ld %ld\n\n", sizeof(struct initrd_file_t)*32, sizeof(initrd_file_t));
 			printf("Clearing headers structures ");
 			offset = sizeof(struct initrd_file_t) * 32 + sizeof(int);
-			
+			/*Pulizia delle strutture dati*/
 			for (i=0; i<MAX_FILES; i++){
 				headers[i].magic = 0xBF;
 				strcpy(headers[i].fileName, "");

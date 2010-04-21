@@ -60,6 +60,8 @@ typedef struct initrd_fd initrd_fd;
 
 extern initrd_t* fs_specs;
 extern initrd_file_t* fs_headers;
+extern unsigned int fs_end;
+
 void dummy();
 int initfs_init();
 DIR *initfs_opendir(const char *);

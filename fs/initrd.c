@@ -31,6 +31,7 @@ char *module_start;
 initrd_t *fs_specs;
 initrd_file_t* fs_headers;
 initrd_fd ird_descriptors[MAX_INITRD_DESCRIPTORS];
+unsigned int fs_end;
 unsigned int cur_irdfd;
 
 void dummy(){
@@ -39,6 +40,7 @@ void dummy(){
 
 int initfs_init(){	
 	int i=0;
+	fs_end = 0;
 	fs_specs = (initrd_t *) module_start;
 	fs_headers = (initrd_file_t *)(module_start + sizeof(initrd_t));
 	while (i<MAX_INITRD_DESCRIPTORS) {
@@ -47,7 +49,9 @@ int initfs_init(){
 		i++;
 	}
 	cur_irdfd = 0;
-	printf("Number of files present: %d\n", fs_specs->nfiles);		
+	printf("Number of files present: %d\n", fs_specs->nfiles);
+	fs_end = fs_headers[(fs_specs->nfiles)-1].offset + fs_headers[(fs_specs->nfiles)-1].length;
+	printf("Fs_end: %d\n", fs_end);
 	return fs_specs->nfiles;
 	
 }
@@ -110,7 +114,10 @@ int initfs_open(const char *path, int flags, ...){
 			strcpy(module_var[fs_specs->nfiles].fileName, path);
 			module_var[fs_specs->nfiles].file_type = FS_FILE;
 			module_var[fs_specs->nfiles].uid = 1;
-			module_var[fs_specs->nfiles].offset = 0;
+			module_var[fs_specs->nfiles].offset = ++fs_end;
+			module_var[fs_specs->nfiles].length = 0;
+			ird_descriptors[cur_irdfd].file_descriptor	= fs_specs->nfiles;
+			ird_descriptors[cur_irdfd].cur_pos = 0;
 			fs_specs->nfiles++;
 			return cur_irdfd++; 
 		}
@@ -175,7 +182,22 @@ int initrd_stat(char* path, struct stat *buf){
 }
 
 ssize_t initrd_write(int fildes, const void *buf, size_t nbyte){
+	char *file_start;
+	char *appoggio;
+	appoggio = (char *) kmalloc(strlen(buf)*sizeof(char));
+	strcpy(appoggio, buf);
+	unsigned int lfd = 0;
+	int i = 0;
+	lfd = ird_descriptors[fildes].file_descriptor;
 	printf("Please wait, im writing the world...\n");
+	printf("And the world begun with those words: %s and his mark his: %d\n", appoggio, lfd);
+	file_start = (char *) (module_start	+ fs_headers[lfd].offset);
+	while(i<=nbyte) {	
+		file_start[i] = appoggio[i];	
+		i++;
+	} 
+	fs_headers[lfd].length = i;
+	//fs_headers[ird_descriptors.fildes].
 }
 
 int initrd_close(int fildes){
@@ -183,3 +205,4 @@ int initrd_close(int fildes){
 	ird_descriptors[fildes].cur_pos = 0;
 	return 0;
 }
+
