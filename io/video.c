@@ -291,9 +291,10 @@ void _kntohex (char *buffer, unsigned int decnum)
   *
   * Move the number "num" into a string
   */
-void _kntos(char *buffer,unsigned int num, int base)
+void _kntos(char *buffer,int num, int base)
 {
   int mod;
+  //int numval;
   char *p, *pbase;
 
   p = pbase = buffer;
@@ -303,9 +304,10 @@ void _kntos(char *buffer,unsigned int num, int base)
   else {
     if (num == 0)
       *p++ = '0';
-	else if(num<0) {
+	else if(num<0) {		
 		num=(~num)+1;
 		*p++='-';
+		*pbase++;
 	}
     while(num > 0)
     {

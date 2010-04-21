@@ -48,7 +48,7 @@
 
 #define OK_POS 70
 
-void _kntos(char*,unsigned int, int);
+void _kntos(char*,int, int);
 void _kputc(char);
 void _kcolor(char);
 void _kputs(char *);
