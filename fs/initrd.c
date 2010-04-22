@@ -107,7 +107,21 @@ int initfs_open(const char *path, int flags, ...){
 		while(ird_descriptors[i].file_descriptor!=-1 && i < MAX_INITRD_DESCRIPTORS) i++;			
 		cur_irdfd = i;
 	}
-	if(flags&O_CREAT) {
+	else {
+		while (j < fs_specs->nfiles) {
+			if(!strcmp(path, module_var[j].fileName)){
+				if(module_var[j].file_type == FS_DIRECTORY || module_var[j].file_type == FS_MOUNTPOINT)
+					return -1;
+				ird_descriptors[cur_irdfd].file_descriptor	= j;
+				//printf("%s Found. Size: %d FS fd val: %d - ID File val: %d\n", path, module_var[j].length, cur_irdfd, ird_descriptors[cur_irdfd].file_descriptor);
+				ret_fd = cur_irdfd;				
+				//printf("ret_fd: %d --- %d\n", cur_irdfd, j);
+				ird_descriptors[cur_irdfd].cur_pos = 0;
+				return cur_irdfd++; 
+			}
+			j++;
+		}
+		if(flags&O_CREAT) {
 		printf("O_CREAT Flag\n");
 		if(fs_specs->nfiles < MAX_FILES ){			
 			module_var[fs_specs->nfiles].magic=0xBF;
@@ -123,20 +137,6 @@ int initfs_open(const char *path, int flags, ...){
 		}
 		return -1;
 	}
-	else {
-		while (j < fs_specs->nfiles) {
-			if(!strcmp(path, module_var[j].fileName)){
-				if(module_var[j].file_type == FS_DIRECTORY || module_var[j].file_type == FS_MOUNTPOINT)
-					return -1;
-				ird_descriptors[cur_irdfd].file_descriptor	= j;
-				//printf("%s Found. Size: %d FS fd val: %d - ID File val: %d\n", path, module_var[j].length, cur_irdfd, ird_descriptors[cur_irdfd].file_descriptor);
-				ret_fd = cur_irdfd;				
-				//printf("ret_fd: %d --- %d\n", cur_irdfd, j);
-				ird_descriptors[cur_irdfd].cur_pos = 0;
-				return cur_irdfd++; 
-			}
-			j++;
-		}
 	}
 	return -1;	
 }
@@ -191,12 +191,14 @@ ssize_t initrd_write(int fildes, const void *buf, size_t nbyte){
 	lfd = ird_descriptors[fildes].file_descriptor;
 	printf("Please wait, im writing the world...\n");
 	printf("And the world begun with those words: %s and his mark his: %d\n", appoggio, lfd);
-	file_start = (char *) (module_start	+ fs_headers[lfd].offset);
+	file_start = (char *) (module_start	+ fs_headers[lfd].offset);	
 	while(i<=nbyte) {	
 		file_start[i] = appoggio[i];	
 		i++;
 	} 
 	fs_headers[lfd].length = i;
+	free(appoggio);
+	return i;
 	//fs_headers[ird_descriptors.fildes].
 }
 
