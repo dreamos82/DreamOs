@@ -122,21 +122,23 @@ int initfs_open(const char *path, int flags, ...){
 			j++;
 		}
 		if(flags&O_CREAT) {
-		printf("O_CREAT Flag\n");
-		if(fs_specs->nfiles < MAX_FILES ){			
-			module_var[fs_specs->nfiles].magic=0xBF;
-			strcpy(module_var[fs_specs->nfiles].fileName, path);
-			module_var[fs_specs->nfiles].file_type = FS_FILE;
-			module_var[fs_specs->nfiles].uid = 1;
-			module_var[fs_specs->nfiles].offset = ++fs_end;
-			module_var[fs_specs->nfiles].length = 0;
-			ird_descriptors[cur_irdfd].file_descriptor	= fs_specs->nfiles;
-			ird_descriptors[cur_irdfd].cur_pos = 0;
-			fs_specs->nfiles++;
-			return cur_irdfd++; 
+			printf("O_CREAT Flag\n");
+			if(fs_specs->nfiles < MAX_FILES ){			
+				module_var[fs_specs->nfiles].magic=0xBF;
+				strcpy(module_var[fs_specs->nfiles].fileName, path);
+				module_var[fs_specs->nfiles].file_type = FS_FILE;
+				module_var[fs_specs->nfiles].uid = 1;
+				module_var[fs_specs->nfiles].offset = ++fs_end;
+				module_var[fs_specs->nfiles].length = 0;
+				ird_descriptors[cur_irdfd].file_descriptor	= fs_specs->nfiles;
+				ird_descriptors[cur_irdfd].cur_pos = 0;
+				fs_specs->nfiles++;
+				if(flags&O_APPEND) printf("Appendiamoci\n");
+				else printf("Pero' non ci appendiamo\n");
+				return cur_irdfd++; 
+			}
+			return -1;
 		}
-		return -1;
-	}
 	}
 	return -1;	
 }
