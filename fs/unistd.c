@@ -48,7 +48,10 @@ ssize_t write(int fildes, const void *buf, size_t nbyte){
 		if((ssize_t*)mountpoint_list[fd_list[fildes].mountpoint_id].operations.write!=NULL)
 			mountpoint_list[fd_list[fildes].mountpoint_id].operations.write(fs_fd, buf, nbyte);
 		//else printf("Give Me a pen and i'll write you the world\n");
-		else return -1;
+		else {
+			printf("Give Me a pen and i'll write you the world\n");
+			return -1;
+		}
 	}
 	else return -1;
 	return 0;

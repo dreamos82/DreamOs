@@ -134,6 +134,7 @@ char *get_rel_path(int mountpoint_id, const char* path){
 	int j=0;
 	char *tmp_path;
 	rel_size = strlen(path) - strlen(mountpoint_list[mountpoint_id].mountpoint);	
+	//printf("rel_size: %d mp_id: %d\n", rel_size, mountpoint_id);
 	if(rel_size>0){		
 		int mp_size= 0;
 		tmp_path = kmalloc(rel_size * sizeof(char));		
@@ -143,7 +144,9 @@ char *get_rel_path(int mountpoint_id, const char* path){
 			j++;
 		}
 		tmp_path[j]='\0';
-	}	
+	} 
+	else strcpy(tmp_path, path);
+	//printf("Tmp path: %s\n", tmp_path);
 	return tmp_path;
 }
 

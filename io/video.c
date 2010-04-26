@@ -283,6 +283,36 @@ void _kntohex (char *buffer, unsigned int decnum)
 }
 
 
+void _knntos(char *buffer, int num, int base){
+	int mod;
+  //int numval;
+  char *p, *pbase;
+
+  p = pbase = buffer;
+    
+	if(num<0) {		
+		num=(~num)+1;
+		*p++='-';
+		*pbase++;
+	}
+    while(num > 0)
+    {
+      mod = num % base;
+      *p++ = mod + '0';
+      num = num / base;
+    }
+
+    *p-- = 0;
+    while(p > pbase)
+    {
+      char tmp;
+      tmp = *p;
+      *p = *pbase;
+      *pbase = tmp;
+    
+      p--; pbase++;
+    }
+}
 /** @author Lisa
   * @version 1.0
   * @param  buffer (char*) La stringa che contiene il numero
@@ -291,7 +321,7 @@ void _kntohex (char *buffer, unsigned int decnum)
   *
   * Move the number "num" into a string
   */
-void _kntos(char *buffer,int num, int base)
+void _kntos(char *buffer, unsigned int num, int base)
 {
   int mod;
   //int numval;

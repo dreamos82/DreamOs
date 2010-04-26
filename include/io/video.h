@@ -48,7 +48,7 @@
 
 #define OK_POS 70
 
-void _kntos(char*,int, int);
+void _kntos(char*, unsigned int, int);
 void _kputc(char);
 void _kcolor(char);
 void _kputs(char *);
@@ -68,7 +68,7 @@ void _krotate_buffer();
 void _kscrollup();
 void _kscrolldown();
 void _kntohex (char *, unsigned int);
-
+void _knntos(char *, int, int );
 unsigned short shell_mess_col, shell_mess_line;
 
 #endif /* _VIDEO_H */

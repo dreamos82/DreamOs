@@ -392,7 +392,7 @@ void ls() {
 			if(flag==1){
 				struct stat tmp_stat;
 				if(stat(cur_dir_entry->d_name, &tmp_stat)!=-1)
-					printf("uid=%d(%s) - size:  %d ", tmp_stat.st_uid, "root", tmp_stat.st_size);
+					printf("uid=%d(%s) - size:  %d ", tmp_stat.st_uid, current_user.username, tmp_stat.st_size);
 			}
 			printf("%s\n", cur_dir_entry->d_name);
 			_kcolor(WHITE);			
@@ -456,11 +456,12 @@ void cd( ){
 		return;
 	} else {
 		int i=0;
-		int rel_size = 0;
+		int rel_size = 0;		
 		memset(abspath, '\0', CURPATH_LEN);				
 		if(argv[1][0] == '/') {
-			i = get_mountpoint_id(argv[1]);
+			i = get_mountpoint_id(argv[1]);		
 			strcpy(abspath, argv[1]);
+			//printf("abspath: %s\n", abspath);
 			dirp=opendir(argv[1]);
 		}
 		else {			

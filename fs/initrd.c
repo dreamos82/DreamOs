@@ -117,6 +117,11 @@ int initfs_open(const char *path, int flags, ...){
 				ret_fd = cur_irdfd;				
 				//printf("ret_fd: %d --- %d\n", cur_irdfd, j);
 				ird_descriptors[cur_irdfd].cur_pos = 0;
+				if(flags&O_APPEND) {
+					printf("Appendiamoci\n");
+					ird_descriptors[cur_irdfd].cur_pos = module_var[j].length;
+				}
+				//else printf("Pero' non ci appendiamo\n");
 				return cur_irdfd++; 
 			}
 			j++;
@@ -132,9 +137,7 @@ int initfs_open(const char *path, int flags, ...){
 				module_var[fs_specs->nfiles].length = 0;
 				ird_descriptors[cur_irdfd].file_descriptor	= fs_specs->nfiles;
 				ird_descriptors[cur_irdfd].cur_pos = 0;
-				fs_specs->nfiles++;
-				if(flags&O_APPEND) printf("Appendiamoci\n");
-				else printf("Pero' non ci appendiamo\n");
+				fs_specs->nfiles++;				
 				return cur_irdfd++; 
 			}
 			return -1;
@@ -193,12 +196,12 @@ ssize_t initrd_write(int fildes, const void *buf, size_t nbyte){
 	lfd = ird_descriptors[fildes].file_descriptor;
 	printf("Please wait, im writing the world...\n");
 	printf("And the world begun with those words: %s and his mark his: %d\n", appoggio, lfd);
-	file_start = (char *) (module_start	+ fs_headers[lfd].offset);	
+	file_start = (char *) (module_start	+ fs_headers[lfd].offset + ird_descriptors[fildes].cur_pos);	
 	while(i<=nbyte) {	
 		file_start[i] = appoggio[i];	
 		i++;
 	} 
-	fs_headers[lfd].length = i;
+	fs_headers[lfd].length = fs_headers[lfd].length+i;
 	free(appoggio);
 	return i;
 	//fs_headers[ird_descriptors.fildes].

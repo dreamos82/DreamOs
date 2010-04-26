@@ -153,7 +153,9 @@ int printf (const char *format, ...)
             }
             if (*format == 'd' || *format == 'i') {
                 int varint = va_arg (ap, int);
-                _kntos (cur_p, varint, 10);
+                if(varint >= 0)
+					_kntos (cur_p, varint, 10);
+				else _knntos (cur_p, varint, 10);
             }
             if (*format == 'u') {
                 unsigned int uint = va_arg (ap, int);
