@@ -25,8 +25,8 @@
 #define O_WRONLY    0x01
 #define O_RDWR      0x02
 
-#define O_CREAT		0x04
-#define O_APPEND	0x08
+#define O_CREAT		0x40
+#define O_APPEND	0x400
 
 
 int  creat(const char *, mode_t);

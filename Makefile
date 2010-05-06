@@ -126,8 +126,8 @@ vers:
 .PHONY: clean install qemu
 
 clean:
-	rm -f *.img *.bin *.map initfs
-	rm -f $(OBJ)
+	rm -f *.img *.bin *.map 
+	rm -f $(OBJ)		
 	rm -rf utils/initfscp
 
 install:

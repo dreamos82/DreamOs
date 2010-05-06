@@ -43,7 +43,7 @@ struct super_node_operations {
 	int (*open)(const char *, int, ... );
 	int (*close)(int);
 	ssize_t (*read)(int, char*, size_t);
-	int (*write)(int, void*, size_t);
+	ssize_t (*write)(int,const void*, size_t);
 };
 
 struct stat_operations{

@@ -133,6 +133,7 @@ char *get_rel_path(int mountpoint_id, const char* path){
 	int rel_size = 0;
 	int j=0;
 	char *tmp_path;
+	tmp_path = NULL;
 	rel_size = strlen(path) - strlen(mountpoint_list[mountpoint_id].mountpoint);	
 	//printf("rel_size: %d mp_id: %d\n", rel_size, mountpoint_id);
 	if(rel_size>0){		
