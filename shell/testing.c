@@ -107,8 +107,7 @@ void help_tester()
 		"  -> try_kmalloc       - Test a basic kmalloc() function\n"
 		"  -> do_fault          - Test a page_fault\n"
 		"  -> try_strtok        - Test strtok() function in string.h\n"
-		"  -> try_printmem      - Print used locations of memory\n"
-		"  -> try_module        - Read the content of the memory zone loaded in module, aka initfs \n"
+		"  -> try_printmem      - Print used locations of memory\n"		
 		"  -> try_open          - Function to test open() & stdarg() \n"		
 		"  -> try_syscall	    - Try some syscall functions\n"
 		);	
@@ -166,7 +165,7 @@ void try_ocreat(){
 
 void try_syscall(){
 	int i;
-	int var = -1;
+	int var = -100;
 	printf("Trying sysputch:\n");	
     for(i='A';i<='Z';i++) {
 		asm(
@@ -176,7 +175,7 @@ void try_syscall(){
 			: : "g"(i)	
 		);	
 	}
-	printf("And before ending try to print a -1: %d\n", var);
+	printf("And before ending try to print a -100: %d\n", var);
 	printf("\n");
 }
 

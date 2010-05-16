@@ -293,7 +293,7 @@ void _knntos(char *buffer, int num, int base){
 	if(num<0) {		
 		num=(~num)+1;
 		*p++='-';
-		*pbase++;
+		pbase++;
 	}
     while(num > 0)
     {
@@ -337,7 +337,7 @@ void _kntos(char *buffer, unsigned int num, int base)
 	else if(num<0) {		
 		num=(~num)+1;
 		*p++='-';
-		*pbase++;
+		pbase++;
 	}
     while(num > 0)
     {
