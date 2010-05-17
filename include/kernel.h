@@ -35,7 +35,7 @@ extern unsigned int module_end;
 asmlinkage void _start(struct multiboot_info*);
 int main_loop(struct multiboot_info*);
 
-#define DREAMOS_VER "DreamOS ver 0.2.0 - trunk"
+#define DREAMOS_VER "DreamOS ver 0.2.1 - trunk"
 #define SITEURL "www.dreamos.org"
 
 #endif
