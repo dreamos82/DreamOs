@@ -464,6 +464,10 @@ void cd( ){
 			//printf("abspath: %s\n", abspath);
 			dirp=opendir(argv[1]);
 		}
+		else if(argv[1][0]=='.') {
+			printf(". option\n");
+			return;
+		}
 		else {			
 			int abs_size = 0;			
 			abs_size = strlen(current_user.cur_path);
