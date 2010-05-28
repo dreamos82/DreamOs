@@ -377,6 +377,7 @@ void ls() {
 	i = 0;		
 	dirp = opendir(current_user.cur_path);
 	if(dirp!=NULL){
+		int tot = 0;
 		if(argc > 1 && strcmp(argv[1], "-l") == 0) flag =1;
 		/*while(i<j){
 			if(strcmp(mountpoint_list[i].mountpoint, current_user.cur_path)){
@@ -386,13 +387,15 @@ void ls() {
 		}*/
 		struct dirent* cur_dir_entry;
 		cur_dir_entry = readdir(dirp);		
-		while(cur_dir_entry!=NULL){
+		while(cur_dir_entry!=NULL){			
 			//struct stat 			
 			if(cur_dir_entry->d_type == FS_MOUNTPOINT) _kcolor(BRIGHT_GREEN);
 			if(flag==1){
 				struct stat tmp_stat;
-				if(stat(cur_dir_entry->d_name, &tmp_stat)!=-1)
+				if(stat(cur_dir_entry->d_name, &tmp_stat)!=-1){
 					printf("uid=%d(%s) - size:  %d ", tmp_stat.st_uid, current_user.username, tmp_stat.st_size);
+					tot = tot + tmp_stat.st_size;
+				}
 			}
 			printf("%s\n", cur_dir_entry->d_name);
 			_kcolor(WHITE);			
@@ -400,6 +403,7 @@ void ls() {
 		}
 		closedir(dirp);
 		printf("\n");
+		if(flag==1)printf("Total: %d byte\n", tot);
 	} else {
 		while( i < j ) {
 			if (argc == 1) {
