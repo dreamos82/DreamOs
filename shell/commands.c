@@ -541,3 +541,14 @@ void tester(){
 void pwd(){
 	printf("%s\n", current_user.cur_path );
 }
+
+void newfile(){
+	if(argc!=2){
+		printf("Bad usage. Try newfile --help for more informations\n");
+	}
+	else {
+		if(strcmp(argv[1], "--help")==0) {
+			printf("newfile FILENAME - Make a new file, and prompt for it's content\n");
+		}
+	}
+}

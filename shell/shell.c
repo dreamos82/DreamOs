@@ -116,6 +116,7 @@ void shell()
 	{ "tester", tester},	
 	{ "pwd", pwd},
 	{ "more", more},
+	{ "newfile", newfile}
   };
 
 
