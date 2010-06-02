@@ -550,5 +550,20 @@ void newfile(){
 		if(strcmp(argv[1], "--help")==0) {
 			printf("newfile FILENAME - Make a new file, and prompt for it's content\n");
 		}
+		else {
+			int fd;			
+			fd = open(argv[1], O_RDONLY);
+			if(fd>=0) printf("-ERROR: %s File already exist\n", argv[1]);
+			else {
+				char text[256];
+				printf("Filname: %s", argv[1]);
+				close(fd);
+				fd = open(argv[1], O_RDWR|O_CREAT|O_APPEND);
+				printf("Type your text here, actually only one line available!!\n");
+				scanf("%s", text);
+				if(fd>=0) write(fd,text, strlen(text));
+				close(fd);
+			}
+		}
 	}
 }
