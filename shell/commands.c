@@ -470,8 +470,9 @@ void cd( ){
 			dirp=opendir(argv[1]);
 		}
 		else if(argv[1][0]=='.') {
-			printf(". option\n");
-			return;
+			printf(". option\n");			
+			if(strlen(argv[1]) == 1) return;
+			else printf("str_len: %d\n", strlen(argv[1]));
 		}
 		else {			
 			int abs_size = 0;			
