@@ -35,11 +35,13 @@ void *memcpy(void *, const void *, size_t );
 size_t strlen (const char *);
 
 int strcmp (const char *, const char *);
+int  strncmp (const char *, const char *, int);
 char *strchr (register const char *, register int);
 char *strstr (const char *, const char *);
 char *strncat (char *, const char *, size_t);
 
 char *strtok (char *, const char *);
 char *strcpy (char *, register const char *);
+
 char *strncpy (char *, register const char *, size_t);
 #endif

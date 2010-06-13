@@ -85,6 +85,10 @@ int _kstrncmp(const char *s1, const char *s2, int n)
   return 0;
 }
 
+int strncmp(const char *s1, const char *s2, int n){
+	_kstrncmp(s1,s2,n);
+}
+
 /*
  * Compare s1 and s2
  */
