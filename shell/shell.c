@@ -140,7 +140,8 @@ void shell()
   printf("\n\n\n\n");
   argc=1;  
   strcpy(current_user.cur_path, "/root");
-  
+  current_user.uid = 1;
+  current_user.gid = 0;
   for (;;)
   {
     for (c = 1 ; c <= 10 ; c++) {

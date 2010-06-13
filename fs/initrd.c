@@ -26,6 +26,7 @@
 #include <kheap.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <commands.h>
 
 char *module_start;
 initrd_t *fs_specs;
@@ -132,7 +133,7 @@ int initfs_open(const char *path, int flags, ...){
 				module_var[fs_specs->nfiles].magic=0xBF;
 				strcpy(module_var[fs_specs->nfiles].fileName, path);
 				module_var[fs_specs->nfiles].file_type = FS_FILE;
-				module_var[fs_specs->nfiles].uid = 1;
+				module_var[fs_specs->nfiles].uid = current_user.uid;
 				module_var[fs_specs->nfiles].offset = ++fs_end;
 				module_var[fs_specs->nfiles].length = 0;
 				ird_descriptors[cur_irdfd].file_descriptor	= fs_specs->nfiles;

@@ -35,6 +35,8 @@ struct cmd {
 struct user_env {
 	char username[USER_LEN];
 	char cur_path[CURPATH_LEN];
+	unsigned int uid;
+	unsigned int gid;
 };
 
 //extern char cur_path[256];
