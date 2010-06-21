@@ -1,0 +1,6 @@
+default=0
+timeout=30
+title DreamOS 0.2 
+color light-green/brown blink-red/blue
+kernel /boot/dreamos.img
+module /initfs

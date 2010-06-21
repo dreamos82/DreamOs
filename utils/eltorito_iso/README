@@ -1,0 +1,77 @@
+---------------------------
+ DreamOS - ISO VERSION
+---------------------------
+
+1. Cosa è DreamOS
+	a. Cosa NON è DreamOS
+2. Usare DreamOS
+	a. L'avvio
+	b. Uso della CLI
+4. Feedback
+	a. Come segnalare bug
+	b. Come mandare un feedback
+
+
+- 1 -----------------------
+--- Cosa è DreamOS --------
+
+Il DreamOS è un sistema operativo open source rilasciato sotto licenza GPLv3 sviluppato partendo da 0 puramente per scopi didattici o comunque per capire come funzionano i sistemi operativi.
+Il team di sviluppo attuale è composto dagli sviluppatori
+
+Ivan - Finarfin (http://earyrian.elenhost.org)
+
+e dai contributori:
+
+Osiris
+Celeron
+Hamcha
+m0nt0.
+vinc94
+tk0
+
+	- a -- Cosa NON è DreamOS -
+
+DreamOS non è un sistema operativo completo e pronto per essere utilizzato per l'uso quotidiano, non è basato su Kernel esistenti e non è supportato/sponsorizzato da alcuna società.
+
+
+- 3 -----------------------
+---- Usare DreamOS --------
+
+L'Interattività di DreamOS al momento si ferma ad una CLI (Command Line Interface, Interfaccia a linea di comando) con un numero limitato di comandi utilizzabili, la maggior parte a scopo di test.
+Se non lo avete gia fatto masterizzate questa ISO su un CD e inseritela nel vostro lettore e riavvite il CD e scegliete come boot device il CDROM.
+	- a ------- L'Avvio -------
+
+L'avvio di DreamOS contiene il loading di tutte le funzioni necessarie al funzionamento del S.O. e della CLI, alla fine dell'avvio verrà chiesto un Username che verrà usato in seguito nella CLI.
+
+	- b ---- Uso della CLI ----
+
+La CLI di DreamOS ha una struttura molto comune a quella *NIX
+	Username~# Comando inserito
+Dove Username è l'username inserito durante l'avvio.
+Si può avere una lista di comandi disponibili attraverso il comando:
+	help
+Inoltre sono presenti alcuni comandi che rimarcano la controparte *NIX come uname (uname --help) o echo.
+
+- 4 -----------------------
+---- Feedback -------------
+
+	- a -- Come segnalare Bug -
+	
+Per segnalare bug riscontrati durante l'uso di DreamOS bisogna segnalarli usando il modulo di berliOS presente alla pagina:
+	http://developer.berlios.de/bugs/?group_id=9715
+Oppure potete segnalarlo sul forum osdev.it, precisamente:
+	http://forum.osdev.it/viewforum.php?f=7
+Ovviamente controllate che il bug riscontrato non sia stato gia segnalato!
+
+	- b - Come mandare un feedback
+
+Potete mandare un resoconto o comunque raccontare la vostra esperienza con DreamOS sul forum di osdev.it:
+	http://forum.osdev.it/
+Oppure ci trovate su irc: 
+	Server: irc.azzurra.org
+	Chan: #dreamos
+	
+
+DreamOS 2003-2009 by finarfin/shainer
+http://www.dreamos.org
+http://www.osdev.it
