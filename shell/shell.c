@@ -38,6 +38,7 @@
 #include <cpuid.h>
 #include <clock.h>
 #include <sys/utsname.h>
+#include <user_shell.h>
 
 #define NUM_COM 30
 userenv_t current_user;
@@ -134,7 +135,8 @@ void shell()
     scanf ("%23s",current_user.username);
     printf(LNG_USER_R);
   } while (!strlen(current_user.username));
- 
+  
+  user_chk(current_user.username);
   _kclear();
   aalogo();
   printf("\n\n\n\n");

@@ -60,6 +60,7 @@ OBJ = kernel.o\
       hardware/8253.o\
       shell/commands.o\
       shell/testing.o\
+      shell/user_shell.o\
       sys/utsname.o\
       sys/dirent.o\
       sys/stat.o
@@ -103,6 +104,8 @@ system/syscall.o: system/syscall.c
 hardware/8253.o: hardware/8253.c
 shell/shell.o: shell/shell.c
 shell/commands.o: shell/commands.c
+shell/testing.o: shell/testing.c
+shell/user_shell.o: shell/user_shell.c
 sys/utsname.o: sys/utsname.c
 sys/dirent.o: sys/dirent.c
 sys/stat.o: sys/stat.c
