@@ -27,6 +27,7 @@ void try_module();
 void try_open();
 void try_ocreat();
 void try_syscall();
+void try_check();
 void show_fd();
 void test_stat();
 

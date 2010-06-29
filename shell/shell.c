@@ -136,7 +136,7 @@ void shell()
     printf(LNG_USER_R);
   } while (!strlen(current_user.username));
   
-  user_chk(current_user.username);
+  //user_chk(current_user.username);
   _kclear();
   aalogo();
   printf("\n\n\n\n");

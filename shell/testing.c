@@ -110,6 +110,8 @@ void help_tester()
 		"  -> try_printmem      - Print used locations of memory\n"		
 		"  -> try_open          - Function to test open() & stdarg() \n"		
 		"  -> try_syscall	    - Try some syscall functions\n"
+		"  -> try_check         - Test username if exist\n"
+		"  -> test_stat			- Test stat function\n"
 		);	
 }
 
@@ -126,6 +128,14 @@ void try_module(){
 	}
 	printf("Total Files: %d\n", fs_head->nfiles);
 	_kputs("\n");
+}
+
+void try_check(){
+	char test_name[50];
+	memset(test_name, '\0', 50);
+	printf("Please insert a username: "); 
+	scanf("%s", test_name);
+	user_chk(test_name);
 }
 
 void try_open(){
@@ -191,7 +201,7 @@ void show_fd(){
 
 void test_stat(){
 	struct stat *stats;
-	printf("Testing stat functions\n");
+	printf("Testing stat functions on README\n");
 	stats = (struct stat*) kmalloc(sizeof(struct stat));
 	stat("README", stats);
 	printf("Device_id: %d\n", stats->st_dev);	

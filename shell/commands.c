@@ -524,6 +524,7 @@ void tester(){
 					{ "try_syscall", try_syscall},
 					{ "show_fd", show_fd},
 					{ "test_stat", test_stat},
+					{ "try_check", try_check},
 					{ "--help", help_tester },
 					};
 	if (argc != 2) {
