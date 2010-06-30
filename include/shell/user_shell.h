@@ -19,5 +19,11 @@
 #ifndef USER_SHELL_H
 #define USER_SHELL_H
 
+struct passwd_user {
+	char username[50];
+	char password[50];
+};
+
 int user_chk(char *);
+
 #endif

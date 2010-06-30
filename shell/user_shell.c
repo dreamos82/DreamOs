@@ -15,7 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
+
+#include <user_shell.h>
 #include <stdio.h>
 #include <vfs.h>
 #include <fcntl.h>
@@ -26,6 +27,7 @@ int user_chk(char *username){
 	int i = 0;
 	int err;
 	char appo[50];
+	struct passwd_user checking_user;
 	memset(appo, '\0', 50);
 	printf("Username provided: %s\n", username);
 	fd = open("/passwd", O_RDONLY,0);
@@ -39,5 +41,11 @@ int user_chk(char *username){
 		}
 		else i++;
 	}
-	printf("%s - %s\n", username, appo);
+	strcpy(checking_user.username, appo);
+	printf("%s - %s\n", username, checking_user.username);
+	close(fd);
+}
+
+struct passwd_user user_get(int fd){
+	printf("placeholder\n");
 }
