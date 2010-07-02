@@ -25,14 +25,24 @@
 int user_chk(char *username){
 	int fd = -1;
 	int i = 0;
-	int err;
-	char appo[50];
-	struct passwd_user checking_user;
-	memset(appo, '\0', 50);
+	int err;	
+	struct passwd_user checking_user;	
 	printf("Username provided: %s\n", username);
 	fd = open("/passwd", O_RDONLY,0);
 	if(fd != -1) printf("File passwd found\n");
 	else printf("not found\n");
+	user_get(fd, &checking_user);
+	//strcpy(checking_user.username, appo);
+	printf("%s - %s\n", username, checking_user.username);
+	close(fd);
+}
+
+int user_get(int fd, struct passwd_user *checking_user){
+	int i=0;
+	char appo[50];	
+	int err;
+	memset(appo, '\0', 50);
+//	printf("placeholder\n");
 	while(i < 50 || appo[i] != ':'){
 		err = read(fd, &appo[i], 1);
 		if(appo[i] == ':') {
@@ -41,11 +51,6 @@ int user_chk(char *username){
 		}
 		else i++;
 	}
-	strcpy(checking_user.username, appo);
-	printf("%s - %s\n", username, checking_user.username);
-	close(fd);
-}
-
-struct passwd_user user_get(int fd){
-	printf("placeholder\n");
+	strcpy(checking_user->username, appo);
+	return 0;
 }

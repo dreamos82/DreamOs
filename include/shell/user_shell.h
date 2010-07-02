@@ -25,5 +25,6 @@ struct passwd_user {
 };
 
 int user_chk(char *);
+int user_get(int, struct passwd_user *);
 
 #endif
