@@ -24,8 +24,6 @@
  
 int user_chk(char *username){
 	int fd = -1;
-	int i = 0;
-	int err;	
 	struct passwd_user checking_user;	
 	printf("Username provided: %s\n", username);
 	fd = open("/passwd", O_RDONLY,0);
@@ -42,10 +40,10 @@ int user_chk(char *username){
 int user_get(int fd, struct passwd_user *checking_user){
 	int i=0;
 	char appo[50];	
-	int err;
+	int err = 1;
 	memset(appo, '\0', 50);
 //	printf("placeholder\n");	
-	while(i < 50 || appo[i] != ':'){
+	while((i < 50 || appo[i] != ':') && err!=0){
 		err = read(fd, &appo[i], 1);		
 		if(appo[i] == ':') {
 			appo[i] = '\0'; 
@@ -56,7 +54,7 @@ int user_get(int fd, struct passwd_user *checking_user){
 	strcpy(checking_user->username, appo);	
 	i=0;
 	memset(appo, '\0', 50);
-	while(i<50 || appo[i]!='\n'){
+	while((i<50 || appo[i]!='\n')&& err!=0){
 		err = read(fd, &appo[i], 1);		
 		if(appo[i] == '\n') {
 			appo[i] = '\0'; 
