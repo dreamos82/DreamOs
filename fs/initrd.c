@@ -164,7 +164,9 @@ ssize_t initfs_read(int fildes, char *buf, size_t nbyte){
 		j++;
 	}			
 	ird_descriptors[fildes].cur_pos = read_pos;		
-	if(read_pos == file_size) return 0;
+	if(read_pos == file_size) {
+		return 0; //Return an EOF
+	}
 	return nbyte;
 }
 

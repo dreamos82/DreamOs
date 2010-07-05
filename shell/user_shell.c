@@ -29,10 +29,11 @@ int user_chk(char *username){
 	fd = open("/passwd", O_RDONLY,0);
 	if(fd != -1) printf("File passwd found\n");
 	else printf("not found\n");
-	user_get(fd, &checking_user);
-	printf("name: %s - password: %s\n", checking_user.username, checking_user.password);	
-	user_get(fd, &checking_user);
-	printf("name: %s - password: %s\n", checking_user.username, checking_user.password);
+	while(user_get(fd, &checking_user)==2){
+		printf("name: %s - password: %s\n", checking_user.username, checking_user.password);	
+	}
+	//user_get(fd, &checking_user);
+	//printf("name: %s - password: %s\n", checking_user.username, checking_user.password);
 	//strcpy(checking_user.username, appo);	
 	close(fd);
 }
@@ -41,6 +42,7 @@ int user_get(int fd, struct passwd_user *checking_user){
 	int i=0;
 	char appo[50];	
 	int err = 1;
+	int status = 0;
 	memset(appo, '\0', 50);
 //	printf("placeholder\n");	
 	while((i < 50 || appo[i] != ':') && err!=0){
@@ -51,6 +53,8 @@ int user_get(int fd, struct passwd_user *checking_user){
 		}
 		else i++;
 	}
+	if(err ==0) return err;
+	status++;
 	strcpy(checking_user->username, appo);	
 	i=0;
 	memset(appo, '\0', 50);
@@ -62,6 +66,8 @@ int user_get(int fd, struct passwd_user *checking_user){
 		}
 		else i++;		
 	}
+	//if(err ==0) return err;
+	status++;	
 	strcpy(checking_user->password, appo);
-	return err;
+	return status;
 }
