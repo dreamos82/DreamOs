@@ -134,10 +134,9 @@ void shell()
     printf(LNG_USER);
     scanf ("%23s",current_user.username);
     printf(LNG_USER_R);
-  } while (!strlen(current_user.username));
-  
-  //user_chk(current_user.username);
-  _kclear();
+  } while ((!strlen(current_user.username) || (user_chk(current_user.username)!=1)));
+    
+  _kclear();  
   aalogo();
   printf("\n\n\n\n");
   argc=1;  

@@ -25,18 +25,21 @@
 int user_chk(char *username){
 	int fd = -1;
 	struct passwd_user checking_user;	
-	printf("Username provided: %s\n", username);
+	//printf("Username provided: %s\n", username);
 	fd = open("/passwd", O_RDONLY,0);
-	if(fd != -1) printf("File passwd found\n");
-	else printf("not found\n");
+	/*if(fd != -1) printf("File passwd found\n");
+	else printf("not found\n");*/
+	if(fd<0) return 0;
 	while(user_get(fd, &checking_user)==2){
-		printf("name: %s - password: %s\n", checking_user.username, checking_user.password);	
+		if(!strcmp(username, checking_user.username)) return 1;
+		//else printf("Not Found ");
+		//printf("name: %s - password: %s\n", checking_user.username, checking_user.password);	
 	}
 	//user_get(fd, &checking_user);
 	//printf("name: %s - password: %s\n", checking_user.username, checking_user.password);
 	//strcpy(checking_user.username, appo);	
 	close(fd);
-	return 1;
+	return 0;
 }
 
 int user_get(int fd, struct passwd_user *checking_user){
