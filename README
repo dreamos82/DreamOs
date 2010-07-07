@@ -103,6 +103,8 @@ L'Interattività di DreamOS al momento si ferma ad una CLI (Command Line Interfac
 	- a ------- L'Avvio -------
 
 L'avvio di DreamOS contiene il loading di tutte le funzioni necessarie al funzionamento del S.O. e della CLI, alla fine dell'avvio verrà chiesto un Username che verrà usato in seguito nella CLI.
+Per poter accedere l'username deve essere definito nel file passwd. Di default sono definiti 2 utenti: root e user.
+Attualmente non viene richiesta alcuna password
 
 	- b ---- Uso della CLI ----
 
