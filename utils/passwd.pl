@@ -1,4 +1,6 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
+
+use Cwd;
 
 #TODO:
 # 1. rendere meno "forzato" e portabile il noecho della richiesta della password.
@@ -9,8 +11,15 @@ my $__script_version__="0.1";
 my $__script_author__="DT";
 my $__script_license__="New BSD License";
 
-my $filepath="../files/passwd";
+my $filepath;
 
+if (-e &Cwd::realpath("../files/passwd")) {
+	$filepath=&Cwd::realpath("../files/passwd");
+} elsif (-e "files/passwd") {
+	$filepath="files/passwd";
+} else {
+	$filepath="passwd";
+}
 
 # Read Users
 
@@ -28,7 +37,7 @@ while(<PASSWD>) {
 		print ".junkdata: @junk\n";
 	}
 	$passwd{$user}=$password;
-	$junkdata{$user}=@junkdata;
+	$junkdata{$user}=@junk;
 }
 print "\n";
 # Add User
@@ -58,6 +67,6 @@ print "$password\n";
 
 print "adduser $username:$password\n";
 
-print PASSWD "\n$username:$password";
+print PASSWD "$username:$password\n";
 
 close(PASSWD);
