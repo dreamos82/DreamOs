@@ -28,6 +28,7 @@
 #include <fcntl.h>
 #include <initrd.h>
 #include <unistd.h>
+#include <user_shell.h>
 
 //multiboot_info_t *boot_informations;
 char *module_start;

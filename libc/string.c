@@ -86,7 +86,7 @@ int _kstrncmp(const char *s1, const char *s2, int n)
 }
 
 int strncmp(const char *s1, const char *s2, int n){
-	_kstrncmp(s1,s2,n);
+	return _kstrncmp(s1,s2,n);
 }
 
 /*

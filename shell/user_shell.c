@@ -36,6 +36,7 @@ int user_chk(char *username){
 	//printf("name: %s - password: %s\n", checking_user.username, checking_user.password);
 	//strcpy(checking_user.username, appo);	
 	close(fd);
+	return 1;
 }
 
 int user_get(int fd, struct passwd_user *checking_user){
