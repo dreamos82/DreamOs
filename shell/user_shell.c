@@ -22,7 +22,7 @@
 #include <fcntl.h>
 #include <string.h>
  
-int user_chk(char *username){
+int user_chk(char *username, char* usr_pwd){
 	int fd = -1;
 	struct passwd_user checking_user;	
 	//printf("Username provided: %s\n", username);
@@ -31,7 +31,11 @@ int user_chk(char *username){
 	else printf("not found\n");*/
 	if(fd<0) return 0;
 	while(user_get(fd, &checking_user)==2){
+		#ifdef PWD_CHECK
+		if(!strcmp(username, checking_user.username) && !strcmp(usr_pwd, checking_user.password)) return 1;
+		#else
 		if(!strcmp(username, checking_user.username)) return 1;
+		#endif
 		//else printf("Not Found ");
 		//printf("name: %s - password: %s\n", checking_user.username, checking_user.password);	
 	}
@@ -75,3 +79,4 @@ int user_get(int fd, struct passwd_user *checking_user){
 	strcpy(checking_user->password, appo);
 	return status;
 }
+

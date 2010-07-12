@@ -29,6 +29,7 @@
 #define LNG_BITMAP "\t- Number bitmap's elements:"
 #define LNG_SHELL "Loading the shell"
 #define LNG_USER "[?] Enter your username: "
+#define LNG_PWD "[?] Insert your password\n"
 #define LNG_USER_R "[x] Please, insert your username :)\n"
 #define LNG_UNKNOWN_CMD "Unknown command:"
 #define LNG_MOUSE_SETUP "Setting up mouse driver.."

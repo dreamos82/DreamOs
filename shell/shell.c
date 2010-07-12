@@ -97,7 +97,7 @@ void shell()
 {
   
   char *cmd_ptr;
- 
+  char password[30];
   static struct cmd shell_cmd[NUM_COM] = {
 	{ "aalogo",   aalogo      },
 	{ "clear",    _kclear     },
@@ -125,6 +125,7 @@ void shell()
   hst_flag = 0;
   memset(cmd, '\0', CMD_LEN);
   memset(current_user.username, '\0', USER_LEN);
+  memset(password, '\0', USER_LEN);
   memset(current_user.cur_path, '\0', CURPATH_LEN);  
   _kcolor(BRIGHT_BLUE);
   printf(LNG_WELCOME);
@@ -134,7 +135,11 @@ void shell()
     printf(LNG_USER);
     scanf ("%23s",current_user.username);
     printf(LNG_USER_R);
-  } while ((!strlen(current_user.username) || (user_chk(current_user.username)!=1)));
+    #ifdef PWD_CHECK
+    printf(LNG_PWD);
+    scanf ("%23s",password);
+    #endif
+  } while ((!strlen(current_user.username) || (user_chk(current_user.username, password)!=1)));
     
   _kclear();  
   aalogo();

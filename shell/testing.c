@@ -136,7 +136,7 @@ void try_check(){
 	memset(test_name, '\0', 50);
 	printf("Please insert a username: "); 
 	scanf("%s", test_name);
-	user_chk(test_name);
+	user_chk(test_name, test_name);
 }
 
 void try_open(){
