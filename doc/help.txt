@@ -1,0 +1,76 @@
+	             
+	        The DreamOS Operating System
+		        Init Script
+		           ----
+		            --
+		                    
+
+
+Usage: ./start.sh options command language
+---------------------------------------------------------------
+Starting DreamOS Emulation:
+
+Usage: ./start.sh qemu  -> to use Qemu Emulator
+       ./start.sh bochs -> to use Bochs Emulator
+be sure you have one of those, else you can try it from
+floppy drive, or boot it form your grub.. DreamOS can! :) 
+
+However you have the possibility to choose if you want to 
+compile DreamOS or only lunch the 'Emulator'.
+If you want to compile, use the USE Flags '--compile' then
+the command, like:"
+
+Usage: ./start.sh --compile emulator
+or any command you like to compile before.
+---------------------------------------------------------------
+
+Also you can chose the language for the boot message, it
+can be very important to understanding the OS and do the
+debug.
+
+So please add the argv[3] into your option to this launch
+script, something like that:
+
+Usage: ./start.sh --compile emulator language
+where, now, language supported is 'it' or 'en'
+---------------------------------------------------------------
+
+If you want, you can install DreamOS on your floppy
+So, it's very simple, just type install in argv[1] then
+your test on emulators:"
+
+Usage: ./start.sh floppy_install
+---------------------------------------------------------------
+
+If you want to install DreamOS into your grub, the step
+is very simple, just grub into your argv[1] :-)
+Please, be sure you have python."
+
+Usage: ./start.sh grub
+---------------------------------------------------------------
+
+If you want, you can create a DreamOS ISO Image Disk
+to burn it on a cdrom and boot it from a real PC.
+Make sure you have installed mkisofs from cdrkit package.
+The command is like this:
+
+Usage: ./start.sh create_iso
+---------------------------------------------------------------
+
+If you want, you can create a DreamOS FileSystem
+You know, this is *VERY* important :)
+To add the file and then re-create the FS, put you files
+into files/ and do:
+
+Usage: ./start.sh create_fs
+
+Also you should know that this process is maked during the
+compilation of DreamOS.
+---------------------------------------------------------------
+
+If you want, you can create a DreamOS Floppy ISO Image
+to burn it on a cdrom and boot it from a real PC.
+Make sure you have installed genisoimage from cdrkit package.
+
+Usage: ./start.sh eltorito_iso
+---------------------------------------------------------------
