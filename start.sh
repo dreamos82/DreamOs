@@ -88,12 +88,12 @@ elif [ "$1" == "create_fs" ]; then
   exit
 
 elif [ "$1" == "" ]; then
-  echo "no command passed; please, read the help!"
+  echo "no command passed; please read the help!"
   echo "Usage: $0 help"
   exit
 
 else
-  echo "'$1' is not a command that I known to me, please, read the help!"
+  echo "'$2' is an unknown command to me, please read the help!"
   echo "Usage: $0 help"
   exit
 
@@ -219,7 +219,7 @@ elif [ "$1" == "eltorito_iso" ]; then
   exit
 
 else
-  echo "'$2' is not a command that I known to me, please, read the help!"
+  echo "'$2' is an unknown command to me, please read the help!"
   echo "Usage: $0 help"
   exit
 
