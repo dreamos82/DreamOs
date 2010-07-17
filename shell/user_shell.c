@@ -80,3 +80,5 @@ int user_get(int fd, struct passwd_user *checking_user){
 	return status;
 }
 
+int pwd_check(char* password, char* realpass){
+}

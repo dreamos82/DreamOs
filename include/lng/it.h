@@ -31,7 +31,7 @@
 #define LNG_SHELL "Carico la shell"
 #define LNG_USER "[?] Inserisci il nome utente: "
 #define LNG_USER_R "[x] Per favore, inserisci il nome utente :)\n"
-#define LNG_PWD "[?] Per favore, inserisci la password\n"
+#define LNG_PWD "[?] Per favore, inserisci la password "
 #define LNG_UNKNOWN_CMD "Comando sconosciuto:"
 #define LNG_MOUSE_SETUP "Inizializzo il driver del mouse.."
 #define LNG_MOUSE_REMOVE "Disattivo il driver del mouse.."

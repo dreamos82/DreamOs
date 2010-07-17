@@ -80,6 +80,8 @@ static int is_scroll_pressed;
 
 extern unsigned int last_tab;
 
+int shadow=0;
+
 /*
  * The keyboard handler
  */
@@ -228,7 +230,7 @@ void keyboard_isr (void)
 	    curmap = key_it_map;
 
         //printf ("%d", sc);
-        putchar (curmap[sc]);
+        if(shadow==0) putchar (curmap[sc]);
 
         /* Update buffer */
 	if (STEP(buf_w) == buf_r)
@@ -304,4 +306,10 @@ loop:
     else
         goto loop;
     return c;
+}
+
+int  set_shadow(int value){
+	if(value>1 || value < 0) return -1;
+	else shadow = value;
+	return shadow;
 }

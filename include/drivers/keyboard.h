@@ -56,11 +56,18 @@
 
 #define BUFSIZE        256
 
+#define ENABLED		   1
+#define DISABLED       0
+
 /* Procedures */
+
+extern int shadow;
+
 void keyboard_isr (void);
 void keyboard_enable (void);
 void keyboard_disable (void);
 void _ksetleds (int, int, int);
+int  set_shadow(int);
 int  _kgetch (void);
 
 #endif
