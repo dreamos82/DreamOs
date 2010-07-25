@@ -21,11 +21,20 @@
 #include <vfs.h>
 #include <fcntl.h>
 #include <string.h>
- 
+#include <debug.h>
+#include <use.h>
+
 int user_chk(char *username, char* usr_pwd){
 	int fd = -1;
-	struct passwd_user checking_user;	
-	//printf("Username provided: %s\n", username);
+	struct passwd_user checking_user;
+	//char *path = kmalloc(sizeof(char) * 8);
+	//memset(path,0,8);
+	//strcpy(path, "/passwd");		
+	memset(checking_user.username, '\0', 50);
+	memset(checking_user.password, '\0', 50);
+	/*printf("Username provided: %s\n");*/
+	puts(username);
+	dbg_bochs_print((const unsigned char*)"Logging In\n");
 	fd = open("/passwd", O_RDONLY,0);
 	/*if(fd != -1) printf("File passwd found\n");
 	else printf("not found\n");*/
@@ -41,7 +50,7 @@ int user_chk(char *username, char* usr_pwd){
 	}
 	//user_get(fd, &checking_user);
 	//printf("name: %s - password: %s\n", checking_user.username, checking_user.password);
-	//strcpy(checking_user.username, appo);	
+	//strcpy(checking_user.username, appo);		
 	close(fd);
 	return 0;
 }

@@ -210,3 +210,11 @@ void test_stat(){
 	printf("Uid: %d\n", stats->st_uid);
 	free(stats);	
 }
+
+void try_shadow(){
+	char stringa[30];
+	set_shadow(ENABLED);
+	scanf("%s", stringa);
+	set_shadow(DISABLED);
+	printf("%s\n", stringa);
+}

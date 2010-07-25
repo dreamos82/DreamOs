@@ -39,6 +39,7 @@
 #include <clock.h>
 #include <sys/utsname.h>
 #include <user_shell.h>
+#include <debug.h>
 
 #define NUM_COM 30
 userenv_t current_user;
@@ -122,11 +123,12 @@ void shell()
 
 
   int i = 0;
+  int ret_val;
   hst_flag = 0;
   memset(cmd, '\0', CMD_LEN);
   memset(current_user.username, '\0', USER_LEN);
-  memset(password, '\0', USER_LEN);
-  memset(current_user.cur_path, '\0', CURPATH_LEN);  
+  memset(password, '\0', 30);
+  memset(current_user.cur_path, '\0', CURPATH_LEN); 
   _kcolor(BRIGHT_BLUE);
   printf(LNG_WELCOME);
   _kcolor(WHITE);
@@ -139,7 +141,10 @@ void shell()
     printf(LNG_PWD);
     scanf ("%23s",password);
     #endif
-  } while ((!strlen(current_user.username) || (user_chk(current_user.username, password)!=1)));
+    //printf("Vediamo %s\n", current_user.username);
+    dbg_bochs_print((const unsigned char*)"Asking username");
+    ret_val = user_chk(current_user.username, password);
+  } while ((!strlen(current_user.username) || ret_val!=1));
     
   _kclear();  
   aalogo();

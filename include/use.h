@@ -70,4 +70,6 @@
 #define LNG_TIMESTAMP2 " del "
 #define LNG_TIMESTAMP3 " di "
 
+#define LNG_TEST "Username provided\n"
+
 #endif

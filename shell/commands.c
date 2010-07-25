@@ -525,6 +525,7 @@ void tester(){
 					{ "show_fd", show_fd},
 					{ "test_stat", test_stat},
 					{ "try_check", try_check},
+					{ "try_shadow", try_shadow},
 					{ "--help", help_tester },
 					};
 	if (argc != 2) {

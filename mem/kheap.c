@@ -81,7 +81,7 @@ heap_t* make_heap(unsigned int size)
 {
     heap_t* new_heap;
     heap_node_t* first_node;
-	heap_node_t* apic_node;
+	//heap_node_t* apic_node;
 	heap_node_t* module_node;
 
     new_heap = (heap_t*)KHEAP_LIST_ADDRESS;
@@ -103,7 +103,7 @@ heap_t* make_heap(unsigned int size)
     printf("  First heap created...\n");   
     printf("  Size: %d "
 	   "  Tot mem: %d\n", (new_heap->free_list)->size, tot_mem);	    
-	apic_node = alloc_node();
+	/*apic_node = alloc_node();
 	apic_node->start_address = 0xFEC00000;
 	apic_node->size = 4096;
 	apic_node->next = NULL;
@@ -112,7 +112,7 @@ heap_t* make_heap(unsigned int size)
 	apic_node->start_address = 0xFEE00000;
 	apic_node->size = 4096;
 	apic_node->next = NULL;
-	insert_list (apic_node, &(new_heap->used_list));
+	insert_list (apic_node, &(new_heap->used_list));*/
 	module_node = alloc_node();
 	module_node->start_address = (unsigned int)module_start;
 	module_node->size = module_end - (unsigned int)module_start;	

@@ -60,7 +60,7 @@ int open(const char *path, int oflags,  ...){
 	}
 	strcpy(newpath, path);	
 	error = get_abs_path((char*) newpath);
-	//printf("After get_abs: %s %s\n", newpath, current_user.cur_path);
+	//printf("After get_abs: %s %s\n", newpath, current_user.cur_path);	
     mpid = get_mountpoint_id((char*) newpath);		
 	//printf("Cur_fd: %d\n",cur_fd);
 	if(mpid >-1) {

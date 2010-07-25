@@ -25,7 +25,7 @@
 
 #include <shell.h>
 #include <kheap.h>
-#define MAX_TEST 12
+#define MAX_TEST 13
 
 extern int argc;
 extern char **argv;

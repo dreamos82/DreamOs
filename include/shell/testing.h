@@ -30,5 +30,6 @@ void try_syscall();
 void try_check();
 void show_fd();
 void test_stat();
+void try_shadow();
 
 #endif

@@ -122,7 +122,7 @@ int printf (const char *format, ...)
     char field[5];
     int len=0;
     int i=0;
-
+    	
     /* Start variabile argument's list */
     va_start (ap, format);
 
@@ -154,15 +154,15 @@ int printf (const char *format, ...)
             if (*format == 'd' || *format == 'i') {
                 int varint = va_arg (ap, int);
                 if(varint >= 0)
-					_kntos (cur_p, varint, 10);
+					_kntos (cur_p, (unsigned int)varint, 10);
 				else _knntos (cur_p, varint, 10);
             }
             if (*format == 'u') {
-                unsigned int uint = va_arg (ap, int);
+                unsigned int uint = va_arg (ap, unsigned int);
                 _kntos (cur_p, uint, 10);
             }
             if (*format == 'x' || *format == 'X') {
-                int varhex = va_arg (ap, int);
+                int varhex = va_arg (ap, unsigned int);
                 _kntos (cur_p, varhex, 16);
             }
             if (*format == 'n')

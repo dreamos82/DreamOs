@@ -60,8 +60,8 @@ config_interface: textconfig
 #display_library: term
 #display_library: win32, options="legacyF12" # use F12 to toggle mouse
 #display_library: wx
-#display_library: x, options="gui_debug"
-display_library: x
+display_library: x, options="gui_debug"
+#display_library: x
 #=======================================================================
 # ROMIMAGE:
 # The ROM BIOS controls what the PC does when it first powers on.

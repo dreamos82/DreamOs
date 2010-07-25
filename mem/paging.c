@@ -240,7 +240,8 @@ void page_fault_handler (int ecode)
     //printf("Test\n");
         /* Ricava l'indirizzo che ha causato l'eccezione */
     asm ("movl %%cr2, %0":"=r" (fault_addr));
-	//printf("Fault addr: %d\n", fault_addr); 
+    //if(fault_addr > 0) printf("Ok ");
+	//printf("Fault addr: %u\n", fault_addr); 
 	//while(1);
     if ((ecode & PF_MASK) == 2 || (ecode & PF_MASK) == 0) {
     pdir = BITRANGE (fault_addr, 22, 31);
