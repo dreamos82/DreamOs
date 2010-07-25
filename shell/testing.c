@@ -213,6 +213,7 @@ void test_stat(){
 
 void try_shadow(){
 	char stringa[30];
+	memset(stringa, '\0', 30);
 	set_shadow(ENABLED);
 	scanf("%s", stringa);
 	set_shadow(DISABLED);
