@@ -85,8 +85,8 @@ void init_IRQ(){
     enable_IRQ(TIMER);
     enable_IRQ(TO_SLAVE_PIC);
    
-    init_idt();
-    init_gdt();
+    //init_idt();
+    //init_gdt();
 
     setup_IRQ();
     asm("sti");

@@ -570,7 +570,7 @@ void newfile(){
 					printf("Type your text here, actually only one line available!!\n");
 					scanf("%s", text);
 					write(fd,text, strlen(text));
-					close(fd);
+					if(close(fd)==-1) printf("something went wrong\n");
 				}
 			}
 		}

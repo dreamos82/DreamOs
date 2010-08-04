@@ -102,48 +102,52 @@ int initfs_open(const char *path, int flags, ...){
 	int j = 0;
 	int ret_fd = -1;
 	module_var = fs_headers;
+	//printf("J vale: %d fs_spec: %d cur_idfd: %d\n", j, fs_specs->nfiles, cur_irdfd);
 	if(cur_irdfd >= MAX_INITRD_DESCRIPTORS) {
 		int i=0;
 		cur_irdfd=0;
 		while(ird_descriptors[i].file_descriptor!=-1 && i < MAX_INITRD_DESCRIPTORS) i++;			
 		cur_irdfd = i;
+		//printf("i: %d\n", i);
 	}
-	else {
-		while (j < fs_specs->nfiles) {
-			if(!strcmp(path, module_var[j].fileName)){
-				if(module_var[j].file_type == FS_DIRECTORY || module_var[j].file_type == FS_MOUNTPOINT)
-					return -1;
-				ird_descriptors[cur_irdfd].file_descriptor	= j;
-				//printf("%s Found. Size: %d FS fd val: %d - ID File val: %d\n", path, module_var[j].length, cur_irdfd, ird_descriptors[cur_irdfd].file_descriptor);
-				ret_fd = cur_irdfd;				
-				//printf("ret_fd: %d --- %d\n", cur_irdfd, j);
-				ird_descriptors[cur_irdfd].cur_pos = 0;
-				if(flags&O_APPEND) {
-					printf("Appendiamoci\n");
-					ird_descriptors[cur_irdfd].cur_pos = module_var[j].length;
-				}
-				//else printf("Pero' non ci appendiamo\n");
-				return cur_irdfd++; 
+	while (j < fs_specs->nfiles) {
+		//printf(".");
+		if(!strcmp(path, module_var[j].fileName)){
+			if(module_var[j].file_type == FS_DIRECTORY || module_var[j].file_type == FS_MOUNTPOINT)
+			//Erroneus file type
+				return -1;
+			ird_descriptors[cur_irdfd].file_descriptor	= j;
+			ret_fd = cur_irdfd;				
+			//printf("ret_fd: %d --- %d\n", cur_irdfd, j);
+			ird_descriptors[cur_irdfd].cur_pos = 0;
+			if(flags&O_APPEND) {
+				printf("Appendiamoci\n");
+				ird_descriptors[cur_irdfd].cur_pos = module_var[j].length;
 			}
-			j++;
+			//else printf("Pero' non ci appendiamo\n");
+			return cur_irdfd++; 
 		}
-		if(flags&O_CREAT) {
-			printf("O_CREAT Flag\n");
-			if(fs_specs->nfiles < MAX_FILES ){			
-				module_var[fs_specs->nfiles].magic=0xBF;
-				strcpy(module_var[fs_specs->nfiles].fileName, path);
-				module_var[fs_specs->nfiles].file_type = FS_FILE;
-				module_var[fs_specs->nfiles].uid = current_user.uid;
-				module_var[fs_specs->nfiles].offset = ++fs_end;
-				module_var[fs_specs->nfiles].length = 0;
-				ird_descriptors[cur_irdfd].file_descriptor	= fs_specs->nfiles;
-				ird_descriptors[cur_irdfd].cur_pos = 0;
-				fs_specs->nfiles++;				
-				return cur_irdfd++; 
-			}
-			return -1;
-		}
+		j++;
 	}
+	//printf("\n");
+	if(flags&O_CREAT) {
+		printf("O_CREAT Flag\n");
+		if(fs_specs->nfiles < MAX_FILES ){			
+			module_var[fs_specs->nfiles].magic=0xBF;
+			strcpy(module_var[fs_specs->nfiles].fileName, path);
+			module_var[fs_specs->nfiles].file_type = FS_FILE;
+			module_var[fs_specs->nfiles].uid = current_user.uid;
+			module_var[fs_specs->nfiles].offset = ++fs_end;
+			module_var[fs_specs->nfiles].length = 0;
+			ird_descriptors[cur_irdfd].file_descriptor	= fs_specs->nfiles;
+			ird_descriptors[cur_irdfd].cur_pos = 0;
+			fs_specs->nfiles++;				
+			return cur_irdfd++; 
+		}
+		return -1;
+	}
+	
+	printf("Qua\n");
 	return -1;	
 }
 

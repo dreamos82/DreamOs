@@ -42,8 +42,7 @@ int open(const char *path, int oflags,  ...){
 	char *newpath;
 	va_list ap;
 	va_start(ap, oflags);
-	ret_fd = 0;	
-	//printf("Path: %s\n", path);	
+	ret_fd = 0;		
 	prova = va_arg(ap, int);
 	newpath = kmalloc(CURPATH_LEN * sizeof(char));
 	memset(newpath, '\0', CURPATH_LEN);
@@ -59,6 +58,7 @@ int open(const char *path, int oflags,  ...){
 		return -1;
 	}
 	strcpy(newpath, path);	
+	//printf("Path: %s %s\n", path, newpath);	
 	error = get_abs_path((char*) newpath);
 	//printf("After get_abs: %s %s\n", newpath, current_user.cur_path);	
     mpid = get_mountpoint_id((char*) newpath);		

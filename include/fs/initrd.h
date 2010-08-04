@@ -50,8 +50,8 @@ struct initrd_file_t{
     \brief File Descriptor relativo ai files aperti.
  */
 struct initrd_fd{
-	int file_descriptor;
-	int cur_pos;
+	int file_descriptor; /*!< id del file aperto all'interno del file system (posizione nel vettore dei files */
+	int cur_pos; /*!< Posizione attuale all'interno del file, per operazioni di lettura/scrittura*/
 };
 
 typedef struct initrd_t initrd_t;

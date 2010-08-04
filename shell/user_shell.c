@@ -31,8 +31,7 @@ int user_chk(char *username, char* usr_pwd){
 	//memset(path,0,8);
 	//strcpy(path, "/passwd");		
 	memset(checking_user.username, '\0', 50);
-	memset(checking_user.password, '\0', 50);
-	/*printf("Username provided: %s\n");*/
+	memset(checking_user.password, '\0', 50);	
 	puts(username);
 	dbg_bochs_print((const unsigned char*)"Logging In\n");
 	fd = open("/passwd", O_RDONLY,0);
