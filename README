@@ -9,26 +9,26 @@
 	b. Scaricare da SVN
 	c. Compilare DreamOS
 	d. Mettere su Floppy (opzionale)
-	e. Creare la entry per GRUB (opzionale)
+	e. Fare la entry per GRUB (opzionale)
 3. Usare DreamOS
 	a. L'avvio
 	b. Uso della CLI
 4. Feedback
 	a. Come segnalare bug
-	b. Come inoltrare un feedback
+	b. Come mandare un feedback
 
 
 - 1 -----------------------
 --- Cosa è DreamOS --------
 
-DreamOS è un sistema operativo open source rilasciato sotto licenza GPLv3 sviluppato partendo da 0 puramente per scopi didattici o comunque per capire come funzionano i sistemi operativi.
+Il DreamOS è un sistema operativo open source rilasciato sotto licenza GPLv3 sviluppato partendo da 0 puramente per scopi didattici o comunque per capire come funzionano i sistemi operativi.
 Il team di sviluppo attuale è composto dagli sviluppatori
+
+Ivan Gualandri - Finarfin (http://earyrian.elenhost.org)
+
 
 Alessandro (celeron) 
 Diego Stamigni (osiris_h4ck)
-Finessi Manuel (theking0)
-Giuseppe Massaro (n3mes1s)
-Ivan Gualandri (finarfin)
 Lorenzo De Liso (blackz)
 Michele Morelli (dt-)
 
@@ -43,7 +43,7 @@ Per Installazione s'intende compilare e mettere DreamOS su un supporto per l'avv
 
 	- a - Requisiti necessari -
 
-DreamOS è un sistema operativo sviluppato per funzionare su cpu con architettura Intel x86/IA32 (i386/i686) e attualmente è sviluppato in modo da partire da floppy anche se, utilizzando GRUB, è possibile farlo partire avendo l'immagine compilata sull'Hard-disk.
+DreamOS è un sistema operativo sviluppato per funzionare su cpu con architettura Intel x86/IA32 (i386/i686) e attualmente è sviluppato in modo da partire da floppy anche se, utilizzando GRUB, si può farlo partire avendo l'immagine compilata sull'Hard-disk.
 DreamOS può essere anche emulato usando Software come qEmu o Bochs.
 
 Per compilare DreamOS bisogna prima di tutto avere una distribuzione Linux installata, poi avere i seguenti software:
@@ -90,7 +90,7 @@ Se invece volete creare una entry apposita su Grub potete farlo nel seguente mod
 	boot
 Naturalmenet modificando /path/al/file/dreamos.img con la path al file dreamos.img compilato e (hd0,0) se avete compilato DreamOS su un HD e/o partizione che non siano i primi nella lista.
 
-Attaualmente è stato aggiunto uno script per inserire dreamos in grub, esso è ancora nelle prime fasi, e quindi non sempre potrebbe inserire la entry corretta. Lo script è stato scritto in python quindi richiede che quest'ultimo sia installto, per le istruzioni sull'utilizzo nella cartella doc è presente il file: HOWTO_use_grub_script che può fornirvi maggiori informazioni.
+Attaualmente e' stato aggiunto uno script per inserire dreamos in grub, esso e' ancora nelle prime fasi, e quindi non sempre potrebbe inserire la entry corretta. Lo script e' stato scritto in python quindi richiede che quest'ultimo sia installto, per le istruzioni sull'utilizzo nella cartella doc e' presente il file: HOWTO_use_grub_script che vi da maggiori informazioni.
 
 - 3 -----------------------
 ---- Usare DreamOS --------
@@ -129,9 +129,9 @@ Potete mandare un resoconto o comunque raccontare la vostra esperienza con Dream
 	http://forum.osdev.it/
 Oppure ci trovate su irc: 
 	Server: irc.azzurra.org
-	Chan: #dreamos	
+	Chan: #dreamos
+	
 
-
-2003-2010, DreamOS. 
+DreamOS 2003-2009 by finarfin/shainer
 http://www.dreamos.org
 http://www.osdev.it

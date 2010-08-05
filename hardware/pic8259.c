@@ -89,15 +89,15 @@ void init_IRQ(){
     //init_gdt();
 
     setup_IRQ();
-    asm("sti");
-                    
-    i=0;
+    
+        i=0;
     while(i<IRQ_NUM){
         shareHandler[i] = NULL;
         i++;
     }
     add_IRQ_handler(1, keyboard_isr);
     add_IRQ_handler(0, PIT_handler);
+    asm("sti");                  
 }
 
 void setup_IRQ(){

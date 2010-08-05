@@ -50,7 +50,7 @@ int initfs_init(){
 		i++;
 	}
 	cur_irdfd = 0;
-	printf("Number of files present: %d\n", fs_specs->nfiles);
+	//printf("Number of files present: %d\n", fs_specs->nfiles);
 	fs_end = fs_headers[(fs_specs->nfiles)-1].offset + fs_headers[(fs_specs->nfiles)-1].length;
 	printf("Fs_end: %d\n", fs_end);
 	return fs_specs->nfiles;

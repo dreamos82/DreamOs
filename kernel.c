@@ -107,13 +107,13 @@ int main_loop(struct multiboot_info *boot_info)
     vfs_init();
     initfs_init();
 	if(boot_info->mods_count > 0) printf("Found n. %d Modules\n", boot_info->mods_count);		
-	printf("Address of module: 0x%x - 0x%x\n", *((unsigned int*)boot_info->mods_addr),module_end-(unsigned int) module_start);
+	//printf("Address of module: 0x%x - 0x%x\n", *((unsigned int*)boot_info->mods_addr),module_end-(unsigned int) module_start);
     printf("\n");
     printf("----\n");
     printf(LNG_SHELL);    
     _kprintOK();
 		printf("[+] Address: 0x%x\n", &end);		   	        
-		printf("\n\n");
+		printf("\n");
 #ifdef BOCHS_DEBUG
 		dbg_bochs_print((const unsigned char*)"DreamOS Debug String for Bochs\n");
 #endif

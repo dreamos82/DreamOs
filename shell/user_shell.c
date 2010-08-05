@@ -87,9 +87,10 @@ int user_get(int fd, struct passwd_user *checking_user){
 	//if(err ==0) return err;
 	status++;	
 	strcpy(checking_user->password, appo);
-	printf("Status: %sd\n", status);
+	//printf("Status: %sd\n", status);
 	return status;
 }
 
 int pwd_check(char* password, char* realpass){
+	return 0;
 }
