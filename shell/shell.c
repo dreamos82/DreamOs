@@ -45,6 +45,7 @@
 userenv_t current_user;
 int hst_flag;
 char cmd[CMD_LEN];
+//#define PWD_CHECK 1
 /*struct cmd shell_cmd[NUM_COM] = {
  { "aalogo",   aalogo,    "  Show an ascii art logo" },
  { "clear",    _kclear,   "   Clear the screen" },
@@ -139,9 +140,11 @@ void shell()
     printf(LNG_USER_R);
     #ifdef PWD_CHECK
     printf(LNG_PWD);
+    set_shadow(1);
     scanf ("%23s",password);
+    set_shadow(0);
     #endif
-    //printf("Vediamo %s\n", current_user.username);
+    //printf("Vediamo %s pwd: %s\n", current_user.username, password);
     dbg_bochs_print((const unsigned char*)"Asking username");
     ret_val = user_chk(current_user.username, password);
   } while ((!strlen(current_user.username) || ret_val!=1));

@@ -24,6 +24,7 @@
 #include <debug.h>
 #include <use.h>
 
+//#define PWD_CHECK 1
 int user_chk(char *username, char* usr_pwd){
 	int fd = -1;
 	struct passwd_user checking_user;
@@ -32,13 +33,14 @@ int user_chk(char *username, char* usr_pwd){
 	//strcpy(path, "/passwd");		
 	memset(checking_user.username, '\0', 50);
 	memset(checking_user.password, '\0', 50);	
-	puts(username);
+	//puts(username);
+	//printf("user: %s\n", username);
 	dbg_bochs_print((const unsigned char*)"Logging In\n");
 	fd = open("/passwd", O_RDONLY,0);
 	/*if(fd != -1) printf("File passwd found\n");
 	else printf("not found\n");*/
 	if(fd<0) return 0;
-	while(user_get(fd, &checking_user)==2){
+	while(user_get(fd, &checking_user)==2){		
 		#ifdef PWD_CHECK
 		if(!strcmp(username, checking_user.username) && !strcmp(usr_pwd, checking_user.password)) return 1;
 		#else
@@ -85,6 +87,7 @@ int user_get(int fd, struct passwd_user *checking_user){
 	//if(err ==0) return err;
 	status++;	
 	strcpy(checking_user->password, appo);
+	printf("Status: %sd\n", status);
 	return status;
 }
 
