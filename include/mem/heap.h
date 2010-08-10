@@ -1,11 +1,10 @@
 /***************************************************************************
- *            kernel.h
+ *            heap.h
  *
- *  Sat Mar 31 07:45:13 2007
- *  Copyright  2007  Ivan Gualandri
- *  Email
+ *  Sun 8 08 10 
+ *  Copyright  2010  Ivan Gualandri
+ *  Email finarfin@elenhost.org
  ****************************************************************************/
-
 /*
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,21 +20,25 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
-#ifndef _KERNEL_H
-#define _KERNEL_H
 
-#include <multiboot.h>
-#define asmlinkage __attribute__((regparm(0)))
+#ifndef __HEAP_H
+#define __HEAP_H
 
-extern multiboot_info_t *boot_informations;
-//extern char *module_start;
-extern char *module_start;
-extern unsigned int module_end;
-asmlinkage void _start(struct multiboot_info*);
-int main_loop(struct multiboot_info*);
+/*! \struct header_t 
+    \brief Contiene le informazioni relative alle locazioni di memoria 
+ */
+typedef struct {
+	int magic; /*!<For header identification*/
+	char is_hole /*!<1 se si tratta di un hole 0 se si tratta di un block*/
+	int size;  /*!<Total size of the block (including header and footer)*/
+} header_t;
 
-#define DREAMOS_VER "DreamOS ver 0.3 - trunk"
-#define SITEURL "www.dreamos.org"
+/*! \struct footer_t 
+    \brief Contiene altre informazioni relative alle locazioni di memoria 
+ */
+typedef struct {
+	int magic; /*!<For footer identification */
+	header_t *header;/*!< Pointer to the block header*/
+} footer_t;
 
 #endif

@@ -4,7 +4,7 @@
 
 NAME = DreamOS
 VERSION = 0
-PATCHLEVEL = 2.1
+PATCHLEVEL = 3
 EXTRAVERSION = -trunk
 
 include Makefile.am
@@ -52,6 +52,7 @@ OBJ = kernel.o\
       mem/fismem.o\
       mem/paging.o\
       mem/kheap.o\
+      mem/heap.o\
       misc/clock.o\
       misc/bitops.o\
       misc/ordered_list.o\
@@ -94,6 +95,7 @@ libc/string.o: libc/string.c
 mem/fismem.o: mem/fismem.c
 mem/paging.o: mem/paging.c
 mem/kheap.o: mem/kheap.c
+mem/heap.o: mem/heap.c
 misc/clock.o: misc/clock.c
 misc/ordered_list.o: misc/ordered_list.c
 misc/bitops.o: misc/bitops.c
