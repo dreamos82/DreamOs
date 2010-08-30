@@ -25,6 +25,14 @@
 #include <ordered_array.h>
 #include <kheap.h>
 #include <stdio.h>
+#include <heap.h>
+
+
+short int standard_lessthan (type_t a, type_t b){
+	if(a<b) return 1;
+	else return 0;
+	return 0;
+}
 
 /**
   * Crea un nuovo ordered_array

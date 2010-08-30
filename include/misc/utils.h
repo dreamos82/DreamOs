@@ -1,7 +1,7 @@
 /***************************************************************************
- *            heap.h
+ *            utils.h
  *
- *  Sun 8 08 10 
+ *  Sun 30 08 10 
  *  Copyright  2010  Ivan Gualandri
  *  Email finarfin@elenhost.org
  ****************************************************************************/
@@ -21,27 +21,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __HEAP_H
-#define __HEAP_H
+#ifndef COMMON_H
+#define COMMON_H
 
-#define KHEAP_START_ADDRESS 0xD0000000
+#define MAX(a,b) ((a) > (b) ? (a) : (b)) 
 
-/*! \struct header_t 
-    \brief Contiene le informazioni relative alle locazioni di memoria 
- */
-typedef struct {
-	int magic; /*!<For header identification*/
-	short int is_hole /*!<1 se si tratta di un hole 0 se si tratta di un block*/
-	int size;  /*!<Total size of the block (including header and footer)*/
-} header_t;
-
-/*! \struct footer_t 
-    \brief Contiene altre informazioni relative alle locazioni di memoria 
- */
-typedef struct {
-	int magic; /*!<For footer identification */
-	header_t *header;/*!< Pointer to the block header*/
-} footer_t;
-
-void heap_init();
+#define ASSERT(b) ((b)? (void)0 ? void(1))
 #endif

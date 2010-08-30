@@ -36,9 +36,15 @@ typedef struct {
     void_t *array; /**< Il vettore che sara' ordinato*/
     unsigned int size; /**< La dimensione attuale*/
     unsigned int size_max; /**< La dimensione massima*/
+    lessthan_predicate_t less_than;
 }ordered_array_t;
 
+typedef void* type_t;
+
+typedef short int (*lessthan_predicate_t)(type_t,type_t);
 ordered_array_t new_array(void_t, unsigned int, unsigned int);
 void insert_array(void_t, ordered_array_t*);
-
+void destroy_array(ordered_array_t*);
+type_t get_array(int, ordered_array_t*);
+void remove_array(int, ordered_array_t*);
 #endif

@@ -55,6 +55,7 @@ OBJ = kernel.o\
       mem/heap.o\
       misc/clock.o\
       misc/bitops.o\
+      misc/ordered_array.o\
       misc/ordered_list.o\
       misc/debug.o \
       system/syscall.o\
@@ -98,6 +99,7 @@ mem/kheap.o: mem/kheap.c
 mem/heap.o: mem/heap.c
 misc/clock.o: misc/clock.c
 misc/ordered_list.o: misc/ordered_list.c
+misc/orderet_array.o: misc/ordered_array.c
 misc/bitops.o: misc/bitops.c
 misc/debug.o: misc/debug.c
 drivers/keyboard.o: drivers/keyboard.c
