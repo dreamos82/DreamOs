@@ -25,10 +25,10 @@
 #ifndef ORDERED_ARRAY_H
 #define ORDERED_ARRAY_H
 
-#include <ordered_array.h>
+/*#include <ordered_array.h>*/
 
 typedef void* void_t;
-
+typedef short int (*lessthan_predicate_t)(type_t,type_t);
 /*!  \struct ordered_array_t
      \brief Struttura dati che un vettore ordinato.
  */
@@ -41,7 +41,7 @@ typedef struct {
 
 typedef void* type_t;
 
-typedef short int (*lessthan_predicate_t)(type_t,type_t);
+
 ordered_array_t new_array(void_t, unsigned int, unsigned int);
 void insert_array(void_t, ordered_array_t*);
 void destroy_array(ordered_array_t*);

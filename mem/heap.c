@@ -21,5 +21,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-void heap_init(){
+#include <heap.h>
+
+void new_heap(unsigned int start, unsigned int size){
 }

@@ -25,13 +25,25 @@
 #define __HEAP_H
 
 #define KHEAP_START_ADDRESS 0xD0000000
+#define KHEAP_START_SIZE 0x100000
+
+#include <ordered_array.h>
+
+/*! \struct heap_t 
+    \brief Contiene le informazioni relative all'heap corrente DA TERMINARE
+ */
+typedef struct {
+	ordered_array_t index; /*!< Indice degli holes */
+	unsigned int start_address; /*!< Indirizzo di inizio dell'heap */
+	unsigned int end_address; /*!< Indirizzo di fine dell'heap */
+}new_heap_t;
 
 /*! \struct header_t 
     \brief Contiene le informazioni relative alle locazioni di memoria 
  */
 typedef struct {
 	int magic; /*!<For header identification*/
-	short int is_hole /*!<1 se si tratta di un hole 0 se si tratta di un block*/
+	short int is_hole; /*!<1 se si tratta di un hole 0 se si tratta di un block*/
 	int size;  /*!<Total size of the block (including header and footer)*/
 } header_t;
 
@@ -43,5 +55,7 @@ typedef struct {
 	header_t *header;/*!< Pointer to the block header*/
 } footer_t;
 
-void heap_init();
+void new_heap(unsigned int, unsigned int);
+void *new_alloc(unsigned int size, unsigned short int page_align, heap_t heap);
+void new_free();
 #endif
