@@ -24,8 +24,8 @@
 #ifndef __HEAP_H
 #define __HEAP_H
 
-#define KHEAP_START_ADDRESS 0xD0000000
-#define KHEAP_START_SIZE 0x100000
+#define HEAP_START_ADDRESS 0xD0000000
+#define HEAP_START_SIZE 0x100000
 
 #include <ordered_array.h>
 
@@ -55,7 +55,10 @@ typedef struct {
 	header_t *header;/*!< Pointer to the block header*/
 } footer_t;
 
+
 void new_heap(unsigned int, unsigned int);
-void *new_alloc(unsigned int size, unsigned short int page_align, heap_t heap);
+void *new_alloc(unsigned int, unsigned short int, new_heap_t);
 void new_free();
+
+unsigned int new_malloc(unsigned int);
 #endif

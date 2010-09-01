@@ -22,6 +22,21 @@
  */
 
 #include <heap.h>
+#include <stdio.h>
 
+extern unsigned int end;
+new_heap_t *n_heap=0;
 void new_heap(unsigned int start, unsigned int size){
+	new_heap_t* t_heap = new_malloc(sizeof(new_heap_t));
+	if(start%0x1000 == 0) printf("all right\n");
+	else printf("ERROR\n");
+}
+
+unsigned int new_malloc(unsigned int size){
+	if(n_heap==0) {
+		printf("No heap defined starting from: %d ...\n", &end);
+	}
+	else {
+		printf("Heap defined\n");
+	}
 }

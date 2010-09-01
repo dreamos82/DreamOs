@@ -29,6 +29,7 @@
 #include <initrd.h>
 #include <unistd.h>
 #include <user_shell.h>
+#include <heap.h>
 
 //multiboot_info_t *boot_informations;
 char *module_start;
@@ -96,6 +97,15 @@ void do_fault()
 void try_printmem(void)
 {
 	print_heap_list(kheap->used_list);
+}
+
+void try_newheap(){
+	printf("Testing the new heap (in development)\n");
+	printf("First step: testing a new heap...\n");
+	new_heap(HEAP_START_ADDRESS, HEAP_START_SIZE);
+	printf("Second step: trying new_malloc...\n");
+	new_malloc(0);
+	printf("DONE\n");
 }
 
 void help_tester()

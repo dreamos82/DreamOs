@@ -28,7 +28,9 @@
 /*#include <ordered_array.h>*/
 
 typedef void* void_t;
+typedef void* type_t;
 typedef short int (*lessthan_predicate_t)(type_t,type_t);
+
 /*!  \struct ordered_array_t
      \brief Struttura dati che un vettore ordinato.
  */
@@ -38,9 +40,6 @@ typedef struct {
     unsigned int size_max; /**< La dimensione massima*/
     lessthan_predicate_t less_than;
 }ordered_array_t;
-
-typedef void* type_t;
-
 
 ordered_array_t new_array(void_t, unsigned int, unsigned int);
 void insert_array(void_t, ordered_array_t*);
