@@ -26,6 +26,7 @@
 
 extern unsigned int end;
 new_heap_t *n_heap=0;
+unsigned int placement_address=&end;
 void new_heap(unsigned int start, unsigned int size){
 	new_heap_t* t_heap = new_malloc(sizeof(new_heap_t));
 	if(start%0x1000 == 0) printf("all right\n");
@@ -34,9 +35,16 @@ void new_heap(unsigned int start, unsigned int size){
 
 unsigned int new_malloc(unsigned int size){
 	if(n_heap==0) {
-		printf("No heap defined starting from: %d ...\n", &end);
+		unsigned int tmp;
+		printf("No heap defined starting from: %d and %x...\n", &end, placement_address);
+		tmp = placement_address; 
+		placement_address = placement_address+size;
+		printf("New address: %x\n", tmp);
+		return tmp;
 	}
 	else {
 		printf("Heap defined\n");
+		return 0;
 	}
+	return 0;
 }

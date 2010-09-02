@@ -147,7 +147,7 @@ int initfs_open(const char *path, int flags, ...){
 		return -1;
 	}
 	
-	printf("Qua\n");
+	//printf("Qua\n");
 	return -1;	
 }
 

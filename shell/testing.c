@@ -104,7 +104,7 @@ void try_newheap(){
 	printf("First step: testing a new heap...\n");
 	new_heap(HEAP_START_ADDRESS, HEAP_START_SIZE);
 	printf("Second step: trying new_malloc...\n");
-	new_malloc(0);
+	new_malloc(sizeof(new_heap_t));
 	printf("DONE\n");
 }
 
