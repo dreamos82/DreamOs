@@ -26,6 +26,7 @@
 
 #define HEAP_START_ADDRESS 0xD0000000
 #define HEAP_START_SIZE 0x100000
+#define HEAP_MAGIC 0x12893457
 
 #include <ordered_array.h>
 

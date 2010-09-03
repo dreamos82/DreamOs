@@ -26,10 +26,14 @@
 
 extern unsigned int end;
 new_heap_t *n_heap=0;
-unsigned int placement_address=&end;
+unsigned int placement_address=(unsigned int) &end;
 void new_heap(unsigned int start, unsigned int size){
-	new_heap_t* t_heap = new_malloc(sizeof(new_heap_t));
-	if(start%0x1000 == 0) printf("all right\n");
+	new_heap_t* t_heap =(new_heap_t*) new_malloc(sizeof(new_heap_t));
+	if(start%0x1000 == 0){
+		printf("all right\n");
+		t_heap->start_address = HEAP_START_ADDRESS;
+		printf("Start_address: 0x%u\n", t_heap->start_address);
+	}
 	else printf("ERROR\n");
 }
 
