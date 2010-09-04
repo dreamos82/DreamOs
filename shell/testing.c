@@ -123,6 +123,7 @@ void help_tester()
 		"  -> try_syscall	    - Try some syscall functions\n"
 		"  -> try_check         - Test username if exist\n"
 		"  -> test_stat			- Test stat function\n"
+		"  -> try_newheap		- Test heap functions\n"
 		);	
 }
 

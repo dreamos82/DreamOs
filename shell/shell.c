@@ -46,7 +46,7 @@ userenv_t current_user;
 int hst_flag;
 char cmd[CMD_LEN];
 //#define PWD_CHECK 1
-/*struct cmd shell_cmd[NUM_COM] = {
+struct cmd shell_cmd[NUM_COM] = {
  { "aalogo",   aalogo,    "  Show an ascii art logo" },
  { "clear",    _kclear,   "   Clear the screen" },
  { "poweroff", poweroff,  "Turn off the machine" },
@@ -65,7 +65,8 @@ char cmd[CMD_LEN];
  { "tester",   tester,    "  Try some functions, 'tester --help' for more info'" },	
  { "pwd",      pwd,       "     Print current working directory" },
  { "more",     more,      "    Read content of a file" },
-};*/
+ { "newfile", newfile,	  "	Create a new file"},
+};
 /*
  * Inserisce gli argomenti di un comando in un array di stringhe
  * argc = numero degli argomenti
@@ -100,7 +101,7 @@ void shell()
   
   char *cmd_ptr;
   char password[30];
-  static struct cmd shell_cmd[NUM_COM] = {
+  /*static struct cmd shell_cmd[NUM_COM] = {
 	{ "aalogo",   aalogo      },
 	{ "clear",    _kclear     },
 	{ "poweroff", poweroff    },
@@ -120,7 +121,7 @@ void shell()
 	{ "pwd", pwd},
 	{ "more", more},
 	{ "newfile", newfile}
-  };
+  };*/
 
 
   int i = 0;

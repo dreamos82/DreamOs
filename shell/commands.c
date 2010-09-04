@@ -57,17 +57,18 @@ void logo()
   _kcolor(WHITE);
 }
 
-/*void help()
+void help()
 {
   printf ("Available commands:\n");
   int i=0;
-  while(i<5)
+  while(i<19)
   {
 	printf("%s   %s\n", shell_cmd[i].cmdname, shell_cmd[i].cmddesc);
 	i++;
   }
-}*/
-void help()
+}
+
+/*void help()
 {
   printf ("Available commands:\n");
   printf(
@@ -90,7 +91,7 @@ void help()
 	"more		   - read content of a file\n"
 	"newfile	   - create a newfile\n"
 	);
-}
+}*/
 
 
 void echo()

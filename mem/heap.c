@@ -32,7 +32,10 @@ void new_heap(unsigned int start, unsigned int size){
 	if(start%0x1000 == 0){
 		printf("all right\n");
 		t_heap->start_address = HEAP_START_ADDRESS;
-		printf("Start_address: 0x%u\n", t_heap->start_address);
+		t_heap->end_address = HEAP_START_ADDRESS + HEAP_START_SIZE;
+		printf("Start_address: %u\n", t_heap->start_address);		
+		printf("End Address: %u\n", t_heap->end_address);
+		n_heap=t_heap;
 	}
 	else printf("ERROR\n");
 }
@@ -48,6 +51,7 @@ unsigned int new_malloc(unsigned int size){
 	}
 	else {
 		printf("Heap defined\n");
+		printf("Start Address: %u End Address: %u\n", n_heap->start_address, n_heap->end_address);
 		return 0;
 	}
 	return 0;
