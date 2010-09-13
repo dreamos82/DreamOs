@@ -43,6 +43,7 @@
 #include <kheap.h>
 #include <vfs.h>
 #include <initrd.h>
+#include <heap.h>
 
 #ifdef BOCHS_DEBUG
 #include <debug.h>
@@ -92,7 +93,7 @@ int main_loop(struct multiboot_info *boot_info)
     configure_PIT ();   
     //_kprintOK();   
     set_memorysize((boot_info->mem_upper+boot_info->mem_lower)*1024);
-    init_mem();        
+    init_mem();       
     asm("sti");
     _kprintOK();   
     init_paging();    
@@ -106,6 +107,7 @@ int main_loop(struct multiboot_info *boot_info)
         
     vfs_init();
     initfs_init();
+      init_newmem(); 
 	if(boot_info->mods_count > 0) printf("Found n. %d Modules\n", boot_info->mods_count);		
 	//printf("Address of module: 0x%x - 0x%x\n", *((unsigned int*)boot_info->mods_addr),module_end-(unsigned int) module_start);
     printf("\n");

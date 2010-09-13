@@ -23,21 +23,30 @@
 
 #include <heap.h>
 #include <stdio.h>
+#include <ordered_array.h>
 
 extern unsigned int end;
-new_heap_t *n_heap=0;
+new_heap_t *n_heap;
 unsigned int placement_address=(unsigned int) &end;
-void new_heap(unsigned int start, unsigned int size){
+
+void init_newmem(){
+	
+	n_heap = (new_heap_t*)new_heap(HEAP_START_ADDRESS, HEAP_START_SIZE);
+}
+
+new_heap_t *new_heap(unsigned int start, unsigned int size){
 	new_heap_t* t_heap =(new_heap_t*) new_malloc(sizeof(new_heap_t));
 	if(start%0x1000 == 0){
 		printf("all right\n");
-		t_heap->start_address = HEAP_START_ADDRESS;
-		t_heap->end_address = HEAP_START_ADDRESS + HEAP_START_SIZE;
-		printf("Start_address: %u\n", t_heap->start_address);		
-		printf("End Address: %u\n", t_heap->end_address);
-		n_heap=t_heap;
+		t_heap->start_address = start;
+		t_heap->end_address = start + size;	
+		//t_heap->index = new_array(start,size, 
+		printf("Start_address: %u\n", n_heap->start_address);		
+		printf("End Address: %u\n", n_heap->end_address);
+		return t_heap;		
 	}
 	else printf("ERROR\n");
+	return 0;
 }
 
 unsigned int new_malloc(unsigned int size){

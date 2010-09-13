@@ -41,7 +41,7 @@ typedef struct {
     lessthan_predicate_t less_than;
 }ordered_array_t;
 
-ordered_array_t new_array(void_t, unsigned int, unsigned int);
+ordered_array_t new_array(unsigned int, unsigned int, lessthan_predicate_t);
 void insert_array(void_t, ordered_array_t*);
 void destroy_array(ordered_array_t*);
 type_t get_array(int, ordered_array_t*);

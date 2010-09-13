@@ -57,9 +57,12 @@ typedef struct {
 } footer_t;
 
 
-void new_heap(unsigned int, unsigned int);
+new_heap_t *new_heap(unsigned int, unsigned int);
+
 void *new_alloc(unsigned int, unsigned short int, new_heap_t);
 void new_free();
+void init_newmem();
 
 unsigned int new_malloc(unsigned int);
+
 #endif
