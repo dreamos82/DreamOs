@@ -65,4 +65,5 @@ void init_newmem();
 
 unsigned int new_malloc(unsigned int);
 
+static short int header_t_less_than(void *,void *);
 #endif

@@ -29,9 +29,14 @@ extern unsigned int end;
 new_heap_t *n_heap;
 unsigned int placement_address=(unsigned int) &end;
 
+
 void init_newmem(){
 	
 	n_heap = (new_heap_t*)new_heap(HEAP_START_ADDRESS, HEAP_START_SIZE);
+}
+
+static short int header_t_less_than(void *a,void *b){
+	return (((header_t*)a)->size < ((header_t*)b)->size)?1:0;
 }
 
 new_heap_t *new_heap(unsigned int start, unsigned int size){
