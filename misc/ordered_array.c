@@ -26,6 +26,7 @@
 #include <kheap.h>
 #include <stdio.h>
 #include <heap.h>
+#include <string.h>
 
 
 short int standard_lessthan (type_t a, type_t b){
@@ -52,10 +53,8 @@ ordered_array_t new_array(unsigned int start, unsigned int size, lessthan_predic
     tmp_array.array = (void_t)start;
     tmp_array.less_than = predicate;    
     /* Questa parte e' memsettbile dopo che sara' fatta */
-    while(i<size){
-        tmp_array.array[i]= (void_t) 0x0;
-        i++;
-    }
+    //printf("SizeMax: %d\n", tmp_array.size_max);
+    //memset(tmp_array.array, 0, tmp_array.size_max);
     return tmp_array;
 }
 

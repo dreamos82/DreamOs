@@ -313,3 +313,7 @@ int  set_shadow(int value){
 	else shadow = value;
 	return shadow;
 }
+
+int get_shadow(){
+	return shadow;
+}

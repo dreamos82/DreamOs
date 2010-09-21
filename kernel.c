@@ -44,6 +44,7 @@
 #include <vfs.h>
 #include <initrd.h>
 #include <heap.h>
+#include <keyboard.h>
 
 #ifdef BOCHS_DEBUG
 #include <debug.h>
@@ -112,6 +113,8 @@ int main_loop(struct multiboot_info *boot_info)
 	//printf("Address of module: 0x%x - 0x%x\n", *((unsigned int*)boot_info->mods_addr),module_end-(unsigned int) module_start);
     printf("\n");
     printf("----\n");
+    /*set_shadow(DISABLED);
+    printf("The shadow: %d\n", get_shadow());*/
     printf(LNG_SHELL);    
     _kprintOK();
 		printf("[+] Address: 0x%x\n", &end);		   	        

@@ -32,7 +32,7 @@ unsigned int placement_address=(unsigned int) &end;
 
 void init_newmem(){
 	
-	n_heap = (new_heap_t*)new_heap(HEAP_START_ADDRESS, HEAP_START_SIZE);
+	n_heap = (new_heap_t*)new_heap(HEAP_START_ADDRESS, HEAP_INDEX_SIZE);
 }
 
 static short int header_t_less_than(void *a,void *b){
@@ -45,7 +45,7 @@ new_heap_t *new_heap(unsigned int start, unsigned int size){
 		printf("all right\n");
 		t_heap->start_address = start;
 		t_heap->end_address = start + size;	
-		//t_heap->index = new_array(start,size, 
+		t_heap->index = new_array(start,size, &header_t_less_than);
 		printf("Start_address: %u\n", n_heap->start_address);		
 		printf("End Address: %u\n", n_heap->end_address);
 		return t_heap;		
