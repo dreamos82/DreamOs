@@ -68,6 +68,7 @@ void keyboard_enable (void);
 void keyboard_disable (void);
 void _ksetleds (int, int, int);
 int  set_shadow(int);
+int  get_shadow();
 int  _kgetch (void);
 
 #endif
