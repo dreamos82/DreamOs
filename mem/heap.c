@@ -24,14 +24,16 @@
 #include <heap.h>
 #include <stdio.h>
 #include <ordered_array.h>
+#include <kheap.h>
 
 extern unsigned int end;
+extern unsigned int address_cur;
 new_heap_t *n_heap;
 unsigned int placement_address=(unsigned int) &end;
 
 
 void init_newmem(){
-	
+	placement_address = address_cur;
 	n_heap = (new_heap_t*)new_heap(HEAP_START_ADDRESS, HEAP_INDEX_SIZE);
 }
 
@@ -57,9 +59,9 @@ new_heap_t *new_heap(unsigned int start, unsigned int size){
 unsigned int new_malloc(unsigned int size){
 	if(n_heap==0) {
 		unsigned int tmp;
-		printf("No heap defined starting from: %d and %x...\n", &end, placement_address);
-		tmp = placement_address; 
-		placement_address = placement_address+size;
+		printf("No heap defined starting from: %d and %x...\n", &end, address_cur);
+		tmp = address_cur; 
+		address_cur = address_cur+size;
 		printf("New address: %x\n", tmp);
 		return tmp;
 	}
