@@ -38,6 +38,7 @@ typedef struct {
 	ordered_array_t index; /*!< Indice degli holes */
 	unsigned int start_address; /*!< Indirizzo di inizio dell'heap */
 	unsigned int end_address; /*!< Indirizzo di fine dell'heap */
+	unsigned int max_address; /*!< Indirizzo massimo dove possiamo espandere l'heap */
 }new_heap_t;
 
 /*! \struct header_t 

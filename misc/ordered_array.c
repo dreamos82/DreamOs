@@ -50,10 +50,10 @@ ordered_array_t new_array(unsigned int start, unsigned int size, lessthan_predic
     ordered_array_t tmp_array;
     tmp_array.size_max = size;
     tmp_array.size = 0;
-    tmp_array.array = (void_t)start;
+    tmp_array.array = (void_t*)start;
     tmp_array.less_than = predicate;    
     /* Questa parte e' memsettbile dopo che sara' fatta */
-    //printf("SizeMax: %d\n", tmp_array.size_max);
+    printf("SizeMax: %d\n", tmp_array.size_max);
     //memset(tmp_array.array, 0, tmp_array.size_max);
     return tmp_array;
 }
