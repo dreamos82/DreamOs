@@ -35,13 +35,13 @@ typedef short int (*lessthan_predicate_t)(type_t,type_t);
      \brief Struttura dati che un vettore ordinato.
  */
 typedef struct {
-    void_t *array; /**< Il vettore che sara' ordinato*/
+    type_t* array; /**< Il vettore che sara' ordinato*/
     unsigned int size; /**< La dimensione attuale*/
     unsigned int size_max; /**< La dimensione massima*/
     lessthan_predicate_t less_than;
 }ordered_array_t;
 
-ordered_array_t new_array(unsigned int, unsigned int, lessthan_predicate_t);
+ordered_array_t new_array(void*, unsigned int, lessthan_predicate_t);
 void insert_array(void_t, ordered_array_t*);
 void destroy_array(ordered_array_t*);
 type_t get_array(int, ordered_array_t*);

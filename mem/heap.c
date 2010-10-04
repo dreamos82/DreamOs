@@ -47,7 +47,7 @@ new_heap_t *new_heap(unsigned int start, unsigned int size){
 		printf("all right\n");
 		t_heap->start_address = start;
 		t_heap->end_address = start + size;	
-		t_heap->index = new_array(start,size, &header_t_less_than);
+		t_heap->index = new_array((void*)start,size, &header_t_less_than);
 		printf("Start_address: %u\n", n_heap->start_address);		
 		printf("End Address: %u\n", n_heap->end_address);
 		return t_heap;		
