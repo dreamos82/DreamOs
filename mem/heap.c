@@ -29,11 +29,11 @@
 extern unsigned int end;
 extern unsigned int address_cur;
 new_heap_t *n_heap;
-unsigned int placement_address=(unsigned int) &end;
+//unsigned int placement_address=(unsigned int) &end;
 
 
 void init_newmem(){
-	placement_address = address_cur;
+	//placement_address = address_cur;
 	n_heap = (new_heap_t*)new_heap(HEAP_START_ADDRESS, HEAP_INDEX_SIZE);
 }
 
@@ -50,7 +50,7 @@ new_heap_t *new_heap(unsigned int start, unsigned int size){
 		t_heap->index = new_array((void*)start,size, &header_t_less_than);
 		printf("Start_address: %u\n", n_heap->start_address);		
 		printf("End Address: %u\n", n_heap->end_address);
-		return t_heap;		
+		return t_heap;
 	}
 	else printf("ERROR\n");
 	return 0;

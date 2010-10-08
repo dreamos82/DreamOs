@@ -97,9 +97,10 @@ int main_loop(struct multiboot_info *boot_info)
     init_mem();       
     asm("sti");
     _kprintOK();   
-    init_paging();    
+    init_paging();
+    init_newmem();     
     _kprintOK();    	
-    printf("Memory (upper) amount-> %d kb \n", boot_info->mem_upper);
+    printf("Memory (upper) amount-> %d Mb \n", boot_info->mem_upper/1024);
     printf("Memory (lower) amount-> %d kb \n", boot_info->mem_lower);
 
     /* Alloc and fill CPUID structure */
@@ -107,14 +108,13 @@ int main_loop(struct multiboot_info *boot_info)
     get_cpuid (sinfo);
         
     vfs_init();
-    initfs_init();
-      init_newmem(); 
+    initfs_init();      
 	if(boot_info->mods_count > 0) printf("Found n. %d Modules\n", boot_info->mods_count);		
 	//printf("Address of module: 0x%x - 0x%x\n", *((unsigned int*)boot_info->mods_addr),module_end-(unsigned int) module_start);
     printf("\n");
     printf("----\n");
-    /*set_shadow(DISABLED);
-    printf("The shadow: %d\n", get_shadow());*/
+    //set_shadow(DISABLED);
+    /*printf("The shadow: %d\n", get_shadow());*/
     printf(LNG_SHELL);    
     _kprintOK();
 		printf("[+] Address: 0x%x\n", &end);		   	        

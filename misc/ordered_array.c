@@ -44,14 +44,13 @@ short int standard_lessthan (type_t a, type_t b){
   * @return Pointer to a new ordered_array_t
   */
 ordered_array_t new_array(void* start, unsigned int size, lessthan_predicate_t predicate){
-    int i;
-    i=0;
-    printf("Make array code goes here...\n");        
+    //int i;
+    //i=0;
+    //printf("Make array code goes here...\n");        
     ordered_array_t tmp_array;
     tmp_array.array = (type_t*)start;
     tmp_array.size_max = size;
-    tmp_array.size = 0;
-    tmp_array.array = (void_t*)start;
+    tmp_array.size = 0;	    
     tmp_array.less_than = predicate;    
     /* Questa parte e' memsettbile dopo che sara' fatta */
     printf("SizeMax: %d\n", tmp_array.size_max);
