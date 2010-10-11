@@ -80,7 +80,7 @@ static int is_scroll_pressed;
 
 extern unsigned int last_tab;
 
-int shadow=0;
+static int shadow=0;
 
 /*
  * The keyboard handler
@@ -315,5 +315,6 @@ int  set_shadow(int value){
 }
 
 int get_shadow(){
+	//printf("Address shadow: %u\n", &shadow);
 	return shadow;
 }

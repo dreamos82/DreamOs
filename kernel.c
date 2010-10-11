@@ -91,8 +91,7 @@ int main_loop(struct multiboot_info *boot_info)
     init_IRQ();   
     _kprintOK();            	
     printf(LNG_PIT8253);
-    configure_PIT ();   
-    //_kprintOK();   
+    configure_PIT ();       
     set_memorysize((boot_info->mem_upper+boot_info->mem_lower)*1024);
     init_mem();       
     asm("sti");
@@ -114,7 +113,7 @@ int main_loop(struct multiboot_info *boot_info)
     printf("\n");
     printf("----\n");
     //set_shadow(DISABLED);
-    /*printf("The shadow: %d\n", get_shadow());*/
+    //printf("The shadow: %d\n", get_shadow());
     printf(LNG_SHELL);    
     _kprintOK();
 		printf("[+] Address: 0x%x\n", &end);		   	        

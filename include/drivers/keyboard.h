@@ -61,7 +61,6 @@
 
 /* Procedures */
 
-extern int shadow;
 
 void keyboard_isr (void);
 void keyboard_enable (void);

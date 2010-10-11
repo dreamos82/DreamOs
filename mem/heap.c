@@ -33,7 +33,7 @@ new_heap_t *n_heap;
 
 
 void init_newmem(){
-	//placement_address = address_cur;
+	//placement_address = address_cur;	
 	n_heap = (new_heap_t*)new_heap(HEAP_START_ADDRESS, HEAP_INDEX_SIZE);
 }
 
@@ -44,7 +44,7 @@ static short int header_t_less_than(void *a,void *b){
 new_heap_t *new_heap(unsigned int start, unsigned int size){
 	new_heap_t* t_heap =(new_heap_t*) new_malloc(sizeof(new_heap_t));
 	if(start%0x1000 == 0){
-		printf("all right\n");
+		//printf("all right\n");
 		t_heap->start_address = start;
 		t_heap->end_address = start + size;	
 		t_heap->index = new_array((void*)start,size, &header_t_less_than);

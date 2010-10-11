@@ -118,7 +118,8 @@ void* request_pages(int n_pages, int flags){
      add_memarea_element(indirizzo, n_pages);
     #ifdef DEBUG
     printf("Next_free: %d\n", mem_info->next_free);
-    #endif
+    printf("%u\n", indirizzo);
+    #endif    
     return (void*) indirizzo;
 }
 
@@ -210,7 +211,7 @@ int add_memarea_element(size_t start_address, int required_pages){
 
 /**
   * Calcola la quantita' di memoria
-  * @author Ivan Gualandri and Osiris
+  * @author Ivan Gualandri
   * @version 1.0
   * @return size_t Dimensione della memoria.
   * Questa funzione andra'completamente modificata appena si aggiungera il boot con grub.

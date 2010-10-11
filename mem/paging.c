@@ -238,7 +238,7 @@ void page_fault_handler (int ecode)
     unsigned int *new_pt;
 	void *new_p;
     //printf("Test\n");
-        /* Ricava l'indirizzo che ha causato l'eccezione */
+    /* Ricava l'indirizzo che ha causato l'eccezione */
     asm ("movl %%cr2, %0":"=r" (fault_addr));
     //if(fault_addr > 0) printf("Ok ");
 	//printf("Fault addr: %u\n", fault_addr); 
@@ -257,6 +257,7 @@ void page_fault_handler (int ecode)
     if (pd_entry == 0) {
 	    int i=0;
 	    new_pt = create_pageTable();
+	    if(new_pt==4468736) printf("Eccolo qua lo stronzo\n");
 	    while(i<PT_LIMIT){
 	      new_pt[i] = 0x00000000;
 	      i++;
@@ -273,7 +274,9 @@ void page_fault_handler (int ecode)
 	printf ("Entry corrente della pagetable: %d\n", pt_entry);
 	#endif
 	if (pt_entry == 0) {
+		//Si configura una entry della pagetable.
 	    new_p = request_pages (1, ADD_LIST);
+	    if(new_p==4468736) printf("Eccolo qua lo stronzo\n");
 	    set_pagetable_entry_ric (pdir, ptable, (unsigned int)new_p, PD_PRESENT|SUPERVISOR|WRITE, 0);
 	    #ifdef DEBUG
 	    printf ("Nuova entry dopo la mappatura: %d\n", get_pagetable_entry (pdir, ptable));
