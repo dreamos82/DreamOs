@@ -42,14 +42,17 @@ static short int header_t_less_than(void *a,void *b){
 }
 
 new_heap_t *new_heap(unsigned int start, unsigned int size){
-	new_heap_t* t_heap =(new_heap_t*) new_malloc(sizeof(new_heap_t));
-	if(start%0x1000 == 0){
-		//printf("all right\n");
+	new_heap_t* t_heap =(new_heap_t*) new_malloc(sizeof(new_heap_t));	
+	if(start%0x1000 == 0){		
+		header_t *first_hole = (header_t*)start;
 		t_heap->start_address = start;
 		t_heap->end_address = start + size;	
 		t_heap->index = new_array((void*)start,size, &header_t_less_than);
-		printf("Start_address: %u\n", n_heap->start_address);		
-		printf("End Address: %u\n", n_heap->end_address);
+		printf("Start_address: %u End Address: %u\n", n_heap->start_address, n_heap->end_address);		
+		printf("Making first Hole\n");		
+		first_hole->size = t_heap->end_address - start;
+		first_hole->magic = HEAP_MAGIC;
+		first_hole->is_hole = 1; /*TRUE*/
 		return t_heap;
 	}
 	else printf("ERROR\n");
