@@ -29,12 +29,11 @@
 extern unsigned int end;
 extern unsigned int address_cur;
 new_heap_t *n_heap;
-//unsigned int placement_address=(unsigned int) &end;
 
 
 void init_newmem(){
-	//placement_address = address_cur;	
 	n_heap = (new_heap_t*)new_heap(HEAP_START_ADDRESS, HEAP_INDEX_SIZE);
+	//printf("Start_address: %u End Address: %u\n", n_heap->start_address, n_heap->end_address);		
 }
 
 static short int header_t_less_than(void *a,void *b){
@@ -42,17 +41,17 @@ static short int header_t_less_than(void *a,void *b){
 }
 
 new_heap_t *new_heap(unsigned int start, unsigned int size){
-	new_heap_t* t_heap =(new_heap_t*) new_malloc(sizeof(new_heap_t));	
+	new_heap_t* t_heap =(new_heap_t*) kmalloc(sizeof(new_heap_t));	
 	if(start%0x1000 == 0){		
-		header_t *first_hole = (header_t*)start;
-		t_heap->start_address = start;
-		t_heap->end_address = start + size;	
+		header_t *first_hole = (header_t*)start;		
 		t_heap->index = new_array((void*)start,size, &header_t_less_than);
-		printf("Start_address: %u End Address: %u\n", n_heap->start_address, n_heap->end_address);		
-		printf("Making first Hole\n");		
+		t_heap->start_address = start;
+		t_heap->end_address = start + size;			
+		//printf("Making first Hole\n");	
+		//This should be inserted into the ordered array.	
 		first_hole->size = t_heap->end_address - start;
 		first_hole->magic = HEAP_MAGIC;
-		first_hole->is_hole = 1; /*TRUE*/
+		first_hole->is_hole = 1; /*TRUE*/			
 		return t_heap;
 	}
 	else printf("ERROR\n");
@@ -61,6 +60,7 @@ new_heap_t *new_heap(unsigned int start, unsigned int size){
 
 unsigned int new_malloc(unsigned int size){
 	if(n_heap==0) {
+		//I have no heap defined, i continue to use address_cur.
 		unsigned int tmp;
 		printf("No heap defined starting from: %d and %x...\n", &end, address_cur);
 		tmp = address_cur; 
@@ -69,9 +69,16 @@ unsigned int new_malloc(unsigned int size){
 		return tmp;
 	}
 	else {
+		//If i have a heap, then i have vm management enabled, and i can call alloc...
+		void* new_address = new_alloc(size, 1, n_heap);
 		printf("Heap defined\n");
 		printf("Start Address: %u End Address: %u\n", n_heap->start_address, n_heap->end_address);
+		if(n_heap->start_address==0) printf("erroso\n");
 		return 0;
 	}
 	return 0;
+}
+
+void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t *t_heap){
+	printf("Step by step\n");
 }

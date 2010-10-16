@@ -55,6 +55,7 @@ extern unsigned int end;
 multiboot_info_t *boot_informations;
 char *module_start;
 unsigned int module_end;
+extern new_heap_t* n_heap;
 asmlinkage void _start(struct multiboot_info *boot_info)
 {
     boot_informations = boot_info;    
@@ -100,16 +101,13 @@ int main_loop(struct multiboot_info *boot_info)
     init_newmem();     
     _kprintOK();    	
     printf("Memory (upper) amount-> %d Mb \n", boot_info->mem_upper/1024);
-    printf("Memory (lower) amount-> %d kb \n", boot_info->mem_lower);
-
+    printf("Memory (lower) amount-> %d kb \n", boot_info->mem_lower);	
     /* Alloc and fill CPUID structure */
-    sinfo = kmalloc(sizeof(struct cpuinfo_generic));
-    get_cpuid (sinfo);
-        
+    sinfo = kmalloc(sizeof(struct cpuinfo_generic));    
+    get_cpuid (sinfo);        
     vfs_init();
     initfs_init();      
-	if(boot_info->mods_count > 0) printf("Found n. %d Modules\n", boot_info->mods_count);		
-	//printf("Address of module: 0x%x - 0x%x\n", *((unsigned int*)boot_info->mods_addr),module_end-(unsigned int) module_start);
+	if(boot_info->mods_count > 0) printf("Found n. %d Modules\n", boot_info->mods_count);			
     printf("\n");
     printf("----\n");
     //set_shadow(DISABLED);

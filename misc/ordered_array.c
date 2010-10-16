@@ -55,11 +55,11 @@ ordered_array_t new_array(void* start, unsigned int size, lessthan_predicate_t p
     /* Questa parte e' memsettbile dopo che sara' fatta */
     printf("SizeMax: %d\n", tmp_array.size_max);
     i=0;    
-    while(i < tmp_array.size_max){
+    /*while(i < tmp_array.size_max){
 		tmp_array.array[i] = 0x0;
 		i++;
-	}
-    //memset(tmp_array.array, 0, tmp_array.size_max);
+	}*/
+    memset(tmp_array.array, 0, tmp_array.size_max);
     return tmp_array;
 }
 

@@ -100,11 +100,11 @@ void try_printmem(void)
 }
 
 void try_newheap(){
-	printf("Testing the new heap (in development)\n");
-	printf("First step: testing a new heap...\n");
-	new_heap(HEAP_START_ADDRESS, HEAP_START_SIZE);
+	//printf("Testing the new heap (in development)\n");
+	//printf("First step: testing a new heap...\n");
+	//new_heap(HEAP_START_ADDRESS, HEAP_START_SIZE);
 	printf("Second step: trying new_malloc...\n");
-	new_malloc(sizeof(new_heap_t));
+	new_malloc(sizeof(new_heap_t));	
 	printf("DONE\n");
 }
 

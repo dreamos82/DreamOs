@@ -39,7 +39,7 @@ void get_cpuid(struct cpuinfo_generic *sh_info)
   cpuid_write_vendor (sh_info, ereg);
 
   ereg->eax = 1;
-  ereg->ebx = ereg->ecx = ereg->edx = 0;
+  ereg->ebx = ereg->ecx = ereg->edx = 0;    
   cpuid_write_proctype (sh_info, ereg);
 
   free (ereg);
@@ -70,8 +70,8 @@ void cpuid_write_vendor (struct cpuinfo_generic *s, struct registri *regs)
   cpu_vendor[9] = (char)((regs->ecx & 0x0000FF00)>>8);
   cpu_vendor[10] = (char)((regs->ecx & 0x00FF0000)>>16);
   cpu_vendor[11] = (char)((regs->ecx & 0xFF000000)>>24);
-  cpu_vendor[12] = '\0';
-  s->cpu_vendor = cpu_vendor;
+  cpu_vendor[12] = '\0';  
+  s->cpu_vendor = cpu_vendor;  
 }
 
 /*
@@ -90,6 +90,7 @@ void cpuid_write_proctype (struct cpuinfo_generic *s, struct registri *regs)
   call_cpuid (regs);
 
   type = cpuid_get_byte (regs->eax, 0xB, 0x3);
+
   switch (type)
   {
     case 0:
@@ -108,7 +109,7 @@ void cpuid_write_proctype (struct cpuinfo_generic *s, struct registri *regs)
     s->cpu_type = "(Intel reserved bit)";
     break;
   }
-
+    
   familyID = cpuid_get_byte(regs->eax, 0x7, 0xE);
   s->cpu_family = familyID;
   if (familyID == 0x0F)
@@ -120,11 +121,10 @@ void cpuid_write_proctype (struct cpuinfo_generic *s, struct registri *regs)
     ext_model = cpuid_get_byte (regs->eax, 0xF, 0xE);
     s->cpu_model += (ext_model<<4);
   }
+  s->apic_id = cpuid_get_byte (regs->ebx, 0x17, 0xFF);  
 
-  s->apic_id = cpuid_get_byte (regs->ebx, 0x17, 0xFF);
   cpuid_feature_ecx (s, regs->ecx);
   cpuid_feature_edx (s, regs->edx);
-
   /* Get brand string to identify the processor */
   if (familyID >= 0x0F && model >= 0x03)
     s->brand_string = cpuid_brand_string (regs);
