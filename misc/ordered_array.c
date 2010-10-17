@@ -74,5 +74,16 @@ void insert_array(void_t elem, ordered_array_t* array){
         i++;
 	}
     if(i==array->size) array->array[i++] = elem;
+    else {
+		type_t tmp = array->array[i];
+		array->array[i] = elem;
+		while(i < array->size){
+			i++;
+			type_t tmp2 = array->array[i];			
+			array->array[i] = tmp;
+			tmp = tmp2;			
+		}
+		array->size++;
+	}
     printf("Test header_less_than: %d\n", header_t_less_than(elem, array->array[i-1]));
 }
