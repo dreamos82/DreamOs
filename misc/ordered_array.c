@@ -69,8 +69,10 @@ void insert_array(void_t elem, ordered_array_t* array){
     //Qui va un ciclo tipo: che termina o quando l'elemento va inserito in coda, o quando trova
     //la sua posizione dove mettersi. && array->array[i].size>=elem->size Questa e' l'idea, ma va 
     //sistemato il codice.
-    while(i<array->size)
+    while(i<array->size && header_t_less_than(array->array[i], elem)){
+		printf("Ci passo?\n");
         i++;
+	}
     if(i==array->size) array->array[i++] = elem;
     printf("Test header_less_than: %d\n", header_t_less_than(elem, array->array[i-1]));
 }
