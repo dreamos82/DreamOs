@@ -37,14 +37,13 @@ void init_newmem(){
 	//printf("Start_address: %u End Address: %u\n", n_heap->start_address, n_heap->end_address);		
 }
 
-static short int header_t_less_than(void *a,void *b){
+short int header_t_less_than(void *a,void *b){
 	return (((header_t*)a)->size < ((header_t*)b)->size)?1:0;
 }
 
 new_heap_t *new_heap(unsigned int start, unsigned int size){
 	/*Actually we need to use kmalloc!*/
-	new_heap_t* t_heap =(new_heap_t*) kmalloc(sizeof(new_heap_t));	
-	printf("Kmalloc: %x\n", t_heap);
+	new_heap_t* t_heap =(new_heap_t*) kmalloc(sizeof(new_heap_t));		
 	if(start%0x1000 == 0){		
 		header_t *first_hole = (header_t*)start;		
 		t_heap->index = new_array((void*)start,size, &header_t_less_than);
@@ -55,6 +54,7 @@ new_heap_t *new_heap(unsigned int start, unsigned int size){
 		first_hole->size = t_heap->end_address - start;
 		first_hole->magic = HEAP_MAGIC;
 		first_hole->is_hole = 1; /*TRUE*/			
+		insert_array((void*) first_hole, &t_heap->index);
 		return t_heap;
 	}
 	else printf("ERROR\n");
