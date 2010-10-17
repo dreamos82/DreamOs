@@ -43,7 +43,7 @@ void* kmalloc(unsigned int size)
    if(kheap!=0) {
      if (size>0) return (void *) alloc(size, kheap);
    }
-   else {            
+   else {   	 
      temp = address_cur;
      address_cur+=size;
    }
@@ -86,17 +86,18 @@ heap_t* make_heap(unsigned int size)
 
     new_heap = (heap_t*)KHEAP_LIST_ADDRESS;
     node_address = KHEAP_LIST_ADDRESS + sizeof(heap_t);        
-//     new_heap = (heap_t*)kmalloc(sizeof(heap_t));
-//     first_node = (heap_node_t*)alloc_node();
+	//new_heap = (heap_t*)kmalloc(sizeof(heap_t));
+	//first_node = (heap_node_t*)alloc_node();
     first_node = (heap_node_t*)node_address;    
     node_address = node_address + sizeof(heap_node_t);    
-    first_node->start_address = (unsigned int)&end;
-    //printf("Test\n");
+    //first_node->start_address = (unsigned int)&end;
+    first_node->start_address = (unsigned int)address_cur;
     first_node->size = size;
     first_node->next = NULL;
 
     new_heap->free_nodes = NULL;
-    new_heap->max_size = tot_mem-(unsigned int) &end;
+    //new_heap->max_size = tot_mem-(unsigned int) &end;
+    new_heap->max_size = tot_mem-(unsigned int) address_cur;
     new_heap->free_list = first_node;
     new_heap->used_list = NULL;
     new_heap->free_nodes = NULL;    
@@ -184,7 +185,7 @@ void *alloc(unsigned int size, heap_t *cur_heap)
    #ifdef DEBUG
    printf("Prev_node: %d \n", prev_node->start_address);
    printf("New Address: %d ", new_node->start_address);    
-   #endif   
+   #endif         
    return (void *)new_node->start_address;
 }
 
@@ -298,7 +299,7 @@ void print_heap_list (heap_node_t *list)
 {
    int count=0;   
    while (list) {
-     printf ("%d) Node_address: %d, Current->start_address: %d size: %d\n", count++, list,list->start_address, list->size);     
+     printf ("%u) Node_address: %u, Current->start_address: %u size: %u\n", count++, list,list->start_address, list->size);     
      list = (heap_node_t*)list->next;
    }
    printf ("\n");
@@ -316,3 +317,4 @@ void free_node(heap_node_t* toadd){
     toadd->next = kheap->free_nodes;
     kheap->free_nodes = toadd;        
 }
+

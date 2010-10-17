@@ -32,6 +32,7 @@ new_heap_t *n_heap;
 
 
 void init_newmem(){
+	n_heap =0;
 	n_heap = (new_heap_t*)new_heap(HEAP_START_ADDRESS, HEAP_INDEX_SIZE);
 	//printf("Start_address: %u End Address: %u\n", n_heap->start_address, n_heap->end_address);		
 }
@@ -41,7 +42,9 @@ static short int header_t_less_than(void *a,void *b){
 }
 
 new_heap_t *new_heap(unsigned int start, unsigned int size){
+	/*Actually we need to use kmalloc!*/
 	new_heap_t* t_heap =(new_heap_t*) kmalloc(sizeof(new_heap_t));	
+	printf("Kmalloc: %x\n", t_heap);
 	if(start%0x1000 == 0){		
 		header_t *first_hole = (header_t*)start;		
 		t_heap->index = new_array((void*)start,size, &header_t_less_than);
@@ -62,18 +65,18 @@ unsigned int new_malloc(unsigned int size){
 	if(n_heap==0) {
 		//I have no heap defined, i continue to use address_cur.
 		unsigned int tmp;
-		printf("No heap defined starting from: %d and %x...\n", &end, address_cur);
+		printf("No heap defined starting %x...\n", address_cur);
 		tmp = address_cur; 
-		address_cur = address_cur+size;
-		printf("New address: %x\n", tmp);
+		address_cur += size;
+		printf("New address: %x\n", address_cur);
 		return tmp;
 	}
 	else {
 		//If i have a heap, then i have vm management enabled, and i can call alloc...
-		void* new_address = new_alloc(size, 1, n_heap);
+		void* new_address = new_alloc(size, 1, n_heap);		
 		printf("Heap defined\n");
 		printf("Start Address: %u End Address: %u\n", n_heap->start_address, n_heap->end_address);
-		if(n_heap->start_address==0) printf("erroso\n");
+		printf("See address_cur value: %x\n", address_cur);
 		return 0;
 	}
 	return 0;

@@ -26,7 +26,6 @@
 #define KHEAP_H
 
 #include <ordered_array.h>
-extern unsigned int address_cur;
 
 /*!  \struct heap_node_t
      \brief Struttura dati che mantiene le informazioni su locazioni occupate e libere di memoria

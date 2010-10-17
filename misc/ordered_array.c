@@ -36,33 +36,34 @@ short int standard_lessthan (type_t a, type_t b){
 }
 
 /**
-  * Crea un nuovo ordered_array
+  * Create a new  ordered_array
   * @author Ivan Gualandri
   * @version 1.0
-  * @param start Indirizzo di inizio del nostro array 
-  * @param size grandezza massima dell'array
+  * @param start Start address of our new array 
+  * @param size Max size of array
   * @return Pointer to a new ordered_array_t
   */
 ordered_array_t new_array(void* start, unsigned int size, lessthan_predicate_t predicate){
-    int i;
-    //printf("Make array code goes here...\n");        
     ordered_array_t tmp_array;
-    tmp_array.array = (type_t*)start;
-    //printf("Address: %u\n", &tmp_array);
+    tmp_array.array = (type_t*)start;    
     tmp_array.size_max = size;
     tmp_array.size = 0;	    
     tmp_array.less_than = predicate;    
     /* Questa parte e' memsettbile dopo che sara' fatta */
     printf("SizeMax: %d\n", tmp_array.size_max);
-    i=0;    
-    /*while(i < tmp_array.size_max){
-		tmp_array.array[i] = 0x0;
-		i++;
-	}*/
+
     memset(tmp_array.array, 0, tmp_array.size_max);
     return tmp_array;
 }
 
+/**
+  * Insert an element into ordered_array
+  * @author Ivan Gualandri
+  * @version 1.0
+  * @param elem Element to be inserted
+  * @param array Array where we insert our new element
+  * @return void
+  */
 void insert_array(void_t elem, ordered_array_t* array){
     int i;
     i=0;

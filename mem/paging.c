@@ -276,7 +276,6 @@ void page_fault_handler (int ecode)
 	if (pt_entry == 0) {
 		//Si configura una entry della pagetable.
 	    new_p = request_pages (1, ADD_LIST);
-	    if(new_p==4468736) printf("Eccolo qua lo stronzo\n");
 	    set_pagetable_entry_ric (pdir, ptable, (unsigned int)new_p, PD_PRESENT|SUPERVISOR|WRITE, 0);
 	    #ifdef DEBUG
 	    printf ("Nuova entry dopo la mappatura: %d\n", get_pagetable_entry (pdir, ptable));
