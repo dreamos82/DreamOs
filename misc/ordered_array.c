@@ -86,4 +86,14 @@ void insert_array(void_t elem, ordered_array_t* array){
 		array->size++;
 	}
     printf("Test header_less_than: %d\n", header_t_less_than(elem, array->array[i-1]));
+    print_array(array);
+}
+
+void print_array(ordered_array_t* array){
+	int i=0;
+	printf("Print\n");
+	while(i<array->size+1){
+		printf("Val: %d: %u\n", i, array->array[i]);
+		i++;
+	}
 }

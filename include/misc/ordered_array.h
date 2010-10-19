@@ -46,4 +46,5 @@ void insert_array(void_t, ordered_array_t*);
 void destroy_array(ordered_array_t*);
 type_t get_array(int, ordered_array_t*);
 void remove_array(int, ordered_array_t*);
+void print_array(ordered_array_t*);
 #endif
