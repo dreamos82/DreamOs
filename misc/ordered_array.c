@@ -69,8 +69,7 @@ void insert_array(void_t elem, ordered_array_t* array){
     //Qui va un ciclo tipo: che termina o quando l'elemento va inserito in coda, o quando trova
     //la sua posizione dove mettersi. && array->array[i].size>=elem->size Questa e' l'idea, ma va 
     //sistemato il codice.
-    while(i<array->size && header_t_less_than(array->array[i], elem)){
-		printf("Ci passo?\n");
+    while(i<array->size && header_t_less_than(array->array[i], elem)){		
         i++;
 	}
     if(i==array->size) array->array[i++] = elem;
@@ -84,9 +83,25 @@ void insert_array(void_t elem, ordered_array_t* array){
 			tmp = tmp2;			
 		}
 		array->size++;
-	}
-    printf("Test header_less_than: %d\n", header_t_less_than(elem, array->array[i-1]));
+	}    
     print_array(array);
+}
+/**
+  * Get an element from ordered_array
+  * @author Ivan Gualandri
+  * @version 1.0
+  * @param index index of element we want to read
+  * @param array Array where we read requested element
+  * @return type_t Element required if available, otherwise PANIC.
+  */
+type_t get_array(int index, ordered_array_t* t_array){
+	if(i < array->size){
+		return array->array[index];
+	}
+	else {		
+		printf("PANIC");
+		while(1)
+	}
 }
 
 void print_array(ordered_array_t* array){
