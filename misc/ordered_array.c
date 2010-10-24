@@ -45,13 +45,17 @@ short int standard_lessthan (type_t a, type_t b){
   */
 ordered_array_t new_array(void* start, unsigned int size, lessthan_predicate_t predicate){
     ordered_array_t tmp_array;
+    int i=0;
     tmp_array.array = (type_t*)start;    
     tmp_array.size_max = size;
     tmp_array.size = 0;	    
     tmp_array.less_than = predicate;    
     printf("SizeMax: %d\n", tmp_array.size_max);
-
-    memset(tmp_array.array, 0, tmp_array.size_max);
+	while(i < tmp_array.size_max){
+		tmp_array.array = 0x0;
+		i++;
+	}
+    //memset(tmp_array.array, 0, tmp_array.size_max);
     return tmp_array;
 }
 
@@ -73,17 +77,15 @@ void insert_array(type_t elem, ordered_array_t* t_array){
         i++;
 	}
     if(i==t_array->size){
-		//header_t* hel = (header_t*) elem;
-		//printf("i = t_arraysize\n");				
-		//printf("elem->magic: %d:  %u\n", i, hel->magic);
+		/*header_t* hel;
+		printf("i = t_arraysize\n");*/
 		t_array->array[t_array->size] = elem;
 		t_array->size++;		
-		//printf("elem->magic: %d:  %u\n", i, hel->magic);
-		//printf("elem: %u\n", elem);		
-		//printf("t_array: %u\n", t_array->array[0]);
+		//hel = (header_t*) t_array->array[0];
+		//printf("array: %u\n",t_array->array[0]);				
 	}
     else {
-		printf("insert in the middle\n");
+		//printf("insert in the middle\n");
 		type_t tmp = t_array->array[i];
 		t_array->array[i] = elem;
 		while(i < t_array->size){
@@ -106,6 +108,7 @@ void insert_array(type_t elem, ordered_array_t* t_array){
   */
 type_t get_array(int index, ordered_array_t* t_array){
 	if(index < t_array->size){
+		printf("Value: %u", (type_t*)t_array->array[0]);
 		return t_array->array[index];
 	}
 	else {		

@@ -67,6 +67,6 @@ void new_free();
 void init_newmem();
 
 unsigned int new_malloc(unsigned int);
-static short int locate_smallest_hole(unsigned int, unsigned short int, new_heap_t*);
+short int locate_smallest_hole(unsigned int, unsigned short int, new_heap_t*);
 short int header_t_less_than(void *,void *);
 #endif
