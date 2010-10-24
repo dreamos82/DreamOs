@@ -33,8 +33,7 @@ new_heap_t *n_heap;
 
 void init_newmem(){
 	n_heap =0;
-	n_heap = (new_heap_t*)new_heap(HEAP_START_ADDRESS, HEAP_INDEX_SIZE);
-	//printf("Start_address: %u End Address: %u\n", n_heap->start_address, n_heap->end_address);		
+	n_heap = (new_heap_t*)new_heap(HEAP_START_ADDRESS, HEAP_INDEX_SIZE);	
 }
 
 short int header_t_less_than(void *a,void *b){
@@ -48,11 +47,9 @@ new_heap_t *new_heap(unsigned int start, unsigned int size){
 		header_t *first_hole = (header_t*)start;		
 		t_heap->index = new_array((void*)start,size, &header_t_less_than);
 		t_heap->start_address = start;
-		t_heap->end_address = start + size;			
-		//printf("Making first Hole\n");	
-		//This should be inserted into the ordered array.	
-		first_hole->size = t_heap->end_address - start;
-		first_hole->magic = HEAP_MAGIC;
+		t_heap->end_address = start + size;					
+		first_hole->size = t_heap->end_address - start;		
+		first_hole->magic = HEAP_MAGIC;		
 		first_hole->is_hole = 1; /*TRUE*/			
 		insert_array((void*) first_hole, &t_heap->index);
 		return t_heap;
@@ -73,7 +70,7 @@ unsigned int new_malloc(unsigned int size){
 	}
 	else {
 		//If i have a heap, then i have vm management enabled, and i can call alloc...
-		void* new_address = new_alloc(size, 1, n_heap);		
+		void* new_address = new_alloc(size, PAGE_ALIGNED, n_heap);	
 		printf("Heap defined\n");
 		printf("Start Address: %u End Address: %u\n", n_heap->start_address, n_heap->end_address);
 		printf("See address_cur value: %x\n", address_cur);
@@ -83,5 +80,17 @@ unsigned int new_malloc(unsigned int size){
 }
 
 void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t *t_heap){
-	printf("Step by step\n");
+	unsigned int real_size = size +sizeof(header_t) + sizeof(footer_t);	
+	printf("Size of:\n\theader_t: %d\n\tfooter_t: %d\n\treal_size: %d\n\tsize: %d\n", sizeof(header_t), sizeof(footer_t), real_size, size);	
+	//unsigned int min_index = locate_smallest_hole(real_size, PAGE_ALIGNED, t_heap);
+}
+
+static short int locate_smallest_hole(unsigned int size, unsigned short int p_align, new_heap_t* in_heap){
+	unsigned int index = 0; 
+	printf("Size index: %d\n", in_heap->index.size);
+	while(index < in_heap->index.size){
+		header_t *header = (header_t *)get_array(index, &in_heap->index);
+		printf("Header: %u\n", header->magic);
+		index++;
+	}
 }

@@ -28,6 +28,7 @@
 #define HEAP_START_SIZE 0x100000
 #define HEAP_INDEX_SIZE 0x20000
 #define HEAP_MAGIC 0x12893457
+#define PAGE_ALIGNED 1
 
 #include <ordered_array.h>
 
@@ -45,10 +46,10 @@ typedef struct {
     \brief Contiene le informazioni relative alle locazioni di memoria 
  */
 typedef struct {
-	int magic; /*!<For header identification*/
+	unsigned int magic; /*!<For header identification*/	
 	short int is_hole; /*!<1 se si tratta di un hole 0 se si tratta di un block*/
 	int size;  /*!<Total size of the block (including header and footer)*/
-} header_t;
+}__attribute__((packed)) header_t;
 
 /*! \struct footer_t 
     \brief Contiene altre informazioni relative alle locazioni di memoria 
@@ -66,6 +67,6 @@ void new_free();
 void init_newmem();
 
 unsigned int new_malloc(unsigned int);
-
+static short int locate_smallest_hole(unsigned int, unsigned short int, new_heap_t*);
 short int header_t_less_than(void *,void *);
 #endif

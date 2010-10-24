@@ -63,28 +63,38 @@ ordered_array_t new_array(void* start, unsigned int size, lessthan_predicate_t p
   * @param array Array where we insert our new element
   * @return void
   */
-void insert_array(void_t elem, ordered_array_t* array){
+void insert_array(type_t elem, ordered_array_t* t_array){
     int i;
     i=0;
     //Qui va un ciclo tipo: che termina o quando l'elemento va inserito in coda, o quando trova
-    //la sua posizione dove mettersi. && array->array[i].size>=elem->size Questa e' l'idea, ma va 
+    //la sua posizione dove mettersi. && t_array->t_array[i].size>=elem->size Questa e' l'idea, ma va 
     //sistemato il codice.
-    while(i<array->size && header_t_less_than(array->array[i], elem)){		
+    while(i<t_array->size && header_t_less_than(t_array->array[i], elem)){				
         i++;
 	}
-    if(i==array->size) array->array[i++] = elem;
+    if(i==t_array->size){
+		//header_t* hel = (header_t*) elem;
+		//printf("i = t_arraysize\n");				
+		//printf("elem->magic: %d:  %u\n", i, hel->magic);
+		t_array->array[t_array->size] = elem;
+		t_array->size++;		
+		//printf("elem->magic: %d:  %u\n", i, hel->magic);
+		//printf("elem: %u\n", elem);		
+		//printf("t_array: %u\n", t_array->array[0]);
+	}
     else {
-		type_t tmp = array->array[i];
-		array->array[i] = elem;
-		while(i < array->size){
+		printf("insert in the middle\n");
+		type_t tmp = t_array->array[i];
+		t_array->array[i] = elem;
+		while(i < t_array->size){
 			i++;
-			type_t tmp2 = array->array[i];			
-			array->array[i] = tmp;
+			type_t tmp2 = t_array->array[i];			
+			t_array->array[i] = tmp;
 			tmp = tmp2;			
 		}
-		array->size++;
+		t_array->size++;
 	}    
-    print_array(array);
+    print_array(t_array);
 }
 /**
   * Get an element from ordered_array
@@ -95,19 +105,34 @@ void insert_array(void_t elem, ordered_array_t* array){
   * @return type_t Element required if available, otherwise PANIC.
   */
 type_t get_array(int index, ordered_array_t* t_array){
-	if(i < array->size){
-		return array->array[index];
+	if(index < t_array->size){
+		return t_array->array[index];
 	}
 	else {		
 		printf("PANIC");
-		while(1)
+		while(1);
 	}
 }
 
+/**
+  * Remove an element from ordered_array
+  * @author Ivan Gualandri
+  * @version 1.0
+  * @param index index of element we want to read
+  * @param array Array where we remove requested element
+  * @return void
+  */
+void remove_array(int index, ordered_array_t* t_array){	
+	while(index < t_array->size){
+		t_array->array[index] = t_array->array[index+1];
+		index++;
+	}
+	t_array->size--;
+}
+
 void print_array(ordered_array_t* array){
-	int i=0;
-	printf("Print\n");
-	while(i<array->size+1){
+	int i=0;	
+	while(i<array->size){
 		printf("Val: %d: %u\n", i, array->array[i]);
 		i++;
 	}
