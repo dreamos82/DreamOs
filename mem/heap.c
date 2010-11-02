@@ -52,6 +52,7 @@ new_heap_t *new_heap(unsigned int start, unsigned int size){
 		first_hole->magic = HEAP_MAGIC;		
 		first_hole->is_hole = 1; /*TRUE*/			
 		insert_array((void*) first_hole, &t_heap->index);
+		//printf("First hole: %u size: %u", t_heap->start_address, t_heap->end_address);
 		//get_array(0, &t_heap->index);
 		//locate_smallest_hole(size, PAGE_ALIGNED,&t_heap->index);
 		return t_heap;
@@ -84,7 +85,7 @@ unsigned int new_malloc(unsigned int size){
 void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_heap){
 	unsigned int real_size = size +sizeof(header_t) + sizeof(footer_t);	
 	printf("Size of:\n\theader_t: %d\n\tfooter_t: %d\n\treal_size: %d\n\tsize: %d\n", sizeof(header_t), sizeof(footer_t), real_size, size);	
-	//unsigned int min_index = locate_smallest_hole(real_size, PAGE_ALIGNED, t_heap);
+	unsigned int min_index = locate_smallest_hole(real_size, PAGE_ALIGNED, t_heap);
 	//get_array(0, &t_heap->index);
 }
 
