@@ -85,7 +85,7 @@ unsigned int new_malloc(unsigned int size){
 void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_heap){
 	unsigned int real_size = size +sizeof(header_t) + sizeof(footer_t);	
 	printf("Size of:\n\theader_t: %d\n\tfooter_t: %d\n\treal_size: %d\n\tsize: %d\n", sizeof(header_t), sizeof(footer_t), real_size, size);	
-	unsigned int min_index = locate_smallest_hole(real_size, PAGE_ALIGNED, t_heap);
+	//unsigned int min_index = locate_smallest_hole(real_size, PAGE_ALIGNED, t_heap);
 	//get_array(0, &t_heap->index);
 }
 
@@ -93,8 +93,16 @@ short int locate_smallest_hole(unsigned int size, unsigned short int p_align, ne
 	unsigned int index = 0; 
 	printf("Size index: %d\n", in_heap->index.size);
 	while(index < in_heap->index.size){
+		unsigned int h_size;
 		header_t *header = (header_t *)get_array(index, &in_heap->index);
 		printf("Header: 0x%x\tSize: %d\n", header->magic, header->size);
+		h_size = header->size;
+		if(h_size >= size)
+			break;
 		index++;
 	}
+	if(index >= in_heap->index.size)
+		return -1;
+	else 
+		return index;
 }
