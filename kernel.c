@@ -99,6 +99,10 @@ int main_loop(struct multiboot_info *boot_info)
     _kprintOK();   
     init_paging();
     init_newmem();     
+    /*
+    try_newheap();
+    while(1);
+    */
     _kprintOK();    	
     printf("Memory (upper) amount-> %d Mb \n", boot_info->mem_upper/1024);
     printf("Memory (lower) amount-> %d kb \n", boot_info->mem_lower);	
