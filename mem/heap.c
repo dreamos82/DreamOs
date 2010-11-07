@@ -83,7 +83,7 @@ unsigned int new_malloc(unsigned int size){
 }
 
 void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_heap){
-	//#define MEMDEBUG
+	//#define MEMDEBUG 1
 	unsigned int real_size = size +sizeof(header_t) + sizeof(footer_t);	
 	printf("Size of:\n\theader_t: %d\n\tfooter_t: %d\n\treal_size: %d\n\tsize: %d\n", sizeof(header_t), sizeof(footer_t), real_size, size);	
 	#ifdef  MEMDEBUG
@@ -93,7 +93,14 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 		printf("No hole  found we need to grow\n");
 	}
 	else {
+		header_t *header = get_array(min_index, &t_heap->index);
+		unsigned int hole_address = (unsigned int)header;
+		unsigned int hole_size = header->size;
 		printf("Good News: Hole found\n");
+		printf("In new_alloc: Header: 0x%x\tSize: 0x%x\n", header->magic, header->size);
+		if(hole_size - real_size < sizeof(header_t) + sizeof(footer_t)){
+			printf("A good step forward");
+		}
 		//get_array(0, &t_heap->index);
 	}	
 	#endif
