@@ -42,7 +42,7 @@ short int header_t_less_than(void *a,void *b){
 
 new_heap_t *new_heap(unsigned int start, unsigned int size){
 	/*Actually we need to use kmalloc!*/
-	new_heap_t* t_heap =(new_heap_t*) kmalloc(sizeof(new_heap_t));		
+	new_heap_t* t_heap =(new_heap_t*) new_malloc(sizeof(new_heap_t));		
 	if(start%0x1000 == 0){		
 		header_t *first_hole = (header_t*)start;		
 		t_heap->index = new_array((void*)start,size, &header_t_less_than);
@@ -100,6 +100,8 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 		printf("In new_alloc: Header: 0x%x\tSize: 0x%x\n", header->magic, header->size);
 		if(hole_size - real_size < sizeof(header_t) + sizeof(footer_t)){
 			printf("A good step forward");
+			size = hole_size + real_size;
+			new_size = hole_size;
 		}
 		//get_array(0, &t_heap->index);
 	}	
