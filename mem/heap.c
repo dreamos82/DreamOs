@@ -99,9 +99,15 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 		printf("Good News: Hole found\n");
 		printf("In new_alloc: Header: 0x%x\tSize: 0x%x\n", header->magic, header->size);
 		if(hole_size - real_size < sizeof(header_t) + sizeof(footer_t)){
+			/*We can't split the hole?*/
 			printf("A good step forward");
 			size = hole_size + real_size;
 			new_size = hole_size;
+		}
+		//Temporaneamente commentato!
+		//remove_array(iterator, &t_heap->index);
+		if(hole_size - real_size >0){
+			printf("Add a new hole!\n");
 		}
 		//get_array(0, &t_heap->index);
 	}	
