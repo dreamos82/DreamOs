@@ -29,6 +29,8 @@
 #define HEAP_INDEX_SIZE 0x20000
 #define HEAP_MAGIC 0x12893457
 #define PAGE_ALIGNED 1
+#define HEAP_HOLE 1
+#define HEAP_BLOCK 0
 
 #include <ordered_array.h>
 
