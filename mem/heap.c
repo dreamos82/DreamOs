@@ -113,7 +113,14 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 		block_header->is_hole= HEAP_BLOCK;
 		#endif
 		if(hole_size - real_size >0){
-			printf("Add a new hole!\n");
+			/*We need to add a new hole. The new_hole address is given by:
+			 * the current hole address + size + sizeof(header_t) + sizeof(footer_t) 
+			 * */
+			header_t *head_hole = (header_t *)hole_address + sizeof(header_t) + size + sizeof(footer_t);
+			head_hole->magic = HEAP_MAGIC;
+			head_hole->is_hole = HEAP_HOLE;
+			head_hole->size = hole_size - real_size;
+			printf("Add a new hole!\n");			
 		}
 		//get_array(0, &t_heap->index);
 	}	
