@@ -91,12 +91,13 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 	if(min_index == -1 ){
 		/*No hole with the requested size found, asking more space for heap*/
 		printf("No hole  found we need to grow\n");
+		expand(real_size, t_heap);
 	}
 	else {
 		header_t *header = get_array(min_index, &t_heap->index);
 		unsigned int hole_address = (unsigned int)header;
 		unsigned int hole_size = header->size;
-		printf("Good News: Hole found\n");
+		printf("HOLE FOUND\n");
 		printf("In new_alloc: Header: 0x%x\tSize: 0x%x\n", header->magic, header->size);
 		if(hole_size - real_size < sizeof(header_t) + sizeof(footer_t)){
 			/*We can't split the hole!*/
@@ -115,7 +116,8 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 		if(hole_size - real_size >0){
 			/*We need to add a new hole. The new_hole address is given by:
 			 * the current hole address + size + sizeof(header_t) + sizeof(footer_t) 
-			 * */
+			 **/
+			printf("Add a new hole!\n");			
 			header_t *head_hole = (header_t *)hole_address + sizeof(header_t) + size + sizeof(footer_t);
 			head_hole->magic = HEAP_MAGIC;
 			head_hole->is_hole = HEAP_HOLE;
@@ -123,12 +125,15 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 			footer_t *footer_hole = (footer_t*)(hole_address + head_hole->size - sizeof(footer_t));
 			footer_hole->magic = HEAP_MAGIC;
 			footer_hole->header = head_hole;
-			insert_array((void *)head_hole, &t_heap->index);
-			printf("Add a new hole!\n");			
+			insert_array((void *)head_hole, &t_heap->index);			
 		}
 		//get_array(0, &t_heap->index);
 	}	
 	#endif
+}
+
+void expand(unsigned int new_size, new_heap_t *t_heap){
+	printf("Placeholder for expand\n");	
 }
 
 short int locate_smallest_hole(unsigned int size, unsigned short int p_align, new_heap_t* in_heap){
