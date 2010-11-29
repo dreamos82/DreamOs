@@ -120,6 +120,10 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 			head_hole->magic = HEAP_MAGIC;
 			head_hole->is_hole = HEAP_HOLE;
 			head_hole->size = hole_size - real_size;
+			footer_t *footer_hole = (footer_t*)(hole_address + head_hole->size - sizeof(footer_t));
+			footer_hole->magic = HEAP_MAGIC;
+			footer_hole->header = head_hole;
+			insert_array((void *)head_hole, &t_heap->index);
 			printf("Add a new hole!\n");			
 		}
 		//get_array(0, &t_heap->index);
