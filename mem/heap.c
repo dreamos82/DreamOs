@@ -47,7 +47,8 @@ new_heap_t *new_heap(unsigned int start, unsigned int size){
 		header_t *first_hole = (header_t*)start;		
 		t_heap->index = new_array((void*)start,size, &header_t_less_than);
 		t_heap->start_address = start;
-		t_heap->end_address = start + size;					
+		t_heap->end_address = start + size;
+		t_heap->max_address = 0xDFFFF000; /**Da controllare max address*/					
 		first_hole->size = t_heap->end_address - start;		
 		first_hole->magic = HEAP_MAGIC;		
 		first_hole->is_hole = 1; /*TRUE*/			
@@ -89,7 +90,7 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 	#ifdef  MEMDEBUG
 	unsigned int min_index = locate_smallest_hole(real_size, PAGE_ALIGNED, t_heap);
 	if(min_index == -1 ){
-		/*No hole with the requested size found, asking more space for heap*/
+		/*No hole with the requested size found, asking more space for heap*/		
 		printf("No hole  found we need to grow\n");
 		expand(real_size, t_heap);
 	}
@@ -133,6 +134,13 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 }
 
 void expand(unsigned int new_size, new_heap_t *t_heap){
+	unsigned int old_size = t_heap->end_address - t_heap->start_address; 
+	/** First of all: Align the space required*/
+	if(new_size&0xFFFFF000 != 0){
+		new_size&=0xFFFFF000;
+		new_size+=0x1000;
+	}
+	/**/
 	printf("Placeholder for expand\n");	
 }
 

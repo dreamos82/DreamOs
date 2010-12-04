@@ -24,7 +24,7 @@
 #ifndef __HEAP_H
 #define __HEAP_H
 
-#define HEAP_START_ADDRESS 0xD0000000
+#define HEAP_START_ADDRESS 0xD0000000 /**Indirizzo iniziale*/
 #define HEAP_START_SIZE 0x100000
 #define HEAP_INDEX_SIZE 0x20000
 #define HEAP_MAGIC 0x12893457
