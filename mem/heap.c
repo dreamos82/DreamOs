@@ -136,12 +136,19 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 void expand(unsigned int new_size, new_heap_t *t_heap){
 	unsigned int old_size = t_heap->end_address - t_heap->start_address; 
 	/** First of all: Align the space required*/
-	if(new_size&0xFFFFF000 != 0){
+	if((new_size&0xFFFFF000) != 0){
 		new_size&=0xFFFFF000;
 		new_size+=0x1000;
-	}
-	/**/
+	}	
+	/**We have pages created when #PF occurs, so we only need to update 
+	 * t_heap->end_address*/
+	t_heap->end_address = t_heap->start_address + new_size;	
 	printf("Placeholder for expand\n");	
+}
+
+unsigned int contract(unsigned int new_size, new_heap_t t_heap){
+	printf("PlaceHolder for new function contract\n");
+	return 0;
 }
 
 short int locate_smallest_hole(unsigned int size, unsigned short int p_align, new_heap_t* in_heap){
