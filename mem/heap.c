@@ -90,9 +90,12 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 	#ifdef  MEMDEBUG
 	unsigned int min_index = locate_smallest_hole(real_size, PAGE_ALIGNED, t_heap);
 	if(min_index == -1 ){
-		/*No hole with the requested size found, asking more space for heap*/		
-		printf("No hole  found we need to grow\n");
-		expand(real_size, t_heap);
+		/**No hole with the requested size found, asking more space for heap*/		
+		unsigned int old_len = heap->end_address - heap->start_address;		
+		printf("Old len value: %d\n", old_len);
+		expand(old_len+real_size, t_heap);
+		unsigned int new_len = heap->end_address - heap->start_address;
+		printf("New len value: %d\n", old_len);
 	}
 	else {
 		header_t *header = get_array(min_index, &t_heap->index);
@@ -142,8 +145,7 @@ void expand(unsigned int new_size, new_heap_t *t_heap){
 	}	
 	/**We have pages created when #PF occurs, so we only need to update 
 	 * t_heap->end_address*/
-	t_heap->end_address = t_heap->start_address + new_size;	
-	printf("Placeholder for expand\n");	
+	t_heap->end_address = t_heap->start_address + new_size;		
 }
 
 unsigned int contract(unsigned int new_size, new_heap_t t_heap){
