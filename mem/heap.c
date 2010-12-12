@@ -129,15 +129,16 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 			footer_t *footer_hole = (footer_t*)(hole_address + head_hole->size - sizeof(footer_t));
 			footer_hole->magic = HEAP_MAGIC;
 			footer_hole->header = head_hole;
-			insert_array((void *)head_hole, &t_heap->index);			
+			insert_array((void *)h	ead_hole, &t_heap->index);			
 		}
+		return (block_header+sizeof(header_t));
 		//get_array(0, &t_heap->index);
 	}	
 	#endif
 }
 
 void expand(unsigned int new_size, new_heap_t *t_heap){
-	unsigned int old_size = t_heap->end_address - t_heap->start_address; 
+	//unsigned int old_size = t_heap->end_address - t_heap->start_address; 
 	/** First of all: Align the space required*/
 	if((new_size&0xFFFFF000) != 0){
 		new_size&=0xFFFFF000;
@@ -148,8 +149,14 @@ void expand(unsigned int new_size, new_heap_t *t_heap){
 	t_heap->end_address = t_heap->start_address + new_size;		
 }
 
-unsigned int contract(unsigned int new_size, new_heap_t t_heap){
+unsigned int contract(unsigned int new_size, new_heap_t *t_heap){
 	printf("PlaceHolder for new function contract\n");
+	if(new_size&0x1000){
+        new_size &= 0x1000;
+        new_size += 0x1000;
+    }    
+    if(new_size < HEAP_MIN_SIZE) new_size = HEAP_MIN_SIZE;
+	t_heap->end_address = t_heap->start_address + new_size;
 	return 0;
 }
 

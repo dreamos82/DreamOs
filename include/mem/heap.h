@@ -27,6 +27,7 @@
 #define HEAP_START_ADDRESS 0xD0000000 /**Indirizzo iniziale*/
 #define HEAP_START_SIZE 0x100000
 #define HEAP_INDEX_SIZE 0x20000
+#define HEAP_MIN_SIZE 0x70000
 #define HEAP_MAGIC 0x12893457
 #define PAGE_ALIGNED 1
 #define HEAP_HOLE 1
@@ -70,7 +71,7 @@ void new_free();
 void init_newmem();
 
 unsigned int new_malloc(unsigned int);
-unsigned int contract(unsigned int, new_heap_t);
+unsigned int contract(unsigned int, new_heap_t*);
 short int locate_smallest_hole(unsigned int, unsigned short int, new_heap_t*);
 short int header_t_less_than(void *,void *);
 #endif
