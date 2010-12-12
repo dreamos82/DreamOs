@@ -91,11 +91,46 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 	unsigned int min_index = locate_smallest_hole(real_size, PAGE_ALIGNED, t_heap);
 	if(min_index == -1 ){
 		/**No hole with the requested size found, asking more space for heap*/		
-		unsigned int old_len = heap->end_address - heap->start_address;		
+		unsigned int old_len = t_heap->end_address - t_heap->start_address;		
+		unsigned int old_end_address = t_heap->end_address;			
+		/**expand the current heap*/
 		printf("Old len value: %d\n", old_len);
 		expand(old_len+real_size, t_heap);
-		unsigned int new_len = heap->end_address - heap->start_address;
-		printf("New len value: %d\n", old_len);
+		unsigned int new_len = heap->end_address - heap->start_address;		
+		printf("New len value: %d\n", old_len);		
+		min_index=0;
+		unsigned int latest_i = -1;
+		unsigned int val = 0x0;
+		/**Find the latest hole*/
+		while (min_index < heap->index.size){
+			unsigned int temp = get_array(min_index, &t_heap->index);
+			if(temp > val){
+				val = temp;
+				latest_i = min_index;
+			}
+			min_index++;
+		}
+		if(latest_i == -1){
+			/**We need to create a new hole*/
+			header_t *header = (header_t *)old_end_address;
+			header->magic = HEAP_MAGIC;
+			header->size = new_len - old_len;
+			header->is_hole = HEAP_HOLE;
+			footer_t *footer  (footer_t *)(old_end_address + header->size - sizeof(footer_t));
+			footer->magic = HEAP_MAGIC;
+			footer->header = header;
+			insert_array((void_t*)header, &t_heap->index);
+		}
+		else {
+			/**We need to adjust the latest hole*/
+			header_t* header = get_array(min_index, &t_heap->index);
+			header->size += new_len - old_len;
+			/**We need a new footer*/
+			footer_t* footer = (footer_t*) (header + header->size - sizeof(footer_t));
+			footer->magic = HEAP_MAGIC;
+			footer->header = header;
+		}
+		return new_alloc(size, p_aligned, t_heap);
 	}
 	else {
 		header_t *header = get_array(min_index, &t_heap->index);
@@ -129,7 +164,7 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 			footer_t *footer_hole = (footer_t*)(hole_address + head_hole->size - sizeof(footer_t));
 			footer_hole->magic = HEAP_MAGIC;
 			footer_hole->header = head_hole;
-			insert_array((void *)h	ead_hole, &t_heap->index);			
+			insert_array((void *)head_hole, &t_heap->index);			
 		}
 		return (block_header+sizeof(header_t));
 		//get_array(0, &t_heap->index);
