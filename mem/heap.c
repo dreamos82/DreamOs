@@ -192,7 +192,7 @@ unsigned int contract(unsigned int new_size, new_heap_t *t_heap){
     }    
     if(new_size < HEAP_MIN_SIZE) new_size = HEAP_MIN_SIZE;
 	t_heap->end_address = t_heap->start_address + new_size;
-	return 0;
+	return new_size;
 }
 
 short int locate_smallest_hole(unsigned int size, unsigned short int p_align, new_heap_t* in_heap){
@@ -211,4 +211,14 @@ short int locate_smallest_hole(unsigned int size, unsigned short int p_align, ne
 		return -1;
 	else 
 		return index;
+}
+
+void new_free(void *address, new_heap_t* t_heap){
+	printf("Placeholder for new_free\n");
+	if(address==0){
+		printf("DoNothing\n");
+		return;
+	}
+	header_t* header = (header_t*)(address - sizeof(header_t));
+	footer_t* footer = (footer_t*)(address + header->size - sizeof(footer_t));
 }
