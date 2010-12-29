@@ -221,4 +221,8 @@ void new_free(void *address, new_heap_t* t_heap){
 	}
 	header_t* header = (header_t*)(address - sizeof(header_t));
 	footer_t* footer = (footer_t*)(address + header->size - sizeof(footer_t));
+	/**Set header as a hole*/
+	header->is_hole = HEAP_HOLE;
+	char to_add = 1;
+	/**TODO: unify left and unify right*/
 }
