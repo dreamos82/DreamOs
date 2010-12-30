@@ -21,6 +21,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+/**Please remember that header->size include also sizeof header + sizeof footer*/
 #include <heap.h>
 #include <stdio.h>
 #include <ordered_array.h>
@@ -224,5 +225,7 @@ void new_free(void *address, new_heap_t* t_heap){
 	/**Set header as a hole*/
 	header->is_hole = HEAP_HOLE;
 	char to_add = 1;
+	/**Unify left*/
+	footer_t* test_f = (footer_t*) (unsigned int)(header - sizeof(footer_t));
 	/**TODO: unify left and unify right*/
 }

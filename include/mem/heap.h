@@ -51,7 +51,7 @@ typedef struct {
 typedef struct {
 	unsigned int magic; /*!<For header identification*/	
 	short int is_hole; /*!<1 se si tratta di un hole 0 se si tratta di un block*/
-	int size;  /*!<Total size of the block (including header and footer)*/
+	int size;  /*!<Total size of the block (IMPORTANT: including header and footer)*/
 }__attribute__((packed)) header_t;
 
 /*! \struct footer_t 
