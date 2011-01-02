@@ -226,6 +226,31 @@ void new_free(void *address, new_heap_t* t_heap){
 	header->is_hole = HEAP_HOLE;
 	char to_add = 1;
 	/**Unify left*/
-	footer_t* test_f = (footer_t*) (unsigned int)(header - sizeof(footer_t));
-	/**TODO: unify left and unify right*/
+	/**Test if on the left i have a hole*/
+	footer_t* left_footer = (footer_t*) ((unsigned int) header - sizeof(footer_t));
+	if(left_footer->magic == HEAP_MAGIC && left_footer->header->is_hole == HEAP_HOLE){
+		printf("unify left\n");
+		/**I have found a hole on the left of my current header i need to save the size of
+		 * my current block*/
+		unsigned int cur_block_size = header->size;
+		/**Now i update my header pointer to the new hole found*/
+		header = left_footer->header;
+		header->size = header->size + cur_block_size;
+		/**Now i update the address of the header into footer*/
+		footer->header = header;
+		to_add = 0;
+	}
+	header_t* right_header = (header_t*) ((unsigned int)footer + sizeof(footer_t));
+	if(right_header->magic == HEAP_MAGIC && right_header->is_hole == HEAP_HOLE){
+		unsigned int i = 0;
+		printf("unify right\n");
+		/**First: update the size of the new header*/
+		header->size = header->size + right_header->size;
+		left_footer = (footer_t*) ((unsigned int) right_header + right_header->size - sizeof(footer_t));
+		footer = left_footer;
+		while((i < t_heap->index.size) && get_array(i, &t_heap->index) != (void_t*)right_header)			
+			i++;
+		if(i<t_heap->index.size) remove_array(i, &t_heap->index);		
+	}
+	
 }
