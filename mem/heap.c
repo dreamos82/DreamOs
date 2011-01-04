@@ -186,7 +186,7 @@ void expand(unsigned int new_size, new_heap_t *t_heap){
 }
 
 unsigned int contract(unsigned int new_size, new_heap_t *t_heap){
-	printf("PlaceHolder for new function contract\n");
+	//printf("PlaceHolder for new function contract\n");
 	if(new_size&0x1000){
         new_size &= 0x1000;
         new_size += 0x1000;
@@ -252,5 +252,25 @@ void new_free(void *address, new_heap_t* t_heap){
 			i++;
 		if(i<t_heap->index.size) remove_array(i, &t_heap->index);		
 	}
-	
+	/**We must check if we aren't at the end of memory*/
+	if(((unsigned int)footer + sizeof(footer_t)) == t_heap->end_address){
+		unsigned int old_size = t_heap->end_address - t_heap->start_address;
+		unsigned int new_size = contract((unsigned int)header - t_heap->start_address, t_heap);
+		/**We need to resize?*/
+		if(header->size - (old_size-new_size) > 0){
+			footer = (footer_t *) (unsigned int)header + header->size - sizeof(footer_t);
+			footer->magic = HEAP_MAGIC;
+			footer->header = header;
+		}
+		else {
+			unsigned int i = 0;
+			while(i<t_heap->index.size && get_array(i, &t_heap->index)!=(void_t*)right_header)
+				i++;
+			if(i < t_heap->index.size)
+				remove_array(i, &t_heap->index);
+		}
+	}
+	if(to_add == 1) {
+			insert_array((void_t*) header, &t_heap->index);
+	}	
 }
