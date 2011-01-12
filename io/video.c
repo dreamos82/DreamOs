@@ -262,7 +262,7 @@ int _kgetline()
 void _kntohex (char *buffer, unsigned int decnum)
 {
   int shift=0;
-  int tempnum = decnum;
+  unsigned int tempnum = decnum;
 
   while (tempnum>=16) {
     tempnum >>= 4;
