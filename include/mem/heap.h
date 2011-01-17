@@ -24,7 +24,7 @@
 #ifndef __HEAP_H
 #define __HEAP_H
 
-#define HEAP_START_ADDRESS 0xD0000000 /**Indirizzo iniziale*/
+#define HEAP_START_ADDRESS 0xC0000000 /**Indirizzo iniziale*/
 #define HEAP_START_SIZE 0x100000
 #define HEAP_INDEX_SIZE 0x20000
 #define HEAP_MIN_SIZE 0x70000
@@ -58,7 +58,7 @@ typedef struct {
     \brief Contiene altre informazioni relative alle locazioni di memoria 
  */
 typedef struct {
-	int magic; /*!<For footer identification */
+	unsigned int magic; /*!<For footer identification */
 	header_t *header;/*!< Pointer to the block header*/
 } footer_t;
 

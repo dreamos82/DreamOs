@@ -67,7 +67,7 @@ unsigned int new_malloc(unsigned int size){
 	if(n_heap==0) {
 		//I have no heap defined, i continue to use address_cur.
 		unsigned int tmp;
-		printf("No heap defined starting %x...\n", address_cur);
+		//printf("No heap defined starting %x...\n", address_cur);
 		tmp = address_cur; 
 		address_cur += size;
 		printf("New address: %x\n", address_cur);
@@ -76,10 +76,10 @@ unsigned int new_malloc(unsigned int size){
 	else {
 		//If i have a heap, then i have vm management enabled, and i can call alloc...
 		void* new_address = new_alloc(size, PAGE_ALIGNED, n_heap);	
-		printf("Heap defined\n");
-		printf("Start Address: %u End Address: %u\n", n_heap->start_address, n_heap->end_address);
-		printf("See address_cur value: %x\n", address_cur);
-		return 0;
+		//&printf("Heap defined\n");
+		printf("Start Address: %u End Address: %u ", n_heap->start_address, n_heap->end_address);
+		printf("Address_cur value: %x\n", address_cur);
+		return new_address;
 	}
 	return 0;
 }
@@ -87,23 +87,24 @@ unsigned int new_malloc(unsigned int size){
 void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_heap){
 	//#define MEMDEBUG 1
 	unsigned int real_size = size +sizeof(header_t) + sizeof(footer_t);	
-	printf("Size of:\n\theader_t: %d\n\tfooter_t: %d\n\treal_size: %d\n\tsize: %d\n", sizeof(header_t), sizeof(footer_t), real_size, size);	
+	//printf("Size of:\n\theader_t: %d\n\tfooter_t: %d\n\treal_size: %d\n\tsize: %d\n", sizeof(header_t), sizeof(footer_t), real_size, size);	
 	#ifdef  MEMDEBUG
+	printf("Real size: %d\n", real_size);
 	unsigned int min_index = locate_smallest_hole(real_size, PAGE_ALIGNED, t_heap);
 	if(min_index == -1 ){
 		/**No hole with the requested size found, asking more space for heap*/		
 		unsigned int old_len = t_heap->end_address - t_heap->start_address;		
 		unsigned int old_end_address = t_heap->end_address;			
 		/**expand the current heap*/
-		printf("Old len value: %d\n", old_len);
+		printf("Old len value: %d - ", old_len);
 		expand(old_len+real_size, t_heap);
-		unsigned int new_len = heap->end_address - heap->start_address;		
+		unsigned int new_len = t_heap->end_address - t_heap->start_address;		
 		printf("New len value: %d\n", old_len);		
 		min_index=0;
 		unsigned int latest_i = -1;
 		unsigned int val = 0x0;
 		/**Find the latest hole*/
-		while (min_index < heap->index.size){
+		while (min_index < t_heap->index.size){
 			unsigned int temp = get_array(min_index, &t_heap->index);
 			if(temp > val){
 				val = temp;
@@ -117,7 +118,7 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 			header->magic = HEAP_MAGIC;
 			header->size = new_len - old_len;
 			header->is_hole = HEAP_HOLE;
-			footer_t *footer  (footer_t *)(old_end_address + header->size - sizeof(footer_t));
+			footer_t *footer = (footer_t *)(old_end_address + header->size - sizeof(footer_t));
 			footer->magic = HEAP_MAGIC;
 			footer->header = header;
 			insert_array((void_t*)header, &t_heap->index);
@@ -131,34 +132,39 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 			footer->magic = HEAP_MAGIC;
 			footer->header = header;
 		}
+		printf("Recursing!!! \n");
 		return new_alloc(size, p_aligned, t_heap);
 	}
 	else {
 		header_t *header = get_array(min_index, &t_heap->index);
 		unsigned int hole_address = (unsigned int)header;
 		unsigned int hole_size = header->size;
-		printf("HOLE FOUND\n");
-		printf("In new_alloc: Header: 0x%x\tSize: 0x%x\n", header->magic, header->size);
+		//printf("HOLE FOUND\n");
+		printf("In new_alloc: Header: 0x%x\t Real Size: 0x%x\n", header->magic, real_size);
 		if(hole_size - real_size < sizeof(header_t) + sizeof(footer_t)){
 			/*We can't split the hole!*/
-			printf("A good step forward");
+			//printf("A good step forward");
 			size = hole_size + real_size;
 			real_size = hole_size;
 		}
-		//else remove_array(iterator, &t_heap->index);
+		else remove_array(min_index, &t_heap->index);
 		//Temporaneamente commentato!	
-		#ifdef DEBUG
+		//#ifdef DEBUG
 		header_t *block_header  = (header_t *)hole_address;
 		block_header->magic = HEAP_MAGIC;
-		block_header->size = real_size
+		block_header->size = real_size;
 		block_header->is_hole= HEAP_BLOCK;
-		#endif
+		footer_t *block_footer = (footer_t *)hole_address + size + sizeof(header_t);
+		block_footer->magic = HEAP_MAGIC;
+		block_footer->header = block_header;
+		printf("Block_header: %x - End of block_footer: %x\n", (unsigned int)block_header, (unsigned int)block_footer);
+		//#endif
 		if(hole_size - real_size >0){
 			/*We need to add a new hole. The new_hole address is given by:
 			 * the current hole address + size + sizeof(header_t) + sizeof(footer_t) 
-			 **/
-			printf("Add a new hole!\n");			
+			 **/			
 			header_t *head_hole = (header_t *)hole_address + sizeof(header_t) + size + sizeof(footer_t);
+			printf("Add a new hole! New address: %x\n", (unsigned int) head_hole);			
 			head_hole->magic = HEAP_MAGIC;
 			head_hole->is_hole = HEAP_HOLE;
 			head_hole->size = hole_size - real_size;
@@ -166,7 +172,7 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 			footer_hole->magic = HEAP_MAGIC;
 			footer_hole->header = head_hole;
 			insert_array((void *)head_hole, &t_heap->index);			
-		}
+		}	
 		return (block_header+sizeof(header_t));
 		//get_array(0, &t_heap->index);
 	}	
@@ -198,7 +204,7 @@ unsigned int contract(unsigned int new_size, new_heap_t *t_heap){
 
 short int locate_smallest_hole(unsigned int size, unsigned short int p_align, new_heap_t* in_heap){
 	unsigned int index = 0; 
-	printf("Size index: %d\n", in_heap->index.size);
+	//printf("Size index: %d\n", in_heap->index.size);
 	while(index < in_heap->index.size){
 		unsigned int h_size;
 		header_t *header = (header_t *)get_array(index, &in_heap->index);
@@ -214,10 +220,9 @@ short int locate_smallest_hole(unsigned int size, unsigned short int p_align, ne
 		return index;
 }
 
-void new_free(void *address, new_heap_t* t_heap){
-	printf("Placeholder for new_free\n");
+void new_free(void *address, new_heap_t* t_heap){	
 	if(address==0){
-		printf("DoNothing\n");
+		//printf("DoNothing\n");
 		return;
 	}
 	header_t* header = (header_t*)(address - sizeof(header_t));

@@ -163,7 +163,7 @@ int printf (const char *format, ...)
             }
             if (*format == 'x' || *format == 'X') {
                 int varhex = va_arg (ap, unsigned int);
-                _kntos (cur_p, varhex, 16);
+                _kntohex (cur_p, varhex);
             }
             if (*format == 'n')
                 _kntos (cur_p, len, 10);
