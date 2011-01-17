@@ -78,7 +78,7 @@ unsigned int new_malloc(unsigned int size){
 		//If i have a heap, then i have vm management enabled, and i can call alloc...
 		void* new_address = new_alloc(size, PAGE_ALIGNED, n_heap);	
 		//&printf("Heap defined\n");
-		printf("Start Address: %u End Address: %u ", n_heap->start_address, n_heap->end_address);
+		printf("Start Address: %x End Address: %x ", n_heap->start_address, n_heap->end_address);
 		printf("Address_cur value: %x\n", address_cur);
 		return (unsigned int)new_address;
 	}
@@ -87,20 +87,21 @@ unsigned int new_malloc(unsigned int size){
 
 void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_heap){
 	//#define MEMDEBUG 1
-#ifdef  MEMDEBUG
+	#ifdef  MEMDEBUG
 	unsigned int real_size = size +sizeof(header_t) + sizeof(footer_t);	
 	//printf("Size of:\n\theader_t: %d\n\tfooter_t: %d\n\treal_size: %d\n\tsize: %d\n", sizeof(header_t), sizeof(footer_t), real_size, size);	
 	printf("Real size: %d\n", real_size);
 	unsigned int min_index = locate_smallest_hole(real_size, PAGE_ALIGNED, t_heap);
+	printf("Real size: %d - min_index: %d\n", real_size, min_index);
 	if(min_index == -1 ){
 		/**No hole with the requested size found, asking more space for heap*/		
 		unsigned int old_len = t_heap->end_address - t_heap->start_address;		
 		unsigned int old_end_address = t_heap->end_address;			
 		/**expand the current heap*/
-		printf("Old len value: %d - ", old_len);
+		printf("Old len value: %x - ", old_len);
 		expand(old_len+real_size, t_heap);
 		unsigned int new_len = t_heap->end_address - t_heap->start_address;		
-		printf("New len value: %d\n", old_len);		
+		printf("New len value: %x\n", old_len);		
 		min_index=0;
 		unsigned int latest_i = -1;
 		unsigned int val = 0x0;
@@ -141,12 +142,12 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 		unsigned int hole_address = (unsigned int)header;
 		unsigned int hole_size = header->size;
 		//printf("HOLE FOUND\n");
-		printf("In new_alloc: Header: 0x%x\t Real Size: 0x%x\n", header->magic, real_size);
+		printf(" In new_alloc: Header: 0x%x\t Real Size: 0x%x\n", header->magic, real_size);
 		if(hole_size - real_size < sizeof(header_t) + sizeof(footer_t)){
 			/*We can't split the hole!*/
 			//printf("A good step forward");
 			size = hole_size + real_size;
-			real_size = hole_size;
+			real_size = hole_size;			
 		}
 		else remove_array(min_index, &t_heap->index);
 		//Temporaneamente commentato!	
@@ -164,7 +165,7 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 			/*We need to add a new hole. The new_hole address is given by:
 			 * the current hole address + size + sizeof(header_t) + sizeof(footer_t) 
 			 **/			
-			header_t *head_hole = (header_t *)hole_address + sizeof(header_t) + size + sizeof(footer_t);
+			header_t *head_hole = (header_t *)(hole_address + sizeof(header_t) + size + sizeof(footer_t));
 			printf("Add a new hole! New address: %x\n", (unsigned int) head_hole);			
 			head_hole->magic = HEAP_MAGIC;
 			head_hole->is_hole = HEAP_HOLE;
