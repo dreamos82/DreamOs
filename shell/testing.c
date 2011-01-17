@@ -102,7 +102,7 @@ void try_printmem(void)
 void try_newheap(){
 	unsigned int testA;
 	unsigned int testB;
-	unsigned int testC;
+	//unsigned int testC;
 	//printf("Testing the new heap (in development)\n");
 	//printf("First step: testing a new heap...\n");
 	//new_heap(HEAP_START_ADDRESS, HEAP_START_SIZE);

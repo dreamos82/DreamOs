@@ -257,7 +257,7 @@ void page_fault_handler (int ecode)
     if (pd_entry == 0) {
 	    int i=0;
 	    new_pt = create_pageTable();
-	    if(new_pt==4468736) printf("Eccolo qua lo stronzo\n");
+	    if(new_pt == (unsigned int *) 4468736) printf("Eccolo qua lo stronzo\n");
 	    while(i<PT_LIMIT){
 	      new_pt[i] = 0x00000000;
 	      i++;

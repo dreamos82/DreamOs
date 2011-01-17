@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <ordered_array.h>
 #include <kheap.h>
+#include <stddef.h>
 
 extern unsigned int end;
 extern unsigned int address_cur;
@@ -79,16 +80,16 @@ unsigned int new_malloc(unsigned int size){
 		//&printf("Heap defined\n");
 		printf("Start Address: %u End Address: %u ", n_heap->start_address, n_heap->end_address);
 		printf("Address_cur value: %x\n", address_cur);
-		return new_address;
+		return (unsigned int)new_address;
 	}
 	return 0;
 }
 
 void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_heap){
 	//#define MEMDEBUG 1
+#ifdef  MEMDEBUG
 	unsigned int real_size = size +sizeof(header_t) + sizeof(footer_t);	
 	//printf("Size of:\n\theader_t: %d\n\tfooter_t: %d\n\treal_size: %d\n\tsize: %d\n", sizeof(header_t), sizeof(footer_t), real_size, size);	
-	#ifdef  MEMDEBUG
 	printf("Real size: %d\n", real_size);
 	unsigned int min_index = locate_smallest_hole(real_size, PAGE_ALIGNED, t_heap);
 	if(min_index == -1 ){
@@ -177,6 +178,7 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 		//get_array(0, &t_heap->index);
 	}	
 	#endif
+	return NULL;
 }
 
 void expand(unsigned int new_size, new_heap_t *t_heap){
