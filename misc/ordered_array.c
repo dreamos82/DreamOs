@@ -112,7 +112,7 @@ type_t get_array(int index, ordered_array_t* t_array){
 		return t_array->array[index];
 	}
 	else {		
-		printf("PANIC");
+		printf("get_array: PANIC");
 		while(1);
 	}
 }
