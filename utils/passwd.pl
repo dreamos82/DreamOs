@@ -7,11 +7,25 @@ use Cwd;
 # 2. flags.
 # 3. pulizia generale dello script.
 
-my $__script_version__="0.1";
+my $__script_version__="1.0.2";
 my $__script_author__="DT";
 my $__script_license__="New BSD License";
 
 my $filepath;
+
+if (@ARGV == 1) {
+	my $usage = "Usage: $0 [arguments]\n\t--version\n\t--help\n";
+	if($ARGV[0] eq "--version") {
+		print "Version: $__script_version__\n";
+		exit;
+	} elsif ($ARGV[0] eq "--help") {
+		print $usage;
+		exit;
+	} else {
+		print "Command not found!\n$usage";
+		exit;
+	}
+}
 
 if (-e &Cwd::realpath("../files/passwd")) {
 	$filepath=&Cwd::realpath("../files/passwd");
@@ -43,9 +57,9 @@ print "\n";
 # Add User
 
 print "username: ";
-$username = <>;
+$username = <STDIN>;
 chomp($username);
-print "$username\n";
+#print "$username\n";
 
 if(!($username =~ m/^(\w+)$/)) {
 	print "Invalid username \"$username\"\n";
@@ -60,7 +74,7 @@ if(exists $passwd{$username}) {
 
 print "password: ";
 system("stty -echo");
-$password = <>;
+$password = <STDIN>;
 system("stty echo");
 chomp($password);
 print "$password\n";
