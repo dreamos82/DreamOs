@@ -102,7 +102,7 @@ void try_printmem(void)
 void try_newheap(){
 	unsigned int testA;
 	unsigned int testB;
-	//unsigned int testC;
+	unsigned int testC;
 	//printf("Testing the new heap (in development)\n");
 	//printf("First step: testing a new heap...\n");
 	//new_heap(HEAP_START_ADDRESS, HEAP_START_SIZE);
@@ -112,13 +112,13 @@ void try_newheap(){
 	testB=(unsigned int)new_malloc(8);
 	printf("-Address of testB Hex: 0x%x\n", testB);
 	//printf("testB - testA = %u", testB - testA);
-	//testC=new_malloc(8);
-	//printf("-Address of testC = %u\n", testC);
-	//new_free(testC);
+	testC=new_malloc(8);
+	printf("-Address of testC Hex: 0x%x\n", testC);
+	new_free(testC);
 	new_free(testB);
 	unsigned int testD;
 	testD = new_malloc(12);
-	printf("-Address of testD Hex: %x\n", testD);
+	printf("-Address of testD Hex: 0x%x\n", testD);
 	new_free(testA);
 	new_free(testD);
 	printf("DONE\n");

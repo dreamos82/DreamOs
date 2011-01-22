@@ -96,7 +96,7 @@ void insert_array(type_t elem, ordered_array_t* t_array){
 		}
 		t_array->size++;
 	}    
-    print_array(t_array);
+    //print_array(t_array);
 }
 /**
   * Get an element from ordered_array
@@ -108,7 +108,7 @@ void insert_array(type_t elem, ordered_array_t* t_array){
   */
 type_t get_array(int index, ordered_array_t* t_array){
 	if(index < t_array->size){
-		printf("Value: %x ", (type_t*)t_array->array[index]);
+		//printf("Value: %x ", (type_t*)t_array->array[index]);
 		return t_array->array[index];
 	}
 	else {		
@@ -136,7 +136,7 @@ void remove_array(int index, ordered_array_t* t_array){
 void print_array(ordered_array_t* array){
 	int i=0;	
 	while(i<array->size){
-		printf("Val: %d: %x\n", i, array->array[i]);
+		//printf("Val: %d: %x\n", i, array->array[i]);
 		i++;
 	}
 }

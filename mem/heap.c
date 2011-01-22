@@ -77,7 +77,7 @@ unsigned int new_malloc(unsigned int size){
 	else {
 		//If i have a heap, then i have vm management enabled, and i can call alloc...
 		void* new_address = new_alloc(size, PAGE_ALIGNED, n_heap);	
-		//&printf("Heap defined\n");
+		//printf("Heap defined\n");
 		printf("Start Address: %x End Address: %x\n", n_heap->start_address, n_heap->end_address);
 		//printf("Address_cur value: %x\n", address_cur);
 		return (unsigned int)new_address;
@@ -90,18 +90,18 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 	#ifdef  MEMDEBUG
 	unsigned int real_size = size +sizeof(header_t) + sizeof(footer_t);	
 	//printf("Size of:\n\theader_t: %d\n\tfooter_t: %d\n\treal_size: %d\n\tsize: %d\n", sizeof(header_t), sizeof(footer_t), real_size, size);	
-	printf("Real size: %d\n", real_size);
+	//printf("Real size: %d\n", real_size);
 	unsigned int min_index = locate_smallest_hole(real_size, PAGE_ALIGNED, t_heap);
-	printf("Real size: %d - min_index: %d\n", real_size, min_index);
+	//printf("Real size: %d - min_index: %d\n", real_size, min_index);
 	if(min_index == -1 ){
 		/**No hole with the requested size found, asking more space for heap*/		
 		unsigned int old_len = t_heap->end_address - t_heap->start_address;		
 		unsigned int old_end_address = t_heap->end_address;			
 		/**expand the current heap*/
-		printf("Old len value: %x - ", old_len);
+		//printf("Old len value: %x - ", old_len);
 		expand(old_len+real_size, t_heap);
 		unsigned int new_len = t_heap->end_address - t_heap->start_address;		
-		printf("New len value: %x\n", old_len);		
+		//printf("New len value: %x\n", old_len);		
 		min_index=0;
 		unsigned int latest_i = -1;
 		unsigned int val = 0x0;
@@ -134,7 +134,7 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 			footer->magic = HEAP_MAGIC;
 			footer->header = header;
 		}
-		printf("Recursing!!! \n");
+		//printf("Recursing!!! \n");
 		return new_alloc(size, p_aligned, t_heap);
 	}
 	else {
@@ -142,7 +142,7 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 		unsigned int hole_address = (unsigned int)header;
 		unsigned int hole_size = header->size;
 		//printf("HOLE FOUND\n");
-		printf(" In new_alloc: Header: 0x%x\t Real Size: 0x%x\n", header->magic, real_size);
+		//printf(" In new_alloc: Header: 0x%x\t Real Size: 0x%x\n", header->magic, real_size);
 		if(hole_size - real_size < sizeof(header_t) + sizeof(footer_t)){
 			/*We can't split the hole!*/
 			//printf("A good step forward");
@@ -159,14 +159,14 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 		footer_t *block_footer = (footer_t *)(hole_address + size + sizeof(header_t));
 		block_footer->magic = HEAP_MAGIC;
 		block_footer->header = block_header;
-		printf("Block_header: %x - End of block_footer: %x\n", (unsigned int)block_header, (unsigned int)block_footer);
+		//printf("Block_header: %x - End of block_footer: %x\n", (unsigned int)block_header, (unsigned int)block_footer);
 		//#endif
 		if(hole_size - real_size >0){
 			/*We need to add a new hole. The new_hole address is given by:
 			 * the current hole address + size + sizeof(header_t) + sizeof(footer_t) 
 			 **/			
 			header_t *head_hole = (header_t *)(hole_address + sizeof(header_t) + size + sizeof(footer_t));
-			printf("Add a new hole! New address: %x\n", (unsigned int) head_hole);			
+			//printf("Add a new hole! New address: %x\n", (unsigned int) head_hole);			
 			head_hole->magic = HEAP_MAGIC;
 			head_hole->is_hole = HEAP_HOLE;
 			head_hole->size = hole_size - real_size;
@@ -236,9 +236,9 @@ void new_free(void *address, new_heap_t* t_heap){
 	/**Unify left*/
 	/**Test if on the left i have a hole*/
 	footer_t* left_footer = (footer_t*) ((unsigned int) header - sizeof(footer_t));
-	printf("Address of header: %x - Footer: %x Left: %x\n", header, footer, footer->magic);
+	//printf("Address of header: %x - Footer: %x Left: %x\n", header, footer, footer->magic);
 	if(left_footer->magic == HEAP_MAGIC && left_footer->header->is_hole == HEAP_HOLE){
-		printf("unify left\n");
+		//printf("unify left\n");
 		/**I have found a hole on the left of my current header i need to save the size of
 		 * my current block*/
 		unsigned int cur_block_size = header->size;
@@ -252,7 +252,7 @@ void new_free(void *address, new_heap_t* t_heap){
 	header_t* right_header = (header_t*) ((unsigned int)footer + sizeof(footer_t));
 	if(right_header->magic == HEAP_MAGIC && right_header->is_hole == HEAP_HOLE){
 		unsigned int i = 0;
-		printf("unify right\n");
+		//printf("unify right\n");
 		/**First: update the size of the new header*/
 		header->size = header->size + right_header->size;
 		left_footer = (footer_t*) ((unsigned int) right_header + right_header->size - sizeof(footer_t));
@@ -266,7 +266,7 @@ void new_free(void *address, new_heap_t* t_heap){
 		unsigned int old_size = t_heap->end_address - t_heap->start_address;
 		unsigned int new_size = contract((unsigned int)header - t_heap->start_address, t_heap);
 		/**We need to resize?*/
-		printf("Test\n");
+		//printf("Test\n");
 		if(header->size - (old_size-new_size) > 0){
 			footer = (footer_t *) (unsigned int)header + header->size - sizeof(footer_t);
 			footer->magic = HEAP_MAGIC;
@@ -281,7 +281,7 @@ void new_free(void *address, new_heap_t* t_heap){
 		}
 	}
 	if(to_add == 1) {
-		printf("And then\n");
+		//printf("And then\n");
 			insert_array((void_t*) header, &t_heap->index);
 	}	
 }
