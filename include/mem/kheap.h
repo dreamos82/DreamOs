@@ -50,7 +50,7 @@ extern heap_t *kheap;
 
 heap_t* make_heap(unsigned int);
 void* kmalloc(unsigned int);
-void kfree(unsigned int);
+//void kfree(unsigned int);
 void try_alloc();
 heap_node_t* alloc_node();
 void free_node(heap_node_t*);

@@ -162,9 +162,9 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 		//printf("Block_header: %x - End of block_footer: %x\n", (unsigned int)block_header, (unsigned int)block_footer);
 		//#endif
 		if(hole_size - real_size >0){
-			/*We need to add a new hole. The new_hole address is given by:
+			/**We need to add a new hole. The new_hole address is given by:
 			 * the current hole address + size + sizeof(header_t) + sizeof(footer_t) 
-			 **/			
+			 */			
 			header_t *head_hole = (header_t *)(hole_address + sizeof(header_t) + size + sizeof(footer_t));
 			//printf("Add a new hole! New address: %x\n", (unsigned int) head_hole);			
 			head_hole->magic = HEAP_MAGIC;
