@@ -49,16 +49,16 @@ typedef struct {
     \brief Contiene le informazioni relative alle locazioni di memoria 
  */
 typedef struct {
-	unsigned int magic; /*!<For header identification*/	
-	short int is_hole; /*!<1 se si tratta di un hole 0 se si tratta di un block*/
-	int size;  /*!<Total size of the block (IMPORTANT: including header and footer)*/
+	unsigned int magic; /*!< For header identification*/	
+	short int is_hole; /*!< 1 se si tratta di un hole 0 se si tratta di un block*/
+	int size;  /*!< Total size of the block (IMPORTANT: including header and footer)*/
 }__attribute__((packed)) header_t;
 
 /*! \struct footer_t 
     \brief Contiene altre informazioni relative alle locazioni di memoria 
  */
 typedef struct {
-	unsigned int magic; /*!<For footer identification */
+	unsigned int magic; /*!< For footer identification */
 	header_t *header;/*!< Pointer to the block header*/
 } footer_t;
 

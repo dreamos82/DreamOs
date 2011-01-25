@@ -308,13 +308,26 @@ loop:
     return c;
 }
 
+/**
+  * Set Keyboard echo Shadow 
+  * @author Ivan Gualandri
+  * @version 1.0
+  * @param 1 if you want enable shadow 0 otherwise
+  * @return 1 if keyboard echo shadow enable 0 if not.
+  */
 int  set_shadow(int value){
 	if(value>1 || value < 0) return -1;
 	else shadow = value;
 	return shadow;
 }
 
-int get_shadow(){
-	//printf("Address shadow: %u\n", &shadow);
+/**
+  * Get Keyboard Shadow informations 
+  * @author Ivan Gualandri
+  * @version 1.0
+  * @return 1 if keyboard echo shadow enable 0 if not.
+  */
+
+int get_shadow(){	
 	return shadow;
 }

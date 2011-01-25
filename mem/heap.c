@@ -43,7 +43,6 @@ short int header_t_less_than(void *a,void *b){
 }
 
 new_heap_t *new_heap(unsigned int start, unsigned int size){
-	/*Actually we need to use kmalloc!*/
 	new_heap_t* t_heap =(new_heap_t*) new_malloc(sizeof(new_heap_t));		
 	if(start%0x1000 == 0){		
 		header_t *first_hole = (header_t*)start;		
@@ -53,7 +52,7 @@ new_heap_t *new_heap(unsigned int start, unsigned int size){
 		t_heap->max_address = 0xDFFFF000; /**Da controllare max address*/					
 		first_hole->size = t_heap->end_address - start;		
 		first_hole->magic = HEAP_MAGIC;		
-		first_hole->is_hole = 1; /*TRUE*/			
+		first_hole->is_hole = HEAP_HOLE; 
 		insert_array((void*) first_hole, &t_heap->index);
 		//printf("First hole: %u size: %u", t_heap->start_address, t_heap->end_address);
 		//get_array(0, &t_heap->index);

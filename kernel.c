@@ -107,7 +107,7 @@ int main_loop(struct multiboot_info *boot_info)
     _kprintOK();    	
     printf("Memory (upper) amount-> %d Mb \n", boot_info->mem_upper/1024);
     printf("Memory (lower) amount-> %d kb \n", boot_info->mem_lower);	
-    /* Alloc and fill CPUID structure */
+    /** Alloc and fill CPUID structure */
     sinfo = kmalloc(sizeof(struct cpuinfo_generic));    
     get_cpuid (sinfo);        
     vfs_init();
