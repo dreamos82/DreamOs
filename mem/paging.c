@@ -46,7 +46,7 @@ void init_paging(){
     printf(LNG_PAGING);
     _kprintOK();    	
     current_page_dir = create_pageDir();  
-    //second_pagetable = create_pageTable();      
+    second_pagetable = create_pageTable();      
     //third_pagetable = create_pageTable();      
     #ifdef DEBUG
     printf("Pd baseAddress: %d\n", (unsigned int) current_page_dir);
@@ -58,7 +58,7 @@ void init_paging(){
     }    
     set_pagedir_entry(1023, (unsigned int)current_page_dir, PD_PRESENT|SUPERVISOR, 0);    
     current_page_table=create_pageTable();
-    //second_pagetable = create_pageTable();
+    second_pagetable = create_pageTable();
     //third_pagetable = create_pageTable();
     i=0;
     while(i<PT_LIMIT){
@@ -68,7 +68,7 @@ void init_paging(){
         i++;
     }
     set_pagedir_entry(0, (unsigned int)current_page_table, PD_PRESENT|SUPERVISOR|WRITE,0);    
-    //set_pagedir_entry(1, (unsigned int)second_pagetable, PD_PRESENT|SUPERVISOR|WRITE,0);    
+    set_pagedir_entry(1, (unsigned int)second_pagetable, PD_PRESENT|SUPERVISOR|WRITE,0);    
     //set_pagedir_entry(2, (unsigned int)third_pagetable, PD_PRESENT|SUPERVISOR|WRITE,0);    
     i=0;
     while(i<PT_LIMIT){
