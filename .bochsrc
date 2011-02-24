@@ -697,7 +697,7 @@ keyboard_mapping: enabled=1, map=/usr/share/bochs/keymaps/x11-pc-it.map
 #=======================================================================
 # other stuff
 #=======================================================================
-#magic_break: enabled=1
+magic_break: enabled=1
 #load32bitOSImage: os=nullkernel, path=../kernel.img, iolog=../vga_io.log
 #load32bitOSImage: os=linux, path=../linux.img, iolog=../vga_io.log, initrd=../initrd.img
 #text_snapshot_check: enable
