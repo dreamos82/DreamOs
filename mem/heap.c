@@ -264,9 +264,9 @@ void new_free(void *address, new_heap_t* t_heap){
 	if(((unsigned int)footer + sizeof(footer_t)) == t_heap->end_address){
 		unsigned int old_size = t_heap->end_address - t_heap->start_address;
 		unsigned int new_size = contract((unsigned int)header - t_heap->start_address, t_heap);
-		/**We need to resize?*/
-		//printf("Test\n");
+		/**We need to resize?*/		
 		if(header->size - (old_size-new_size) > 0){
+			header->size = old_size-new_size;			
 			footer = (footer_t *) (unsigned int)header + header->size - sizeof(footer_t);
 			footer->magic = HEAP_MAGIC;
 			footer->header = header;

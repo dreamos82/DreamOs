@@ -73,7 +73,7 @@ void insert_array(type_t elem, ordered_array_t* t_array){
     //Qui va un ciclo tipo: che termina o quando l'elemento va inserito in coda, o quando trova
     //la sua posizione dove mettersi. && t_array->t_array[i].size>=elem->size Questa e' l'idea, ma va 
     //sistemato il codice.
-    while(i<t_array->size && header_t_less_than(t_array->array[i], elem)){				
+    while(i<t_array->size && t_array->less_than(t_array->array[i], elem)){				
         i++;
 	}
     if(i==t_array->size){
