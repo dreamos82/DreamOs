@@ -284,3 +284,7 @@ void new_free(void *address, new_heap_t* t_heap){
 			insert_array((void_t*) header, &t_heap->index);
 	}	
 }
+
+void n_free(unsigned int address){
+	new_free(address, n_heap);
+}
