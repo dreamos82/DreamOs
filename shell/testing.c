@@ -114,13 +114,13 @@ void try_newheap(){
 	//printf("testB - testA = %u", testB - testA);
 	testC=new_malloc(8);
 	printf("-Address of testC Hex: 0x%x\n", testC);
-	new_free(testC);
-	new_free(testB);
+	n_free(testC);
+	n_free(testB);
 	unsigned int testD;
 	testD = new_malloc(12);
 	printf("-Address of testD Hex: 0x%x\n", testD);
-	new_free(testA);
-	new_free(testD);
+	n_free(testA);
+	n_free(testD);
 	printf("DONE\n");
 }
 
