@@ -84,7 +84,7 @@ void init_paging(){
     load_pdbr((unsigned int)current_page_dir);
 	//set_pagetable_entry_ric(1019, 512 ,0xFEE00000, SUPERVISOR|PD_PRESENT|WRITE, 0);
 	//set_pagetable_entry_ric(1019, 0 ,0xFEC00000, SUPERVISOR|PD_PRESENT|WRITE, 0);	
-    kheap = make_heap(tot_mem - ((unsigned int) &end));    
+    //kheap = make_heap(tot_mem - ((unsigned int) &end));    
 }
 
 /**

@@ -85,11 +85,7 @@ unsigned int new_malloc(unsigned int size){
 }
 
 void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_heap){
-	//#define MEMDEBUG 1
-	#ifdef  MEMDEBUG
 	unsigned int real_size = size +sizeof(header_t) + sizeof(footer_t);	
-	//printf("Size of:\n\theader_t: %d\n\tfooter_t: %d\n\treal_size: %d\n\tsize: %d\n", sizeof(header_t), sizeof(footer_t), real_size, size);	
-	//printf("Real size: %d\n", real_size);
 	unsigned int min_index = locate_smallest_hole(real_size, PAGE_ALIGNED, t_heap);
 	//printf("Real size: %d - min_index: %d\n", real_size, min_index);
 	if(min_index == -1 ){
@@ -97,10 +93,8 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 		unsigned int old_len = t_heap->end_address - t_heap->start_address;		
 		unsigned int old_end_address = t_heap->end_address;			
 		/**expand the current heap*/
-		//printf("Old len value: %x - ", old_len);
 		expand(old_len+real_size, t_heap);
 		unsigned int new_len = t_heap->end_address - t_heap->start_address;		
-		//printf("New len value: %x\n", old_len);		
 		min_index=0;
 		unsigned int latest_i = -1;
 		unsigned int val = 0x0;
@@ -132,25 +126,19 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 			footer_t* footer = (footer_t*) (header + header->size - sizeof(footer_t));
 			footer->magic = HEAP_MAGIC;
 			footer->header = header;
-		}
-		//printf("Recursing!!! \n");
+		}	
 		return new_alloc(size, p_aligned, t_heap);
 	}
 	else {
 		header_t *header = get_array(min_index, &t_heap->index);
 		unsigned int hole_address = (unsigned int)header;
 		unsigned int hole_size = header->size;
-		//printf("HOLE FOUND\n");
-		//printf(" In new_alloc: Header: 0x%x\t Real Size: 0x%x\n", header->magic, real_size);
 		if(hole_size - real_size < sizeof(header_t) + sizeof(footer_t)){
 			/*We can't split the hole!*/
-			//printf("A good step forward");
 			size = hole_size + real_size;
 			real_size = hole_size;			
 		}
 		else remove_array(min_index, &t_heap->index);
-		//Temporaneamente commentato!	
-		//#ifdef DEBUG
 		header_t *block_header  = (header_t *)hole_address;
 		block_header->magic = HEAP_MAGIC;
 		block_header->size = real_size;
@@ -158,8 +146,6 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 		footer_t *block_footer = (footer_t *)(hole_address + size + sizeof(header_t));
 		block_footer->magic = HEAP_MAGIC;
 		block_footer->header = block_header;
-		//printf("Block_header: %x - End of block_footer: %x\n", (unsigned int)block_header, (unsigned int)block_footer);
-		//#endif
 		if(hole_size - real_size >0){
 			/**We need to add a new hole. The new_hole address is given by:
 			 * the current hole address + size + sizeof(header_t) + sizeof(footer_t) 
@@ -175,9 +161,7 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 			insert_array((void *)head_hole, &t_heap->index);			
 		}	
 		return (void *)((unsigned int)block_header+sizeof(header_t));
-		//get_array(0, &t_heap->index);
 	}	
-	#endif
 	return NULL;
 }
 
@@ -210,7 +194,7 @@ short int locate_smallest_hole(unsigned int size, unsigned short int p_align, ne
 	while(index < in_heap->index.size){
 		unsigned int h_size;
 		header_t *header = (header_t *)get_array(index, &in_heap->index);
-		printf("Header: 0x%x\tSize: 0x%x\n", header->magic, header->size);
+		//printf("Header: 0x%x\tSize: 0x%x\n", header->magic, header->size);
 		h_size = header->size;
 		if(h_size >= size)
 			break;
@@ -235,7 +219,6 @@ void new_free(void *address, new_heap_t* t_heap){
 	/**Unify left*/
 	/**Test if on the left i have a hole*/
 	footer_t* left_footer = (footer_t*) ((unsigned int) header - sizeof(footer_t));
-	//printf("Address of header: %x - Footer: %x Left: %x\n", header, footer, footer->magic);
 	if(left_footer->magic == HEAP_MAGIC && left_footer->header->is_hole == HEAP_HOLE){
 		//printf("unify left\n");
 		/**I have found a hole on the left of my current header i need to save the size of
@@ -286,5 +269,15 @@ void new_free(void *address, new_heap_t* t_heap){
 }
 
 void n_free(unsigned int address){
-	new_free(address, n_heap);
+	new_free((void*)address, n_heap);
 }
+
+#ifdef OLD_MEM_DISABLED
+void* kmalloc(unsigned int size){
+	new_malloc(size);
+}
+
+void kfree(unsigned int address){
+	n_free(address);
+}
+#endif
