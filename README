@@ -2,8 +2,8 @@
  DreamOS
 ---------------------------
 
-1. Cosa Ë DreamOS
-	a. Cosa NON Ë DreamOS
+1. Cosa √® DreamOS
+	a. Cosa NON √® DreamOS
 2. Installare DreamOS
 	a. Requisiti necessari
 	b. Scaricare da SVN
@@ -19,10 +19,10 @@
 
 
 - 1 -----------------------
---- Cosa Ë DreamOS --------
+--- Cosa √® DreamOS --------
 
-Il DreamOS Ë un sistema operativo open source rilasciato sotto licenza GPLv3 sviluppato partendo da 0 puramente per scopi didattici o comunque per capire come funzionano i sistemi operativi.
-Il team di sviluppo attuale Ë composto dagli sviluppatori
+Il DreamOS √® un sistema operativo open source rilasciato sotto licenza GPLv3 sviluppato partendo da 0 puramente per scopi didattici o comunque per capire come funzionano i sistemi operativi.
+Il team di sviluppo attuale √® composto dagli sviluppatori
 
 Ivan Gualandri - Finarfin (http://www.osdev.it http://italialinux.altervista.org) - Creatore e Main Developer 
 
@@ -30,31 +30,31 @@ Finessi Manuel (tk0)
 Alessandro (celeron) 
 
 
-	- a -- Cosa NON Ë DreamOS -
+	- a -- Cosa NON √® DreamOS -
 
-DreamOS non Ë un sistema operativo completo e pronto per essere utilizzato per l'uso quotidiano, non Ë basato su Kernel esistenti e non Ë supportato/sponsorizzato da alcuna societ‡.
+DreamOS non √® un sistema operativo completo e pronto per essere utilizzato per l'uso quotidiano, non √® basato su Kernel esistenti e non √® supportato/sponsorizzato da alcuna societ√†.
 
 - 2 -----------------------
 --- Installare DreamOS ----
 
-Per Installazione s'intende compilare e mettere DreamOS su un supporto per l'avvio, visto che attualmente DreamOS non Ë predisposto per installazioni vere e proprie.
+Per Installazione s'intende compilare e mettere DreamOS su un supporto per l'avvio, visto che attualmente DreamOS non √® predisposto per installazioni vere e proprie.
 
 	- a - Requisiti necessari -
 
-DreamOS Ë un sistema operativo sviluppato per funzionare su cpu con architettura Intel x86/IA32 (i386/i686) e attualmente Ë sviluppato in modo da partire da floppy anche se, utilizzando GRUB, si puÚ farlo partire avendo l'immagine compilata sull'Hard-disk.
-DreamOS puÚ essere anche emulato usando Software come qEmu o Bochs.
+DreamOS √® un sistema operativo sviluppato per funzionare su cpu con architettura Intel x86/IA32 (i386/i686) e attualmente √® sviluppato in modo da partire da floppy anche se, utilizzando GRUB, si pu√≤ farlo partire avendo l'immagine compilata sull'Hard-disk.
+DreamOS pu√≤ essere anche emulato usando Software come qEmu o Bochs.
 
 Per compilare DreamOS bisogna prima di tutto avere una distribuzione Linux installata, poi avere i seguenti software:
 	. Nasm
 	. GCC
 	. make
 
-Opzionalmente un emulatore di cpu se non si vuole provare il sistema operativo su hardware reale e SVN se volete scaricare le versioni pi˘ recenti da repository.
+Opzionalmente un emulatore di cpu se non si vuole provare il sistema operativo su hardware reale e SVN se volete scaricare le versioni pi√π recenti da repository.
 
 	- b -- Scaricare da SVN ---
 
 Potete scaricare i sorgenti di DreamOS da SVN attraverso il repository svn://svn.berlios.de/dreamos/trunk
-Per i meno pratici il comando da eseguire Ë: (assicuratevi di avere il pacchetto SVN installato)
+Per i meno pratici il comando da eseguire √®: (assicuratevi di avere il pacchetto SVN installato)
 	svn checkout svn://svn.berlios.de/dreamos/trunk
 
 Alla fine del download dovreste avere una cartella trunk/ con tutti i sorgenti al suo interno
@@ -93,11 +93,11 @@ Attaualmente e' stato aggiunto uno script per inserire dreamos in grub, esso e' 
 - 3 -----------------------
 ---- Usare DreamOS --------
 
-L'Interattivit‡ di DreamOS al momento si ferma ad una CLI (Command Line Interface, Interfaccia a linea di comando) con un numero limitato di comandi utilizzabili, la maggior parte a scopo di test.
+L'Interattivit√† di DreamOS al momento si ferma ad una CLI (Command Line Interface, Interfaccia a linea di comando) con un numero limitato di comandi utilizzabili, la maggior parte a scopo di test.
 
 	- a ------- L'Avvio -------
 
-L'avvio di DreamOS contiene il loading di tutte le funzioni necessarie al funzionamento del S.O. e della CLI, alla fine dell'avvio verr‡ chiesto un Username che verr‡ usato in seguito nella CLI.
+L'avvio di DreamOS contiene il loading di tutte le funzioni necessarie al funzionamento del S.O. e della CLI, alla fine dell'avvio verr√† chiesto un Username che verr√† usato in seguito nella CLI.
 Per poter accedere l'username deve essere definito nel file passwd. Di default sono definiti 2 utenti: root e user.
 Attualmente non viene richiesta alcuna password
 
@@ -105,8 +105,8 @@ Attualmente non viene richiesta alcuna password
 
 La CLI di DreamOS ha una struttura molto comune a quella *NIX
 	Username~# Comando inserito
-Dove Username Ë l'username inserito durante l'avvio.
-Si puÚ avere una lista di comandi disponibili attraverso il comando:
+Dove Username √® l'username inserito durante l'avvio.
+Si pu√≤ avere una lista di comandi disponibili attraverso il comando:
 	help
 Inoltre sono presenti alcuni comandi che rimarcano la controparte *NIX come uname (uname --help) o echo.
 

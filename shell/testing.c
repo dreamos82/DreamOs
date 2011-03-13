@@ -100,6 +100,7 @@ void try_printmem(void)
 }
 
 void try_newheap(){
+	#ifdef NEW_HEAP_TEST
 	unsigned int testA;
 	unsigned int testB;
 	unsigned int testC;
@@ -122,6 +123,7 @@ void try_newheap(){
 	n_free(testA);
 	n_free(testD);
 	printf("DONE\n");
+	#endif
 }
 
 void help_tester()
