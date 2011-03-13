@@ -140,6 +140,9 @@ clean:
 install:
 	mkfs.ext2 /dev/fd0
 	dd if=boot/grub.img of=/dev/fd0
+	
+iso-image:
+	./utils/eltorito_gen.sh
 
 qemu: dreamos.img
 	dd if=/dev/zero bs=$(shell let bs=1474560 -$(shell stat --format=%s dreamos.img); echo $$bs) count=1 2>/dev/null | cat dreamos.img - > dreamos_padded.img
