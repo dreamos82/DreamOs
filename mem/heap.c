@@ -274,10 +274,10 @@ void n_free(unsigned int address){
 
 #ifdef OLD_MEM_DISABLED
 void* kmalloc(unsigned int size){
-	new_malloc(size);
+	return (void *)	new_malloc(size);
 }
 
-void kfree(unsigned int address){
+void free(void* address){
 	n_free(address);
 }
 #endif

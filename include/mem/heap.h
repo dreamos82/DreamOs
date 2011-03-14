@@ -78,7 +78,7 @@ short int header_t_less_than(void *,void *);
 void n_free(unsigned int);
 #ifdef OLD_MEM_DISABLED
 void* kmalloc(unsigned int);
-void kfree(unsigned int);
+void free(void*);
 #endif
 
 #endif

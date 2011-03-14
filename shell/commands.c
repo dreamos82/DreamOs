@@ -198,12 +198,7 @@ void uname_info()
 
   printf("\n:==========: :===========: :==========:\n\n");
 }
-/*
-void printmem(void)
-{
-  print_heap_list(kheap->used_list);
-}
-*/
+
 void credits(void)
 {
   _kcolor(BRIGHT_BLUE);
