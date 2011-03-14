@@ -21,7 +21,12 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#ifdef LEGACY
 #include <kheap.h>
+#endif
+#ifdef LATEST
+#include <heap.h>
+#endif
 #include <shell.h>
 
 int cur_fd;

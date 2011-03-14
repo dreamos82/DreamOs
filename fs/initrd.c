@@ -23,7 +23,12 @@
 #include <types.h>
 #include <string.h>
 #include <vfs.h>
+#ifdef LEGACY
 #include <kheap.h>
+#endif
+#ifdef LATEST
+#include <heap.h>
+#endif
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <commands.h>

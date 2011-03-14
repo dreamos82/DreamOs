@@ -21,7 +21,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <vfs.h>
+#ifdef LEGACY
 #include <kheap.h>
+#endif
+#ifdef LATEST
+#include <heap.h>
+#endif
 #include <shell.h>
 
 /**

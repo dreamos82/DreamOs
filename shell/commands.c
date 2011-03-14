@@ -25,6 +25,7 @@
 #include <testing.h>
 #include <fcntl.h>
 #include <stat.h>
+#include <heap.h>
 
 int argc;
 char **argv;

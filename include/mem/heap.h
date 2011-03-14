@@ -75,7 +75,7 @@ unsigned int contract(unsigned int, new_heap_t*);
 short int locate_smallest_hole(unsigned int, unsigned short int, new_heap_t*);
 short int header_t_less_than(void *,void *);
 
-void n_free(unsigned int);
+void n_free(void*);
 #ifdef LATEST
 void* kmalloc(unsigned int);
 void free(void*);

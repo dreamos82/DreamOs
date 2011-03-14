@@ -19,7 +19,12 @@
 #include <video.h>
 #include <vfs.h>
 #include <stdio.h>
+#ifdef LEGACY
 #include <kheap.h>
+#endif
+#ifdef LATEST
+#include <heap.h>
+#endif
 #include <stddef.h>
 #include <string.h>
 #include <kheap.h>

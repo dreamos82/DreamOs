@@ -268,7 +268,7 @@ void new_free(void *address, new_heap_t* t_heap){
 	}	
 }
 
-void n_free(unsigned int address){
+void n_free(void *address){
 	new_free((void*)address, n_heap);
 }
 

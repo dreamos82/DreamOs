@@ -6,7 +6,7 @@ NAME = DreamOS
 VERSION = 0
 PATCHLEVEL = 3
 EXTRAVERSION = -trunk
-MEMORY = LEGACY 
+MEMORY = LEGACY
 include Makefile.am
 
 CFLAGS = -nostdlib\

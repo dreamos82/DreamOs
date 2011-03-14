@@ -22,7 +22,12 @@
  */
 
 #include <cpuid.h>
+#ifdef LEGACY
 #include <kheap.h>
+#endif
+#ifdef LATEST
+#include <heap.h>
+#endif
 #include <string.h>
 
 /*
