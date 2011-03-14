@@ -6,7 +6,7 @@ NAME = DreamOS
 VERSION = 0
 PATCHLEVEL = 3
 EXTRAVERSION = -trunk
-
+MEMORY = LEGACY 
 include Makefile.am
 
 CFLAGS = -nostdlib\
@@ -29,7 +29,8 @@ CFLAGS = -nostdlib\
 	 -I./include/misc\
 	 -I./include/fs\
 	 -I./include/sys \
-	 -DBOCHS_DEBUG
+	 -DBOCHS_DEBUG\
+	 -D$(MEMORY)
 
 OBJ = kernel.o\
       io/video.o\

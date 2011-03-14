@@ -98,7 +98,9 @@ int main_loop(struct multiboot_info *boot_info)
     asm("sti");
     _kprintOK();   
     init_paging();
-
+    #ifdef LATEST
+    init_newmem();
+	#endif
     /*
     init_newmem();     
     try_newheap();

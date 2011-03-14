@@ -49,14 +49,16 @@ typedef struct {
 extern heap_t *kheap;
 
 heap_t* make_heap(unsigned int);
-void* kmalloc(unsigned int);
 //void kfree(unsigned int);
 void try_alloc();
 heap_node_t* alloc_node();
 void free_node(heap_node_t*);
 
 void* alloc(unsigned int, heap_t*);
+#ifdef LEGACY
+void* kmalloc(unsigned int);
 void free (void *);
+#endif
 
 void print_heap_list (heap_node_t *);
 

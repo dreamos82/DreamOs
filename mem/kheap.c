@@ -37,6 +37,7 @@ heap_t *kheap_tmp;
 unsigned int address_cur = (unsigned int) &end;
 unsigned int node_address;
 
+#ifdef LEGACY
 void* kmalloc(unsigned int size)
 {
    unsigned int temp;
@@ -49,7 +50,7 @@ void* kmalloc(unsigned int size)
    }
      return (void *) temp;
 }
-
+#endif
 /* Test procedure ("try_heap" shell command") */
 void try_alloc()
 {
@@ -220,6 +221,7 @@ heap_node_t* alloc_node(){
   * @param Start_address of the block
   * @return none
   */
+#ifdef LEGACY
 void free (void *location)
 {
   heap_node_t *busy = kheap->used_list;
@@ -288,7 +290,7 @@ void free (void *location)
 
 //     printf ("Address not found in list\n");
 }
-
+#endif
 /**
   * Print a heap list
   * @author shainer

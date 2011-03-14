@@ -76,7 +76,7 @@ short int locate_smallest_hole(unsigned int, unsigned short int, new_heap_t*);
 short int header_t_less_than(void *,void *);
 
 void n_free(unsigned int);
-#ifdef OLD_MEM_DISABLED
+#ifdef LATEST
 void* kmalloc(unsigned int);
 void free(void*);
 #endif
