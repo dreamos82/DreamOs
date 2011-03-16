@@ -25,6 +25,7 @@
 
 #include <debug.h>
 #include <io.h>
+#include <video.h>
 /******************************
  *		Debug Func
  ******************************/
@@ -40,6 +41,16 @@ void dbg_bochs_print( const unsigned char *msg )
         outportb(0xE9, msg[i]);
 #endif
 return;
+}
+
+/**
+ *  Print an integer
+ */
+void dbg_bochs_print_digit(unsigned int number){
+	char buffer[10];
+	_kntos(buffer, number, 10);
+	dbg_bochs_print(buffer);
+	dbg_bochs_print("\n");
 }
 
 /**

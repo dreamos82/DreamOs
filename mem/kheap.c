@@ -54,7 +54,7 @@ void* kmalloc(unsigned int size)
 /* Test procedure ("try_heap" shell command") */
 void try_alloc()
 {
-   
+    #ifdef LEGACY
     printf("try_alloc(): Used list address: %d, Value: %d\n", &(kheap->used_list), kheap->used_list);
     alloc(50, kheap);
     alloc(60, kheap);
@@ -67,6 +67,7 @@ void try_alloc()
     print_heap_list (kheap->free_list);
     printf("Free nodes\n");
     print_heap_list(kheap->free_nodes);
+    #endif
 }
 
 /**

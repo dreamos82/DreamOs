@@ -77,7 +77,7 @@ unsigned int new_malloc(unsigned int size){
 		//If i have a heap, then i have vm management enabled, and i can call alloc...
 		void* new_address = new_alloc(size, PAGE_ALIGNED, n_heap);	
 		//printf("Heap defined\n");
-		printf("Start Address: %x End Address: %x\n", n_heap->start_address, n_heap->end_address);
+		//printf("Start Address: %x End Address: %x\n", n_heap->start_address, n_heap->end_address);
 		//printf("Address_cur value: %x\n", address_cur);
 		return (unsigned int)new_address;
 	}

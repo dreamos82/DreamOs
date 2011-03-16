@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <heap.h>
 #include <string.h>
-
+#include <debug.h>
 
 short int standard_lessthan (type_t a, type_t b){
 	if(a<b) return 1;
@@ -79,6 +79,7 @@ void insert_array(type_t elem, ordered_array_t* t_array){
     if(i==t_array->size){
 		/*header_t* hel;
 		printf("i = t_arraysize\n");*/
+		dbg_bochs_print("Insert array - if\n");
 		t_array->array[t_array->size] = elem;
 		t_array->size++;		
 		//hel = (header_t*) t_array->array[0];
@@ -94,6 +95,8 @@ void insert_array(type_t elem, ordered_array_t* t_array){
 			t_array->array[i] = tmp;
 			tmp = tmp2;			
 		}
+		dbg_bochs_print("Insert array - else\n");
+		dbg_bochs_print_digit(t_array->size);
 		t_array->size++;
 	}    
     //print_array(t_array);
@@ -112,7 +115,9 @@ type_t get_array(int index, ordered_array_t* t_array){
 		return t_array->array[index];
 	}
 	else {		
-		printf("get_array: PANIC");
+		dbg_bochs_print("Panic - get_array\n");		
+		dbg_bochs_print_digit(t_array->size);
+		printf("get_array: PANIC - %d", t_array->size);
 		while(1);
 	}
 }
