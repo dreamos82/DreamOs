@@ -211,14 +211,14 @@ int getchar (void)
 
 char *gets ()
 {
-    char *str=0;
+    char str[255];
     int c;
     int count=0;
     shell_mess_col = _kgetcolumn ();
     shell_mess_line = _kgetline ();
-
+	memset(str, '\0', 255);
     do {
-	c = getchar();
+	c = getchar();	
 	if (c=='\n') // tasto invio
 	    break;
 	else if (c=='\b') //backspace
