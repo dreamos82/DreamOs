@@ -120,7 +120,7 @@ void *new_alloc(unsigned int size, unsigned short int p_aligned, new_heap_t* t_h
 		}
 		else {
 			/**We need to adjust the latest hole*/
-			header_t* header = get_array(min_index, &t_heap->index);
+			header_t* header = get_array(latest_i, &t_heap->index);
 			header->size += new_len - old_len;
 			/**We need a new footer*/
 			footer_t* footer = (footer_t*) (header + header->size - sizeof(footer_t));
