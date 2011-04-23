@@ -43,7 +43,9 @@
 #include <kheap.h>
 #include <vfs.h>
 #include <initrd.h>
+#ifdef LATEST
 #include <heap.h>
+#endif
 #include <keyboard.h>
 
 #ifdef BOCHS_DEBUG
@@ -55,7 +57,7 @@ extern unsigned int end;
 multiboot_info_t *boot_informations;
 char *module_start;
 unsigned int module_end;
-extern new_heap_t* n_heap;
+//extern new_heap_t* n_heap;
 asmlinkage void _start(struct multiboot_info *boot_info)
 {
     boot_informations = boot_info;    

@@ -29,7 +29,9 @@
 #include <initrd.h>
 #include <unistd.h>
 #include <user_shell.h>
+#ifdef LATEST
 #include <heap.h>
+#endif
 
 //multiboot_info_t *boot_informations;
 char *module_start;
@@ -99,6 +101,7 @@ void try_printmem(void)
 	print_heap_list(kheap->used_list);
 }
 
+#ifdef LATEST
 void try_newheap(){
 	#ifdef NEW_HEAP_TEST
 	unsigned int testA;
@@ -125,6 +128,7 @@ void try_newheap(){
 	printf("DONE\n");
 	#endif
 }
+#endif
 
 void help_tester()
 {

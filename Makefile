@@ -53,10 +53,8 @@ OBJ = kernel.o\
       mem/fismem.o\
       mem/paging.o\
       mem/kheap.o\
-      mem/heap.o\
       misc/clock.o\
       misc/bitops.o\
-      misc/ordered_array.o\
       misc/ordered_list.o\
       misc/debug.o \
       system/syscall.o\
@@ -67,7 +65,8 @@ OBJ = kernel.o\
       sys/utsname.o\
       sys/dirent.o\
       sys/stat.o
-
+#mem/heap.o\
+#misc/ordered_array.o
 dreamos.img: bl.img kernel.bin
 	mv kernel.bin dreamos.img
 
@@ -97,10 +96,10 @@ libc/string.o: libc/string.c
 mem/fismem.o: mem/fismem.c
 mem/paging.o: mem/paging.c
 mem/kheap.o: mem/kheap.c
-mem/heap.o: mem/heap.c
+#mem/heap.o: mem/heap.c
 misc/clock.o: misc/clock.c
 misc/ordered_list.o: misc/ordered_list.c
-misc/ordered_array.o: misc/ordered_array.c
+#misc/ordered_array.o: misc/ordered_array.c
 misc/bitops.o: misc/bitops.c
 misc/debug.o: misc/debug.c
 drivers/keyboard.o: drivers/keyboard.c

@@ -25,7 +25,9 @@
 #include <testing.h>
 #include <fcntl.h>
 #include <stat.h>
+#ifdef LATEST
 #include <heap.h>
+#endif
 
 int argc;
 char **argv;
@@ -523,7 +525,9 @@ void tester(){
 					{ "test_stat", test_stat},
 					{ "try_check", try_check},
 					{ "try_shadow", try_shadow},
+					#ifdef LATEST
 					{ "try_newheap", try_newheap},
+					#endif
 					{ "--help", help_tester },
 					};
 	if (argc != 2) {
