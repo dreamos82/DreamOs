@@ -100,7 +100,7 @@ mem/kheap.o: mem/kheap.c
 mem/heap.o: mem/heap.c
 misc/clock.o: misc/clock.c
 misc/ordered_list.o: misc/ordered_list.c
-misc/orderet_array.o: misc/ordered_array.c
+misc/ordered_array.o: misc/ordered_array.c
 misc/bitops.o: misc/bitops.c
 misc/debug.o: misc/debug.c
 drivers/keyboard.o: drivers/keyboard.c
