@@ -96,7 +96,6 @@ void init_paging(){
   * @return page_dir address
   */
 unsigned int* create_pageDir(){
-//     Page_Dir prova;        
     return request_pages(8, NOT_ADD_LIST);       
 }
 
@@ -285,4 +284,12 @@ void page_fault_handler (int ecode)
 	  }
 	}        
     return;
+}
+
+unsigned int get_phys_address(unsigned int address){
+	return 0;
+}
+
+void free_logical_page(unsigned int address){
+	return;
 }
