@@ -34,7 +34,7 @@
    * @version 1.0 
    */
 unsigned int map_kernel(){
-	heap_node_t* new_pd_node = alloc_node();
+	unsigned int *logic_pd_address = kmalloc(8*4096);
 	unsigned int *pagedir;
 	unsigned int *pagetable;
 	pagedir = create_pageDir();

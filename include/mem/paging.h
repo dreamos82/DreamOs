@@ -80,6 +80,7 @@ unsigned int get_phys_address(unsigned int);
 void load_pdbr(unsigned int);
 //void map_kernel(pde_t);
 void page_fault_handler(int);
+void map_address(unsigned int, unsigned int);
 void free_logical_page(unsigned int);
 
 #endif

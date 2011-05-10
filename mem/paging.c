@@ -286,6 +286,10 @@ void page_fault_handler (int ecode)
     return;
 }
 
+void map_address(unsigned int fis_addres, unsigned int logical_address){
+	return;
+}
+
 unsigned int get_phys_address(unsigned int address){
 	return 0;
 }
