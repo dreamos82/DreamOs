@@ -78,7 +78,7 @@ unsigned int get_pagetable_entry(int,int);
 unsigned int get_phys_address(unsigned int);
 
 void load_pdbr(unsigned int);
-void map_kernel(pde_t);
+//void map_kernel(pde_t);
 void page_fault_handler(int);
 void free_logical_page(unsigned int);
 

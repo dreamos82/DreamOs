@@ -25,6 +25,8 @@
 #include <task_utils.h>
 #include <fismem.h>
 #include <paging.h>
+#include <kheap.h>
+#include <ordered_list.h>
 
 /**
    * Make a copy of the kernel into a new pagedir/pagetable
@@ -32,10 +34,13 @@
    * @version 1.0 
    */
 unsigned int map_kernel(){
+	heap_node_t* new_pd_node = alloc_node();
 	unsigned int *pagedir;
 	unsigned int *pagetable;
 	pagedir = create_pageDir();
 	pagetable = create_pageTable();
+	new_pd_node->start_address = (heap_node_t*) pagedir;
+	new_pd_node->size = 8 * 4096;
 	
 	//set_pagedir_entry_ric(0, (unsigned int)current_page_table, PD_PRESENT|SUPERVISOR|WRITE,0);    
 	
