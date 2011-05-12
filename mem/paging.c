@@ -287,6 +287,8 @@ void page_fault_handler (int ecode)
 }
 
 void map_address(unsigned int fis_addres, unsigned int logical_address){
+	/** questa funzione estrapolerà pdentry e ptentry dal logical address e vi mapperà fis_address*/
+	//set_pagedir_entry_ric(1023, fis_address, PD_PRESENT|SUPERVISOR, 0);
 	return;
 }
 

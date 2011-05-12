@@ -38,10 +38,11 @@ unsigned int map_kernel(){
 	unsigned int *pagedir;
 	unsigned int *pagetable;
 	pagedir = create_pageDir();
-	pagetable = create_pageTable();
-	new_pd_node->start_address = (heap_node_t*) pagedir;
-	new_pd_node->size = 8 * 4096;
-	
+	pagetable = create_pageTable();	
+	//set_pagedir_entry_ric(1023, fis_address, PD_PRESENT|SUPERVISOR, 0);
+	/*new_pd_node->start_address = (heap_node_t*) pagedir;
+	new_pd_node->size = 8 * 4096;*/
+	map_address(pagedir, logic_pd_address);
 	//set_pagedir_entry_ric(0, (unsigned int)current_page_table, PD_PRESENT|SUPERVISOR|WRITE,0);    
 	
 	return 0;
