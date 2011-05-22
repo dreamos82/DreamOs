@@ -303,6 +303,13 @@ void map_address(unsigned int fis_addres, unsigned int logic_address){
 	pdir = BITRANGE (logic_address, 22, 31);
     ptable = BITRANGE (logic_address, 12, 21);
     printf("Pdir value: %d, PtableValue: %d\n", pdir, ptable);
+    printf("Pdir entry value: %d\n", get_pagedir_entry(pdir));
+    if(get_pagedir_entry(pdir)==NULL){
+		printf("TODO\n");
+	} else {
+		printf("Else TODO\n");
+		//set_pagetable_entry(ptable, fis_address, PD_PRESENT|SUPERVISOR|WRITE, 0);
+	}
 	return;
 }
 
