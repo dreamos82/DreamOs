@@ -252,3 +252,9 @@ void try_shadow(){
 	set_shadow(DISABLED);
 	printf("%s\n", stringa);
 }
+
+void try_mapaddress(){
+	printf("Testing map_address\n");
+	map_address(0x0010000, kmalloc(sizeof(int)));
+	return;
+}

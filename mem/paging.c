@@ -258,7 +258,7 @@ void page_fault_handler (int ecode)
     if (pd_entry == 0) {
 	    int i=0;
 	    new_pt = create_pageTable();
-	    if(new_pt == (unsigned int *) 4468736) printf("Eccolo qua lo stronzo\n");
+	    //if(new_pt == (unsigned int *) 4468736) printf("Eccolo qua lo stronzo\n");
 	    while(i<PT_LIMIT){
 	      new_pt[i] = 0x00000000;
 	      i++;
@@ -285,10 +285,24 @@ void page_fault_handler (int ecode)
 	}        
     return;
 }
-
-void map_address(unsigned int fis_addres, unsigned int logical_address){
+/**
+  * Mappa l'indirizzo fisico fis_address in quello logico logic_address
+  * @author Ivan Gualandri
+  * @version 1.0
+  * @param fis_address Indirizzo fisico
+  * @param logic_address Indirizzo logico
+  * @return none
+  */
+void map_address(unsigned int fis_addres, unsigned int logic_address){
 	/** questa funzione estrapolerà pdentry e ptentry dal logical address e vi mapperà fis_address*/
 	//set_pagedir_entry_ric(1023, fis_address, PD_PRESENT|SUPERVISOR, 0);
+	unsigned int pdir, ptable;
+	printf("Logic Address: 0x%x\n", logic_address);
+	pdir = 0;
+	ptable =0;
+	pdir = BITRANGE (logic_address, 22, 31);
+    ptable = BITRANGE (logic_address, 12, 21);
+    printf("Pdir value: %d, PtableValue: %d\n", pdir, ptable);
 	return;
 }
 

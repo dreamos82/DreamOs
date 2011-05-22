@@ -525,6 +525,7 @@ void tester(){
 					{ "test_stat", test_stat},
 					{ "try_check", try_check},
 					{ "try_shadow", try_shadow},
+					{ "try_mapaddress", try_mapaddress},
 					#ifdef LATEST
 					{ "try_newheap", try_newheap},
 					#endif
@@ -578,3 +579,4 @@ void newfile(){
 		}
 	}
 }
+
