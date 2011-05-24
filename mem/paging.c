@@ -305,10 +305,13 @@ void map_address(unsigned int fis_addres, unsigned int logic_address){
     printf("Pdir value: %d, PtableValue: %d\n", pdir, ptable);
     printf("Pdir entry value: %d\n", get_pagedir_entry(pdir));
     if(get_pagedir_entry(pdir)==NULL){
-		printf("TODO\n");
+		printf("TODO\n");		
 		/**TODO
-		 * Crate_page_dir
+		 * Crate_page_table
 		 * Map_new_pdir */		
+		unsigned int *new_pagetable;		
+		new_pagetable = create_pageTable();
+		set_pagedir_entry_ric(pdir, (unsigned int)new_pagetable, PD_PRESENT|SUPERVISOR, 0);
 	} else {
 		printf("Else TODO\n");
 		set_pagetable_entry_ric(pdir, ptable ,fis_addres, PD_PRESENT|SUPERVISOR|WRITE, 0);
