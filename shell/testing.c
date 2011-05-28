@@ -29,6 +29,7 @@
 #include <initrd.h>
 #include <unistd.h>
 #include <user_shell.h>
+#include <task_utils.h>
 #ifdef LATEST
 #include <heap.h>
 #endif
@@ -256,5 +257,6 @@ void try_shadow(){
 void try_mapaddress(){
 	printf("Testing map_address\n");
 	map_address(0x0010000, kmalloc(sizeof(int)));
+	//map_kernel();
 	return;
 }

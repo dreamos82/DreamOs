@@ -35,14 +35,22 @@
    */
 unsigned int map_kernel(){
 	unsigned int *logic_pd_address = kmalloc(8*4096);
+	unsigned int *logic_pt_address = kmalloc(8*4096);
 	unsigned int *pagedir;
 	unsigned int *pagetable;
+	int i=0;	
 	pagedir = create_pageDir();
 	pagetable = create_pageTable();	
 	//set_pagedir_entry_ric(1023, fis_address, PD_PRESENT|SUPERVISOR, 0);
 	/*new_pd_node->start_address = (heap_node_t*) pagedir;
 	new_pd_node->size = 8 * 4096;*/
-	map_address(pagedir, logic_pd_address);
+	while(i < 8){
+		map_address(pagedir, logic_pd_address);
+		map_address(pagetable, logic_pt_address);
+		pagedir+=4096;
+		pagetable+=4096;
+		i++;
+	}
 	//set_pagedir_entry_ric(0, (unsigned int)current_page_table, PD_PRESENT|SUPERVISOR|WRITE,0);    
 	
 	return 0;

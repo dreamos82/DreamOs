@@ -293,7 +293,7 @@ void page_fault_handler (int ecode)
   * @param logic_address Indirizzo logico
   * @return none
   */
-void map_address(unsigned int fis_addres, unsigned int logic_address){
+void map_address(unsigned int fis_address, unsigned int logic_address){
 	/** questa funzione estrapolerà pdentry e ptentry dal logical address e vi mapperà fis_address*/
 	//set_pagedir_entry_ric(1023, fis_address, PD_PRESENT|SUPERVISOR, 0);
 	unsigned int pdir, ptable;
@@ -312,10 +312,10 @@ void map_address(unsigned int fis_addres, unsigned int logic_address){
 		unsigned int *new_pagetable;		
 		new_pagetable = create_pageTable();
 		set_pagedir_entry_ric(pdir, (unsigned int)new_pagetable, PD_PRESENT|SUPERVISOR, 0);
+		set_pagetable_entry_ric(pdir, ptable, fis_address, PD_PRESENT|SUPERVISOR, 0);
 	} else {
 		printf("Else TODO\n");
-		set_pagetable_entry_ric(pdir, ptable ,fis_addres, PD_PRESENT|SUPERVISOR|WRITE, 0);
-		//set_pagetable_entry(ptable, fis_address, PD_PRESENT|SUPERVISOR|WRITE, 0);
+		set_pagetable_entry_ric(pdir, ptable ,fis_address, PD_PRESENT|SUPERVISOR|WRITE, 0);		
 	}
 	return;
 }
