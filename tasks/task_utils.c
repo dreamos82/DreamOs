@@ -38,7 +38,8 @@ unsigned int map_kernel(){
 	unsigned int *logic_pt_address = kmalloc(8*4096);
 	unsigned int *pagedir;
 	unsigned int *pagetable;
-	int i=0;	
+	unsigned int i=0;	
+	unsigned int j=0;
 	pagedir = create_pageDir();
 	pagetable = create_pageTable();	
 	//set_pagedir_entry_ric(1023, fis_address, PD_PRESENT|SUPERVISOR, 0);
@@ -52,6 +53,12 @@ unsigned int map_kernel(){
 		i++;
 	}
 	//set_pagedir_entry_ric(0, (unsigned int)current_page_table, PD_PRESENT|SUPERVISOR|WRITE,0);    
-	
+	while(j<PD_LIMIT){
+		pagedir[j] = 0x0;
+		pagetable[j] = (j*0x1000&0xFFFFF0)|PD_PRESENT|SUPERVISOR|WRITE|0;
+		j++;
+	}	
+	pagedir[0] = ((unsigned int)pagetable&0xFFFFF000)|PD_PRESENT|SUPERVISOR|WRITE|0;
+	pagedir[1023] = ((unsigned int)pagedir&0xFFFFF000)|PD_PRESENT|SUPERVISOR|0;	
 	return 0;
 }

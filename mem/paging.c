@@ -175,9 +175,9 @@ void set_pagetable_entry_ric(int pd_entry, int pt_entry ,unsigned int base, unsi
     unsigned int *mod_address;    
     mod_address = (unsigned int *)((0XFFC00000|(pd_entry<<12))+(pt_entry*4));
     *mod_address = (base&0xFFFFF000)|opt1|opt2;
-    #ifdef DEBUG
-    printf("value for entry n.: %d is: %d\n", pt_entry,*mod_address);
-    #endif
+    //#ifdef DEBUG
+    printf("value for entry n.: %d is: %x\n", pt_entry,mod_address);
+    //#endif
 }
 
 /**
@@ -201,7 +201,8 @@ unsigned int get_pagedir_entry(int num){
   * @return Il contenuto dell'entry
   */
 unsigned int get_pagetable_entry(int dir_num, int tab_num){
-    unsigned int *mod_address = (unsigned int*) (0xFFC00000|(dir_num<<12))+ (tab_num*4);
+    unsigned int *mod_address = (unsigned int*) ((0xFFC00000|(dir_num<<12))+(tab_num*4));
+    //printf("value for entry n.: %d is: %u\n", tab_num,mod_address);
     return (unsigned int) (*mod_address);
 }
 
@@ -314,13 +315,21 @@ void map_address(unsigned int fis_address, unsigned int logic_address){
 		set_pagedir_entry_ric(pdir, (unsigned int)new_pagetable, PD_PRESENT|SUPERVISOR, 0);
 		set_pagetable_entry_ric(pdir, ptable, fis_address, PD_PRESENT|SUPERVISOR, 0);
 	} else {
-		printf("Else TODO\n");
+		printf("Else TODO %u %u\n", fis_address, get_pagedir_entry(pdir));		
 		set_pagetable_entry_ric(pdir, ptable ,fis_address, PD_PRESENT|SUPERVISOR|WRITE, 0);		
 	}
 	return;
 }
 
 unsigned int get_phys_address(unsigned int address){
+	unsigned int pdir = 0;
+	unsigned int ptable = 0;
+	//unsigned int* tmp;
+	//tmp = 0xFFC00518;
+	pdir = BITRANGE (address, 22, 31);
+    ptable = BITRANGE (address, 12, 21);
+    printf("GetPhys - Pdir: %d, PTable: %d\n", pdir,ptable);
+    if(ptable!=0) printf("PhysAddress: %x\n", get_pagetable_entry(pdir, ptable));
 	return 0;
 }
 
