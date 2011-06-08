@@ -258,7 +258,7 @@ void try_mapaddress(){
 	unsigned int *tmp = kmalloc(sizeof(int));
 	printf("Testing map_address\n");
 	map_address(0x0010000, (unsigned int)tmp);
-	get_phys_address((unsigned int)tmp);
+	printf("GetPhysAddress: %x\n", get_phys_address((unsigned int)tmp));
 	//map_kernel();
 	return;
 }

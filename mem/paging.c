@@ -286,6 +286,7 @@ void page_fault_handler (int ecode)
 	}        
     return;
 }
+
 /**
   * Mappa l'indirizzo fisico fis_address in quello logico logic_address
   * @author Ivan Gualandri
@@ -305,8 +306,7 @@ void map_address(unsigned int fis_address, unsigned int logic_address){
     ptable = BITRANGE (logic_address, 12, 21);
     printf("Pdir value: %d, PtableValue: %d\n", pdir, ptable);
     printf("Pdir entry value: %d\n", get_pagedir_entry(pdir));
-    if(get_pagedir_entry(pdir)==NULL){
-		printf("TODO\n");		
+    if(get_pagedir_entry(pdir)==NULL){		
 		/**TODO
 		 * Crate_page_table
 		 * Map_new_pdir */		
@@ -321,16 +321,21 @@ void map_address(unsigned int fis_address, unsigned int logic_address){
 	return;
 }
 
+/**
+  * Ritorna l'indirizzo fisico a cui si riferisce l'indirizzo logico preso in input
+  * @author Ivan Gualandri
+  * @version 1.0
+  * @param address Indirizzo fisico
+  * @return physical address
+  */
 unsigned int get_phys_address(unsigned int address){
 	unsigned int pdir = 0;
 	unsigned int ptable = 0;
-	//unsigned int* tmp;
-	//tmp = 0xFFC00518;
 	pdir = BITRANGE (address, 22, 31);
     ptable = BITRANGE (address, 12, 21);
-    printf("GetPhys - Pdir: %d, PTable: %d\n", pdir,ptable);
-    if(ptable!=0) printf("PhysAddress: %x\n", get_pagetable_entry(pdir, ptable));
-	return 0;
+    //printf("GetPhys - Pdir: %d, PTable: %d\n", pdir,ptable);
+    //suif(ptable!=0) printf("PhysAddress: %x\n", get_pagetable_entry(pdir, ptable));
+	return get_pagetable_entry(pdir, ptable);
 }
 
 void free_logical_page(unsigned int address){
