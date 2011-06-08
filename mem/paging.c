@@ -337,7 +337,12 @@ unsigned int get_phys_address(unsigned int address){
     //suif(ptable!=0) printf("PhysAddress: %x\n", get_pagetable_entry(pdir, ptable));
 	return get_pagetable_entry(pdir, ptable);
 }
-
+/**
+  * Libera un indirizzo logico
+  * @author Ivan Gualandri
+  * @version 1.0
+  * @param address Indirizzo fisico  
+  */
 void free_logical_page(unsigned int address){
 	unsigned int pdir = 0;
 	unsigned int ptable = 0;
