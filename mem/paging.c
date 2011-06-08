@@ -175,9 +175,9 @@ void set_pagetable_entry_ric(int pd_entry, int pt_entry ,unsigned int base, unsi
     unsigned int *mod_address;    
     mod_address = (unsigned int *)((0XFFC00000|(pd_entry<<12))+(pt_entry*4));
     *mod_address = (base&0xFFFFF000)|opt1|opt2;
-    //#ifdef DEBUG
+    #ifdef DEBUG
     printf("value for entry n.: %d is: %x\n", pt_entry,mod_address);
-    //#endif
+    #endif
 }
 
 /**
@@ -339,5 +339,10 @@ unsigned int get_phys_address(unsigned int address){
 }
 
 void free_logical_page(unsigned int address){
+	unsigned int pdir = 0;
+	unsigned int ptable = 0;
+	pdir = BITRANGE (address, 22, 31);
+    ptable = BITRANGE (address, 12, 21);
+    set_pagetable_entry_ric(pdir, ptable ,0x00000000, PD_PRESENT|SUPERVISOR|WRITE, 0);		
 	return;
 }
