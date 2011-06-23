@@ -25,6 +25,14 @@
 #ifndef _TASK__H
 #define _TASK__H
 
+#define MAX_TASKS 10
+
+typedef unsigned int pid_t;
+typedef struct {
+	unsigned int pid;	
+} task_t;
+
+extern task_t task_list[MAX_TASKS];
 void tasks_init();
 
 #endif
