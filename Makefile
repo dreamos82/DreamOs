@@ -66,7 +66,8 @@ OBJ = kernel.o\
       sys/utsname.o\
       sys/dirent.o\
       sys/stat.o\
-      tasks/task_utils.o
+      tasks/task_utils.o\
+      tasks/task.o
 #mem/heap.o\
 #misc/ordered_array.o
 dreamos.img: bl.img kernel.bin
@@ -116,6 +117,7 @@ sys/utsname.o: sys/utsname.c
 sys/dirent.o: sys/dirent.c
 sys/stat.o: sys/stat.c
 tasks/task_utils.o: tasks/task_utils.c
+tasks/task.o: tasks/task_utils.c
 utils:
 	make -f utils/Makefile
 	

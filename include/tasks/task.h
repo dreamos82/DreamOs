@@ -28,11 +28,30 @@
 #define MAX_TASKS 10
 
 typedef unsigned int pid_t;
+
+/*!  \enum task_state
+     \brief I possibili stati di un processo
+ */
+typedef enum {
+	DEAD,
+	READY,
+	SLEEPING
+} task_state;
+
 typedef struct {
-	unsigned int pid;	
+	pid_t pid;	
+	char *name;
+	task_state state;
+	unsigned int eip;
+	unsigned int esp;
+	unsigned int pdir;
+	unsigned int ptable;
 } task_t;
 
 extern task_t task_list[MAX_TASKS];
+extern pid_t current_pid;
+
 void tasks_init();
+void new_task();
 
 #endif

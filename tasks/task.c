@@ -22,9 +22,19 @@
   */
   
 #include <task.h>
+#include <stdio.h>
 
-void tasks_init(){
+pid_t current_pid; 
+task_t task_list[MAX_TASKS];
+
+void tasks_init(){	
+	current_pid = 0;
+	printf("Init Tasks");	
+	//_kprintOk();
 	return;
 }
 
+void new_task(){
+	
+}
 
