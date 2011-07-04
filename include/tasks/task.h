@@ -42,6 +42,9 @@ typedef struct {
 		unsigned int eax;
 } task_register_t;
 
+/*!  \struct task_t
+     \brief Main Task Structure
+ */
 typedef struct {
 	pid_t pid;	
 	char *name;
@@ -57,5 +60,7 @@ extern pid_t current_pid;
 
 void tasks_init();
 void new_task();
+
+unsigned int request_pid();
 
 #endif

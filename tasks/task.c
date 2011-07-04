@@ -40,6 +40,10 @@ void tasks_init(){
 	return;
 }
 
+unsigned int request_pid(){
+	return current_pid++;
+}
+
 void new_task(){
 	
 }
