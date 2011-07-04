@@ -39,6 +39,10 @@ typedef enum {
 } task_state;
 
 typedef struct {
+		unsigned int eax;
+} task_register_t;
+
+typedef struct {
 	pid_t pid;	
 	char *name;
 	task_state state;
