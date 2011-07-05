@@ -39,7 +39,7 @@
 #define LNG_MOUSE_RIGHT "\n[+] Mouse driver: rilevato tasto destro premuto!"
 #define LNG_MOUSE_LEFT "\n[+] Mouse driver: rilevato tasto sinistro premuto!"
 #define LNG_WELCOME "\t\t.: Benvenuto in DreamOS :.\n\n"
-#define LNG_VFS "\nInizializzo VFS\n"
+#define LNG_VFS "\nInizializzo VFS"
 
 // DATE ME NOE!
 // MESI: sereno variabile in tutto il nord Italia

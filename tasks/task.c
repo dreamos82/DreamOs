@@ -27,7 +27,7 @@
 pid_t current_pid; 
 task_t task_list[MAX_TASKS];
 
-void tasks_init(){	
+void tasks_init(){		
 	current_pid = 0;	
 	int i=0;
 	while(i<MAX_TASKS){

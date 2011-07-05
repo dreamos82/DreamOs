@@ -43,10 +43,8 @@
 #include <kheap.h>
 #include <vfs.h>
 #include <initrd.h>
-#ifdef LATEST
-#include <heap.h>
-#endif
 #include <keyboard.h>
+#include <task.h>
 
 #ifdef BOCHS_DEBUG
 #include <debug.h>
@@ -99,16 +97,8 @@ int main_loop(struct multiboot_info *boot_info)
     init_mem();       
     asm("sti");
     _kprintOK();   
-    init_paging();
-    #ifdef LATEST
-    init_newmem();
-	#endif
-    /*
-    init_newmem();     
-    try_newheap();
-    while(1);            
-    */
-    _kprintOK();    	
+    init_paging();    
+    _kprintOK();    	   
     printf("Memory (upper) amount-> %d Mb \n", boot_info->mem_upper/1024);
     printf("Memory (lower) amount-> %d kb \n", boot_info->mem_lower);	
     /** Alloc and fill CPUID structure */
@@ -116,11 +106,11 @@ int main_loop(struct multiboot_info *boot_info)
     get_cpuid (sinfo);        
     vfs_init();
     initfs_init();      
-	if(boot_info->mods_count > 0) printf("Found n. %d Modules\n", boot_info->mods_count);			
+	if(boot_info->mods_count > 0) printf("Found n. %d Modules\n", boot_info->mods_count);				
     printf("\n");
-    printf("----\n");
-    //set_shadow(DISABLED);
-    //printf("The shadow: %d\n", get_shadow());
+    tasks_init();
+    _kprintOK();
+    printf("----\n");    
     printf(LNG_SHELL);    
     _kprintOK();
 		printf("[+] Address: 0x%x\n", &end);		   	        

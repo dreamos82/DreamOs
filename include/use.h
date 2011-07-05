@@ -31,7 +31,7 @@
 #define LNG_SHELL "Carico la shell"
 #define LNG_USER "[?] Inserisci il nome utente: "
 #define LNG_USER_R "[x] Per favore, inserisci il nome utente :)\n"
-#define LNG_PWD "[?] Per favore, inserisci la password: "
+#define LNG_PWD "[?] Per favore, inserisci la password "
 #define LNG_UNKNOWN_CMD "Comando sconosciuto:"
 #define LNG_MOUSE_SETUP "Inizializzo il driver del mouse.."
 #define LNG_MOUSE_REMOVE "Disattivo il driver del mouse.."
@@ -39,7 +39,7 @@
 #define LNG_MOUSE_RIGHT "\n[+] Mouse driver: rilevato tasto destro premuto!"
 #define LNG_MOUSE_LEFT "\n[+] Mouse driver: rilevato tasto sinistro premuto!"
 #define LNG_WELCOME "\t\t.: Benvenuto in DreamOS :.\n\n"
-#define LNG_VFS "\nInizializzo VFS\n"
+#define LNG_VFS "\nInizializzo VFS"
 
 // DATE ME NOE!
 // MESI: sereno variabile in tutto il nord Italia
@@ -69,7 +69,5 @@
 #define LNG_TIMESTAMP "Sono le "
 #define LNG_TIMESTAMP2 " del "
 #define LNG_TIMESTAMP3 " di "
-
-#define LNG_TEST "Username provided\n"
 
 #endif

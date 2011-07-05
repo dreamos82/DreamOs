@@ -108,7 +108,7 @@ void vfs_init(){
 		fd_list[j].offset = 0;
 		j++;
 	}
-
+	_kprintOK();
 }
 
 int get_mountpoint_id(char *path){

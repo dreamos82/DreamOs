@@ -38,7 +38,7 @@
 #define LNG_MOUSE_RIGHT  "\n[+] Mouse driver: right key pressed!"
 #define LNG_MOUSE_LEFT  "\n[+] Mouse driver: left key pressed!"
 #define LNG_WELCOME "\t\t.: Welcome to DreamOS :.\n\n"
-#define LNG_VFS "\nPreparing VFS\n"
+#define LNG_VFS "\nPreparing VFS"
 
 // DATE ME NOE!
 // MONTHS
