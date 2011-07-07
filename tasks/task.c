@@ -44,7 +44,7 @@ unsigned int request_pid(){
 	return current_pid++;
 }
 
-void new_task(){
-	
+void new_task(char *task_name, void (*start_function)()){
+	return;
 }
 

@@ -38,8 +38,19 @@ typedef enum {
 	SLEEPING
 } task_state;
 
-typedef struct {
-		unsigned int eax;
+typedef struct {	
+        unsigned int edi;   //+0
+        unsigned int esi;   //+1
+        unsigned int ebp;  //+2
+        unsigned int null;  //+3
+        unsigned int ebx;  //+4
+        unsigned int edx;  //+5
+        unsigned int ecx;  //+6
+        unsigned int eax;  //+7
+        unsigned int eip;  //+8
+        unsigned int cs;   //+9
+        unsigned int eflags;  //+10
+        unsigned int fine;    		
 } task_register_t;
 
 /*!  \struct task_t
@@ -48,7 +59,9 @@ typedef struct {
 typedef struct {
 	pid_t pid;	
 	char *name;
+	void (*start_function)();
 	task_state state;
+	task_register_t *registers;
 	unsigned int eip;
 	unsigned int esp;
 	unsigned int pdir;
@@ -59,7 +72,7 @@ extern task_t task_list[MAX_TASKS];
 extern pid_t current_pid;
 
 void tasks_init();
-void new_task();
+void new_task(char*, void (*start_function)());
 
 unsigned int request_pid();
 
