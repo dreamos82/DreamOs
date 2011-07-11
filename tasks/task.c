@@ -23,6 +23,7 @@
   
 #include <task.h>
 #include <stdio.h>
+#include <stddef.h>
 
 pid_t current_pid; 
 task_t task_list[MAX_TASKS];
@@ -33,6 +34,11 @@ void tasks_init(){
 	while(i<MAX_TASKS){
 		task_list[i].pid = 0;
 		task_list[i].pdir = 0x0;
+		task_list[i].state = DEAD;
+		task_list[i].start_function = NULL;
+		task_list[i].esp = 0x0;
+		task_list[i].pdir = 0x0;
+		task_list[i].ptable = 0x0;
 		i++;
 	}
 	printf("Init Tasks");	
@@ -45,6 +51,7 @@ unsigned int request_pid(){
 }
 
 void new_task(char *task_name, void (*start_function)()){
+	unsigned int new_pid = request_pid();
 	return;
 }
 
