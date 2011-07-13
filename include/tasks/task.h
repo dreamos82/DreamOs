@@ -50,7 +50,7 @@ typedef struct {
         unsigned int eip;  //+8
         unsigned int cs;   //+9
         unsigned int eflags;  //+10
-        unsigned int fine;    		
+        unsigned int end;    		
 } task_register_t;
 
 /*!  \struct task_t
@@ -73,6 +73,7 @@ extern pid_t current_pid;
 
 void tasks_init();
 void new_task(char*, void (*start_function)());
+void add_task(unsigned int, task_t);
 
 unsigned int request_pid();
 

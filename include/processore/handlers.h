@@ -96,7 +96,10 @@
 #define IRQ(n)\
     __asm__("INT_"#n":"\
             SAVE_CONTEXT\
+            "movl %esp, %eax;"\
+			"pushl %eax;"\
             "call _irqinterrupt;"\
+            "popl %eax;"\
             RESTORE\
             "iret;")
 

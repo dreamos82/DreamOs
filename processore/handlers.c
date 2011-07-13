@@ -159,7 +159,7 @@ void _globalException(int n, int error)
   }
 }
 
-void _irqinterrupt(){
+void _irqinterrupt(unsigned int *esp){
     int irqn;
     irqn = get_current_irq();  
     IRQ_s* tmpHandler; 

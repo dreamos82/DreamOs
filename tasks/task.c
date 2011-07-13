@@ -24,6 +24,7 @@
 #include <task.h>
 #include <stdio.h>
 #include <stddef.h>
+#include <string.h>
 
 pid_t current_pid; 
 task_t task_list[MAX_TASKS];
@@ -45,13 +46,19 @@ void tasks_init(){
 	//_kprintOk();
 	return;
 }
-
+/**TODO: add pid number check*/
 unsigned int request_pid(){
 	return current_pid++;
 }
 
 void new_task(char *task_name, void (*start_function)()){
+	asm("cli");
+	task_t new_task;
 	unsigned int new_pid = request_pid();
+	strcpy(new_task.name, task_name);
+	new_task.pid = new_pid;			
+	new_task.eip = (unsigned int)start_function;	
+	asm("sti");
 	return;
 }
 
