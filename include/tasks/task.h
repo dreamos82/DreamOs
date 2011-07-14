@@ -26,6 +26,7 @@
 #define _TASK__H
 
 #define MAX_TASKS 10
+#define STACK_SIZE 0x1000 //Dimensione dello stack
 
 typedef unsigned int pid_t;
 

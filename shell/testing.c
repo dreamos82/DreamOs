@@ -262,3 +262,8 @@ void try_mapaddress(){
 	//map_kernel();
 	return;
 }
+
+void try_tasksetup(){
+	printf("Testing task creation functions:\n");
+	return;
+}
