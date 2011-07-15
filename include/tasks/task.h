@@ -27,7 +27,7 @@
 
 #define MAX_TASKS 10
 #define STACK_SIZE 0x1000 //Dimensione dello stack
-
+#define NAME_LENGTH 30 //Task name length
 typedef unsigned int pid_t;
 
 /*!  \enum task_state
@@ -59,7 +59,7 @@ typedef struct {
  */
 typedef struct {
 	pid_t pid;	
-	char *name;
+	char name[NAME_LENGTH];
 	void (*start_function)();
 	task_state state;
 	task_register_t *registers;
@@ -73,9 +73,10 @@ extern task_t task_list[MAX_TASKS];
 extern pid_t current_pid;
 
 void tasks_init();
-void new_task(char*, void (*start_function)());
-void add_task(unsigned int, task_t);
+void add_task(pid_t, task_t*);
+task_t get_task(pid_t);
 
+pid_t new_task(char*, void (*start_function)());
 unsigned int request_pid();
 
 #endif

@@ -40,6 +40,7 @@ unsigned int map_kernel(){
 	unsigned int *pagetable;
 	unsigned int i=0;	
 	unsigned int j=0;
+	/** Request physical space for pagedir and pagetable*/ 	
 	pagedir = create_pageDir();
 	pagetable = create_pageTable();	
 	//set_pagedir_entry_ric(1023, fis_address, PD_PRESENT|SUPERVISOR, 0);

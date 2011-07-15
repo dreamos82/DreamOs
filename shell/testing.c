@@ -30,9 +30,7 @@
 #include <unistd.h>
 #include <user_shell.h>
 #include <task_utils.h>
-#ifdef LATEST
-#include <heap.h>
-#endif
+#include <task.h>
 
 //multiboot_info_t *boot_informations;
 char *module_start;
@@ -264,6 +262,13 @@ void try_mapaddress(){
 }
 
 void try_tasksetup(){
+	unsigned int task_pid;
+	task_t _task;
 	printf("Testing task creation functions:\n");
+	task_pid = new_task("test", try_tasksetup);
+	printf("Pid Obtained: %d\n", task_pid);
+	_task = get_task(task_pid);
+	printf("Task state: %d\n", _task.state);
+	printf(" ----name:: %s\n", _task.name);
 	return;
 }

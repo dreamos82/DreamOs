@@ -52,16 +52,36 @@ unsigned int request_pid(){
 	return current_pid++;
 }
 
-void new_task(char *task_name, void (*start_function)()){
+/**
+ * That function add a task to the current task list 
+ * @author Ivan Gualandri
+ * @version 1.0
+ */
+void add_task(pid_t pid, task_t* cur_task){
+	task_list[pid] = *cur_task;
+}
+
+/**
+ * Retrieve  the task given the pid
+ * @author Ivan Gualandri
+ * @version 1.0
+ * @param pid task pid
+ */
+task_t get_task(pid_t pid){
+	return task_list[pid];	
+}
+
+pid_t new_task(char *task_name, void (*start_function)()){
 	asm("cli");
 	task_t new_task;
-	unsigned int new_pid = request_pid();
+	unsigned int new_pid = request_pid();	
 	strcpy(new_task.name, task_name);
 	new_task.pid = new_pid;			
 	new_task.eip = (unsigned int)start_function;	
 	new_task.esp = (unsigned int) kmalloc(STACK_SIZE) + STACK_SIZE - 100;
-	
+	new_task.state = READY;
+	add_task(new_task.pid, &new_task);
 	asm("sti");
-	return;
+	return new_pid;
 }
 

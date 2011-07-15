@@ -527,9 +527,6 @@ void tester(){
 					{ "try_shadow", try_shadow},
 					{ "try_mapaddress", try_mapaddress},
 					{ "try_tasksetup", try_tasksetup},
-					#ifdef LATEST
-					{ "try_newheap", try_newheap},
-					#endif
 					{ "--help", help_tester },
 					};
 	if (argc != 2) {
