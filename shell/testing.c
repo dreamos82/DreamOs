@@ -265,10 +265,16 @@ void try_tasksetup(){
 	unsigned int task_pid;
 	task_t _task;
 	printf("Testing task creation functions:\n");
-	task_pid = new_task("test", try_tasksetup);
+	task_pid = new_task("test", task_test);	
 	printf("Pid Obtained: %d\n", task_pid);
 	_task = get_task(task_pid);
 	printf("Task state: %d\n", _task.state);
 	printf(" ----name:: %s\n", _task.name);
+	printf("Calling start function...\n");
+	_task.start_function();
 	return;
+}
+
+void task_test(){
+	printf("Hi, i'm a freshly created task!!!\n");
 }

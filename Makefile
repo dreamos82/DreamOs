@@ -30,6 +30,7 @@ CFLAGS = -nostdlib\
 	 -I./include/fs\
 	 -I./include/sys \
 	 -I./include/tasks\
+	 -I./include/tasks/tss\
 	 -DBOCHS_DEBUG\
 	 -D$(MEMORY)
 
@@ -67,7 +68,8 @@ OBJ = kernel.o\
       sys/dirent.o\
       sys/stat.o\
       tasks/task_utils.o\
-      tasks/task.o
+      tasks/task.o\
+      tasks/tss/tss.o
 #mem/heap.o\
 #misc/ordered_array.o
 dreamos.img: bl.img kernel.bin
@@ -118,6 +120,7 @@ sys/dirent.o: sys/dirent.c
 sys/stat.o: sys/stat.c
 tasks/task_utils.o: tasks/task_utils.c
 tasks/task.o: tasks/task_utils.c
+tasks/tss/tss.o: tasks/tss/tss.c
 utils:
 	make -f utils/Makefile
 	

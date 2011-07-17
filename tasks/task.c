@@ -26,6 +26,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <kheap.h>
+#include <tss.h>
 
 pid_t current_pid; 
 task_t task_list[MAX_TASKS];
@@ -76,10 +77,13 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	task_t new_task;
 	unsigned int new_pid = request_pid();	
 	strcpy(new_task.name, task_name);
+	new_task.start_function = start_function;
 	new_task.pid = new_pid;			
 	new_task.eip = (unsigned int)start_function;	
 	new_task.esp = (unsigned int) kmalloc(STACK_SIZE) + STACK_SIZE - 100;
 	new_task.state = READY;
+	new_task.registers = (task_register_t*)new_task.esp;
+	new_tss(new_task.registers, start_function);
 	add_task(new_task.pid, &new_task);
 	asm("sti");
 	return new_pid;
