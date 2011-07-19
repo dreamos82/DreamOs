@@ -25,6 +25,10 @@
  #ifndef TASK_UT_H
  #define TASK_UT_H
  
- unsigned int map_kernel();
+ typedef struct {
+	 unsigned int page_dir;
+	 unsigned int page_table;
+ } table_address_t;
+ table_address_t map_kernel();
  
  #endif

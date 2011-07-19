@@ -33,7 +33,8 @@
    * @author Ivan Gualandri
    * @version 1.0 
    */
-unsigned int map_kernel(){
+table_address_t map_kernel(){
+	table_address_t logicmemory_root;
 	unsigned int *logic_pd_address = kmalloc(8*4096);
 	unsigned int *logic_pt_address = kmalloc(8*4096);
 	unsigned int *pagedir;
@@ -48,18 +49,20 @@ unsigned int map_kernel(){
 	new_pd_node->size = 8 * 4096;*/
 	while(i < 8){
 		map_address(pagedir, logic_pd_address);
-		map_address(pagetable, logic_pt_address);
+		map_address(pagetable, logic_pt_address);		
 		pagedir+=4096;
 		pagetable+=4096;
 		i++;
-	}
+	}	
 	//set_pagedir_entry_ric(0, (unsigned int)current_page_table, PD_PRESENT|SUPERVISOR|WRITE,0);    
 	while(j<PD_LIMIT){
 		pagedir[j] = 0x0;
 		pagetable[j] = (j*0x1000&0xFFFFF0)|PD_PRESENT|SUPERVISOR|WRITE|0;
 		j++;
-	}	
+	}
 	pagedir[0] = ((unsigned int)pagetable&0xFFFFF000)|PD_PRESENT|SUPERVISOR|WRITE|0;
 	pagedir[1023] = ((unsigned int)pagedir&0xFFFFF000)|PD_PRESENT|SUPERVISOR|0;	
-	return 0;
+	logicmemory_root.page_dir = (unsigned int) pagedir;
+	logicmemory_root.page_table = (unsigned int) pagetable;
+	return logicmemory_root;
 }

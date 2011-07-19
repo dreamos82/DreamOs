@@ -270,7 +270,7 @@ void try_tasksetup(){
 	_task = get_task(task_pid);
 	printf("Task state: %d\n", _task.state);
 	printf(" ----name:: %s\n", _task.name);
-	printf("Calling start function...\n");
+	printf("Calling start function...\n");	
 	_task.start_function();
 	return;
 }

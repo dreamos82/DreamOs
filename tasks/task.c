@@ -27,6 +27,7 @@
 #include <string.h>
 #include <kheap.h>
 #include <tss.h>
+#include <task_utils.h>
 
 pid_t current_pid; 
 task_t task_list[MAX_TASKS];
@@ -72,9 +73,17 @@ task_t get_task(pid_t pid){
 	return task_list[pid];	
 }
 
+/**
+ * Create a new task 
+ * @author Ivan Gualandri
+ * @version 1.0
+ * @param task_name The name of the task
+ * @param start_function the entry point of the task.
+ */
 pid_t new_task(char *task_name, void (*start_function)()){
 	asm("cli");
 	task_t new_task;
+	table_address_t local_table;
 	unsigned int new_pid = request_pid();	
 	strcpy(new_task.name, task_name);
 	new_task.start_function = start_function;
@@ -84,7 +93,10 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	new_task.state = READY;
 	new_task.registers = (task_register_t*)new_task.esp;
 	new_tss(new_task.registers, start_function);
-	add_task(new_task.pid, &new_task);
+	local_table = map_kernel();
+	new_task.pdir = local_table.page_dir;
+	new_task.ptable = local_table.page_table;
+	add_task(new_task.pid, &new_task);	
 	asm("sti");
 	return new_pid;
 }
