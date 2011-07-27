@@ -28,6 +28,7 @@
 #define MAX_TASKS 10
 #define STACK_SIZE 0x1000 //Dimensione dello stack
 #define NAME_LENGTH 30 //Task name length
+
 typedef unsigned int pid_t;
 
 /*!  \enum task_state
@@ -43,14 +44,17 @@ typedef struct {
         unsigned int edi;   //+0
         unsigned int esi;   //+1
         unsigned int ebp;  //+2
-        unsigned int null;  //+3
+        unsigned int esp;  //+3 (could be null)
         unsigned int ebx;  //+4
         unsigned int edx;  //+5
         unsigned int ecx;  //+6
         unsigned int eax;  //+7
-        unsigned int eip;  //+8
-        unsigned int cs;   //+9
-        unsigned int eflags;  //+10
+        unsigned int ds;	//+9
+        unsigned int es;    //+10
+        unsigned int fs;    //+11
+        unsigned int eip;  //+12
+        unsigned int cs;   //+13
+        unsigned int eflags;  //+14
         unsigned int end;    		
 } task_register_t;
 

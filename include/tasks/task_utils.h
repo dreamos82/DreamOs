@@ -29,6 +29,7 @@
 	 unsigned int page_dir;
 	 unsigned int page_table;
  } table_address_t;
+ 
  table_address_t map_kernel();
  
  #endif
