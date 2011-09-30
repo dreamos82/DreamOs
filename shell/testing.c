@@ -145,6 +145,7 @@ void help_tester()
 		"  -> try_check         - Test username if exist\n"
 		"  -> test_stat			- Test stat function\n"
 		"  -> try_mapaddress    - Test map address function\n"
+		"  -> try_tasksetup     - Test map address function\n"
 		);	
 }
 
