@@ -100,7 +100,7 @@ unsigned int* create_pageDir(){
 }
 
 /**
-  * Crea una nuova page_table
+  * Crea una nuova page_table in modalita' lineare
   * @author Ivan Gualandri
   * @version 1.0
   * @return page_table address
@@ -315,7 +315,7 @@ void map_address(unsigned int fis_address, unsigned int logic_address){
 		set_pagedir_entry_ric(pdir, (unsigned int)new_pagetable, PD_PRESENT|SUPERVISOR, 0);
 		set_pagetable_entry_ric(pdir, ptable, fis_address, PD_PRESENT|SUPERVISOR, 0);
 	} else {
-		printf("Else TODO %u %u\n", fis_address, get_pagedir_entry(pdir));		
+		printf("Else %u %u\n", fis_address, get_pagedir_entry(pdir));		
 		set_pagetable_entry_ric(pdir, ptable ,fis_address, PD_PRESENT|SUPERVISOR|WRITE, 0);		
 	}
 	return;
