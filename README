@@ -51,13 +51,20 @@ Per compilare DreamOS bisogna prima di tutto avere una distribuzione Linux insta
 
 Opzionalmente un emulatore di cpu se non si vuole provare il sistema operativo su hardware reale e SVN se volete scaricare le versioni più recenti da repository.
 
-	- b -- Scaricare da SVN ---
+	- b -- Scaricare da GIT ---
 
-Potete scaricare i sorgenti di DreamOS da SVN attraverso il repository svn://svn.berlios.de/dreamos/trunk
-Per i meno pratici il comando da eseguire è: (assicuratevi di avere il pacchetto SVN installato)
-	svn checkout svn://svn.berlios.de/dreamos/trunk
+Potete scaricare i sorgenti di DreamOS da GIT attraverso il repository su github all'indirizzo: https://github.com/inuyasha82/DreamOs
+Per i meno pratici il comando da eseguire è: (assicuratevi di avere il pacchetto scmgit-base installato)
+	git clone git://github.com/inuyasha82/DreamOs.git
 
-Alla fine del download dovreste avere una cartella trunk/ con tutti i sorgenti al suo interno
+Alla fine del download dovreste avere una cartella DeamOs/ con tutti i sorgenti al suo interno.
+
+Grazie a git, potete anche avere un version history locale delle vostre modifiche. Quindi se volete provare a modificare i sorgenti per fare delle prove, vi basta fare le vostre modifiche e dopo di che dare il commando 
+
+	git commit 
+
+questo salvera' le vostre modifiche nel repository locale. 
+
 
 	- c -- Compilare DreamOS --
 
