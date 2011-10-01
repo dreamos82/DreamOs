@@ -30,12 +30,10 @@
 #include <task_utils.h>
 
 pid_t current_pid; 
-int cur_free_index; 
 task_t task_list[MAX_TASKS];
 
 void tasks_init(){		
-	current_pid = 0;
-	current_free_index=0;	
+	current_pid = 0;	
 	int i=0;
 	while(i<MAX_TASKS){
 		task_list[i].pid = 0;

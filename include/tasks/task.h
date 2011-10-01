@@ -25,7 +25,7 @@
 #ifndef _TASK__H
 #define _TASK__H
 
-#define MAX_TASKS 20
+#define MAX_TASKS 10
 #define STACK_SIZE 0x1000 //Dimensione dello stack
 #define NAME_LENGTH 30 //Task name length
 
