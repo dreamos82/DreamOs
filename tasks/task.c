@@ -72,7 +72,14 @@ void add_task(pid_t pid, task_t* cur_task){
  * @param pid task pid
  */
 task_t get_task(pid_t pid){
-	return task_list[pid];	
+	int i = 0;
+	while(i<MAX_TASKS) {
+		if(task_list[i].pid == pid) {
+			return task_list[i];
+		}		
+		i++;
+	}
+	return task_list[0];	
 }
 
 /**
@@ -103,3 +110,7 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	return new_pid;
 }
 
+void release_task(){
+	return;
+}
+	
