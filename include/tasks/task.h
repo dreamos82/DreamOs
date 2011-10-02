@@ -79,7 +79,7 @@ extern pid_t current_pid;
 
 void tasks_init();
 void add_task(pid_t, task_t*);
-task_t get_task(pid_t);
+task_t* get_task(pid_t);
 
 pid_t new_task(char*, void (*start_function)());
 unsigned int request_pid();

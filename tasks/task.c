@@ -71,15 +71,15 @@ void add_task(pid_t pid, task_t* cur_task){
  * @version 1.0
  * @param pid task pid
  */
-task_t get_task(pid_t pid){
+task_t* get_task(pid_t pid){
 	int i = 0;
 	while(i<MAX_TASKS) {
 		if(task_list[i].pid == pid) {
-			return task_list[i];
+			return &(task_list[i]);
 		}		
 		i++;
 	}
-	return task_list[0];	
+	return NULL;	
 }
 
 /**
