@@ -62,7 +62,8 @@ unsigned int request_pid(){
  * @version 1.0
  */
 void add_task(pid_t pid, task_t* cur_task){
-	task_list[pid] = *cur_task;
+	task_list[cur_free_index] = *cur_task;
+	cur_free_index++;
 }
 
 /**
@@ -110,7 +111,12 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	return new_pid;
 }
 
-void release_task(){
+void release_task(unsigned int pid){
+	task_t* _task;
+	_task = get_task(pid);
+	printf("Pid of task to delete: %d\n", _task->pid);	
+	_task->state = DEAD;
+	printf("New task state: %d\n", _task->state);	
 	return;
 }
 	

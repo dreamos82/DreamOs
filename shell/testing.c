@@ -269,10 +269,11 @@ void try_tasksetup(){
 	task_pid = new_task("test", task_test);	
 	printf("Pid Obtained: %d\n", task_pid);
 	_task = *get_task(task_pid);
-	printf("Task state: %d\ PID: %d", _task.state, _task.pid);
+	printf("Task state: %d PID: %d", _task.state, _task.pid);
 	printf(" ----name:: %s\n", _task.name);
 	printf("Calling start function...\n");	
 	_task.start_function();
+	release_task(task_pid);
 	return;
 }
 

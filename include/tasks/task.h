@@ -83,6 +83,6 @@ task_t* get_task(pid_t);
 
 pid_t new_task(char*, void (*start_function)());
 unsigned int request_pid();
-void release_task();
+void release_task(unsigned int);
 
 #endif
