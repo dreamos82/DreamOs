@@ -72,7 +72,16 @@ typedef struct {
 	unsigned int esp;
 	unsigned int pdir;
 	unsigned int ptable;
+	struct task_t *next;
 } task_t;
+
+/*!  \struct task_list_t
+     \brief Task List Structure
+ */
+typedef struct {
+	task_t *head;
+	task_t *tail;
+} task_list_t; 
 
 extern task_t task_list[MAX_TASKS];
 extern pid_t current_pid;

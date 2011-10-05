@@ -32,11 +32,14 @@
 pid_t current_pid; 
 int cur_free_index; 
 task_t task_list[MAX_TASKS];
+task_list_t _task_list;
 
 void tasks_init(){		
 	current_pid = 0;
 	cur_free_index=0;	
 	int i=0;
+	_task_list.head = NULL;
+	_task_list.tail = NULL;
 	while(i<MAX_TASKS){
 		task_list[i].pid = 0;
 		task_list[i].pdir = 0x0;
