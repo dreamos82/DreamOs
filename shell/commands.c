@@ -25,9 +25,7 @@
 #include <testing.h>
 #include <fcntl.h>
 #include <stat.h>
-#ifdef LATEST
-#include <heap.h>
-#endif
+#include <task.h>
 
 int argc;
 char **argv;
@@ -527,6 +525,7 @@ void tester(){
 					{ "try_shadow", try_shadow},
 					{ "try_mapaddress", try_mapaddress},
 					{ "try_tasksetup", try_tasksetup},
+					{ "try_tasklist", test_tasklist},
 					{ "--help", help_tester },
 					};
 	if (argc != 2) {

@@ -146,6 +146,7 @@ void help_tester()
 		"  -> test_stat			- Test stat function\n"
 		"  -> try_mapaddress    - Test map address function\n"
 		"  -> try_tasksetup     - Test map address function\n"
+		"  -> try_tasklist		- Test new task list\n" 
 		);	
 }
 

@@ -35,14 +35,22 @@ task_t task_list[MAX_TASKS];
 task_list_t _task_list;
 
 void tasks_init(){		
+	task_t *task;
 	current_pid = 0;
 	cur_free_index=0;	
 	int i=0;
 	_task_list.head = NULL;
 	_task_list.tail = NULL;
+	task = (task_t*)kmalloc(sizeof(task_t));
+	task->pid = 12;
+	task->pdir = 0x0;
+	task->state = READY;
+	task->start_function = NULL;
+	_task_list.head = task;
+	_task_list.tail = task;	
+	
 	while(i<MAX_TASKS){
-		task_list[i].pid = 0;
-		task_list[i].pdir = 0x0;
+		task_list[i].pid = 0;		
 		task_list[i].state = DEAD;
 		task_list[i].start_function = NULL;
 		task_list[i].esp = 0x0;
@@ -122,4 +130,9 @@ void release_task(unsigned int pid){
 	printf("New task state: %d\n", _task->state);	
 	return;
 }
-	
+
+void test_tasklist(){
+	task_t *mytask;
+	mytask = (task_t*)_task_list.head;
+	printf("Pid: %d - STATUS: %d\n", mytask->pid, mytask->state);
+}
