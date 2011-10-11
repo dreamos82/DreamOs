@@ -46,6 +46,7 @@ void tasks_init(){
 	task->pdir = 0x0;
 	task->state = READY;
 	task->start_function = NULL;
+	task->next = NULL;
 	_task_list.head = task;
 	_task_list.tail = task;	
 	
@@ -73,6 +74,7 @@ unsigned int request_pid(){
  * @version 1.0
  */
 void add_task(pid_t pid, task_t* cur_task){
+	//TODO: inserimento in coda dei task.	
 	task_list[cur_free_index] = *cur_task;
 	cur_free_index++;
 }
@@ -102,7 +104,10 @@ task_t* get_task(pid_t pid){
  * @param start_function the entry point of the task.
  */
 pid_t new_task(char *task_name, void (*start_function)()){
-	asm("cli");
+	asm("cli");	
+	/*task_t *task;
+	task = malloc(sizeof(task_t));
+	task->next = NULL;*/
 	task_t new_task;
 	table_address_t local_table;
 	unsigned int new_pid = request_pid();	

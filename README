@@ -122,8 +122,8 @@ Inoltre sono presenti alcuni comandi che rimarcano la controparte *NIX come unam
 
 	- a -- Come segnalare Bug -
 	
-Per segnalare bug riscontrati durante l'uso di DreamOS bisogna segnalarli usando il modulo di berliOS presente alla pagina:
-	http://developer.berlios.de/bugs/?group_id=9715
+Per segnalare bug riscontrati durante l'uso di DreamOS bisogna segnalarli usando il modulo di github presente alla pagina:
+	https://github.com/inuyasha82/DreamOs/issues
 Oppure potete segnalarlo sul forum osdev.it, precisamente:
 	http://forum.osdev.it/viewforum.php?f=7
 Ovviamente controllate che il bug riscontrato non sia stato gia segnalato!
