@@ -107,7 +107,18 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	asm("cli");	
 	/*task_t *task;
 	task = malloc(sizeof(task_t));
-	task->next = NULL;*/
+	task->next = NULL;
+	task->pid = new_pid;
+	task->eip = start_function;
+	task->esp = kmalloc(STACK_SIZE) + STACK_SIZE-100;
+	task->state = NEW;
+	task->registers = (task_register_t*)new_task.esp;
+	new_tss(new_task.registers, start_function);
+	local_table = map_kernel();
+	task.pdir = local_table.page_dir;
+	task.ptable = local_table.page_table;
+	add_task(task.pid, &new_task);	
+	*/
 	task_t new_task;
 	table_address_t local_table;
 	unsigned int new_pid = request_pid();	
