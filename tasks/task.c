@@ -49,7 +49,7 @@ void tasks_init(){
 	task->next = NULL;
 	_task_list.head = task;
 	_task_list.tail = task;	
-	
+	//Da eliminare!
 	while(i<MAX_TASKS){
 		task_list[i].pid = 0;		
 		task_list[i].state = DEAD;
@@ -75,8 +75,24 @@ unsigned int request_pid(){
  */
 void add_task(pid_t pid, task_t* cur_task){
 	//TODO: inserimento in coda dei task.	
+	task_t *_task = (task_t *)_task_list.head;
+	while(_task->next != NULL){
+		_task = _task->next;
+	}	
+	_task->next = cur_task;
+	
 	task_list[cur_free_index] = *cur_task;
 	cur_free_index++;
+}
+
+void printsize(){
+	int i = 0;
+	task_t *_task = (task_t *)_task_list.head;
+	while(_task->next != NULL){
+		_task = _task->next;
+		i++;
+	}	
+	printf("I value: %d\n", i);
 }
 
 /**
@@ -105,23 +121,23 @@ task_t* get_task(pid_t pid){
  */
 pid_t new_task(char *task_name, void (*start_function)()){
 	asm("cli");	
+	task_t new_task;
+	table_address_t local_table;
+	unsigned int new_pid = request_pid();	
 	/*task_t *task;
-	task = malloc(sizeof(task_t));
+	task = kmalloc(sizeof(task_t));
 	task->next = NULL;
 	task->pid = new_pid;
 	task->eip = start_function;
 	task->esp = kmalloc(STACK_SIZE) + STACK_SIZE-100;
 	task->state = NEW;
 	task->registers = (task_register_t*)new_task.esp;
-	new_tss(new_task.registers, start_function);
-	local_table = map_kernel();
-	task.pdir = local_table.page_dir;
-	task.ptable = local_table.page_table;
-	add_task(task.pid, &new_task);	
-	*/
-	task_t new_task;
-	table_address_t local_table;
-	unsigned int new_pid = request_pid();	
+	new_tss(new_task.registers, start_function);*/
+	//local_table = map_kernel();
+	//task->pdir = local_table.page_dir;
+	//task->ptable = local_table.page_table;
+	//add_task(task->pid, task);	
+	
 	strcpy(new_task.name, task_name);
 	new_task.start_function = start_function;
 	new_task.pid = new_pid;			
@@ -150,5 +166,8 @@ void release_task(unsigned int pid){
 void test_tasklist(){
 	task_t *mytask;
 	mytask = (task_t*)_task_list.head;
-	printf("Pid: %d - STATUS: %d\n", mytask->pid, mytask->state);
+	if(mytask!=NULL){
+		printf("Pid: %d - STATUS: %d\n", mytask->pid, mytask->state);
+	} else printf("List NULL\n");
+	printsize();
 }
