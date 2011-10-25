@@ -50,7 +50,8 @@ unsigned int request_pid(){
  * @author Ivan Gualandri
  * @version 1.0
  */
-void add_task(pid_t pid, task_t* cur_task){
+void add_task(pid_t pid, task_t* cur_task){	
+	printf("Placeholder for new task\n");
 }
 
 void printsize(){
@@ -78,7 +79,15 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	task_t *new_task;
 	table_address_t local_table;
 	unsigned int new_pid = request_pid();	
-	new_task = kmalloc(sizeof(task_t)); 
+	new_task = (task_t*)kmalloc(sizeof(task_t)); 	
+	new_task->next = NULL;
+	new_task->pid = new_pid;
+	new_task->eip = (unsigned int)start_function;
+	new_task->esp = (unsigned int)kmalloc(STACK_SIZE) + STACK_SIZE-100;
+	new_task->state = NEW;
+	new_task->registers = (task_register_t*)new_task->esp;
+	new_tss(new_task->registers, start_function);
+	add_task(new_task->pid, new_task);		
 	/*task_t *task;
 	task = kmalloc(sizeof(task_t));
 	task->next = NULL;
