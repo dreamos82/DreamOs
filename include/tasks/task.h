@@ -83,7 +83,8 @@ typedef struct {
 	task_t *tail;
 } task_list_t; 
 
-extern task_t task_list[MAX_TASKS];
+//extern task_t task_list[MAX_TASKS];
+extern task_list_t task_list;
 extern pid_t current_pid;
 
 void tasks_init();
