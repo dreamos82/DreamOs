@@ -50,8 +50,18 @@ unsigned int request_pid(){
  * @author Ivan Gualandri
  * @version 1.0
  */
-void add_task(pid_t pid, task_t* cur_task){	
+void add_task(pid_t pid, task_t* n_task){	
 	printf("Placeholder for new task\n");
+	if(task_list.head == NULL){
+		task_list.head = n_task;
+		task_list.tail = n_task;
+	} else {
+		task_t* cur_task;
+		cur_task = (task_t*)task_list.head;
+		while(cur_task->next != NULL){
+			cur_task = cur_task->next;
+		}
+	}
 }
 
 void printsize(){
