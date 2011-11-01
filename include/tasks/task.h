@@ -95,5 +95,7 @@ pid_t new_task(char*, void (*start_function)());
 unsigned int request_pid();
 void release_task(unsigned int);
 
+int isEmpty();
+
 void test_tasklist();
 #endif

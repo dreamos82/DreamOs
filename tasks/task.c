@@ -88,6 +88,7 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	table_address_t local_table;
 	unsigned int new_pid = request_pid();	
 	new_task = (task_t*)kmalloc(sizeof(task_t)); 	
+	strcpy(new_task->name, task_name);
 	new_task->next = NULL;
 	new_task->pid = new_pid;
 	new_task->eip = (unsigned int)start_function;
@@ -129,7 +130,8 @@ void test_tasklist(){
 	int i = 0;
 	local_task = (task_t*) task_list.head;
 	while(local_task!=NULL){
-		local_task = local_task->next;
+		printf("%d %s - ", local_task->pid, local_task->name);
+		local_task = local_task->next;		
 		i++;
 	}
 	printf("TaskList size: %d\n", i);
