@@ -50,7 +50,7 @@ unsigned int request_pid(){
  * @author Ivan Gualandri
  * @version 1.0
  */
-void add_task(pid_t pid, task_t* n_task){	
+void enqueue_task(pid_t pid, task_t* n_task){	
 	printf("Placeholder for new task\n");
 	if(task_list.head == NULL){
 		printf("NULL");
@@ -96,7 +96,7 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	new_task->state = NEW;
 	new_task->registers = (task_register_t*)new_task->esp;
 	new_tss(new_task->registers, start_function);
-	add_task(new_task->pid, new_task);		
+	enqueue_task(new_task->pid, new_task);		
 	/*task_t *task;
 	task = kmalloc(sizeof(task_t));
 	task->next = NULL;
@@ -114,7 +114,7 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	return new_pid;
 }
 
-void release_task(unsigned int pid){
+task_t* dequeue_task(){
 	//placeholder for release_task. 
 	return;
 }
