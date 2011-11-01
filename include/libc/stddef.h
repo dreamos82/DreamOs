@@ -37,6 +37,14 @@
 
 #define KERNEL_SIZE 0x200
 
+#ifndef TRUE 
+#define TRUE 1
+#endif
+
+#ifndef FALSE
+#define FALSE 0 
+#endif
+
 typedef unsigned int size_t;
 typedef unsigned long long qword;
 typedef unsigned short int ushort;

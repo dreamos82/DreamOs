@@ -53,15 +53,12 @@ unsigned int request_pid(){
 void add_task(pid_t pid, task_t* n_task){	
 	printf("Placeholder for new task\n");
 	if(task_list.head == NULL){
-		task_list.head = n_task;
-		task_list.tail = n_task;
+		printf("NULL");
+		task_list.head = n_task;		
 	} else {
-		task_t* cur_task;
-		cur_task = (task_t*)task_list.head;
-		while(cur_task->next != NULL){
-			cur_task = cur_task->next;
-		}
+		task_list.tail->next = n_task;		
 	}
+	task_list.tail = n_task;
 }
 
 void printsize(){
@@ -75,6 +72,7 @@ void printsize(){
  */
 task_t* get_task(pid_t pid){
 	//Placeholtder for get_task
+	return (task_t *) NULL;
 }
 
 /**
@@ -111,6 +109,7 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	//task->pdir = local_table.page_dir;
 	//task->ptable = local_table.page_table;
 	//add_task(task->pid, task);		
+	asm("sti");
 	return new_pid;
 }
 
@@ -119,6 +118,19 @@ void release_task(unsigned int pid){
 	return;
 }
 
+int isEmpty(){
+	if(task_list.head == task_list.tail) return TRUE;
+	else return FALSE;
+}
+
 void test_tasklist(){
 	//Placeholder
+	task_t* local_task;
+	int i = 0;
+	local_task = (task_t*) task_list.head;
+	while(local_task!=NULL){
+		local_task = local_task->next;
+		i++;
+	}
+	printf("TaskList size: %d\n", i);
 }

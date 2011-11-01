@@ -264,18 +264,20 @@ void try_mapaddress(){
 }
 
 void try_tasksetup(){
-	unsigned int task_pid;
 	task_t _task;
-	printf("Testing task creation functions:\n");
+	unsigned int task_pid;	
 	task_pid = new_task("test", task_test);	
+	printf("Testing task creation functions:\n");
 	printf("Pid Obtained: %d\n", task_pid);
+	test_tasklist();
+	/*	
 	_task = *get_task(task_pid);
 	printf("Task state: %d PID: %d", _task.state, _task.pid);
 	printf(" ----name:: %s\n", _task.name);
 	printf("Calling start function...\n");	
 	_task.start_function();
 	release_task(task_pid);
-	return;
+	return;*/
 }
 
 void task_test(){
