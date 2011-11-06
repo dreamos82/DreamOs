@@ -61,7 +61,21 @@ void enqueue_task(pid_t pid, task_t* n_task){
 	task_list.tail = n_task;
 }
 
-void printsize(){
+/**
+ * That function get the size of the tasklist. 
+ * @author Ivan Gualandri
+ * @version 1.0
+ * @return Task List size
+ */
+int get_tasklist_size(){
+	task_t* head;
+	int i=0;
+	head = (task_t*)task_list.head;
+	while(head!=NULL){
+		head = head->next;
+		i++;
+	}
+	return i;
 }
 
 /**
@@ -90,6 +104,7 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	new_task = (task_t*)kmalloc(sizeof(task_t)); 	
 	strcpy(new_task->name, task_name);
 	new_task->next = NULL;
+	new_task->start_function = start_function;
 	new_task->pid = new_pid;
 	new_task->eip = (unsigned int)start_function;
 	new_task->esp = (unsigned int)kmalloc(STACK_SIZE) + STACK_SIZE-100;
@@ -115,8 +130,11 @@ pid_t new_task(char *task_name, void (*start_function)()){
 }
 
 task_t* dequeue_task(){
-	//placeholder for release_task. 
-	return;
+	pid_t pid; 	
+	task_t* _task; 
+	_task = (task_t*)task_list.head;
+	task_list.head = _task->next;
+	return _task;;
 }
 
 int isEmpty(){
