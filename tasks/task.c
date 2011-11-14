@@ -134,12 +134,27 @@ task_t* dequeue_task(){
 	task_t* _task; 
 	_task = (task_t*)task_list.head;
 	task_list.head = _task->next;
-	return _task;;
+	return _task;
 }
 
 int isEmpty(){
 	if(task_list.head == task_list.tail) return TRUE;
 	else return FALSE;
+}
+
+int getTaskListSize(){
+	task_t *_task = task_list.head;
+	int i = 0;
+	while(_task != task_list.tail){
+		_task = _task->next;
+		i++;
+	}
+	return i;
+}
+
+void test_dequeue(){
+	task_t* _task =  dequeue_task();
+	
 }
 
 void test_tasklist(){
