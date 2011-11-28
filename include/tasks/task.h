@@ -96,6 +96,7 @@ unsigned int request_pid();
 task_t* dequeue_task();
 
 int isEmpty();
+int getTaskListSize();
 
 void test_tasklist();
 #endif

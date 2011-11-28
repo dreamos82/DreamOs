@@ -149,7 +149,7 @@ int getTaskListSize(){
 		_task = _task->next;
 		i++;
 	}
-	return i;
+	return i+1;
 }
 
 void test_dequeue(){

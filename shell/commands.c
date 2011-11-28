@@ -468,6 +468,7 @@ void cd( ){
 		}
 		else if(!strncmp(argv[1], "..", 2)) {
 			printf(".. option %s\n", argv[1]);
+			return;
 		}
 		else if(argv[1][0]=='.') {
 			//printf(". option\n");			

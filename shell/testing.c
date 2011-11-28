@@ -270,6 +270,7 @@ void try_tasksetup(){
 	printf("Testing task creation functions:\n");
 	printf("Pid Obtained: %d\n", task_pid);
 	test_tasklist();	
+	//printf("GetTaskListSize: %d\n", getTaskListSize());
 	/*	
 	_task = *get_task(task_pid);
 	printf("Task state: %d PID: %d", _task.state, _task.pid);
