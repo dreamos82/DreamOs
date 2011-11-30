@@ -68,6 +68,7 @@ typedef struct {
 	void (*start_function)();
 	task_state state;
 	task_register_t *registers;
+	unsigned int cur_quants;
 	unsigned int eip;
 	unsigned int esp;
 	unsigned int pdir;

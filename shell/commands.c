@@ -490,7 +490,6 @@ void cd( ){
 		if(dirp!=NULL){			
 			closedir(dirp);
 		}		
-		//printf("path: %s\n", argv[1]);
 		rel_size = strlen(argv[1]) - strlen(mountpoint_list[i].mountpoint);
 		if(i == -1) {			
 			printf("cd: %s: No such file or directory\n", argv[1]);

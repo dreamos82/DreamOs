@@ -31,7 +31,6 @@
 
 pid_t current_pid; 
 int cur_free_index; 
-//task_t task_list[MAX_TASKS];
 task_list_t task_list;
 
 void tasks_init(){
