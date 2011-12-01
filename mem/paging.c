@@ -299,13 +299,17 @@ void map_address(unsigned int fis_address, unsigned int logic_address){
 	/** questa funzione estrapolerà pdentry e ptentry dal logical address e vi mapperà fis_address*/
 	//set_pagedir_entry_ric(1023, fis_address, PD_PRESENT|SUPERVISOR, 0);
 	unsigned int pdir, ptable;
+	#ifdef DEBUG
 	printf("Logic Address: 0x%x\n", logic_address);
+	#endif
 	pdir = 0;
 	ptable =0;
 	pdir = BITRANGE (logic_address, 22, 31);
     ptable = BITRANGE (logic_address, 12, 21);
+    #ifdef DEBUG
     printf("Pdir value: %d, PtableValue: %d\n", pdir, ptable);
     printf("Pdir entry value: %d\n", get_pagedir_entry(pdir));
+    #endif
     if(get_pagedir_entry(pdir)==NULL){		
 		/**TODO
 		 * Crate_page_table
@@ -315,7 +319,9 @@ void map_address(unsigned int fis_address, unsigned int logic_address){
 		set_pagedir_entry_ric(pdir, (unsigned int)new_pagetable, PD_PRESENT|SUPERVISOR, 0);
 		set_pagetable_entry_ric(pdir, ptable, fis_address, PD_PRESENT|SUPERVISOR, 0);
 	} else {
+		#ifdef DEBUG
 		printf("Else %u %u\n", fis_address, get_pagedir_entry(pdir));		
+		#endif
 		set_pagetable_entry_ric(pdir, ptable ,fis_address, PD_PRESENT|SUPERVISOR|WRITE, 0);		
 	}
 	return;

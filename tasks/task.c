@@ -39,6 +39,7 @@ void tasks_init(){
 	task_list.tail = task_list.head;			
 	current_pid = 0;
 }
+
 /**TODO: add pid number check*/
 unsigned int request_pid(){
 	return current_pid++;
@@ -58,23 +59,6 @@ void enqueue_task(pid_t pid, task_t* n_task){
 		task_list.tail->next = n_task;		
 	}
 	task_list.tail = n_task;
-}
-
-/**
- * That function get the size of the tasklist. 
- * @author Ivan Gualandri
- * @version 1.0
- * @return Task List size
- */
-int get_tasklist_size(){
-	task_t* head;
-	int i=0;
-	head = (task_t*)task_list.head;
-	while(head!=NULL){
-		head = head->next;
-		i++;
-	}
-	return i;
 }
 
 /**
@@ -110,20 +94,10 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	new_task->state = NEW;
 	new_task->registers = (task_register_t*)new_task->esp;
 	new_tss(new_task->registers, start_function);
+	local_table = map_kernel();
+	new_task->pdir = local_table.page_dir;
+	new_task->ptable = local_table.page_table;
 	enqueue_task(new_task->pid, new_task);		
-	/*task_t *task;
-	task = kmalloc(sizeof(task_t));
-	task->next = NULL;
-	task->pid = new_pid;
-	task->eip = start_function;
-	task->esp = kmalloc(STACK_SIZE) + STACK_SIZE-100;
-	task->state = NEW;
-	task->registers = (task_register_t*)new_task.esp;
-	new_tss(new_task.registers, start_function);*/
-	//local_table = map_kernel();
-	//task->pdir = local_table.page_dir;
-	//task->ptable = local_table.page_table;
-	//add_task(task->pid, task);		
 	asm("sti");
 	return new_pid;
 }
@@ -141,6 +115,12 @@ int isEmpty(){
 	else return FALSE;
 }
 
+/**
+ * That function get the size of the tasklist. 
+ * @author Ivan Gualandri
+ * @version 1.0
+ * @return Task List size
+ */
 int getTaskListSize(){
 	task_t *_task = task_list.head;
 	int i = 0;
