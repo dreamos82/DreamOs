@@ -82,6 +82,7 @@ typedef struct {
 typedef struct {
 	task_t *head;
 	task_t *tail;
+	task_t *current;
 } task_list_t; 
 
 //extern task_t task_list[MAX_TASKS];

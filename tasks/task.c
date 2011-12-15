@@ -50,8 +50,7 @@ unsigned int request_pid(){
  * @author Ivan Gualandri
  * @version 1.0
  */
-void enqueue_task(pid_t pid, task_t* n_task){	
-	printf("Placeholder for new task\n");
+void enqueue_task(pid_t pid, task_t* n_task){		
 	if(task_list.head == NULL){
 		printf("NULL");
 		task_list.head = n_task;		
@@ -69,6 +68,8 @@ void enqueue_task(pid_t pid, task_t* n_task){
  */
 task_t* get_task(pid_t pid){
 	//Placeholtder for get_task
+	printf("PlaceHolder for get_task\n");
+	task_t *_task = task_list.head;
 	return (task_t *) NULL;
 }
 
