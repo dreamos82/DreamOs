@@ -24,6 +24,9 @@
 #include <scheduler.h>
 #include <task.h>
 
+task_list_t task_list;
+
 void schedule(){
+	printf("Called\n");	
 	return;
 }

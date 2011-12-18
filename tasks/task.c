@@ -89,6 +89,7 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	strcpy(new_task->name, task_name);
 	new_task->next = NULL;
 	new_task->start_function = start_function;
+	new_task->cur_quants=0;
 	new_task->pid = new_pid;
 	new_task->eip = (unsigned int)start_function;
 	new_task->esp = (unsigned int)kmalloc(STACK_SIZE) + STACK_SIZE-100;
