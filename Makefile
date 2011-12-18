@@ -67,6 +67,7 @@ OBJ = kernel.o\
       sys/utsname.o\
       sys/dirent.o\
       sys/stat.o\
+      tasks/scheduler.o\
       tasks/task_utils.o\
       tasks/task.o\
       tasks/tss/tss.o
@@ -118,6 +119,7 @@ shell/user_shell.o: shell/user_shell.c
 sys/utsname.o: sys/utsname.c
 sys/dirent.o: sys/dirent.c
 sys/stat.o: sys/stat.c
+tasks/scheduler.o: tasks/scheduler.c
 tasks/task_utils.o: tasks/task_utils.c
 tasks/task.o: tasks/task_utils.c
 tasks/tss/tss.o: tasks/tss/tss.c

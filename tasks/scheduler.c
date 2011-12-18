@@ -22,6 +22,7 @@
   */
 
 #include <scheduler.h>
+#include <task.h>
 
 void schedule(){
 	return;

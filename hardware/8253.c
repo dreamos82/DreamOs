@@ -20,18 +20,26 @@
 #include <io.h>
 #include <stdio.h>
 #include <pic8259.h>
+#include <task.h>
+#include <scheduler.h>
 
 static unsigned int ticks;
 static unsigned int seconds;
 
+task_list_t task_list;
+
 void PIT_handler ()
-{
+{		
     if (++ticks % 100 == 0) {
 	ticks = 0;
 	if (++seconds > 86400)
 	  seconds = 0;     
     }
-    
+    if(task_list.current!=NULL){
+		task_t* cur_task = task_list.current;	
+		if(cur_task->cur_quants < MAX_TICKS) cur_task->cur_quants++;
+		else schedule();
+	}
 //     outportb(EOI, MASTER_PORT);
 }
 
@@ -55,3 +63,4 @@ unsigned int sleep (unsigned int secs)
     while (seconds < p);
     return 0;
 }
+
