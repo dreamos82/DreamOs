@@ -18,15 +18,18 @@
  
  /*
   * Autore Ivan Gualandri
-  * Prima versione: 14/11/2011
+  * Prima versione: 14/12/2011
   */
 
 #include <scheduler.h>
+#include <stdio.h>
 #include <task.h>
 
 task_list_t task_list;
 
 void schedule(){
+	task_t* next_task;
+	next_task = dequeue_task();
 	printf("Called\n");	
 	return;
 }
