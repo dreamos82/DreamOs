@@ -38,7 +38,10 @@ void PIT_handler ()
     if(task_list.current!=NULL){
 		task_t* cur_task = task_list.current;	
 		if(cur_task->cur_quants < MAX_TICKS && cur_task->state==READY) cur_task->cur_quants++;
-		else schedule();
+		else {
+			schedule();
+			cur_task->cur_quants = 0;
+		}
 	}
 //     outportb(EOI, MASTER_PORT);
 }

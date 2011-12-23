@@ -62,7 +62,7 @@ typedef struct {
 /*!  \struct task_t
      \brief Main Task Structure
  */
-typedef struct {
+typedef struct task_t{
 	pid_t pid;	
 	char name[NAME_LENGTH];
 	void (*start_function)();
@@ -74,7 +74,7 @@ typedef struct {
 	unsigned int pdir;
 	unsigned int ptable;
 	struct task_t *next;
-} task_t;
+}task_t;
 
 /*!  \struct task_list_t
      \brief Task List Structure

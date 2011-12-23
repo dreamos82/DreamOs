@@ -37,6 +37,7 @@ void tasks_init(){
 	printf("Init tasks");
 	task_list.head = NULL;
 	task_list.tail = task_list.head;			
+	task_list.current = NULL;
 	current_pid = 0;
 }
 
@@ -55,7 +56,7 @@ void enqueue_task(pid_t pid, task_t* n_task){
 		printf("NULL");
 		task_list.head = n_task;		
 	} else {
-		task_list.tail->next = n_task;		
+		task_list.tail->next = (task_t*)n_task;		
 	}
 	task_list.tail = n_task;
 }
@@ -99,7 +100,10 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	local_table = map_kernel();
 	new_task->pdir = local_table.page_dir;
 	new_task->ptable = local_table.page_table;
-	enqueue_task(new_task->pid, new_task);		
+	enqueue_task(new_task->pid, new_task);
+	if(task_list.current==NULL){
+		//task_list.current=new_task;
+	}
 	asm("sti");
 	return new_pid;
 }
@@ -108,7 +112,7 @@ task_t* dequeue_task(){
 	pid_t pid; 	
 	task_t* _task; 
 	_task = (task_t*)task_list.head;
-	task_list.head = _task->next;
+	task_list.head = (task_t*)_task->next;
 	return _task;
 }
 
@@ -127,7 +131,7 @@ int getTaskListSize(){
 	task_t *_task = task_list.head;
 	int i = 0;
 	while(_task != task_list.tail){
-		_task = _task->next;
+		_task = (task_t*)_task->next;
 		i++;
 	}
 	return i+1;
@@ -145,7 +149,7 @@ void test_tasklist(){
 	local_task = (task_t*) task_list.head;
 	while(local_task!=NULL){
 		printf("%d %s - ", local_task->pid, local_task->name);
-		local_task = local_task->next;		
+		local_task = (task_t*)local_task->next;		
 		i++;
 	}
 	printf("TaskList size: %d\n", i);
