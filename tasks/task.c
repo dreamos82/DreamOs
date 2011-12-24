@@ -28,6 +28,7 @@
 #include <kheap.h>
 #include <tss.h>
 #include <task_utils.h>
+#include <scheduler.h>
 
 pid_t current_pid; 
 int cur_free_index; 
@@ -102,7 +103,11 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	new_task->ptable = local_table.page_table;
 	enqueue_task(new_task->pid, new_task);
 	if(task_list.current==NULL){
+		printf("Current==NULL\n");
 		//task_list.current=new_task;
+	} else {
+		printf("Current!=NULL\n");
+		(task_list.current)->cur_quants = MAX_TICKS;
 	}
 	asm("sti");
 	return new_pid;
