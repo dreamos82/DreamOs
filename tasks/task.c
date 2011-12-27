@@ -104,7 +104,7 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	enqueue_task(new_task->pid, new_task);
 	if(task_list.current==NULL){
 		printf("Current==NULL\n");
-		//task_list.current=new_task;
+		task_list.current=new_task;
 	} else {
 		printf("Current!=NULL\n");
 		(task_list.current)->cur_quants = MAX_TICKS;
@@ -153,7 +153,7 @@ void test_tasklist(){
 	int i = 0;
 	local_task = (task_t*) task_list.head;
 	while(local_task!=NULL){
-		printf("%d %s - ", local_task->pid, local_task->name);
+		printf("%d %s\n", local_task->pid, local_task->name);
 		local_task = (task_t*)local_task->next;		
 		i++;
 	}

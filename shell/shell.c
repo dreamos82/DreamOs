@@ -67,7 +67,7 @@ struct cmd shell_cmd[NUM_COM] = {
  { "tester",   tester,    "  Try some functions, 'tester --help' for more info'" },	
  { "pwd",      pwd,       "     Print current working directory" },
  { "more",     more,      "    Read content of a file" },
- { "newfile", newfile,	  "	Create a new file"},
+ { "newfile", newfile,	  "	Create a new file"}, 
 };
 /*
  * Inserisce gli argomenti di un comando in un array di stringhe
