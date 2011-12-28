@@ -152,8 +152,9 @@ void test_tasklist(){
 	task_t* local_task;
 	int i = 0;
 	local_task = (task_t*) task_list.head;
+	printf("PID\tName\n");
 	while(local_task!=NULL){
-		printf("%d %s\n", local_task->pid, local_task->name);
+		printf("%d\t%s\n", local_task->pid, local_task->name);
 		local_task = (task_t*)local_task->next;		
 		i++;
 	}

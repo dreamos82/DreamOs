@@ -26,6 +26,6 @@
 
 #define MAX_TICKS 1000
 
-void schedule();
+void schedule(unsigned int*);
 
 #endif

@@ -578,6 +578,7 @@ void newfile(){
 }
 
 void ps(){
-	printf("Stay tuned\n");
+	//printf("Stay tuned\n");
+	test_tasklist();
 }
 

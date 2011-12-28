@@ -27,7 +27,7 @@
 
 task_list_t task_list;
 
-void schedule(){
+void schedule(unsigned int* stack){
 	task_t* next_task;	
 	//next_task = dequeue_task();
 	//printf("Called\n");	
