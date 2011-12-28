@@ -577,3 +577,7 @@ void newfile(){
 	}
 }
 
+void ps(){
+	printf("Stay tuned\n");
+}
+
