@@ -30,6 +30,7 @@
 #include <keyboard.h>
 #include <video.h>
 #include <paging.h>
+#include <scheduler.h>
 
 // #define DEBUG 1
 void (*IntTable[IDT_SIZE])();
@@ -163,15 +164,8 @@ void _irqinterrupt(unsigned int *esp){
     int irqn;
     irqn = get_current_irq();  
     IRQ_s* tmpHandler; 
-    if(irqn>=0) {		
-		/*if(irqn==2) {
-			outportb(SLAVE_PORT,GET_IRR_STATUS);
-			irqn = inportb(SLAVE_PORT);
-			irqn = 8 + find_first_bit(irqn);			
-		}*/
+    if(irqn>=0) {				
         tmpHandler = shareHandler[irqn];		
-        //printf("Test %d\n", irqn);
-		//while(1);
 		if(tmpHandler!=0) {
 	    	tmpHandler->IRQ_func();	    	
 	    	#ifdef DEBUG
@@ -192,6 +186,9 @@ void _irqinterrupt(unsigned int *esp){
       outportb(SLAVE_PORT, EOI);
       outportb(MASTER_PORT, EOI);
     }
+    
+    schedule(esp);
+    return;
 }
 
 void _int_rsv(){

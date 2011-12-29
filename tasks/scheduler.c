@@ -24,12 +24,30 @@
 #include <scheduler.h>
 #include <stdio.h>
 #include <task.h>
+#include <stddef.h>
 
 task_list_t task_list;
 
+unsigned char active;
+
+void init_scheduler(){
+	active=FALSE;
+}
+
 void schedule(unsigned int* stack){
-	task_t* next_task;	
+	if(active == TRUE){
+		task_t* cur_task;		
+		cur_task = (task_t*)task_list.current;
+		cur_task->esp = stack;
+		//printf("Stack: %d", stack);
+		
+		active = FALSE;
+	};	
 	//next_task = dequeue_task();
 	//printf("Called\n");	
 	return;
+}
+
+void preSchedule(){
+	active = TRUE;
 }
