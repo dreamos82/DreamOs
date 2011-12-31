@@ -48,8 +48,6 @@ void schedule(unsigned int* stack){
 		
 		active = FALSE;
 	};	
-	//next_task = dequeue_task();
-	//printf("Called\n");	
 	return;
 }
 
