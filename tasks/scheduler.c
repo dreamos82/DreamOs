@@ -36,10 +36,15 @@ void init_scheduler(){
 
 void schedule(unsigned int* stack){
 	if(active == TRUE){
-		task_t* cur_task;		
+		task_t* cur_task;
+		task_t* next_task;		
 		cur_task = (task_t*)task_list.current;
 		cur_task->esp = stack;
-		//printf("Stack: %d", stack);
+		next_task = cur_task;
+		while(next_task->status!= READY && next_task->status != NEW){
+			enqueue_task(next_task->pid, next_task);		
+			printf("Stack: %d", stack);
+		}
 		
 		active = FALSE;
 	};	

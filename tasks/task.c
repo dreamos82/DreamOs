@@ -95,7 +95,7 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	new_task->pid = new_pid;
 	new_task->eip = (unsigned int)start_function;
 	new_task->esp = (unsigned int)kmalloc(STACK_SIZE) + STACK_SIZE-100;
-	new_task->state = NEW;
+	new_task->status = NEW;
 	new_task->registers = (task_register_t*)new_task->esp;
 	new_tss(new_task->registers, start_function);
 	local_table = map_kernel();

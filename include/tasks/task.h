@@ -66,7 +66,7 @@ typedef struct task_t{
 	pid_t pid;	
 	char name[NAME_LENGTH];
 	void (*start_function)();
-	task_state state;
+	task_state status;
 	task_register_t *registers;
 	unsigned int cur_quants;
 	unsigned int eip;

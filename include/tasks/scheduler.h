@@ -28,5 +28,6 @@
 
 void init_scheduler();
 void schedule(unsigned int*);
+void preSchedule();
 
 #endif
