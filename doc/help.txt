@@ -59,8 +59,8 @@ Usage: ./start.sh create_iso
 
 If you want, you can create a DreamOS FileSystem
 You know, this is *VERY* important :)
-To add the file and then re-create the FS, put you files
-into files/ and do:
+To add the file and then re-create the FS, put your files
+into files/ and type:
 
 Usage: ./start.sh create_fs
 

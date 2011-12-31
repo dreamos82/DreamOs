@@ -50,9 +50,9 @@ Please, be sure you have python."
 
   Usage: start.sh grub
 
-Please Read the HOW To Grub Script to a secure use of it.
+Please refer to: HOW To Grub Script for a secure use of it.
 
-However, if you want, there is a possibility to create an ISO Image
+However, if you want, you can create an ISO Image
 to burn it then on your CDRom and boot DreamOS on every PC you want.
 Make sure you have installed mkisofs from cdrkit package.
 

@@ -40,7 +40,7 @@ void schedule(unsigned int* stack){
 		task_t* next_task;		
 		cur_task = (task_t*)task_list.current;
 		cur_task->esp = stack;
-		next_task = cur_task;
+		next_task = cur_task; // to be replaced
 		while(next_task->status!= READY && next_task->status != NEW){
 			enqueue_task(next_task->pid, next_task);		
 			printf("Stack: %d", stack);
