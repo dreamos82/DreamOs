@@ -60,8 +60,8 @@ config_interface: textconfig
 #display_library: term
 #display_library: win32, options="legacyF12" # use F12 to toggle mouse
 #display_library: wx
-display_library: x, options="gui_debug"
-#display_library: x
+#display_library: x, options="gui_debug"
+display_library: x
 #=======================================================================
 # ROMIMAGE:
 # The ROM BIOS controls what the PC does when it first powers on.
@@ -75,6 +75,7 @@ display_library: x, options="gui_debug"
 # Bochs.
 #=======================================================================
 romimage: file=/usr/share/bochs/BIOS-bochs-latest
+#romimage: file=../bochs-2.4.5/bios/BIOS-bochs-latest
 #romimage: file=bios/BIOS-bochs-2-processors, address=0xf0000
 #romimage: file=bios/BIOS-bochs-4-processors, address=0xf0000
 #romimage: file=mybios.bin, address=0xfff80000 # 512k at memory top
@@ -114,6 +115,7 @@ megs: 512
 #=======================================================================
 #vgaromimage: file=/usr/share/vgabios/vgabios.bin
 vgaromimage: file=/usr/share/bochs/VGABIOS-lgpl-latest
+#garomimage: file=../bochs-2.4.5/bios/VGABIOS-lgpl-latest
 #vgaromimage: file=bios/VGABIOS-lgpl-latest-cirrus
 
 #=======================================================================

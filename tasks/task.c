@@ -37,7 +37,7 @@ task_list_t task_list;
 void tasks_init(){
 	printf("Init tasks");
 	task_list.head = NULL;
-	task_list.tail = task_list.head;			
+	task_list.tail = NULL;			
 	task_list.current = NULL;
 	current_pid = 0;
 }
@@ -117,7 +117,7 @@ task_t* dequeue_task(){
 	pid_t pid; 	
 	task_t* _task; 
 	_task = (task_t*)task_list.head;
-	task_list.head = (task_t*)_task->next;
+	task_list.head = (task_t*)_task->next;	
 	return _task;
 }
 

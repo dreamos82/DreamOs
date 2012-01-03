@@ -50,14 +50,15 @@ typedef struct {
         unsigned int edx;  //+5
         unsigned int ecx;  //+6
         unsigned int eax;  //+7
-        unsigned int ds;	//+9
+        unsigned int fs;	//+9
         unsigned int es;    //+10
-        unsigned int fs;    //+11
+        unsigned int ds;    //+11
         unsigned int eip;  //+12
         unsigned int cs;   //+13
         unsigned int eflags;  //+14
         unsigned int end;    		
 } task_register_t;
+
 
 /*!  \struct task_t
      \brief Main Task Structure

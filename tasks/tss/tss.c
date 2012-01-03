@@ -25,6 +25,7 @@
 #include <tss.h>
 #include <task.h>
 #include <stddef.h>
+#include <scheduler.h>
 
 void new_tss(task_register_t* tss, void (*func)()){
     tss->eax=0;
@@ -40,6 +41,7 @@ void new_tss(task_register_t* tss, void (*func)()){
     tss->fs = 0x10;
     tss->eip = (unsigned)func;
     tss->eflags = 0x202;
+    tss->end = (unsigned) suicide;
     //tss->fine = (unsigned)end; //per metterci il suicide	
 	return;
 }
