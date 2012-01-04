@@ -58,20 +58,13 @@
          movw %dx, %fs;"
 
 #define SAVE_CONTEXT\
-		"pusha;\
-		 pushw %ds;\
-		 pushw %es;\
-         pushw %fs;"\
-		 SWITCH_KERNEL
+		"pusha;"
 		 
 #define SAVE_CONTEXT_EC\
         "nop;\
          xchgl %eax, (%esp);\
          pushl %ecx;\
-         pushl %edx;\
-         pushw %ds;\
-         pushw %es;\
-         pushw %fs;"\
+         pushl %edx;"\
          SWITCH_KERNEL\
          "pushl %eax;"
 		 
@@ -100,6 +93,7 @@
 			"pushl %eax;"\
             "call _irqinterrupt;"\
             "popl %eax;"\
+            "movl %eax, %esp;"\
             RESTORE\
             "iret;")
 
@@ -111,16 +105,10 @@
             "iret;")  
             
 #define RESTORE \
-		"popw %fs;\
-         popw %es; \
-		 popw %ds; \
-		 popa;"
+		"popa;"
 
 #define RESTORE_EC \
-        "popw %fs;\
-         popw %es; \
-         popw %ds; \
-         popl %edx;\
+        "popl %edx;\
          popl %ecx;\
          popl %eax;"       
 

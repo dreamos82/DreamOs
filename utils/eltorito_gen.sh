@@ -13,7 +13,8 @@ if [ -f dreamos.img ]
 		else
 			echo "file initfs not found. Using the old one"
 		fi
-		 genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o dreamos.iso utils/eltorito_iso
+		echo "Generating ISO"
+		genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o dreamos.iso utils/eltorito_iso
 	else
-		echo "No dreamOS file found"
+		echo "Error: No dreamOS file found"
 fi

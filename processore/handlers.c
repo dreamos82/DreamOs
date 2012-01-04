@@ -160,7 +160,7 @@ void _globalException(int n, int error)
   }
 }
 
-void _irqinterrupt(unsigned int *esp){
+void _irqinterrupt(unsigned int esp){
     int irqn;
     irqn = get_current_irq();  
     IRQ_s* tmpHandler; 
@@ -187,7 +187,7 @@ void _irqinterrupt(unsigned int *esp){
       outportb(MASTER_PORT, EOI);
     }
     
-    schedule(esp);
+    schedule(&esp);
     return;
 }
 

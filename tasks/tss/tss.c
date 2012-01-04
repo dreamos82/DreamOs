@@ -36,9 +36,6 @@ void new_tss(task_register_t* tss, void (*func)()){
     tss->edi =0;
     tss->esi =0;
     tss->cs = 8;
-    tss->ds = 0x10;
-    tss->es = 0x10;
-    tss->fs = 0x10;
     tss->eip = (unsigned)func;
     tss->eflags = 0x202;
     tss->end = (unsigned) suicide;

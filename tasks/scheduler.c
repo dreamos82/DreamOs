@@ -25,6 +25,8 @@
 #include <stdio.h>
 #include <task.h>
 #include <stddef.h>
+#include <debug.h>
+#include <paging.h>
 
 task_list_t task_list;
 
@@ -34,24 +36,25 @@ void init_scheduler(){
 	active=FALSE;
 }
 
-void schedule(unsigned int* stack){
+void schedule(unsigned int *stack){
 	if(active == TRUE){
 		dbg_bochs_print((const unsigned char*)"Scheduler called\n");
 		task_t* cur_task;
 		task_t* next_task;		
 		cur_task = (task_t*)task_list.current;
 		cur_task->esp = *stack;
-		//next_task = dequeue_task();		
-		next_task = cur_task; // to be replaced
+		enqueue_task(cur_task->pid, cur_task);
+		next_task = dequeue_task();				
+		//next_task = cur_task; // to be replaced
 		while(next_task->status!= READY && next_task->status != NEW){
 			enqueue_task(next_task->pid, next_task);		
 			//printf("Stack: %d", stack);			
 		}
 		//Switch context logic goes here.		
-		//load_pdbr(next_task->pdir);
-		//*stack = next_task->esp;
+		*stack = next_task->esp;
+		//load_pdbr(next_task->pdir);		
 		active = FALSE;
-	};	
+	}	
 	return;
 }
 
