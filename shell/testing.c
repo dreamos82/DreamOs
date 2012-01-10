@@ -266,9 +266,14 @@ void try_mapaddress(){
 void try_tasksetup(){
 	task_t _task;
 	unsigned int task_pid;	
+	asm("cli;");
 	task_pid = new_task("test", task_test);	
 	printf("Testing task creation functions:\n");
 	printf("Pid Obtained: %d\n", task_pid);
+	task_pid = new_task("testsecond", task_testsecond);	
+	printf("Testing task creation functions:\n");
+	printf("Pid Obtained: %d\n", task_pid);
+	asm("sti;");
 	//test_tasklist();	
 	//printf("GetTaskListSize: %d\n", getTaskListSize());
 	/*	
@@ -283,4 +288,8 @@ void try_tasksetup(){
 
 void task_test(){
 	printf("Hi, i'm a freshly created task!!!\n");
+}
+
+void task_testsecond(){
+	printf("Hi, i'm a very old task!!! I came from the past!!!\n");
 }

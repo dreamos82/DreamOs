@@ -30,5 +30,6 @@ void init_scheduler();
 void schedule(unsigned int*);
 void preSchedule();
 void suicide();
+void idle();
 
 #endif

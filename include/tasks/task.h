@@ -78,10 +78,20 @@ typedef struct task_t{
      \brief Task List Structure
  */
 typedef struct {
+	//task_t list[MAX_TASKS];
+	//int cur_task;
 	task_t *head;
 	task_t *tail;
 	task_t *current;
-} task_list_t; 
+} task_list_t;
+
+/*!  \struct task_vector_t
+     \brief Task Vector Structure
+ */
+
+typedef struct {
+	task_t task_vector[MAX_TASKS];
+} task_vector_t;
 
 //extern task_t task_list[MAX_TASKS];
 extern task_list_t task_list;

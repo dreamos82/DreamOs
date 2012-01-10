@@ -45,6 +45,7 @@
 #include <initrd.h>
 #include <keyboard.h>
 #include <task.h>
+#include <scheduler.h>
 
 #ifdef BOCHS_DEBUG
 #include <debug.h>
@@ -119,7 +120,9 @@ int main_loop(struct multiboot_info *boot_info)
 #ifdef BOCHS_DEBUG
 		dbg_bochs_print((const unsigned char*)"DreamOS Debug String for Bochs\n");
 #endif
-		shell();
+		//shell();						
+		new_task("idle", idle);
+		new_task("dreamshell", shell);
 
     return 0;
 }

@@ -62,9 +62,16 @@ void preSchedule(){
 	active = TRUE;
 }
 
+void idle()
+{	
+	dbg_bochs_print("idle\n");
+    while(TRUE){
+		dbg_bochs_print("idle\n");
+	}
+}
+
 void suicide()
-{
-//    sig_kill(get_current_task());
+{	
     while(TRUE);
 }
 

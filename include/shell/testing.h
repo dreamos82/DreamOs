@@ -34,7 +34,7 @@ void try_shadow();
 void try_newheap();
 void try_mapaddress();
 void try_tasksetup();
-
+void task_testsecond();
 void task_test();
 
 #endif
