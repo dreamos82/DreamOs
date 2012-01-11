@@ -43,14 +43,19 @@ void schedule(unsigned int *stack){
 		task_t* next_task;		
 		cur_task = (task_t*)task_list.current;
 		cur_task->esp = *stack;
-		enqueue_task(cur_task->pid, cur_task);
-		next_task = dequeue_task();				
+		enqueue_task(cur_task->pid, cur_task);		
+		next_task = dequeue_task();
+		dbg_bochs_print(next_task->name);						
+		dbg_bochs_print(cur_task->name);
 		//next_task = cur_task; // to be replaced
 		while(next_task->status!= READY && next_task->status != NEW){
-			enqueue_task(next_task->pid, next_task);		
+			dbg_bochs_print("Not READY or NEW");
+			enqueue_task(next_task->pid, next_task);
+			next_task=dequeue_task();		
 			//printf("Stack: %d", stack);			
 		}
 		//Switch context logic goes here.		
+		task_list.current = next_task;
 		*stack = next_task->esp;
 		//load_pdbr(next_task->pdir);		
 		active = FALSE;

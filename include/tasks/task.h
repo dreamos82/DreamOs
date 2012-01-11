@@ -68,7 +68,7 @@ typedef struct task_t{
 	task_register_t *registers;
 	unsigned int cur_quants;
 	unsigned int eip;
-	unsigned int esp;
+	long int esp;
 	unsigned int pdir;
 	unsigned int ptable;
 	struct task_t *next;
@@ -84,14 +84,6 @@ typedef struct {
 	task_t *tail;
 	task_t *current;
 } task_list_t;
-
-/*!  \struct task_vector_t
-     \brief Task Vector Structure
- */
-
-typedef struct {
-	task_t task_vector[MAX_TASKS];
-} task_vector_t;
 
 //extern task_t task_list[MAX_TASKS];
 extern task_list_t task_list;
