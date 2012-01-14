@@ -35,7 +35,7 @@ int cur_free_index;
 task_list_t task_list;
 
 void tasks_init(){
-	int i=0;
+	//int i=0;
 	printf("Init tasks");
 	task_list.head = NULL;
 	task_list.tail = NULL;			
@@ -55,10 +55,10 @@ unsigned int request_pid(){
  */
 void enqueue_task(pid_t pid, task_t* n_task){		
 	if(task_list.head == NULL){
-		dbg_bochs_print("TaskList NULL\n");
+		//dbg_bochs_print("TaskList NULL\n");
 		task_list.head = n_task;						
 	} else {
-		dbg_bochs_print("TaskList Not Null\n");
+		//dbg_bochs_print("TaskList Not Null\n");
 		(task_list.tail)->next = (task_t*)n_task;				
 	}
 	task_list.tail = n_task;
@@ -74,7 +74,7 @@ void enqueue_task(pid_t pid, task_t* n_task){
 task_t* get_task(pid_t pid){
 	//Placeholtder for get_task
 	printf("PlaceHolder for get_task\n");
-	task_t *_task = task_list.head;
+    //task_t *_task = task_list.head;
 	return (task_t *) NULL;
 }
 
@@ -106,10 +106,10 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	new_task->ptable = local_table.page_table;
 	enqueue_task(new_task->pid, new_task);
 	if(task_list.current==NULL){
-		dbg_bochs_print("Current==NULL\n");
+		//dbg_bochs_print("Current==NULL\n");
 		task_list.current=new_task;
 	} else {
-		dbg_bochs_print("Current!=NULL\n");
+		//dbg_bochs_print("Current!=NULL\n");
 		(task_list.current)->cur_quants = MAX_TICKS;
 	}
 	asm("sti");
@@ -117,7 +117,7 @@ pid_t new_task(char *task_name, void (*start_function)()){
 }
 
 task_t* dequeue_task(){
-	pid_t pid; 	
+    //pid_t pid; 	
 	task_t* _task; 
 	_task = (task_t*)task_list.head;
 	task_list.head = (task_t*)_task->next;	
@@ -145,9 +145,9 @@ int getTaskListSize(){
 	return i+1;
 }
 
-void test_dequeue(){
+task_t* test_dequeue(){
 	task_t* _task =  dequeue_task();
-	
+	return _task;
 }
 
 void test_tasklist(){
@@ -159,7 +159,7 @@ void test_tasklist(){
 	printf("%d\t%s\n", local_task->pid, local_task->name);
 	local_task = (task_t*)local_task->next;		
 	while(local_task!=task_list.tail && local_task!=NULL){
-		dbg_bochs_print("ps inside\n");
+		//dbg_bochs_print("ps inside\n");
 		printf("%d\t%s\n", local_task->pid, local_task->name);
 		local_task = (task_t*)local_task->next;		
 		i++;

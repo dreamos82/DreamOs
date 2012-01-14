@@ -264,7 +264,8 @@ void try_mapaddress(){
 }
 
 void try_tasksetup(){
-	task_t _task;
+	// unused
+    //task_t _task;
 	unsigned int task_pid;	
 	asm("cli;");
 	task_pid = new_task("test", task_test);	

@@ -47,10 +47,11 @@ return;
  *  Print an integer
  */
 void dbg_bochs_print_digit(unsigned int number){
-	char buffer[10];
-	_kntos(buffer, number, 10);
-	dbg_bochs_print(buffer);
-	dbg_bochs_print("\n");
+	// need to be casted
+    //char buffer[10];
+	//_kntos(buffer, number, 10);
+	//dbg_bochs_print(buffer);
+	//dbg_bochs_print("\n");
 }
 
 /**

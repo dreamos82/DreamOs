@@ -310,7 +310,9 @@ void map_address(unsigned int fis_address, unsigned int logic_address){
     printf("Pdir value: %d, PtableValue: %d\n", pdir, ptable);
     printf("Pdir entry value: %d\n", get_pagedir_entry(pdir));
     #endif
-    if(get_pagedir_entry(pdir)==NULL){		
+
+    // can't compare with NULL - set 0 instead
+    if(get_pagedir_entry(pdir)==0){		
 		/**TODO
 		 * Crate_page_table
 		 * Map_new_pdir */		
