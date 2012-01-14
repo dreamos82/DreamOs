@@ -1,6 +1,6 @@
 # Please set your kernel preference versions..
 # Enjoy your self :)
-# Osiris at osiris@Devils.com
+# Osiris at diegostamigni@areamobile.eu
 
 NAME = DreamOS
 VERSION = 0
