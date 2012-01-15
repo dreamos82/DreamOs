@@ -18,7 +18,7 @@
 
  /*
   * Driver for *PS2* Mouses.
-  * Authors DT, Osiris
+  * Authors DT, Osiris (Diego Stamigni)
   * Contributor: finarfin 
   * first version: 16/06/2009
   */

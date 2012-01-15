@@ -50,8 +50,8 @@ table_address_t map_kernel(){
 	/**Map the logic addresses for pagedir and pagetable into phisical address
 	 * identified by the variables pagetable and pagedir*/
 	while(i < 8){
-		map_address(pagedir, logic_pd_address);
-		map_address(pagetable, logic_pt_address);		
+		map_address(*pagedir, *logic_pd_address);
+		map_address(*pagetable, *logic_pt_address);		
 		pagedir+=4096;
 		pagetable+=4096;
 		i++;

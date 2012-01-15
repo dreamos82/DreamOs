@@ -1,8 +1,8 @@
 #	    The DreamOS Operating System 
+#   	Greez to all DreamOS Dev & Community
 #
-#   Greez to all DreamOS Dev & Community
-#	Lord Osiris at osiris@Devils.com
-#		    or diego.stamigni@linux.com
+#    Diego Stamigni - Osiris
+#    diego.stamigni@linux.com
 
 
 This DOC is about the "start.sh" init script that allow you to use many

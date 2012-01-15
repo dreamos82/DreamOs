@@ -458,7 +458,7 @@ void cd( ){
 		return;
 	} else {
 		int i=0;
-		int rel_size = 0;		
+		int rel_size __attribute__((unused))= 0;		
 		memset(abspath, '\0', CURPATH_LEN);				
 		if(argv[1][0] == '/') {
 			i = get_mountpoint_id(argv[1]);		

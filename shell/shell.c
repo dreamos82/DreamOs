@@ -101,7 +101,7 @@ void options(char *com)
 /* corpo della shell */
 void shell()
 {
-  dbg_bochs_print("\nNewShell\n");
+  //dbg_bochs_print("\nNewShell\n");
   char *cmd_ptr;
   char password[30];
   /*static struct cmd shell_cmd[NUM_COM] = {
@@ -162,7 +162,7 @@ void shell()
   current_user.gid = 0;
   for (;;)
   {
-	dbg_bochs_print("shell loop\n");
+	//dbg_bochs_print("shell loop\n");
     for (c = 1 ; c <= 10 ; c++) {
     	    lastcmd[c] = (char *)kmalloc(sizeof(char) * 30); 
     }

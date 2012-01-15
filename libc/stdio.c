@@ -211,7 +211,7 @@ int getchar (void)
 
 char *gets ()
 {
-    char str[255];
+    char *str[255];
     int c;
     int count=0;
     shell_mess_col = _kgetcolumn ();
@@ -227,11 +227,11 @@ char *gets ()
                 count--;
 	}
 	else
-	    str[count++] = c;
+	    *str[count++] = c;
     } while (count<255);
 
     str[count] = '\0';
-    return str;
+    return *str;
 }
 
 int scanf (const char *format, ...)

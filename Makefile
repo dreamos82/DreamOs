@@ -1,11 +1,11 @@
 # Please set your kernel preference versions..
 # Enjoy your self :)
-# Osiris at osiris@Devils.com
+# Diego Stamigni - Osiris at diegostamigni@areamobile.eu
 
 NAME = DreamOS
 VERSION = 0
-PATCHLEVEL = 3
-EXTRAVERSION = -trunk
+PATCHLEVEL = 4
+EXTRAVERSION = -experimental
 MEMORY = LEGACY
 include Makefile.am
 
@@ -137,7 +137,8 @@ vers:
 	 sed -i -e "/^#define PATCHLEVEL/s/\".*\"/\"$(PATCHLEVEL)\"/" include/version.h
 	 sed -i -e "/^#define EXTRAVERSION/s/\".*\"/\"$(EXTRAVERSION)\"/" include/version.h
 	 sed -i -e "/^#define NAME/s/\".*\"/\"$(NAME)\"/" include/version.h
-	 sed -i -e "/^#define REV_NUM/s/\".*\"/\""-r`cat .svn/entries | head -n 4 | tail -n 1`"\"/" include/version.h
+	#REV_NUM not working with git 
+	#sed -i -e "/^#define REV_NUM/s/\".*\"/\""-r`cat .svn/entries | head -n 4 | tail -n 1`"\"/" include/version.h
 
 .PHONY: clean install iso-image qemu
 

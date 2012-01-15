@@ -28,6 +28,8 @@
 #include <heap.h>
 #endif
 #include <shell.h>
+#include <stdio.h>
+#include <stdio.h>
 
 int cur_fd;
 
@@ -40,15 +42,13 @@ int cur_fd;
   * @todo Inserire gestione flags
   */
 int open(const char *path, int oflags,  ...){
-	int prova;
 	int mpid;
 	int ret_fd;
-	int error = 0;
+	int error __attribute__((unused))= 0;
 	char *newpath;
-	va_list ap;
+	va_list ap __attribute__((unused));
 	va_start(ap, oflags);
 	ret_fd = 0;		
-	prova = va_arg(ap, int);
 	newpath = kmalloc(CURPATH_LEN * sizeof(char));
 	memset(newpath, '\0', CURPATH_LEN);
 	cur_fd=0;
@@ -66,7 +66,7 @@ int open(const char *path, int oflags,  ...){
 	//printf("Path: %s %s\n", path, newpath);	
 	error = get_abs_path((char*) newpath);
 	//printf("After get_abs: %s %s\n", newpath, current_user.cur_path);	
-    mpid = get_mountpoint_id((char*) newpath);		
+   	 mpid = get_mountpoint_id((char*) newpath);		
 	//printf("Cur_fd: %d\n",cur_fd);
 	if(mpid >-1) {
 		fd_list[cur_fd].mountpoint_id = mpid;				
