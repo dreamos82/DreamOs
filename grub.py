@@ -1,4 +1,4 @@
-# Liza feat. Lord Osiris
+# Liza feat. Lord Osiris (Diego Stamigni)
 # GrubScript ver 0.2
 
 import sys

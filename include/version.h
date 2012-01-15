@@ -16,8 +16,8 @@
  */
 
 /*
- * Author: Osiris
- * osiris@katamail.com
+ * Author: Osiris (Diego Stamigni)
+ * diegostamigni@areamobile.eu
  */
 
 #define VERSION "0"
