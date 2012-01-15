@@ -4,8 +4,8 @@
 
 NAME = DreamOS
 VERSION = 0
-PATCHLEVEL = 3
-EXTRAVERSION = -trunk
+PATCHLEVEL = 4
+EXTRAVERSION = -experimental
 MEMORY = LEGACY
 include Makefile.am
 

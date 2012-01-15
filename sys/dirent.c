@@ -38,7 +38,7 @@
   */
 DIR *opendir(const char *path){
 	int mpoint_id = 0;
-	int error = 0;
+	int error __attribute__((unused))= 0;
 	//char tmp_path[CURPATH_LEN];
 	char* rel_path;	
 	DIR* pdir;

@@ -105,7 +105,7 @@ struct dirent *initrd_readdir(DIR *dirp){
 int initfs_open(const char *path, int flags, ...){
 	initrd_file_t *module_var;
 	int j = 0;
-	int ret_fd = -1;
+	int ret_fd __attribute__((unused)) = -1;
 	module_var = fs_headers;
 	//printf("J vale: %d fs_spec: %d cur_idfd: %d\n", j, fs_specs->nfiles, cur_irdfd);
 	if(cur_irdfd >= MAX_INITRD_DESCRIPTORS) {
