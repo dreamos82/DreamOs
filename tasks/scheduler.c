@@ -77,6 +77,7 @@ void idle()
 
 void suicide()
 {	
+	//dbg_bochs_print("suicide\n");
     while(TRUE);
 }
 

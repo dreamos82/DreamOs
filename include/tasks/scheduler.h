@@ -24,7 +24,7 @@
 #ifndef __SCHEDULER_H
 #define __SCHEDULER_H
 
-#define MAX_TICKS 1000
+#define MAX_TICKS 100
 
 void init_scheduler();
 void schedule(unsigned int*);
