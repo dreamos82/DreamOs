@@ -28,8 +28,7 @@
 #include <scheduler.h>
 
 void new_tss(task_register_t* tss, void (*func)()){
-    tss->eax=0;
-    tss->esp=NULL;
+    tss->eax=0;    
     tss->ebx=0;
     tss->ecx=0;
     tss->edx=0;

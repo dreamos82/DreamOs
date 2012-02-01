@@ -35,12 +35,15 @@ int cur_free_index;
 task_list_t task_list;
 
 void tasks_init(){
+	asm("cli");
 	int i=0;
 	printf("Init tasks");
 	task_list.head = NULL;
 	task_list.tail = NULL;			
 	task_list.current = NULL;
+	task_list.size = 0;
 	current_pid = 0;
+	asm("sti");
 }
 
 /**TODO: add pid number check*/
@@ -56,13 +59,14 @@ unsigned int request_pid(){
 void enqueue_task(pid_t pid, task_t* n_task){		
 	if(task_list.head == NULL){
 		dbg_bochs_print("TaskList NULL\n");
-		task_list.head = n_task;						
+		task_list.head = n_task;
+		task_list.current= n_task;
 	} else {
 		dbg_bochs_print("TaskList Not Null\n");
 		(task_list.tail)->next = (task_t*)n_task;				
 	}
-	task_list.tail = n_task;
-	n_task=NULL;
+	task_list.tail = n_task;	
+	task_list.size++;
 }
 
 /**
@@ -109,7 +113,7 @@ pid_t new_task(char *task_name, void (*start_function)()){
 		dbg_bochs_print("Current==NULL\n");
 		task_list.current=new_task;
 	} else {
-		dbg_bochs_print("Current!=NULL\n");
+		dbg_bochs_print("Current!=NULL\n");	
 		(task_list.current)->cur_quants = MAX_TICKS;
 	}
 	asm("sti");
@@ -121,6 +125,7 @@ task_t* dequeue_task(){
 	task_t* _task; 
 	_task = (task_t*)task_list.head;
 	task_list.head = (task_t*)_task->next;	
+	task_list.size--;
 	return _task;
 }
 
@@ -136,13 +141,7 @@ int isEmpty(){
  * @return Task List size
  */
 int getTaskListSize(){
-	task_t *_task = task_list.head;
-	int i = 0;
-	while(_task != task_list.tail){
-		_task = (task_t*)_task->next;
-		i++;
-	}
-	return i+1;
+	return task_list.size;
 }
 
 void test_dequeue(){
@@ -167,5 +166,5 @@ void test_tasklist(){
 	local_task=(task_t*)task_list.current;
 	printf("%d\t%s\n", local_task->pid, local_task->name);
 	asm("sti;");
-	printf("TaskList size: %d\n", i);
+	printf("TaskList size: %d\n", getTaskListSize());
 }
