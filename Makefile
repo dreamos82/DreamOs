@@ -11,6 +11,7 @@ include Makefile.am
 
 CFLAGS = -nostdlib\
 	 -nostdinc\
+	 -g\
 	 -fomit-frame-pointer\
      -fno-builtin\
 	 -fno-stack-protector\

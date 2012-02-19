@@ -105,9 +105,11 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	new_task->status = NEW;
 	new_task->registers = (task_register_t*)new_task->esp;
 	new_tss(new_task->registers, start_function);
-	local_table = map_kernel();
-	new_task->pdir = local_table.page_dir;
-	new_task->ptable = local_table.page_table;
+//	local_table = map_kernel();
+//	new_task->pdir = local_table.page_dir;
+//	new_task->ptable = local_table.page_table;
+	new_task->pdir = 0;
+	new_task->ptable = 0;
 	enqueue_task(new_task->pid, new_task);
 	if(task_list.current==NULL){
 		dbg_bochs_print("Current==NULL\n");
@@ -121,7 +123,6 @@ pid_t new_task(char *task_name, void (*start_function)()){
 }
 
 task_t* dequeue_task(){
-	pid_t pid; 	
 	task_t* _task; 
 	_task = (task_t*)task_list.head;
 	task_list.head = (task_t*)_task->next;	
@@ -141,7 +142,9 @@ int isEmpty(){
  * @return Task List size
  */
 int getTaskListSize(){
-	return task_list.size;
+	int i=0;
+	if(task_list.current!=NULL) i++;
+	return task_list.size+i;
 }
 
 void test_dequeue(){
@@ -163,8 +166,9 @@ void test_tasklist(){
 		local_task = (task_t*)local_task->next;		
 		i++;
 	}	
+	printf("%d\t%s\n", local_task->pid, local_task->name);
 	local_task=(task_t*)task_list.current;
 	printf("%d\t%s\n", local_task->pid, local_task->name);
 	asm("sti;");
-	printf("TaskList size: %d\n", getTaskListSize());
+	printf("TaskList size: %d\n", getTaskListSize()+1);
 }

@@ -60,8 +60,8 @@ config_interface: textconfig
 #display_library: term
 #display_library: win32, options="legacyF12" # use F12 to toggle mouse
 #display_library: wx
-display_library: x, options="gui_debug"
-#display_library: x
+#display_library: x, options="gui_debug"
+display_library: x
 #=======================================================================
 # ROMIMAGE:
 # The ROM BIOS controls what the PC does when it first powers on.
@@ -714,7 +714,7 @@ magic_break: enabled=1
 # Enable GDB stub. See user documentation for details.
 # Default value is enabled=0.
 #=======================================================================
-#gdbstub: enabled=0, port=1234, text_base=0, data_base=0, bss_base=0
+gdbstub: enabled=1, port=1234, text_base=0, data_base=0, bss_base=0
 
 #=======================================================================
 # for Macintosh, use the style of pathnames in the following
