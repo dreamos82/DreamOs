@@ -160,7 +160,7 @@ void test_tasklist(){
 	printf("PID\tName\n");	
 	printf("%d\t%s\n", local_task->pid, local_task->name);
 	local_task = (task_t*)local_task->next;		
-	while(local_task!=task_list.tail && local_task!=NULL){
+	while(local_task!=task_list.tail && local_task!=task_list.head && local_task!=NULL){
 		dbg_bochs_print("ps inside\n");
 		printf("%d\t%s\n", local_task->pid, local_task->name);
 		local_task = (task_t*)local_task->next;		

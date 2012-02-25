@@ -41,11 +41,10 @@ void schedule(unsigned int *stack){
 		dbg_bochs_print((const unsigned char*)"Scheduler called\n");
 		task_t* cur_task;
 		task_t* next_task;				
-		if(task_list.size>1){
+		if(task_list.size>0){
 			cur_task = (task_t*)task_list.current;
-			next_task = dequeue_task();
-			dbg_bochs_print("OK\n");			
 			cur_task->esp = *stack;
+			next_task = dequeue_task();			
 			enqueue_task(cur_task->pid, cur_task);				
 			dbg_bochs_print(next_task->name);		
 			dbg_bochs_print("-");
@@ -53,7 +52,9 @@ void schedule(unsigned int *stack){
 			dbg_bochs_print("\n");
 			while(next_task->status!= READY && next_task->status != NEW){
 				dbg_bochs_print((const unsigned char*)"Not READY or NEW");
-				enqueue_task(next_task->pid, next_task);
+				if(next_task->status!=DEAD){
+					enqueue_task(next_task->pid, next_task);
+				}
 				next_task=dequeue_task();		
 				//printf("Stack: %d", stack);			
 			}
@@ -63,7 +64,7 @@ void schedule(unsigned int *stack){
 			}
 			//load_pdbr(next_task->pdir);		
 		active = FALSE;
-	}	
+	}*/
 	return;
 }
 
@@ -74,9 +75,10 @@ void preSchedule(){
 void idle()
 {		
 	dbg_bochs_print("idle\n");	
-    while(TRUE){
+    while(1){
 		dbg_bochs_print("===IDLE===\n");
 	}
+	for(;;) {dbg_bochs_print("===IDLE===\n");}
 }
 
 void suicide()
