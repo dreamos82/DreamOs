@@ -60,7 +60,7 @@ void enqueue_task(pid_t pid, task_t* n_task){
 	if(task_list.head == NULL){
 		dbg_bochs_print("TaskList NULL\n");
 		task_list.head = n_task;
-		task_list.current= n_task;
+		//task_list.current= n_task;
 	} else {
 		dbg_bochs_print("TaskList Not Null\n");
 		(task_list.tail)->next = (task_t*)n_task;				
@@ -124,6 +124,7 @@ pid_t new_task(char *task_name, void (*start_function)()){
 
 task_t* dequeue_task(){
 	task_t* _task; 
+	if(task_list.size==0) return NULL;
 	_task = (task_t*)task_list.head;
 	task_list.head = (task_t*)_task->next;	
 	task_list.size--;

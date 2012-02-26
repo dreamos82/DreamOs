@@ -64,7 +64,7 @@ void schedule(unsigned int *stack){
 			}
 			//load_pdbr(next_task->pdir);		
 		active = FALSE;
-	}*/
+	}	
 	return;
 }
 
