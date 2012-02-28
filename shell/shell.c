@@ -40,10 +40,7 @@
 #include <sys/utsname.h>
 #include <user_shell.h>
 #include <debug.h>
-#ifdef LATEST
-#include <heap.h>
-#endif
-#define NUM_COM 30
+
 userenv_t current_user;
 int hst_flag;
 char cmd[CMD_LEN];

@@ -36,13 +36,12 @@ size_t bmp_elements;
 mem_struct mem_bitmap;
 
 
-mem_area_pointer mem_info_root = (mem_area_pointer)0x110000;
-mem_area_pointer mem_info = (mem_area_pointer)0x110000;
+mem_area mem_info; 
+mem_area_pointer mem_info_root = (mem_area_pointer)&mem_info;
 
 void init_mem(){
     int i=0;
-//     int remainder=0;
-    mem_info = mem_info_root;
+//     int remainder=0;    
     while(i<BITMAP_SIZE){
         if(i<32)mem_bitmap.mem_map[i] = 0xFFFFFFFF;
         else mem_bitmap.mem_map[i] = 0x00000000;
@@ -54,14 +53,14 @@ void init_mem(){
     bmp_elements = (tot_mem/4096)/32;    
     //     printf("bmp_elements: %d\n", bmp_elements);
     //Ho allocato il primo elemento di mem_info, spazio dedicato al kernel
-    mem_info->pages_info[0].inizio= 0x00000000;
-    mem_info->pages_info[0].num_pagine = 512;
+    mem_info.pages_info[0].inizio= 0x00000000;
+    mem_info.pages_info[0].num_pagine = 512;
     i++;
-    mem_info->next_free = 1;
-    mem_info->next = NULL;
-    while(i < 509) {
-        mem_info->pages_info[i].inizio= 0x00000000;
-        mem_info->pages_info[i].num_pagine = 0;
+    mem_info.next_free = 1;
+    mem_info.next = NULL;
+    while(i < MEMINFO_SIZE) {
+        mem_info.pages_info[i].inizio= 0x00000000;
+        mem_info.pages_info[i].num_pagine = 0;
         i++;
     }
 }
@@ -117,7 +116,7 @@ void* request_pages(int n_pages, int flags){
     if(flags==ADD_LIST)
      add_memarea_element(indirizzo, n_pages);
     #ifdef DEBUG
-    printf("Next_free: %d\n", mem_info->next_free);
+    printf("Next_free: %d\n", mem_info.next_free);
     printf("%u\n", indirizzo);
     #endif    
     return (void*) indirizzo;
@@ -181,27 +180,27 @@ int release_pages(void *addr){
 int add_memarea_element(size_t start_address, int required_pages){
 //Return -1 on error 0 on success
     int posizione;
-    posizione = mem_info->next_free;
+    posizione = mem_info.next_free;
     if(posizione>0 && posizione<510){
         #ifdef DEBUG
         printf("Posizione <510\n");
         #endif
-        mem_info->pages_info[posizione].inizio = (void*)start_address;
-        mem_info->pages_info[posizione].num_pagine = required_pages;
-        mem_info->next_free++;
+        mem_info.pages_info[posizione].inizio = (void*)start_address;
+        mem_info.pages_info[posizione].num_pagine = required_pages;
+        mem_info.next_free++;
         return 0;
     }
-    else {
-        mem_info->next = request_pages(1, NOT_ADD_LIST);
-        mem_info = (mem_area_pointer) mem_info->next;
-        if(mem_info->next!=NULL){
-            mem_info = (mem_area_pointer)mem_info->next;
+     else {
+       mem_info.next = request_pages(1, NOT_ADD_LIST);
+       mem_area_pointer mem_new = (mem_area_pointer) mem_info.next;
+        if(mem_new->next!=NULL){
+            mem_new = (mem_area_pointer)mem_info.next;
             #ifdef DEBUG
             printf("Posizione >510\n");
             #endif
-            mem_info->pages_info[0].inizio = (void*)start_address;
-            mem_info->pages_info[0].num_pagine = required_pages;
-            mem_info->next_free = 1;
+            mem_new->pages_info[0].inizio = (void*)start_address;
+            mem_new->pages_info[0].num_pagine = required_pages;
+            mem_new->next_free = 1;
         }
         else return -1;
     return 0;

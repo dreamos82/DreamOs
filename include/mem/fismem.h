@@ -35,6 +35,8 @@
 
 #define BITMAP_SIZE 0x8000  //Number of Elements of Bitmap
 
+#define MEMINFO_SIZE 510
+
 #define ADD_LIST 1
 #define NOT_ADD_LIST 0
 
@@ -52,10 +54,10 @@ typedef struct {
 /*! Contain info of allocated memory, for deallocation
  */
 typedef struct {
-    mem_size pages_info[510];/*!< @see mem_size */
+    mem_size pages_info[MEMINFO_SIZE];/*!< @see mem_size */
     size_t next_free; /*!< next element of pages_info free*/
     struct mem_area* next; /*!< next element of list available free*/
-}mem_area;
+}__attribute__((packed)) mem_area;
 
 typedef mem_area *mem_area_pointer;
 extern size_t tot_mem;

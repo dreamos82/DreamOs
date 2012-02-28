@@ -18,11 +18,11 @@
 #ifndef _SHELL_H
 #define _SHELL_H
 
-#define USER_LEN 24
+#define USER_LEN 22
 #define CMD_LEN 256
 #define DESC_LEN 256
 #define CURPATH_LEN 256
-#define NUM_COM 30
+#define NUM_COM 22
 #define DEF_COM 18
 
 

@@ -40,8 +40,7 @@ void schedule(unsigned int *stack){
 	if(active == TRUE){
 		dbg_bochs_print((const unsigned char*)"Scheduler called\n");
 		task_t* cur_task;
-		task_t* next_task;				
-		if(task_list.size>0){
+		task_t* next_task;						
 			cur_task = (task_t*)task_list.current;
 			cur_task->esp = *stack;
 			next_task = dequeue_task();			
@@ -64,7 +63,6 @@ void schedule(unsigned int *stack){
 			}
 			//load_pdbr(next_task->pdir);		
 		active = FALSE;
-	}	
 	return;
 }
 
