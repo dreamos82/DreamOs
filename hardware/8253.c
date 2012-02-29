@@ -39,7 +39,7 @@ void PIT_handler ()
 		task_t* cur_task = task_list.current;	
 		if(cur_task->cur_quants < MAX_TICKS && (cur_task->status == NEW || cur_task->status==READY)) cur_task->cur_quants++;
 		else {			
-			//preSchedule();			
+			preSchedule();			
 			cur_task->cur_quants = 0;			
 		}
 	}
