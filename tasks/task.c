@@ -35,8 +35,7 @@ int cur_free_index;
 task_list_t task_list;
 
 void tasks_init(){
-	asm("cli");
-	int i=0;
+	asm("cli");	
 	printf("Init tasks");
 	task_list.head = NULL;
 	task_list.tail = NULL;			
