@@ -86,6 +86,15 @@ typedef struct {
 	int size;
 } task_list_t;
 
+/*!  \struct task_list_t
+     \brief Task List Structure
+ */
+typedef struct {
+	task_t list[MAX_TASKS];
+	int cur_task;
+	int size;
+} task_array_t;
+
 //extern task_t task_list[MAX_TASKS];
 extern task_list_t task_list;
 extern pid_t current_pid;

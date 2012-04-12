@@ -110,7 +110,7 @@ pid_t new_task(char *task_name, void (*start_function)()){
 }
 
 task_t* dequeue_task(){
-	return _task;
+	return NULL;
 }
 
 int isEmpty(){

@@ -38,6 +38,7 @@ void init_scheduler(){
 
 void schedule(unsigned int *stack){
 	if(active == TRUE){
+	}
 	active = FALSE;
 	return;
 }
