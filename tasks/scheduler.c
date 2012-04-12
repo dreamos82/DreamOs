@@ -38,30 +38,6 @@ void init_scheduler(){
 
 void schedule(unsigned int *stack){
 	if(active == TRUE){
-		dbg_bochs_print((const unsigned char*)"Scheduler called\n");
-		task_t* cur_task;
-		task_t* next_task;						
-		cur_task = (task_t*)task_list.current;
-		cur_task->esp = *stack;
-		next_task = dequeue_task();			
-		enqueue_task(cur_task->pid, cur_task);				
-		dbg_bochs_print(next_task->name);		
-		dbg_bochs_print("-");
-		dbg_bochs_print(cur_task->name);		
-		dbg_bochs_print("\n");
-		while(next_task->status!= READY && next_task->status != NEW){
-			dbg_bochs_print((const unsigned char*)"Not READY or NEW");
-			if(next_task->status!=DEAD){
-				enqueue_task(next_task->pid, next_task);
-			}
-			next_task=dequeue_task();		
-			//printf("Stack: %d", stack);			
-		}
-		//Switch context logic goes here.		
-		task_list.current = next_task;
-		*stack = next_task->esp;			
-		}
-		//load_pdbr(next_task->pdir);		
 	active = FALSE;
 	return;
 }

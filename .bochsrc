@@ -74,7 +74,7 @@ display_library: x
 # now supported, but we still recommend to use the BIOS distributed with
 # Bochs.
 #=======================================================================
-romimage: file=/usr/share/bochs/BIOS-bochs-latest
+romimage: file=/home/vetinari/utils/bochs/bios/BIOS-bochs-latest
 #romimage: file=../bochs-2.4.5/bios/BIOS-bochs-latest
 #romimage: file=bios/BIOS-bochs-2-processors, address=0xf0000
 #romimage: file=bios/BIOS-bochs-4-processors, address=0xf0000
@@ -114,7 +114,7 @@ megs: 512
 # You now need to load a VGA ROM BIOS into C0000.
 #=======================================================================
 #vgaromimage: file=/usr/share/vgabios/vgabios.bin
-vgaromimage: file=/usr/share/bochs/VGABIOS-lgpl-latest
+vgaromimage: file=/home/vetinari/utils/bochs/bios/VGABIOS-lgpl-latest
 #garomimage: file=../bochs-2.4.5/bios/VGABIOS-lgpl-latest
 #vgaromimage: file=bios/VGABIOS-lgpl-latest-cirrus
 
@@ -627,8 +627,8 @@ private_colormap: enabled=0
 # Examples:
 #   keyboard_mapping: enabled=1, map=gui/keymaps/x11-pc-de.map
 #=======================================================================
-keyboard_mapping: enabled=1, map=/usr/share/bochs/keymaps/x11-pc-it.map
-
+#keyboard_mapping: enabled=1, map=/usr/share/bochs/keymaps/x11-pc-it.map
+plugin_ctrl: unmapped=1
 #=======================================================================
 # KEYBOARD_TYPE:
 # Type of keyboard return by a "identify keyboard" command to the

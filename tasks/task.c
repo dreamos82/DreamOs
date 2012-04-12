@@ -38,7 +38,7 @@ void tasks_init(){
 	asm("cli");	
 	printf("Init tasks");
 	task_list.head = NULL;
-	task_list.tail = NULL;			
+	task_list.tail = NULL;
 	task_list.current = NULL;
 	task_list.size = 0;
 	current_pid = 0;
@@ -56,16 +56,7 @@ unsigned int request_pid(){
  * @version 1.0
  */
 void enqueue_task(pid_t pid, task_t* n_task){		
-	if(task_list.head == NULL){
-		dbg_bochs_print("TaskList NULL\n");
-		task_list.head = n_task;
-		task_list.current= n_task;
-	} else {
-		dbg_bochs_print("TaskList Not Null\n");
-		(task_list.tail)->next = (task_t*)n_task;				
-	}
-	task_list.tail = n_task;	
-	task_list.size++;
+
 }
 
 /**
@@ -110,28 +101,20 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	new_task->pdir = 0;
 	new_task->ptable = 0;
 	enqueue_task(new_task->pid, new_task);
-	if(task_list.current==NULL){
-		dbg_bochs_print("Current==NULL\n");
-		task_list.current=new_task;
-	} else {
-		dbg_bochs_print("Current!=NULL\n");	
-		(task_list.current)->cur_quants = MAX_TICKS;
+	if(task_list.current == NULL) {
+	  preSchedule();
 	}
+	(task_list.current)->cur_quants = MAX_TICKS;	
 	asm("sti");
 	return new_pid;
 }
 
 task_t* dequeue_task(){
-	task_t* _task; 	
-	_task = (task_t*)task_list.head;
-	task_list.head = (task_t*)_task->next;	
-	task_list.size--;
 	return _task;
 }
 
 int isEmpty(){
-	if(task_list.head == task_list.tail) return TRUE;
-	else return FALSE;
+
 }
 
 /**
