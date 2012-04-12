@@ -67,8 +67,7 @@ void enqueue_task(pid_t pid, task_t* n_task){
  */
 task_t* get_task(pid_t pid){
 	//Placeholtder for get_task
-	printf("PlaceHolder for get_task\n");
-	task_t *_task = task_list.head;
+	printf("PlaceHolder for get_task\n");	
 	return (task_t *) NULL;
 }
 

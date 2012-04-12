@@ -86,7 +86,7 @@ typedef struct {
 	int size;
 } task_list_t;
 
-/*!  \struct task_list_t
+/*!  \struct task_array_t
      \brief Task List Structure
  */
 typedef struct {
