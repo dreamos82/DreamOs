@@ -33,10 +33,16 @@
 pid_t current_pid; 
 int cur_free_index; 
 task_list_t task_list;
+task_array_t task_array;
 
 void tasks_init(){
 	asm("cli");	
 	printf("Init tasks");
+	int i=0;
+	while(i<MAX_TASKS){
+	  task_array.list[i].status = DEAD;
+	  i++;
+	}
 	task_list.head = NULL;
 	task_list.tail = NULL;
 	task_list.current = NULL;
