@@ -82,7 +82,6 @@ typedef struct {
 	//int cur_task;
 	task_t *head;
 	task_t *tail;
-	task_t *current;
 	int size;
 } task_list_t;
 
@@ -101,7 +100,7 @@ extern pid_t current_pid;
 
 void tasks_init();
 void enqueue_task(pid_t, task_t*);
-task_t* get_task(pid_t);
+task_t* get_task();
 
 pid_t new_task(char*, void (*start_function)());
 unsigned int request_pid();

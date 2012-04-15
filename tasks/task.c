@@ -29,6 +29,7 @@
 #include <tss.h>
 #include <task_utils.h>
 #include <scheduler.h>
+#include <debug.h>
 
 pid_t current_pid; 
 int cur_free_index; 
@@ -38,14 +39,16 @@ task_array_t task_array;
 void tasks_init(){
 	asm("cli");	
 	printf("Init tasks");
+	dbg_bochs_print("Task array setup");
 	int i=0;
 	while(i<MAX_TASKS){
 	  task_array.list[i].status = DEAD;
 	  i++;
 	}
+	task_array.cur_task = 0;
+	task_array.size = 0;
 	task_list.head = NULL;
 	task_list.tail = NULL;
-	task_list.current = NULL;
 	task_list.size = 0;
 	current_pid = 0;
 	asm("sti");
@@ -61,8 +64,11 @@ unsigned int request_pid(){
  * @author Ivan Gualandri
  * @version 1.0
  */
-void enqueue_task(pid_t pid, task_t* n_task){		
-
+void enqueue_task(pid_t pid, task_t* n_task){
+  if(task_list.head == NULL){
+    task_list.tail = n_task;
+    task_list.head = task_list.tail;    
+  }
 }
 
 /**
@@ -71,10 +77,9 @@ void enqueue_task(pid_t pid, task_t* n_task){
  * @version 1.0
  * @param pid task pid
  */
-task_t* get_task(pid_t pid){
-	//Placeholtder for get_task
-	printf("PlaceHolder for get_task\n");	
-	return (task_t *) NULL;
+task_t* get_task(){
+	//Placeholtder for get_task	
+	return (task_t *) task_list.head;
 }
 
 /**
@@ -106,20 +111,27 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	new_task->pdir = 0;
 	new_task->ptable = 0;
 	enqueue_task(new_task->pid, new_task);
-	if(task_list.current == NULL) {
-	  preSchedule();
-	}
-	(task_list.current)->cur_quants = MAX_TICKS;	
+	//(task_list.current)->cur_quants = MAX_TICKS;	
 	asm("sti");
 	return new_pid;
 }
 
 task_t* dequeue_task(){
-	return NULL;
+	if(task_list.tail==NULL){
+	  return NULL;
+	} else {
+	  task_t* _task;
+	  _task = task_list.tail;
+	  task_list.tail=_task->next;
+	  return _task;
+	}
 }
 
 int isEmpty(){
-
+  if(task_array.size==0)
+    return FALSE;
+  else 
+    return TRUE;
 }
 
 /**
@@ -130,7 +142,7 @@ int isEmpty(){
  */
 int getTaskListSize(){
 	int i=0;
-	if(task_list.current!=NULL) i++;
+	//if(task_list.current!=NULL) i++;
 	return task_list.size+i;
 }
 
@@ -144,18 +156,18 @@ void test_tasklist(){
 	task_t* local_task;
 	int i = 0;
 	local_task = (task_t*) task_list.head;
-	printf("PID\tName\n");	
-	printf("%d\t%s\n", local_task->pid, local_task->name);
-	local_task = (task_t*)local_task->next;		
-	while(local_task!=task_list.tail && local_task!=task_list.head && local_task!=NULL){
-		dbg_bochs_print("ps inside\n");
-		printf("%d\t%s\n", local_task->pid, local_task->name);
-		local_task = (task_t*)local_task->next;		
-		i++;
-	}	
-	printf("%d\t%s\n", local_task->pid, local_task->name);
-	local_task=(task_t*)task_list.current;
-	printf("%d\t%s\n", local_task->pid, local_task->name);
-	asm("sti;");
-	printf("TaskList size: %d\n", getTaskListSize()+1);
+// 	printf("PID\tName\n");	
+// 	printf("%d\t%s\n", local_task->pid, local_task->name);
+// 	local_task = (task_t*)local_task->next;		
+// 	while(local_task!=task_list.tail && local_task!=task_list.head && local_task!=NULL){
+// 		dbg_bochs_print("ps inside\n");
+// 		printf("%d\t%s\n", local_task->pid, local_task->name);
+// 		local_task = (task_t*)local_task->next;		
+// 		i++;
+// 	}	
+// 	printf("%d\t%s\n", local_task->pid, local_task->name);
+// 	local_task=(task_t*)task_list.current;
+// 	printf("%d\t%s\n", local_task->pid, local_task->name);
+// 	asm("sti;");
+// 	printf("TaskList size: %d\n", getTaskListSize()+1);
 }
