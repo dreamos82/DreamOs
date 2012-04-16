@@ -65,9 +65,11 @@ unsigned int request_pid(){
  * @version 1.0
  */
 void enqueue_task(pid_t pid, task_t* n_task){
-  if(task_list.head == NULL){
-    task_list.tail = n_task;
-    task_list.head = task_list.tail;    
+  if(task_list.tail == NULL){
+    task_list.head = n_task;
+    task_list.tail = task_list.head;    
+  } else {
+    task_list.head->next=n_task;
   }
 }
 
@@ -117,14 +119,15 @@ pid_t new_task(char *task_name, void (*start_function)()){
 }
 
 task_t* dequeue_task(){
-	if(task_list.tail==NULL){
+	if(task_list.head==NULL){
 	  return NULL;
 	} else {
 	  task_t* _task;
-	  _task = task_list.tail;
-	  task_list.tail=_task->next;
+	  _task = task_list.head; 
+	  task_list.head=_task->next;
 	  return _task;
 	}
+	return
 }
 
 int isEmpty(){
