@@ -70,6 +70,7 @@ void enqueue_task(pid_t pid, task_t* n_task){
     task_list.tail = task_list.head;    
   } else {
     task_list.head->next=n_task;
+    task_list.head = n_task;
   }
 }
 
@@ -127,7 +128,7 @@ task_t* dequeue_task(){
 	  task_list.head=_task->next;
 	  return _task;
 	}
-	return
+	return;
 }
 
 int isEmpty(){
@@ -144,9 +145,15 @@ int isEmpty(){
  * @return Task List size
  */
 int getTaskListSize(){
-	int i=0;
-	//if(task_list.current!=NULL) i++;
-	return task_list.size+i;
+	task_t *local_task;
+	local_task=task_list.tail;
+	int i = 0;
+	while(local_task!=NULL){
+	  i++;
+	  local_task=local_task->next;
+	}
+	//if(task_list.current!=NULL) i++;	
+	return i;
 }
 
 void test_dequeue(){
@@ -157,9 +164,13 @@ void test_dequeue(){
 void test_tasklist(){
 	asm("cli;");
 	task_t* local_task;
-	int i = 0;
-	local_task = (task_t*) task_list.head;
-// 	printf("PID\tName\n");	
+	local_task = (task_t*) task_list.tail;
+	printf("Name\tPid\n");
+	while(local_task!=NULL){
+	  printf("%s\t%d\n", local_task->name, local_task->pid);
+	  local_task=local_task->next;
+	}
+	printf("Size: %d\n", getTaskListSize());
 // 	printf("%d\t%s\n", local_task->pid, local_task->name);
 // 	local_task = (task_t*)local_task->next;		
 // 	while(local_task!=task_list.tail && local_task!=task_list.head && local_task!=NULL){
@@ -171,6 +182,6 @@ void test_tasklist(){
 // 	printf("%d\t%s\n", local_task->pid, local_task->name);
 // 	local_task=(task_t*)task_list.current;
 // 	printf("%d\t%s\n", local_task->pid, local_task->name);
-// 	asm("sti;");
+ 	asm("sti;");
 // 	printf("TaskList size: %d\n", getTaskListSize()+1);
 }
