@@ -119,13 +119,19 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	return new_pid;
 }
 
+/**
+ * That function get the next task on the queue
+ * @author Ivan Gualandri
+ * @version 1.0
+ * @return Get the next task on the queue
+ */
 task_t* dequeue_task(){
 	if(task_list.head==NULL){
 	  return NULL;
 	} else {
 	  task_t* _task;
-	  _task = task_list.head; 
-	  task_list.head=_task->next;
+	  _task = task_list.tail; 
+	  task_list.tail=_task->next;
 	  return _task;
 	}
 	return;
