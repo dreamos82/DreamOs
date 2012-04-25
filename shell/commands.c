@@ -525,6 +525,7 @@ void tester(){
 					{ "try_shadow", try_shadow},
 					{ "try_mapaddress", try_mapaddress},
 					{ "try_taskdel", try_taskdel},
+					{ "try_taskadd", try_taskadd},
 					{ "try_tasklist", test_tasklist},
 					{ "--help", help_tester },
 					};

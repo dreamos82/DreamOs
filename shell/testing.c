@@ -294,6 +294,11 @@ void task_testsecond(){
 	printf("Hi, i'm a very old task!!! I came from the past!!!\n");
 }
 
+void try_taskadd(){
+  task_t* myTask = new_task("testtask", task_test);
+  test_tasklist();
+}
+
 void try_taskdel(){
     task_t* myTask = dequeue_task();
     test_tasklist();

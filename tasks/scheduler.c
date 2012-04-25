@@ -58,7 +58,7 @@ void idle()
 
 void suicide()
 {	
-	task_list.current->status = DEAD;
+	task_list.head->status = DEAD;
 	dbg_bochs_print("suicide\n");
     while(TRUE);
 }

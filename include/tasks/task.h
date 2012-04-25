@@ -80,7 +80,7 @@ typedef struct task_t{
 typedef struct {
 	//task_t list[MAX_TASKS];
 	//int cur_task;
-	task_t *head;
+	task_t *head;	
 	task_t *tail;
 	int size;
 } task_list_t;

@@ -36,7 +36,7 @@ void PIT_handler ()
 	  seconds = 0;     
     }
 //     if(task_list.current!=NULL){
-		task_t* cur_task = task_list.current;	
+		task_t* cur_task = get_task();	
 		if(cur_task->cur_quants < MAX_TICKS && (cur_task->status == NEW || cur_task->status==READY)) cur_task->cur_quants++;
 		else {			
 			preSchedule();			
