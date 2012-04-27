@@ -37,10 +37,19 @@ void init_scheduler(){
 }
 
 void schedule(unsigned int *stack){
+	asm("cli");
 	if(active == TRUE){
+	  task_t* cur_task = dequeue_task();
+	  if(cur_task != NULL){	    
+	    dbg_bochs_print("@@@@@@@@@@@@@@@");
+	    dbg_bochs_print(cur_task->name);
+	    dbg_bochs_print("\n");
+	    enqueue_task(cur_task->pid, cur_task);
+	  }
 	}
 	active = FALSE;
 	return;
+	asm("sti");
 }
 
 void preSchedule(){
