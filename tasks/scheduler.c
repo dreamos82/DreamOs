@@ -42,10 +42,13 @@ void schedule(unsigned int *stack){
 	  task_t* cur_task = dequeue_task();
 	  if(cur_task != NULL){	    
 	    dbg_bochs_print("@@@@@@@@@@@@@@@");
+	    dbg_bochs_print(cur_task->name);	    
+	    cur_task->esp=stack;
+	    enqueue_task(cur_task->pid, cur_task);	    
+	    cur_task = get_task();	    
+	    dbg_bochs_print(" -- ");
 	    dbg_bochs_print(cur_task->name);
 	    dbg_bochs_print("\n");
-	    cur_task->esp=stack;
-	    enqueue_task(cur_task->pid, cur_task);
 	  }
 	}
 	active = FALSE;

@@ -82,7 +82,7 @@ void enqueue_task(pid_t pid, task_t* n_task){
  * @param pid task pid
  */
 task_t* get_task(){	
-	return (task_t *) task_list.head;
+	return (task_t *) task_list.tail;
 }
 
 /**
