@@ -44,6 +44,7 @@ void schedule(unsigned int *stack){
 	    dbg_bochs_print("@@@@@@@@@@@@@@@");
 	    dbg_bochs_print(cur_task->name);
 	    dbg_bochs_print("\n");
+	    cur_task->esp=stack;
 	    enqueue_task(cur_task->pid, cur_task);
 	  }
 	}

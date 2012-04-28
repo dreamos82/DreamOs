@@ -65,12 +65,13 @@ unsigned int request_pid(){
  * @version 1.0
  */
 void enqueue_task(pid_t pid, task_t* n_task){
+  n_task->next=NULL;
   if(task_list.tail == NULL){
     task_list.head = n_task;
     task_list.tail = task_list.head;    
   } else {
-    task_list.head->next=n_task;
-    task_list.head = n_task;
+    task_list.head->next=n_task;    
+    task_list.head = n_task;    
   }
 }
 
@@ -176,17 +177,5 @@ void test_tasklist(){
 	  local_task=local_task->next;
 	}
 	printf("Size: %d\n", getTaskListSize());
-// 	printf("%d\t%s\n", local_task->pid, local_task->name);
-// 	local_task = (task_t*)local_task->next;		
-// 	while(local_task!=task_list.tail && local_task!=task_list.head && local_task!=NULL){
-// 		dbg_bochs_print("ps inside\n");
-// 		printf("%d\t%s\n", local_task->pid, local_task->name);
-// 		local_task = (task_t*)local_task->next;		
-// 		i++;
-// 	}	
-// 	printf("%d\t%s\n", local_task->pid, local_task->name);
-// 	local_task=(task_t*)task_list.current;
-// 	printf("%d\t%s\n", local_task->pid, local_task->name);
  	asm("sti;");
-// 	printf("TaskList size: %d\n", getTaskListSize()+1);
 }

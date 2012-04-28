@@ -514,7 +514,7 @@ void tester(){
 	struct devel testing[MAX_TEST] = { 
 					{ "try_kmalloc", try_kmalloc },
 					{ "try_strtok", try_strtok },
-					{ "do_fault", do_fault },
+					{ "try_tasksetup", try_tasksetup},
 					{ "try_printmem", try_printmem },
 					{ "try_ocreat", try_ocreat },
 					{ "try_open", try_open},					
