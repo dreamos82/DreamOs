@@ -41,8 +41,9 @@ void PIT_handler ()
 		  cur_task->cur_quants++;
 		  //dbg_bochs_print("tick\n");
 		}
-		else {			
-			preSchedule();			
+		else {	
+// 			if(getTaskListSize()>1)
+			  preSchedule();			
 			cur_task->cur_quants = 0;
 		}
 // 	}

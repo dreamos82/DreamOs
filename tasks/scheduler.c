@@ -31,24 +31,37 @@
 task_list_t task_list;
 
 unsigned char active;
+unsigned char started;
 
 void init_scheduler(){
 	active=FALSE;
+	started=FALSE;
 }
 
 void schedule(unsigned int *stack){
 	asm("cli");
 	if(active == TRUE){
-	  task_t* cur_task = dequeue_task();
-	  if(cur_task != NULL){	    
+	  task_t* cur_task = dequeue_task();	  
+	  if(cur_task != NULL){
+	    int curpid = cur_task->pid;
 	    dbg_bochs_print("@@@@@@@@@@@@@@@");
-	    dbg_bochs_print(cur_task->name);	    
-	    cur_task->esp=stack;
-	    enqueue_task(cur_task->pid, cur_task);	    
-	    cur_task = get_task();	    
+	    dbg_bochs_print(cur_task->name);
+	    if(cur_task->status!=NEW){
+	      cur_task->esp=*stack;
+	    } else {
+	      cur_task->status=READY;
+	    }
+	    enqueue_task(cur_task->pid, cur_task);
+	    cur_task=get_task();
+	    if(cur_task->status==NEW){
+	      cur_task->status=READY;
+	    }
 	    dbg_bochs_print(" -- ");
 	    dbg_bochs_print(cur_task->name);
-	    dbg_bochs_print("\n");
+	    dbg_bochs_print("\n");	      
+	    *stack = cur_task->esp;
+	  } else {
+	    enqueue_task(cur_task->pid, cur_task);
 	  }
 	}
 	active = FALSE;
@@ -63,15 +76,15 @@ void preSchedule(){
 void idle()
 {		
 	dbg_bochs_print("idle\n");	
-    while(1){
+	while(1){
 		dbg_bochs_print("===IDLE===\n");
-	}
-	for(;;) {dbg_bochs_print("===IDLE===\n");}
+	}	
 }
 
 void suicide()
 {	
-	task_list.head->status = DEAD;
+	//cur_task = get_task();
+	//cur_task->status = DEAD;
 	dbg_bochs_print("suicide\n");
     while(TRUE);
 }

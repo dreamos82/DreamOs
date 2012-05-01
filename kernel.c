@@ -123,9 +123,8 @@ int main_loop(struct multiboot_info *boot_info)
 #endif
 		new_task("idle", idle);		
 		new_task("dreamshell", shell);
-		new_task("idle2", idle);		
-		shell();						
-
+		//new_task("idle2", idle);		
+		//shell();						
     return 0;
 }
 

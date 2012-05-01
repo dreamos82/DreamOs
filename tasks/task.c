@@ -152,6 +152,9 @@ int isEmpty(){
  */
 int getTaskListSize(){
 	task_t *local_task;
+	if(task_list.tail == NULL) {
+	  return -1;
+	}
 	local_task=task_list.tail;
 	int i = 0;
 	while(local_task!=NULL){
