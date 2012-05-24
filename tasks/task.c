@@ -114,7 +114,7 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	new_task->pdir = 0;
 	new_task->ptable = 0;
 	enqueue_task(new_task->pid, new_task);
-	//(task_list.current)->cur_quants = MAX_TICKS;	
+	//(task_list.current)->cur_quants = MAX_TICKS;			
 	asm("sti");
 	return new_pid;
 }

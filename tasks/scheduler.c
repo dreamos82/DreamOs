@@ -44,7 +44,7 @@ void schedule(unsigned int *stack){
 	  task_t* cur_task = dequeue_task();	  
 	  if(cur_task != NULL){
 	    int curpid = cur_task->pid;
-	    dbg_bochs_print("@@@@@@@@@@@@@@@");
+	    dbg_bochs_print("@@@@@@@");
 	    dbg_bochs_print(cur_task->name);
 	    if(cur_task->status!=NEW){
 	      cur_task->esp=*stack;
@@ -75,16 +75,17 @@ void preSchedule(){
 
 void idle()
 {		
-	dbg_bochs_print("idle\n");	
+	//dbg_bochs_print("idle\n");	
 	while(1){
-		dbg_bochs_print("===IDLE===\n");
+//		dbg_bochs_print("===IDLE===\n");
 	}	
 }
 
 void suicide()
 {	
-	//cur_task = get_task();
-	//cur_task->status = DEAD;
+	task_t* cur_task;
+	cur_task = get_task(); 
+	cur_task->status = DEAD;
 	dbg_bochs_print("suicide\n");
     while(TRUE);
 }
