@@ -91,9 +91,7 @@ int main_loop(struct multiboot_info *boot_info)
     _kprintOK();  
     _kputs(LNG_PIC8259);
     init_IRQ();   
-    _kprintOK();            	
-    printf(LNG_PIT8253);
-    configure_PIT ();       
+    _kprintOK();            	    
     set_memorysize((boot_info->mem_upper+boot_info->mem_lower)*1024);
     init_mem();       
     asm("sti");
@@ -112,6 +110,8 @@ int main_loop(struct multiboot_info *boot_info)
     tasks_init();
     init_scheduler();
     _kprintOK();
+    printf(LNG_PIT8253);
+    configure_PIT ();   
     printf("----\n");    
     printf(LNG_SHELL);    
     _kprintOK();

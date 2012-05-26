@@ -108,11 +108,11 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	new_task->status = NEW;
 	new_task->registers = (task_register_t*)new_task->esp;
 	new_tss(new_task->registers, start_function);
-//	local_table = map_kernel();
-//	new_task->pdir = local_table.page_dir;
-//	new_task->ptable = local_table.page_table;
-	new_task->pdir = 0;
-	new_task->ptable = 0;
+	local_table = map_kernel();
+	new_task->pdir = local_table.page_dir;
+	new_task->ptable = local_table.page_table;
+	//new_task->pdir = 0;
+	//new_task->ptable = 0;
 	enqueue_task(new_task->pid, new_task);
 	//(task_list.current)->cur_quants = MAX_TICKS;			
 	asm("sti");
@@ -167,7 +167,6 @@ int getTaskListSize(){
 
 void test_dequeue(){
 	task_t* _task =  dequeue_task();
-	
 }
 
 void test_tasklist(){
