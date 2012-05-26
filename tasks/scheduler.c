@@ -32,10 +32,12 @@ task_list_t task_list;
 
 unsigned char active;
 unsigned char started;
+int cur_pid;
 
 void init_scheduler(){
 	active=FALSE;
 	started=FALSE;
+	cur_pid=-1;
 }
 
 void schedule(unsigned int *stack){
@@ -43,7 +45,7 @@ void schedule(unsigned int *stack){
 	if(active == TRUE){
 	  task_t* cur_task = dequeue_task();	  
 	  if(cur_task != NULL){
-	    int curpid = cur_task->pid;
+	    cur_pid = cur_task->pid;
 	    dbg_bochs_print("@@@@@@@");
 	    dbg_bochs_print(cur_task->name);
 	    if(cur_task->status!=NEW){
