@@ -51,7 +51,8 @@ void schedule(unsigned int *stack){
 	    if(cur_task->status!=NEW){
 	      cur_task->esp=*stack;
 	    } else {
-	      cur_task->status=READY;
+	      cur_task->status=READY;	      
+	      ((task_register_t *)(cur_task->esp))->eip = cur_task->eip;	      	      
 	    }
 	    enqueue_task(cur_task->pid, cur_task);
 	    cur_task=get_task();

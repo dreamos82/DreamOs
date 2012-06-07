@@ -52,14 +52,14 @@
 #define SIMD_FP_EXC 19
 		 
 #define SWITCH_KERNEL\
-		"movl $0x10, %edx;\
-		 movw %dx, %ds;\
-		 movw %dx, %es;\
-         movw %dx, %fs;"
+	"movl $0x10, %edx;\
+	 movw %dx, %ds;\
+	 movw %dx, %es;\
+	 movw %dx, %fs;"
 
 #define SAVE_CONTEXT\
-		"pusha;"
-		 
+	"pushad;"\
+ 
 #define SAVE_CONTEXT_EC\
         "nop;\
          xchgl %eax, (%esp);\
@@ -70,7 +70,7 @@
 		 
 #define EXCEPTION(n)\
     __asm__("INT_"#n":"\
-			 SAVE_CONTEXT\
+	     SAVE_CONTEXT\
              "pushl $"#n";\
              call *(IntTable+(4*"#n"));\
              add $4, %esp;"\
@@ -90,7 +90,7 @@
     __asm__("INT_"#n":"\
             SAVE_CONTEXT\
             "movl %esp, %eax;"\
-			"pushl %eax;"\
+	    "pushl %eax;"\
             "call _irqinterrupt;"\
             "popl %eax;"\
             "movl %eax, %esp;"\
@@ -105,7 +105,7 @@
             "iret;")  
             
 #define RESTORE \
-		"popa;"
+		"popad;"
 
 #define RESTORE_EC \
         "popl %edx;\
