@@ -45,7 +45,7 @@ typedef struct {
         unsigned int edi;   //+0
         unsigned int esi;   //+1
         unsigned int ebp;  //+2
-        unsigned int esp;  //+3 (could be null)
+        unsigned int esp;  //+3 (can be null)
         unsigned int ebx;  //+4
         unsigned int edx;  //+5
         unsigned int ecx;  //+6

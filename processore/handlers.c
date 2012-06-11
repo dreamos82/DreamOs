@@ -161,7 +161,7 @@ void _globalException(int n, int error)
 }
 
 void _irqinterrupt(unsigned int esp){
-	asm("cli;");
+    asm("cli;");
     int irqn;
     irqn = get_current_irq();  
     IRQ_s* tmpHandler; 
