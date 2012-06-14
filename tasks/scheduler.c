@@ -41,7 +41,6 @@ void init_scheduler(){
 }
 
 void schedule(unsigned int *stack){
-	asm("cli");
 	if(active == TRUE){
 	  task_t* cur_task = dequeue_task();	  
 	  if(cur_task != NULL){
@@ -70,7 +69,6 @@ void schedule(unsigned int *stack){
 	}
 	active = FALSE;
 	return;
-	asm("sti");
 }
 
 void preSchedule(){
