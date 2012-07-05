@@ -66,12 +66,12 @@ unsigned int request_pid(){
  */
 void enqueue_task(pid_t pid, task_t* n_task){
   n_task->next=NULL;
-  if(task_list.tail == NULL){
-    task_list.head = n_task;
-    task_list.tail = task_list.head;    
+  if(task_list.head == NULL){
+    task_list.tail = n_task;
+    task_list.head = task_list.tail;    
   } else {
-    task_list.head->next=n_task;    
-    task_list.head = n_task;    
+    task_list.tail->next=n_task;    
+    task_list.tail = n_task;    
   }
 }
 
@@ -82,7 +82,7 @@ void enqueue_task(pid_t pid, task_t* n_task){
  * @param pid task pid
  */
 task_t* get_task(){	
-	return (task_t *) task_list.tail;
+	return (task_t *) task_list.head;
 }
 
 /**
@@ -126,12 +126,12 @@ pid_t new_task(char *task_name, void (*start_function)()){
  * @return Get the next task on the queue
  */
 task_t* dequeue_task(){
-	if(task_list.head==NULL){
+	if(task_list.tail==NULL){
 	  return NULL;
 	} else {
 	  task_t* _task;
-	  _task = task_list.tail; 
-	  task_list.tail=_task->next;
+	  _task = task_list.head; 
+	  task_list.head=_task->next;
 	  return _task;
 	}
 	return;

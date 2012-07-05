@@ -58,7 +58,7 @@
 	 movw %dx, %fs;"
 
 #define SAVE_CONTEXT\
-	"pushad;"\
+	"pusha;"\
  
 #define SAVE_CONTEXT_EC\
         "nop;\
@@ -105,7 +105,7 @@
             "iret;")  
             
 #define RESTORE \
-		"popad;"
+		"popa;"
 
 #define RESTORE_EC \
         "popl %edx;\
