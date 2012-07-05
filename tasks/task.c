@@ -172,7 +172,7 @@ void test_dequeue(){
 void test_tasklist(){
 	asm("cli;");
 	task_t* local_task;
-	local_task = (task_t*) task_list.tail;
+	local_task = (task_t*) task_list.head;
 	printf("Name\tPid\n");
 	while(local_task!=NULL){
 	  printf("%s\t%d\n", local_task->name, local_task->pid);
