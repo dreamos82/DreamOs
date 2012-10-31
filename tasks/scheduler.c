@@ -21,6 +21,7 @@
   * Prima versione: 14/12/2011
   */
 
+#include <handlers.h>
 #include <scheduler.h>
 #include <stdio.h>
 #include <task.h>
@@ -42,7 +43,7 @@ void init_scheduler(){
 
 void schedule(unsigned int *stack){
 	if(active == TRUE){
-	  task_t* cur_task = dequeue_task();	  
+	  task_t* cur_task = dequeue_task();
 	  if(cur_task != NULL){
 	    cur_pid = cur_task->pid;
 	    dbg_bochs_print("@@@@@@@");

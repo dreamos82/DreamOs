@@ -111,7 +111,8 @@ int main_loop(struct multiboot_info *boot_info)
     init_scheduler();
     _kprintOK();
     printf(LNG_PIT8253);
-    configure_PIT ();   
+    new_task("idle", idle);		
+    new_task("dreamshell", shell);    
     printf("----\n");    
     printf(LNG_SHELL);    
     _kprintOK();
@@ -121,8 +122,7 @@ int main_loop(struct multiboot_info *boot_info)
 #ifdef BOCHS_DEBUG
 		dbg_bochs_print((const unsigned char*)"DreamOS Debug String for Bochs\n");
 #endif
-		new_task("idle", idle);		
-		new_task("dreamshell", shell);
+		configure_PIT ();   
 		//new_task("idle2", idle);		
 		//mshell();						
     return 0;

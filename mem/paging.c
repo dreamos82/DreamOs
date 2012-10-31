@@ -239,7 +239,6 @@ void page_fault_handler (int ecode)
     unsigned int pd_entry, pt_entry;
     unsigned int *new_pt;
 	void *new_p;
-    //printf("Test\n");
     /* Ricava l'indirizzo che ha causato l'eccezione */
     asm ("movl %%cr2, %0":"=r" (fault_addr));
     //if(fault_addr > 0) printf("Ok ");
