@@ -37,6 +37,7 @@ void try_tasksetup();
 void try_taskdel();
 void try_taskadd();
 void task_testsecond();
+void task_testthird();
 void task_test();
 
 #endif

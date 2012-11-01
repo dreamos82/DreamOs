@@ -287,12 +287,29 @@ void try_tasksetup(){
 }
 
 void task_test(){
-	printf("Hi, i'm a freshly created task!!!\n");
+  int i=0;
+  while(1){
+	printf("A %d!!!\n", i);
+	i++;
+  }
 }
 
 void task_testsecond(){
-	printf("Hi, i'm a very old task!!! I came from the past!!!\n");
+  int i=0;
+  while(1){
+	printf("B %d!!!!\n", i);
+	i++;
+  }
 }
+
+void task_testthird(){
+  int i=0;
+  while(1){
+	printf("C!!!! %d\n", i);
+	i++;
+  }
+}
+
 
 void try_taskadd(){
   task_t* myTask = new_task("testtask", task_test);

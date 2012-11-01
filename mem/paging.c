@@ -304,12 +304,12 @@ void map_address(unsigned int fis_address, unsigned int logic_address){
 	pdir = 0;
 	ptable =0;
 	pdir = BITRANGE (logic_address, 22, 31);
-    ptable = BITRANGE (logic_address, 12, 21);
-    #ifdef DEBUG
-    printf("Pdir value: %d, PtableValue: %d\n", pdir, ptable);
-    printf("Pdir entry value: %d\n", get_pagedir_entry(pdir));
-    #endif
-    if(get_pagedir_entry(pdir)==NULL){		
+	ptable = BITRANGE (logic_address, 12, 21);
+	#ifdef DEBUG
+	printf("Pdir value: %d, PtableValue: %d\n", pdir, ptable);
+	printf("Pdir entry value: %d\n", get_pagedir_entry(pdir));
+	#endif
+	if(get_pagedir_entry(pdir)==NULL){		
 		/**TODO
 		 * Crate_page_table
 		 * Map_new_pdir */		

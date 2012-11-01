@@ -46,6 +46,7 @@
 #include <keyboard.h>
 #include <task.h>
 #include <scheduler.h>
+#include <testing.h>
 
 #ifdef BOCHS_DEBUG
 #include <debug.h>
@@ -110,9 +111,7 @@ int main_loop(struct multiboot_info *boot_info)
     tasks_init();
     init_scheduler();
     _kprintOK();
-    printf(LNG_PIT8253);
-    new_task("idle", idle);		
-    new_task("dreamshell", shell);    
+    printf(LNG_PIT8253);    
     printf("----\n");    
     printf(LNG_SHELL);    
     _kprintOK();
@@ -123,8 +122,12 @@ int main_loop(struct multiboot_info *boot_info)
 		dbg_bochs_print((const unsigned char*)"DreamOS Debug String for Bochs\n");
 #endif
 		configure_PIT ();   
-		//new_task("idle2", idle);		
-		//mshell();						
+		new_task("idle", idle);		
+		//new_task("dreamshell", shell);
+		new_task("task1", task_test);
+		new_task("task2", task_testsecond);
+		new_task("task3", task_testthird);
+
     return 0;
 }
 
