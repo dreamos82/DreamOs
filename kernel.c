@@ -123,10 +123,10 @@ int main_loop(struct multiboot_info *boot_info)
 #endif
 		configure_PIT ();   
 		new_task("idle", idle);		
-		//new_task("dreamshell", shell);
-		new_task("task1", task_test);
-		new_task("task2", task_testsecond);
-		new_task("task3", task_testthird);
+		new_task("dreamshell", shell);
+		//new_task("task1", task_test);
+		//new_task("task2", task_testsecond);
+		//new_task("task3", task_testthird);
 
     return 0;
 }

@@ -517,7 +517,7 @@ void tester(){
 					{ "tasksetup", try_tasksetup},
 					{ "try_printmem", try_printmem },
 					{ "try_ocreat", try_ocreat },
-					{ "try_open", try_open},					
+					{ "try_open", try_open},
 					{ "try_syscall", try_syscall},
 					{ "show_fd", show_fd},
 					{ "test_stat", test_stat},
