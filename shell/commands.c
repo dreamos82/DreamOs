@@ -330,7 +330,7 @@ void  drv_load(void)
 		  else 
 			  printf("Warning, no driver name inserted!\n"); 
 	  }
-      // per ora lo impostiamo così, static,
+      // per ora lo impostiamo cosï¿½, static,
       // tanto non abbiamo nessun altro modulo, per ora..
       else if (_kstrncmp (argv[1], "mouse", 5) == 0)
       {
@@ -533,13 +533,13 @@ void tester(){
 		printf ("Bad usage. Try '%s --help' for more info about the usage.\n", argv[0]);
 		return;
 	} else { 
-		for ( i = 0 ; i <= MAX_TEST ; i++) {
-			if ( (strcmp(argv[1], testing[i].cmd_testname) ) == (int) NULL ) {
+		for ( i = 0 ; i < MAX_TEST ; i++) {
+			if ( !(strcmp(argv[1], testing[i].cmd_testname) ) {
 				 (testing[i].func)();
 				break;
 			} 
 		}
-		if ( i > MAX_TEST ) {
+		if ( i >= MAX_TEST ) {
 			printf("Error: %s not found.\n", argv[1]);
 			//return;
 		}
