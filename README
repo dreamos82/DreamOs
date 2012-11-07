@@ -21,11 +21,14 @@
 - 1 -----------------------
 --- Cosa è DreamOS --------
 
-Il DreamOS è un sistema operativo open source rilasciato sotto licenza GPLv3 sviluppato partendo da 0 puramente per scopi didattici o comunque per capire come funzionano i sistemi operativi.
+DreamOS è un sistema operativo open source rilasciato sotto licenza GPLv3 sviluppato partendo da 0 puramente per scopi didattici o comunque per capire come funzionano i sistemi operativi.
 Il team di sviluppo attuale è composto dagli sviluppatori
 
 Ivan Gualandri - Finarfin (http://www.osdev.it http://www.italialinux.com) - Creatore e Main Developer 
 
+Contributi: 
+Odites
+Dakk
 Alessandro (celeron) 
 
 
@@ -62,7 +65,8 @@ Grazie a git, potete anche avere un version history locale delle vostre modifich
 
 	git commit 
 
-questo salvera' le vostre modifiche nel repository locale. 
+questo salvera' le vostre modifiche nel repository locale. Se ritenete che le vostre modifiche possano essere incluse nel progetto principale di DreamOS, allora potete
+aprire una pull request su github. 
 
 
 	- c -- Compilare DreamOS --
