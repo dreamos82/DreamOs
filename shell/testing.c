@@ -274,16 +274,6 @@ void try_tasksetup(){
 	printf("Testing task creation functions:\n");
 	printf("Pid Obtained: %d\n", task_pid);
 	asm("sti;");
-	//test_tasklist();	
-	//printf("GetTaskListSize: %d\n", getTaskListSize());
-	/*	
-	_task = *get_task(task_pid);
-	printf("Task state: %d PID: %d", _task.state, _task.pid);
-	printf(" ----name:: %s\n", _task.name);
-	printf("Calling start function...\n");	
-	_task.start_function();
-	release_task(task_pid);
-	return;*/
 }
 
 void task_test(){
@@ -294,12 +284,8 @@ void task_test(){
   }
 }
 
-void task_testsecond(){
-  int i=0;
-  while(1){
-	printf("B %d!!!!\n", i);
-	i++;
-  }
+void task_testsecond(){  
+  printf("B!!!!\n");
 }
 
 void task_testthird(){

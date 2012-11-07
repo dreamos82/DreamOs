@@ -44,9 +44,7 @@ table_address_t map_kernel(){
 	/** Request physical space for pagedir and pagetable*/ 	
 	pagedir = create_pageDir();
 	pagetable = create_pageTable();	
-	//set_pagedir_entry_ric(1023, fis_address, PD_PRESENT|SUPERVISOR, 0);
-	/*new_pd_node->start_address = (heap_node_t*) pagedir;
-	new_pd_node->size = 8 * 4096;*/
+
 	/**Map the logic addresses for pagedir and pagetable into phisical address
 	 * identified by the variables pagetable and pagedir*/
 	while(i < 8){

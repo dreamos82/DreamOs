@@ -534,7 +534,7 @@ void tester(){
 		return;
 	} else { 
 		for ( i = 0 ; i < MAX_TEST ; i++) {
-			if ( !(strcmp(argv[1], testing[i].cmd_testname) ) {
+			if ( !(strcmp(argv[1], testing[i].cmd_testname) )) {
 				 (testing[i].func)();
 				break;
 			} 
