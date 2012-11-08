@@ -93,7 +93,7 @@ heap_t* make_heap(unsigned int size)
     first_node = (heap_node_t*)node_address;    
     node_address = node_address + sizeof(heap_node_t);    
     //first_node->start_address = (unsigned int)&end;
-    first_node->start_address = (unsigned int)address_cur+0x100000;
+    first_node->start_address = (unsigned int)address_cur;
     first_node->size = size;
     first_node->next = NULL;
 

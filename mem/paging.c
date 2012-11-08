@@ -78,6 +78,7 @@ void init_paging(){
         #endif
         i++;
     }   
+    set_pagetable_entry(1023, (unsigned int)current_page_table, PD_PRESENT|SUPERVISOR|WRITE,0);
     //apic_location = request_pages(1, NOT_ADD_LIST);	
 	//set_pagedir_entry(1019, (unsigned int) apic_location, PD_PRESENT|SUPERVISOR, 0);	
            

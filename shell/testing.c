@@ -106,9 +106,7 @@ void try_newheap(){
 	unsigned int testA;
 	unsigned int testB;
 	unsigned int testC;
-	//printf("Testing the new heap (in development)\n");
-	//printf("First step: testing a new heap...\n");
-	//new_heap(HEAP_START_ADDRESS, HEAP_START_SIZE);
+
 	printf("Second step: trying new_malloc...\n");	
 	testA=(unsigned int)new_malloc(8);	
 	printf("-Address of testA Hex: 0x%x\n", testA);

@@ -45,7 +45,7 @@ table_address_t map_kernel(){
 	pagedir = create_pageDir();
 	pagetable = create_pageTable();	
 
-	/**Map the logic addresses for pagedir and pagetable into phisical address
+	/**Map the logic addresses for pagedir and pagetable into physical address
 	 * identified by the variables pagetable and pagedir*/
 	while(i < 8){
 		map_address(pagedir, logic_pd_address);
