@@ -143,7 +143,7 @@ void help_tester()
 		"  -> try_check         - Test username if exist\n"
 		"  -> test_stat			- Test stat function\n"
 		"  -> try_mapaddress    - Test map address function\n"
-		"  -> try_tasksetup     - Test map address function\n"
+		"  -> tasksetup     - Test map address function\n"
 		"  -> try_tasklist		- Test new task list\n" 
 		);	
 }
@@ -257,7 +257,6 @@ void try_mapaddress(){
 	printf("Testing map_address\n");
 	map_address(0x0010000, (unsigned int)tmp);
 	printf("GetPhysAddress: %x\n", get_phys_address((unsigned int)tmp));
-	//map_kernel();
 	return;
 }
 
@@ -270,16 +269,11 @@ void try_tasksetup(){
 	printf("Pid Obtained: %d\n", task_pid);
 	task_pid = new_task("testsecond", task_testsecond);	
 	printf("Testing task creation functions:\n");
-	printf("Pid Obtained: %d\n", task_pid);
 	asm("sti;");
 }
 
 void task_test(){
-  int i=0;
-  while(1){
-	printf("A %d!!!\n", i);
-	i++;
-  }
+	printf("A!!!\n");
 }
 
 void task_testsecond(){  

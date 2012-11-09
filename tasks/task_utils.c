@@ -63,7 +63,8 @@ table_address_t map_kernel(){
 	}
 	/**Add the pagetable to first entry of the pagedir*/
 	pagedir[0] = ((unsigned int)pagetable&0xFFFFF000)|PD_PRESENT|SUPERVISOR|WRITE|0;
-	pagedir[1023] = ((unsigned int)pagedir&0xFFFFF000)|PD_PRESENT|SUPERVISOR|0;	
+	pagedir[1023] = ((unsigned int)pagedir&0xFFFFF000)|PD_PRESENT|SUPERVISOR|0;
+	pagetable[1023] = ((unsigned int)pagetable&0xFFFFF000|PD_PRESENT|SUPERVISOR|0);
 	/**Prepare the result and return it*/
 	logicmemory_root.page_dir = (unsigned int) pagedir;
 	logicmemory_root.page_table = (unsigned int) pagetable;

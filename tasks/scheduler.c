@@ -48,6 +48,9 @@ void schedule(unsigned int *stack){
 	    cur_pid = cur_task->pid;
 	    dbg_bochs_print("@@@@@@@");
 	    dbg_bochs_print(cur_task->name);
+	    if(cur_task->status==DEAD){
+	      //placeholder
+	    }
 	    if(cur_task->status!=NEW){
 	      cur_task->esp=*stack;
 	    } else {
