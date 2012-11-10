@@ -144,7 +144,10 @@ void help_tester()
 		"  -> test_stat			- Test stat function\n"
 		"  -> try_mapaddress    - Test map address function\n"
 		"  -> tasksetup     - Test map address function\n"
-		"  -> try_tasklist		- Test new task list\n" 
+		"  -> try_tasklist		- Test new task list\n"
+		"  -> try_ocreat	- Test file creation\n" 
+		"  -> show_fd		- Test file descriptors\n" 
+		"  -> try_shadow	- Test shadow feature for text input\n" 
 		);	
 }
 
