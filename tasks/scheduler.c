@@ -45,12 +45,15 @@ void schedule(unsigned int *stack){
 	if(active == TRUE){
 	  task_t* cur_task = dequeue_task();
 	  if(cur_task != NULL){
-	    cur_pid = cur_task->pid;
-	    dbg_bochs_print("@@@@@@@");
-	    dbg_bochs_print(cur_task->name);
 	    if(cur_task->status==DEAD){
 	      //placeholder
+	      free(cur_task);
+	      dbg_bochs_print("DEAD@@@@");
+	      cur_task = dequeue_task();
 	    }
+	    cur_pid = cur_task->pid;
+	    dbg_bochs_print("@@@@@@@");
+	    dbg_bochs_print(cur_task->name);	    
 	    if(cur_task->status!=NEW){
 	      cur_task->esp=*stack;
 	    } else {
