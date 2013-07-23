@@ -31,6 +31,7 @@
 #include <scheduler.h>
 #include <debug.h>
 
+
 pid_t current_pid; 
 int cur_free_index; 
 task_list_t task_list;
@@ -100,7 +101,7 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	dbg_bochs_print(new_task->esp);
 	new_task->status = NEW;
 	new_task->registers = (task_register_t*)new_task->esp;
-	new_tss(new_task->registers, start_function);
+	tss_new(new_task->registers, start_function);
 	local_table = map_kernel();
 	new_task->pdir = local_table.page_dir;
 	new_task->ptable = local_table.page_table;

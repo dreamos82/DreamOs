@@ -29,17 +29,19 @@
 #include <debug.h>
 #include <paging.h>
 
+
 task_list_t task_list;
 
 unsigned char active;
 unsigned char started;
 int cur_pid;
 
-void init_scheduler(){
+void init_scheduler() {
 	active=FALSE;
 	started=FALSE;
 	cur_pid=-1;
 }
+
 
 void schedule(unsigned int *stack) {
 	if (active == FALSE)
@@ -85,9 +87,11 @@ void schedule(unsigned int *stack) {
 	return;
 }
 
+
 void preSchedule(){
 	active = TRUE;
 }
+
 
 void idle()
 {		
@@ -96,6 +100,7 @@ void idle()
 //		dbg_bochs_print("===IDLE===\n");
 	}	
 }
+
 
 void suicide()
 {	
