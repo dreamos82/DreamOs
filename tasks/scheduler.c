@@ -29,23 +29,28 @@
 #include <debug.h>
 #include <paging.h>
 
+
 task_list_t task_list;
 
 unsigned char active;
 unsigned char started;
 int cur_pid;
 
-void init_scheduler(){
+void init_scheduler() {
 	active=FALSE;
 	started=FALSE;
 	cur_pid=-1;
 }
 
-void schedule(unsigned int *stack){
-	if(active == TRUE){
+
+void schedule(unsigned int *stack) {
+	if (active == FALSE)
+		return;
+
 	  task_t* cur_task = dequeue_task();
-	  if(cur_task != NULL){
-	    if(cur_task->status==DEAD){
+	  if (cur_task != NULL){
+
+	    if (cur_task->status==DEAD) {
 	      //placeholder
 	      free(cur_task);
 	      dbg_bochs_print("DEAD@@@@");
@@ -54,33 +59,39 @@ void schedule(unsigned int *stack){
 	    cur_pid = cur_task->pid;
 	    dbg_bochs_print("@@@@@@@");
 	    dbg_bochs_print(cur_task->name);	    
-	    if(cur_task->status!=NEW){
+
+	    if (cur_task->status!=NEW){
 	      cur_task->esp=*stack;
 	    } else {
 	      cur_task->status=READY;	      
 	      ((task_register_t *)(cur_task->esp))->eip = cur_task->eip;	      	      
 	    }
+
 	    enqueue_task(cur_task->pid, cur_task);
 	    cur_task=get_task();
-	    if(cur_task->status==NEW){
-	      cur_task->status=READY;
-	    }
+
+	    if(cur_task->status==NEW)
+			cur_task->status=READY;
+
 	    dbg_bochs_print(" -- ");
 	    dbg_bochs_print(cur_task->name);
 	    dbg_bochs_print("\n");      
 	    //load_pdbr(cur_task->pdir);
 	    *stack = cur_task->esp;
+
 	  } else {
 	    enqueue_task(cur_task->pid, cur_task);
 	  }
-	}
+
 	active = FALSE;
 	return;
 }
 
+
 void preSchedule(){
 	active = TRUE;
 }
+
 
 void idle()
 {		
@@ -89,6 +100,7 @@ void idle()
 //		dbg_bochs_print("===IDLE===\n");
 	}	
 }
+
 
 void suicide()
 {	

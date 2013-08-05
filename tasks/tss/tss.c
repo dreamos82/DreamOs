@@ -20,14 +20,15 @@
   * Autore Ivan Gualandri
   * Prima versione: 20/06/2011
   */
-  
 
 #include <tss.h>
 #include <task.h>
 #include <stddef.h>
+#include <kheap.h>
 #include <scheduler.h>
 
-void new_tss(task_register_t* tss, void (*func)()){
+
+void tss_new(task_register_t* tss, void (*func)()) {
     tss->eax=0;    
     tss->ebx=0;
     tss->ecx=0;
@@ -40,4 +41,9 @@ void new_tss(task_register_t* tss, void (*func)()){
     tss->end = (unsigned) suicide;
     //tss->fine = (unsigned)end; //per metterci il suicide	
 	return;
+}
+
+
+void tss_free(task_register_t* tss) {
+	free(tss);
 }
