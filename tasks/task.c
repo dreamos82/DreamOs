@@ -22,12 +22,12 @@
   */
   
 #include <task.h>
+#include <tss.h>
+#include <task_utils.h>
 #include <stdio.h>
 #include <stddef.h>
 #include <string.h>
 #include <kheap.h>
-#include <tss.h>
-#include <task_utils.h>
 #include <scheduler.h>
 #include <debug.h>
 
@@ -128,7 +128,7 @@ task_t* dequeue_task(){
 	  task_list.head=_task->next;
 	  return _task;
 	}
-	return;
+	return NULL;
 }
 
 int isEmpty(){
@@ -156,9 +156,9 @@ int getTaskListSize(){
 	return i;
 }
 
-void test_dequeue(){
+/*void test_dequeue(){
 	task_t* _task =  dequeue_task();
-}
+}*/
 
 void test_tasklist(){
 	asm("cli;");

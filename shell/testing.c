@@ -270,8 +270,8 @@ void try_tasksetup(){
 	task_pid = new_task("test", task_test);	
 	printf("Testing task creation functions:\n");
 	printf("Pid Obtained: %d\n", task_pid);
-	task_pid = new_task("testsecond", task_testsecond);	
-	printf("Testing task creation functions:\n");
+	//task_pid = new_task("testsecond", task_testsecond);	
+	//printf("Testing task creation functions:\n");
 	asm("sti;");
 }
 

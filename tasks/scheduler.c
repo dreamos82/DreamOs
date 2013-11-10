@@ -28,6 +28,7 @@
 #include <stddef.h>
 #include <debug.h>
 #include <paging.h>
+#include <tss.h>
 
 
 task_list_t task_list;
@@ -52,9 +53,10 @@ void schedule(unsigned int *stack) {
 
 	    if (cur_task->status==DEAD) {
 	      //placeholder
+	      tss_free(cur_task->registers);
 	      free(cur_task);
 	      dbg_bochs_print("DEAD@@@@");
-	      cur_task = dequeue_task();
+	      cur_task = dequeue_task();	      
 	    }
 	    cur_pid = cur_task->pid;
 	    dbg_bochs_print("@@@@@@@");
@@ -108,6 +110,6 @@ void suicide()
 	cur_task = get_task(); 
 	cur_task->status = DEAD;
 	dbg_bochs_print("suicide\n");
-    while(TRUE);
+	while(TRUE);
 }
 

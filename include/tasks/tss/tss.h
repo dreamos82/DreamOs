@@ -26,6 +26,7 @@
 
 #include <task.h> 
 
-void new_tss(task_register_t*, void (*func)());
+void tss_new(task_register_t*, void (*func)());
+void tss_free(task_register_t*);
 
 #endif
