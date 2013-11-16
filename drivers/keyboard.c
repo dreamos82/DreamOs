@@ -296,15 +296,12 @@ void keyboard_disable (void)
  * looping until there is something new to read
  */
 int _kgetch (void) {
-    int c = 0;
+    int c = -1;
 
-loop:
     if (buf_r != buf_w) {
 	c = circlebuf[buf_r];
 	buf_r = STEP(buf_r);
-    }
-    else
-        goto loop;
+    }    
     return c;
 }
 

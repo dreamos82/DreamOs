@@ -52,9 +52,9 @@ void schedule(unsigned int *stack) {
 	    if (cur_task->status==DEAD) {
 	      //placeholder
 	      tss_free(cur_task->registers);	      
-	      dbg_bochs_print("DEAD@@@@");
-	      cur_task = dequeue_task();
+	      dbg_bochs_print("DEAD@@@@");	      
 	      free(cur_task);
+	      active = TRUE;
 	    }
 	    cur_pid = cur_task->pid;
 	    dbg_bochs_print("@@@@@@@");
