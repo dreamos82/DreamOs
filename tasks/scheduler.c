@@ -34,12 +34,10 @@
 task_list_t task_list;
 
 unsigned char active;
-unsigned char started;
 int cur_pid;
 
 void init_scheduler() {
 	active=FALSE;
-	started=FALSE;
 	cur_pid=-1;
 }
 
@@ -53,10 +51,10 @@ void schedule(unsigned int *stack) {
 
 	    if (cur_task->status==DEAD) {
 	      //placeholder
-	      tss_free(cur_task->registers);
-	      free(cur_task);
+	      tss_free(cur_task->registers);	      
 	      dbg_bochs_print("DEAD@@@@");
-	      cur_task = dequeue_task();	      
+	      cur_task = dequeue_task();
+	      free(cur_task);
 	    }
 	    cur_pid = cur_task->pid;
 	    dbg_bochs_print("@@@@@@@");
@@ -108,6 +106,8 @@ void suicide()
 {	
 	task_t* cur_task;
 	cur_task = get_task(); 
+	dbg_bochs_print(cur_task->name);
+	dbg_bochs_print("\n");
 	cur_task->status = DEAD;
 	dbg_bochs_print("suicide\n");
 	while(TRUE);
