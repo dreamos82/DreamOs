@@ -53,9 +53,9 @@ void schedule(unsigned int *stack) {
 	      //placeholder
 	      tss_free(cur_task->registers);	      
 	      dbg_bochs_print("DEAD@@@@");	      
-	      free(cur_task);
-	      active = TRUE;
+	      free(cur_task);	      
 	    }
+	    
 	    cur_pid = cur_task->pid;
 	    dbg_bochs_print("@@@@@@@");
 	    dbg_bochs_print(cur_task->name);	    
@@ -66,8 +66,10 @@ void schedule(unsigned int *stack) {
 	      cur_task->status=READY;	      
 	      ((task_register_t *)(cur_task->esp))->eip = cur_task->eip;	      	      
 	    }
-
-	    enqueue_task(cur_task->pid, cur_task);
+	    
+	    if(cur_task->status!=DEAD){
+	      enqueue_task(cur_task->pid, cur_task);
+	    }
 	    cur_task=get_task();
 
 	    if(cur_task->status==NEW)
