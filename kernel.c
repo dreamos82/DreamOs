@@ -98,7 +98,7 @@ int main_loop(struct multiboot_info *boot_info)
     asm("sti");
     _kprintOK();   
     init_paging();    
-    _kprintOK();    	   
+    _kprintOK();
     printf("Memory (upper) amount-> %d Mb \n", boot_info->mem_upper/1024);
     printf("Memory (lower) amount-> %d kb \n", boot_info->mem_lower);	
     /** Alloc and fill CPUID structure */

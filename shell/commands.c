@@ -124,7 +124,7 @@ void uname_cmd()
   infos = kmalloc(sizeof(struct utsname *));
   uname(infos);
   if (!(strcmp(argv[1], "-a")) || !(strcmp(argv[1], "--all")))
-    printf("%s %s.%s%s Rev: %s #1 CEST 2009 %s\n", infos->sysname, infos->version, infos->release, EXTRAVERSION,REV_NUM, cpu_vendor);
+    printf("%s %s.%s%s Hash: %s #1 CEST 2013 %s\n", infos->sysname, infos->version, infos->release, EXTRAVERSION,REV_NUM, cpu_vendor);
   else if (!(strcmp(argv[1], "-r")) || !(strcmp(argv[1], "--rev")))
     printf("%s.%s%s\n", infos->version, infos->release, EXTRAVERSION);
   else if (!(strcmp(argv[1], "-h") ) || !(strcmp(argv[1], "--help")))
@@ -206,15 +206,12 @@ void credits(void)
   _kputs("DreamOS Credits\n\n");                
   _kputs("Main Developers:\n");
   _kcolor(GREEN);
-   printf(  "Finarfin - Ivan (Founder)\n\n");
+   printf(  "Finarfin - Ivan Gualandri (Founder)\n\n");  
   _kcolor(BRIGHT_BLUE);
-  _kputs("Developers:\n");
+  _kputs("Contributors of the past:\n");
   _kcolor(GREEN);
-  _kputs("Lord Osiris - Diego Stamigni \n\n");
-  _kcolor(BRIGHT_BLUE);
-  _kputs("Contributors:\n");
-  _kcolor(GREEN);
-  _kputs("N3m3s1s\n"
+  _kputs("Lord Osiris - Diego Stamigni\n"
+	  "N3m3s1s\n"
 			"Blackz\n"
 		    "vinc94\n"
 	  		"tk0\n"
