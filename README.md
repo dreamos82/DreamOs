@@ -1,6 +1,5 @@
----------------------------
- DreamOS
----------------------------
+DreamOS
+========
 
 1. Cosa è DreamOS
 	a. Cosa NON è DreamOS
