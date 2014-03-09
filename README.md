@@ -17,8 +17,8 @@ DreamOS
 	b. Come mandare un feedback
 
 
-- 1 -----------------------
---- Cosa è DreamOS --------
+1  Cosa è DreamOS
+-----------------
 
 DreamOS è un sistema operativo open source rilasciato sotto licenza GPLv3 sviluppato partendo da 0 puramente per scopi didattici o comunque per capire come funzionano i sistemi operativi.
 Il team di sviluppo attuale è composto dagli sviluppatori
@@ -31,16 +31,16 @@ Dakk
 Alessandro (celeron) 
 
 
-	- a -- Cosa NON è DreamOS -
+#### a - Cosa NON è DreamOS
 
 DreamOS non è un sistema operativo completo e pronto per essere utilizzato per l'uso quotidiano, non è basato su Kernel esistenti e non è supportato/sponsorizzato da alcuna società.
 
-- 2 -----------------------
---- Installare DreamOS ----
+2 Installare DreamOS
+--------------------
 
 Per Installazione s'intende compilare e mettere DreamOS su un supporto per l'avvio, visto che attualmente DreamOS non è predisposto per installazioni vere e proprie.
 
-	- a - Requisiti necessari -
+#### a - Requisiti necessari 
 
 DreamOS è un sistema operativo sviluppato per funzionare su cpu con architettura Intel x86/IA32 (i386/i686) e attualmente è sviluppato in modo da partire da floppy anche se, utilizzando GRUB, si può farlo partire avendo l'immagine compilata sull'Hard-disk.
 DreamOS può essere anche emulato usando Software come qEmu o Bochs.
@@ -52,7 +52,7 @@ Per compilare DreamOS bisogna prima di tutto avere una distribuzione Linux insta
 
 Opzionalmente un emulatore di cpu se non si vuole provare il sistema operativo su hardware reale e SVN se volete scaricare le versioni più recenti da repository.
 
-	- b -- Scaricare da GIT ---
+#### b - Scaricare da GIT
 
 Potete scaricare i sorgenti di DreamOS da GIT attraverso il repository su github all'indirizzo: https://github.com/inuyasha82/DreamOs
 Per i meno pratici il comando da eseguire è: (assicuratevi di avere il pacchetto scmgit-base installato)
@@ -68,21 +68,21 @@ questo salvera' le vostre modifiche nel repository locale. Se ritenete che le vo
 aprire una pull request su github. 
 
 
-	- c -- Compilare DreamOS --
+#### c - Compilare DreamOS
 
 Posizionatevi dentro la cartella con i sorgenti troverete uno script chiamato start.sh, per lanciarlo date:
 	sh start.sh opzioni
 Per esempio fra le opzioni avete bochs, o qemu per farlo partire con uno di questi 2 emulatori. Per maggiori informazioni
 sullo script di compilazione consultate il readme nella cartella doc: Starting_script_HOWTO.txt
 
-	- d -- Mettere su floppy -- (Opzionale)
+#### d - Mettere su floppy (Opzionale)
 
 Se avete un lettore floppy e volete provare l'ebrezza di usarlo su una macchina reale, allora in questo caso dopo avre lanciato sempre sh start.sh, andate dentro boot/ e date:
 	dd if=grub.img of=/dev/fd0
 E riavviate la macchina con il floppy inserito.
 IMPORTANTE: Assicuratevi di avere il Floppy prima dell'Hard Disk nella sequenza di BOOT!
 
-	- e - Fare la entry per GRUB (Opzionale)
+#### e - Fare la entry per GRUB (Opzionale)
 
 Se volete provare dreamos su pc reale e non avete il floppy potete farlo anche avendo grub come Boot Manager, riavviate il pc, quando si presenta grub premete il tasto c e inserite dei comandi tipo questi:
 root (hdx, y)
@@ -99,18 +99,18 @@ Naturalmenet modificando /path/al/file/dreamos.img con la path al file dreamos.i
 
 Attaualmente e' stato aggiunto uno script per inserire dreamos in grub, esso e' ancora nelle prime fasi, e quindi non sempre potrebbe inserire la entry corretta. Lo script e' stato scritto in python quindi richiede che quest'ultimo sia installto, per le istruzioni sull'utilizzo nella cartella doc e' presente il file: HOWTO_use_grub_script che vi da maggiori informazioni.
 
-- 3 -----------------------
----- Usare DreamOS --------
+3 Usare DreamOS
+---------------
 
 L'Interattività di DreamOS al momento si ferma ad una CLI (Command Line Interface, Interfaccia a linea di comando) con un numero limitato di comandi utilizzabili, la maggior parte a scopo di test.
 
-	- a ------- L'Avvio -------
+#### a - L'Avvio
 
 L'avvio di DreamOS contiene il loading di tutte le funzioni necessarie al funzionamento del S.O. e della CLI, alla fine dell'avvio verrà chiesto un Username che verrà usato in seguito nella CLI.
 Per poter accedere l'username deve essere definito nel file passwd. Di default sono definiti 2 utenti: root e user.
 Attualmente non viene richiesta alcuna password
 
-	- b ---- Uso della CLI ----
+#### b - Uso della CLI
 
 La CLI di DreamOS ha una struttura molto comune a quella *NIX
 	Username~# Comando inserito
@@ -119,10 +119,10 @@ Si può avere una lista di comandi disponibili attraverso il comando:
 	help
 Inoltre sono presenti alcuni comandi che rimarcano la controparte *NIX come uname (uname --help) o echo.
 
-- 4 -----------------------
----- Feedback -------------
+4 Feedback
+----------
 
-	- a -- Come segnalare Bug -
+#### a - Come segnalare Bug
 	
 Per segnalare bug riscontrati durante l'uso di DreamOS bisogna segnalarli usando il modulo di github presente alla pagina:
 	https://github.com/inuyasha82/DreamOs/issues
@@ -130,7 +130,7 @@ Oppure potete segnalarlo sul forum osdev.it, precisamente:
 	http://forum.osdev.it/viewforum.php?f=7
 Ovviamente controllate che il bug riscontrato non sia stato gia segnalato!
 
-	- b - Come mandare un feedback
+### b - Come mandare un feedback
 
 Potete mandare un resoconto o comunque raccontare la vostra esperienza con DreamOS sul forum di osdev.it:
 	http://forum.osdev.it/
@@ -140,8 +140,9 @@ Oppure ci trovate su irc:
 	
 
 DreamOS 2003-2013 by Ivan Gualandri
-http://www.dreamos.org
-http://www.osdev.it
-http://www.italialinux.com
+
+* http://www.dreamos.org
+* http://www.osdev.it
+* http://www.italialinux.com
 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=italialinux&url=https://github.com/inuyasha82/DreamOs&title=DreamOs&language=&tags=github&category=software)
