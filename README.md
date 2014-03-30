@@ -1,22 +1,6 @@
 DreamOS
 ========
 
-1. Cosa è DreamOS
-	a. Cosa NON è DreamOS
-2. Installare DreamOS
-	a. Requisiti necessari
-	b. Scaricare da SVN
-	c. Compilare DreamOS
-	d. Mettere su Floppy (opzionale)
-	e. Fare la entry per GRUB (opzionale)
-3. Usare DreamOS
-	a. L'avvio
-	b. Uso della CLI
-4. Feedback
-	a. Come segnalare bug
-	b. Come mandare un feedback
-
-
 1  Cosa è DreamOS
 -----------------
 
