@@ -30,9 +30,10 @@ DreamOS è un sistema operativo sviluppato per funzionare su cpu con architettur
 DreamOS può essere anche emulato usando Software come qEmu o Bochs.
 
 Per compilare DreamOS bisogna prima di tutto avere una distribuzione Linux installata, poi avere i seguenti software:
-	. Nasm
-	. GCC
-	. make
+
+	* Nasm
+	* GCC
+	* make
 
 Opzionalmente un emulatore di cpu se non si vuole provare il sistema operativo su hardware reale e SVN se volete scaricare le versioni più recenti da repository.
 
