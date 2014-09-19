@@ -75,7 +75,7 @@ OBJ = kernel.o\
 #mem/heap.o\
 #misc/ordered_array.o
 dreamos.img: bl.img kernel.bin
-	mv kernel.bin dreamos.img
+	cp kernel.bin dreamos.img
 
 bl.img : boot/multicatcher.S
 	$(ASM) -f elf ./boot/multicatcher.S -o bl.img

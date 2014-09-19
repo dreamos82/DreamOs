@@ -97,7 +97,9 @@ Attualmente non viene richiesta alcuna password
 #### b - Uso della CLI
 
 La CLI di DreamOS ha una struttura molto comune a quella *NIX
+
 	Username~# Comando inserito
+        
 Dove Username è l'username inserito durante l'avvio.
 Si può avere una lista di comandi disponibili attraverso il comando:
 	help

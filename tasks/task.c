@@ -105,8 +105,6 @@ pid_t new_task(char *task_name, void (*start_function)()){
 	local_table = map_kernel();
 	new_task->pdir = local_table.page_dir;
 	new_task->ptable = local_table.page_table;
-	//new_task->pdir = 0;
-	//new_task->ptable = 0;
 	enqueue_task(new_task->pid, new_task);
 	//(task_list.current)->cur_quants = MAX_TICKS;			
 	asm("sti");

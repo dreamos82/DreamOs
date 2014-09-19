@@ -211,15 +211,15 @@ void credits(void)
   _kputs("Contributors of the past:\n");
   _kcolor(GREEN);
   _kputs("Lord Osiris - Diego Stamigni\n"
-	  "N3m3s1s\n"
-			"Blackz\n"
-		    "vinc94\n"
-	  		"tk0\n"
-	  		"DT\n"
-         	"Celeron\n"
-	 		"Hamcha\n"
-         	"m0nt0\n"			
-         	"and many others (3 or 4 :P)\n\n");
+	"N3m3s1s\n"
+	"Blackz\n"
+	"vinc94\n"
+	"tk0\n"
+	"DT\n"
+        "Celeron\n"
+	"Hamcha\n"
+        "m0nt0\n"			
+        "and many others (3 or 4 :P)\n\n");
   _kcolor(WHITE);
 }
 
