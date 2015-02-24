@@ -74,7 +74,7 @@ display_library: x
 # now supported, but we still recommend to use the BIOS distributed with
 # Bochs.
 #=======================================================================
-romimage: file=/home/vetinari/utils/bochs/bios/BIOS-bochs-latest
+romimage: file=/home/vetinari/utils/bochs-2.6.7/bios/BIOS-bochs-latest
 #romimage: file=../bochs-2.4.5/bios/BIOS-bochs-latest
 #romimage: file=bios/BIOS-bochs-2-processors, address=0xf0000
 #romimage: file=bios/BIOS-bochs-4-processors, address=0xf0000
@@ -114,7 +114,7 @@ megs: 512
 # You now need to load a VGA ROM BIOS into C0000.
 #=======================================================================
 #vgaromimage: file=/usr/share/vgabios/vgabios.bin
-vgaromimage: file=/home/vetinari/utils/bochs/bios/VGABIOS-lgpl-latest
+vgaromimage: file=/home/vetinari/utils/bochs-2.6.7/bios/VGABIOS-lgpl-latest
 #garomimage: file=../bochs-2.4.5/bios/VGABIOS-lgpl-latest
 #vgaromimage: file=bios/VGABIOS-lgpl-latest-cirrus
 
@@ -125,7 +125,7 @@ vgaromimage: file=/home/vetinari/utils/bochs/bios/VGABIOS-lgpl-latest
 # values are 'vbe' for Bochs VBE and 'cirrus' for Cirrus SVGA support.
 #=======================================================================
 #vga: extension=cirrus
-vga: extension=vbe
+vga: extension=vbe, update_freq=10
 
 #=======================================================================
 # FLOPPYA:
@@ -480,7 +480,7 @@ parport1: enabled=1, file="parport.out"
 # Examples:
 #   vga_update_interval: 250000
 #=======================================================================
-vga_update_interval: 300000
+#vga_update_interval: 300000
 
 # using for Winstone '98 tests
 #vga_update_interval:  100000
@@ -492,8 +492,9 @@ vga_update_interval: 300000
 # Examples:
 #   keyboard_serial_delay: 200
 #=======================================================================
-keyboard_serial_delay: 200
+#keyboard_serial_delay: 200
 
+keyboard: serial_delay=200, paste_delay=1000
 #=======================================================================
 # KEYBOARD_PASTE_DELAY:
 # Approximate time in microseconds between attempts to paste
@@ -509,7 +510,7 @@ keyboard_serial_delay: 200
 # Examples:
 #   keyboard_paste_delay: 100000
 #=======================================================================
-keyboard_paste_delay: 1000
+#keyboard_paste_delay: 1000
 
 #=======================================================================
 # FLOPPY_COMMAND_DELAY:

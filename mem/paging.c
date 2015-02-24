@@ -29,7 +29,6 @@
 #include <stddef.h>
 #include <kheap.h>
 #include <use.h>
-// #define DEBUG 1
 
 #define BITMASK(len) ((1<<((len) + 1)) - 1)
 #define BITRANGE(n, from,to) (((n) >> (from)) & BITMASK(to-from))

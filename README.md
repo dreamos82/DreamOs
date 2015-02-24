@@ -123,8 +123,11 @@ Si può avere una lista di comandi disponibili attraverso il comando:
 	
 Per segnalare bug riscontrati durante l'uso di DreamOS bisogna segnalarli usando il modulo di github presente alla pagina:
 	https://github.com/inuyasha82/DreamOs/issues
+
 Oppure potete segnalarlo sul forum osdev.it, precisamente:
+
 	http://forum.osdev.it/viewforum.php?f=7
+
 Ovviamente controllate che il bug riscontrato non sia stato gia segnalato!
 
 #### b - Come mandare un feedback
