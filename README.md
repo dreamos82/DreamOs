@@ -94,6 +94,14 @@ Naturalmenet modificando /path/al/file/dreamos.img con la path al file dreamos.i
 
 Attaualmente e' stato aggiunto uno script per inserire dreamos in grub, esso e' ancora nelle prime fasi, e quindi non sempre potrebbe inserire la entry corretta. Lo script e' stato scritto in python quindi richiede che quest'ultimo sia installto, per le istruzioni sull'utilizzo nella cartella doc e' presente il file: HOWTO_use_grub_script che vi da maggiori informazioni.
 
+#### f - Note se utilizzate bochs
+
+Se utilizzate l'emulatore bochs, trovate un file di configurazione nella root folder del progetto quasi pronto per l'uso. Per poter funzionare correttamente sulla vostra macchina dovete: 
+	
+	* Modificare le righe romimage e vgaromimage, facendole puntare ai relativi files BIOS-bochs-latest e VGABIOS-lgpl-latest che normalmente si trovano all'interno della cartella bios della vostra installazione di bochs.
+	* Se il vostro bochs non è compilato con il supporto del remote debugging, e comunque non volete fare il debug del sistema, dovete commentare la riga relativa all'opzione gdbstub si trova verso la fine.
+
+
 3 Usare DreamOS
 ---------------
 
