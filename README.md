@@ -98,8 +98,8 @@ Attaualmente e' stato aggiunto uno script per inserire dreamos in grub, esso e' 
 
 Se utilizzate l'emulatore bochs, trovate un file di configurazione nella root folder del progetto quasi pronto per l'uso. Per poter funzionare correttamente sulla vostra macchina dovete: 
 	
-	* Modificare le righe romimage e vgaromimage, facendole puntare ai relativi files BIOS-bochs-latest e VGABIOS-lgpl-latest che normalmente si trovano all'interno della cartella bios della vostra installazione di bochs.
-	* Se il vostro bochs non è compilato con il supporto del remote debugging, e comunque non volete fare il debug del sistema, dovete commentare la riga relativa all'opzione gdbstub si trova verso la fine.
+* Modificare le righe romimage e vgaromimage, facendole puntare ai files BIOS-bochs-latest e VGABIOS-lgpl-latest che si trovano all'interno della cartella bios della vostra installazione di bochs.
+* Se il vostro bochs non è compilato con il supporto del remote debugging, e comunque non volete fare il debug del sistema, dovete commentare la riga relativa all'opzione gdbstub si trova verso la fine.
 
 
 3 Usare DreamOS
