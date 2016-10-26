@@ -35,8 +35,9 @@ Per compilare DreamOS bisogna prima di tutto avere una distribuzione Linux insta
 	* Nasm
 	* GCC
 	* make
+	* genisoimage (se si vuole creare una iso)
 
-Opzionalmente un emulatore di cpu se non si vuole provare il sistema operativo su hardware reale e SVN se volete scaricare le versioni più recenti da repository.
+In alternativa si può usare un emulatore di cpu se non si vuole provare il sistema operativo su hardware reale e GIT se volete scaricare le versioni più recenti da repository.
 
 #### b - Scaricare da GIT
 
