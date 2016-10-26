@@ -149,7 +149,7 @@ Oppure ci trovate su irc:
 	Server: irc.azzurra.org
 	Chan: #dreamos
 
-DreamOS 2003-2014 by Ivan Gualandri
+DreamOS 2003-2017 by Ivan Gualandri
 
 * http://www.dreamos.org
 * http://www.osdev.it

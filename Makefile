@@ -10,70 +10,70 @@ MEMORY = LEGACY
 include Makefile.am
 
 CFLAGS = -nostdlib\
-	 -nostdinc\
-	 -g\
-	 -fomit-frame-pointer\
-     -fno-builtin\
-	 -fno-stack-protector\
-	 -Wall\
-	 -march=i686\
-     -m32\
-	 -I./include\
-	 -I./include/io\
-	 -I./include/drivers\
-     -I./include/libc\
-	 -I./include/processore\
-	 -I./include/hardware\
-	 -I./include/mem\
-	 -I./include/system\
-	 -I./include/shell\
-	 -I./include/misc\
-	 -I./include/fs\
-	 -I./include/sys \
-	 -I./include/tasks\
-	 -I./include/tasks/tss\
-	 -DBOCHS_DEBUG\
-	 -D$(MEMORY)
-
+	-nostdinc\
+	-g\
+	-fomit-frame-pointer\
+	-fno-builtin\
+	-fno-stack-protector\
+	-Wall\
+	-march=i686\
+	-m32\
+	-I./include\
+	-I./include/io\
+	-I./include/drivers\
+	-I./include/libc\
+	-I./include/processore\
+	-I./include/hardware\
+	-I./include/mem\
+	-I./include/system\
+	-I./include/shell\
+	-I./include/misc\
+	-I./include/fs\
+	-I./include/sys \
+	-I./include/tasks\
+	-I./include/tasks/tss\
+	-DBOCHS_DEBUG\
+	-D$(MEMORY)
+	
 OBJ = kernel.o\
-      io/video.o\
-      drivers/keyboard.o\
-      drivers/mouse.o\
-	  fs/vfs.o\
-	  fs/fcntl.o\
-	  fs/initrd.o\
-	  fs/unistd.o\
-      libc/ctype.o\
-      libc/string.o\
-      io/io.o\
-      libc/stdio.o\
-      hardware/cpuid.o\
-	  processore/gdt.o\
-      processore/idt.o\
-      processore/handlers.o\
-      hardware/pic8259.o\
-      mem/fismem.o\
-      mem/paging.o\
-      mem/kheap.o\
-      misc/clock.o\
-      misc/bitops.o\
-      misc/ordered_list.o\
-      misc/debug.o \
-      system/syscall.o\
-      hardware/8253.o\
-      shell/commands.o\
-      shell/testing.o\
-      shell/user_shell.o\
-      shell/shell.o\
-      sys/utsname.o\
-      sys/dirent.o\
-      sys/stat.o\
-      tasks/scheduler.o\
-      tasks/task_utils.o\
-      tasks/task.o\
-      tasks/tss/tss.o
-#mem/heap.o\
-#misc/ordered_array.o
+	io/video.o\
+	drivers/keyboard.o\
+	drivers/mouse.o\
+	fs/vfs.o\
+	fs/fcntl.o\
+	fs/initrd.o\
+	fs/unistd.o\
+	libc/ctype.o\
+	libc/string.o\
+	io/io.o\
+	libc/stdio.o\
+	hardware/cpuid.o\
+	processore/gdt.o\
+	processore/idt.o\
+	processore/handlers.o\
+	hardware/pic8259.o\
+	mem/fismem.o\
+	mem/paging.o\
+	mem/kheap.o\
+	misc/clock.o\
+	misc/bitops.o\
+	misc/ordered_list.o\
+	misc/debug.o \
+	system/syscall.o\
+	hardware/8253.o\
+	shell/commands.o\
+	shell/testing.o\
+	shell/user_shell.o\
+	shell/shell.o\
+	sys/utsname.o\
+	sys/dirent.o\
+	sys/stat.o\
+	tasks/scheduler.o\
+	tasks/task_utils.o\
+	tasks/task.o\
+	tasks/tss/tss.o
+	#mem/heap.o\
+	#misc/ordered_array.o
 dreamos.img: bl.img kernel.bin
 	cp kernel.bin dreamos.img
 
