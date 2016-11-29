@@ -22,7 +22,7 @@ CFLAGS = -nostdlib\
 	-I./include/io\
 	-I./include/drivers\
 	-I./include/libc\
-	-I./include/processore\
+	-I./include/cpu\
 	-I./include/hardware\
 	-I./include/mem\
 	-I./include/system\
@@ -48,9 +48,9 @@ OBJ = kernel.o\
 	io/io.o\
 	libc/stdio.o\
 	hardware/cpuid.o\
-	processore/gdt.o\
-	processore/idt.o\
-	processore/handlers.o\
+	cpu/gdt.o\
+	cpu/idt.o\
+	cpu/handlers.o\
 	hardware/pic8259.o\
 	mem/fismem.o\
 	mem/paging.o\
@@ -91,9 +91,9 @@ fs/initrd.o: fs/initrd.c
 fs/unistd.o: fs/unistd.c
 io/video.o: io/video.c
 io/io.o: io/io.c
-processore/gdt.o: processore/gdt.c
-processore/idt.o: processore/idt.c
-processore/handlers.o: processore/handlers.c
+cpu/gdt.o: cpu/gdt.c
+cpu/idt.o: cpu/idt.c
+cpu/handlers.o: cpu/handlers.c
 hardware/pic8259.o: hardware/pic8259.c
 hardware/cpuid.o: hardware/cpuid.c
 hardware/keyboard.o: hardware/keyboard.c

@@ -48,7 +48,7 @@ char *strncpy (char *dest, register const char *src, register size_t n)
 char *strcpy (char *dest, const char *src)
 {
 	char *save = dest;
-	for (; (*dest = *src); ++src, ++dest);
+	for (; (*dest = *src) != '\0' ; ++src, ++dest);
 	return save;
 }
 

@@ -209,7 +209,7 @@ int getchar (void)
     return tmpchar;
 }
 
-char *gets ()
+char *gets (char *s)
 {
     char str[255];
     int c;
@@ -231,13 +231,15 @@ char *gets ()
     } while (count<255);
 
     str[count] = '\0';
-    return str;
+    //str cant simply be returned, it is allocated in this stack frame and it will be lost!
+    strcpy(s, str);
+    return s;
 }
 
 int scanf (const char *format, ...)
 {
     va_list scan;
-    char *input;
+    char input[255];
     int count=0;
     char maxchars[5] = {0};
     int i=0, nmax=0;
@@ -250,7 +252,8 @@ int scanf (const char *format, ...)
     for (; *format; format++) {
 
 	if (*format == '%') {
-	    input = gets();
+	    gets(input);
+        
             count += strlen (input);
 
             if (isdigit(*++format)) {
@@ -265,7 +268,6 @@ int scanf (const char *format, ...)
 	    switch (*format) {
 	    case 's':
 		s_ptr = va_arg (scan, char *);
-
                 if (nmax == 0 || strlen(input) <= nmax)
 					s_ptr = strncpy (s_ptr, input, strlen (input));
                 else
