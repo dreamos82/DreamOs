@@ -127,15 +127,15 @@ void shell()
   int i = 0;
   int ret_val;
   hst_flag = 0;
-  memset(cmd, '\0', CMD_LEN);
-  memset(current_user.username, '\0', USER_LEN);
-  memset(password, '\0', 30);
-  memset(current_user.cur_path, '\0', CURPATH_LEN); 
   _kcolor(BRIGHT_BLUE);
   printf(LNG_WELCOME);
   _kcolor(WHITE);
   
-  do {		
+  do {
+    memset(cmd, '\0', CMD_LEN);
+    memset(current_user.username, '\0', USER_LEN);
+    memset(password, '\0', 30);
+    memset(current_user.cur_path, '\0', CURPATH_LEN);
     printf(LNG_USER);
     scanf ("%23s",current_user.username);
     printf(LNG_USER_R);
@@ -244,4 +244,3 @@ void history_start(void) {
 	}
        
 }
-

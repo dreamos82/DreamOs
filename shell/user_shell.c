@@ -42,9 +42,15 @@ int user_chk(char *username, char* usr_pwd){
 	if(fd<0) return 0;
 	while(user_get(fd, &checking_user)==2){		
 		#ifdef PWD_CHECK
-		if(!strcmp(username, checking_user.username) && !strcmp(usr_pwd, checking_user.password)) return 1;
+		if(!strcmp(username, checking_user.username) && !strcmp(usr_pwd, checking_user.password)) {
+            close(fd);
+            return 1;
+        }
 		#else
-		if(!strcmp(username, checking_user.username)) return 1;
+		if(!strcmp(username, checking_user.username)) {
+            close(fd);
+            return 1;
+        }
 		#endif
 		//else printf("Not Found ");
 		//printf("name: %s - password: %s\n", checking_user.username, checking_user.password);	

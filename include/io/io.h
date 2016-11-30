@@ -29,7 +29,7 @@
 #define sti() __asm__ __volatile__ ("sti");
 #define cli() __asm__ __volatile__ ("cli");
  
-inline unsigned char inportb (int);
-inline void outportb (int, int);
+extern inline unsigned char inportb (int);
+extern inline void outportb (int, int);
  
 #endif
