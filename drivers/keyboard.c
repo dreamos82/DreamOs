@@ -110,7 +110,7 @@ void keyboard_isr (void)
             outportb(MASTER_PORT, EOI);
 	    goto end;
         }
-
+    
     switch (sc) {
     case KEY_LSHIFT:
 	is_shifted = 1;
@@ -203,6 +203,8 @@ void keyboard_isr (void)
 	break;
 
     case KEY_DOWNARROW:
+    history_start();
+    	_ksetcursauto();
 	break;
 	
     case KEY_LEFTARROW:

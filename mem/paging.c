@@ -164,7 +164,7 @@ void set_pagetable_entry(int pos, unsigned int base, unsigned char opt1, unsigne
   * Modifica gli attributi di una page_table con la paginazione abilitata
   * @author Ivan Gualandri
   * @version 1.0
-  * @param pd_entry l'elemento della pagedir che che contiene la pagetable interessta
+  * @param pd_entry l'elemento della pagedir che contiene la pagetable interessata
   * @param pt_entry l'elemento della pagetable che andremo a modificare
   * @param base l'indirizzo base della pagetable associata
   * @param opt1 le opzioni dei primi 7 bit
@@ -309,10 +309,12 @@ void map_address(unsigned int fis_address, unsigned int logic_address){
 	printf("Pdir value: %d, PtableValue: %d\n", pdir, ptable);
 	printf("Pdir entry value: %d\n", get_pagedir_entry(pdir));
 	#endif
-	if(get_pagedir_entry(pdir)==NULL){		
+	//if(get_pagedir_entry(pdir)==NULL){
+    //Comparing with NULL produces a warning, get_pagedir_entry returns unsigned int
+    if(get_pagedir_entry(pdir)==0){
 		/**TODO
-		 * Crate_page_table
-		 * Map_new_pdir */		
+		 * Create_page_table
+		 * Map_new_pdir */
 		unsigned int *new_pagetable;		
 		new_pagetable = create_pageTable();
 		set_pagedir_entry_ric(pdir, (unsigned int)new_pagetable, PD_PRESENT|SUPERVISOR, 0);

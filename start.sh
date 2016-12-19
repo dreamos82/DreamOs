@@ -87,6 +87,19 @@ case $1 in
 		exit
 		;;
 		
+    "--config")
+            case $2 in
+                "bochs")
+                    echo "--------------------------------------------- "
+                    echo "Configuring .bochsrc file configuration.."
+                    echo "--------------------------------------------- "
+                    ./bochsconfig.sh
+                    echo "done."
+                    exit
+                ;;
+            esac
+            ;;
+		
 	"--compile")
 		case $2 in
 			"qemu"|"bochs")

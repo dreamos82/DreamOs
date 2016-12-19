@@ -204,7 +204,7 @@ int printf (const char *format, ...)
 int getchar (void)
 {
     int tmpchar;
-
+    
     while ((tmpchar = _kgetch()) == -1);
     return tmpchar;
 }

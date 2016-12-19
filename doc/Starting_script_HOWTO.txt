@@ -19,7 +19,17 @@ be sure you have one of those, else you can try it from
 floppy drive, or boot it form your grub.. DreamOS can! :) 
 
 However you have the possibility to choose if you want to 
-compile DreamOS or only lunch the 'Emulator'.
+compile DreamOS or only launch the 'Emulator'.
+
+If you haven't configured romimage and vgaromimage paths 
+for your .bochsrc file configuration, there is the flag
+'--config' then use the command:
+	
+  Usage: start.sh --config bochs
+
+This command will look for romimage and vgaromimage paths in
+your pc and will set all to .bocshrc file.
+
 If you want to compile, use the USE Flags '--compile' then
 the command, like:
 

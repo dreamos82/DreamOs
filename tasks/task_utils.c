@@ -39,6 +39,8 @@ table_address_t map_kernel(){
 	unsigned int *logic_pt_address = kmalloc(8*4096);
 	unsigned int *pagedir;
 	unsigned int *pagetable;
+    unsigned int *first_pagedir;
+    unsigned int *first_pagetable;
 	unsigned int i=0;	
 	unsigned int j=0;
 	/** Request physical space for pagedir and pagetable*/ 	
@@ -47,15 +49,22 @@ table_address_t map_kernel(){
 
 	/**Map the logic addresses for pagedir and pagetable into physical address
 	 * identified by the variables pagetable and pagedir*/
+    //NOTE: We should save the first pagedir and first pagetable entries?
+    first_pagedir = pagedir;
+    first_pagetable = pagetable;
 	while(i < 8){
 		map_address(pagedir, logic_pd_address);
-		map_address(pagetable, logic_pt_address);		
-		pagedir+=4096;
-		pagetable+=4096;
+		map_address(pagetable, logic_pt_address);
+        //We pass to the next pagedir and pagetable
+		pagedir+=4096;//4K for each pagedir structure
+		pagetable+=4096;//4K for each pagetable structure
 		i++;
-	}	
+	}
 	//set_pagedir_entry_ric(0, (unsigned int)current_page_table, PD_PRESENT|SUPERVISOR|WRITE,0);  
 	/**Initialize the pagedir with all 0's and the pagetable with the locations of the kernel*/  
+    /*NOTE: We incremented pagedir and pagetable in the last loop we should reinitialize both with the starting values?*/
+    pagedir = first_pagedir;
+    pagetable = first_pagetable;
 	while(j<PD_LIMIT){
 		pagedir[j] = 0x0;
 		pagetable[j] = (j*0x1000&0xFFFFF0)|PD_PRESENT|SUPERVISOR|WRITE|0;
