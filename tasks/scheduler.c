@@ -78,12 +78,9 @@ void schedule(unsigned int *stack) {
 	    dbg_bochs_print(" -- ");
 	    dbg_bochs_print(cur_task->name);
 	    dbg_bochs_print("\n");      
-	    //load_pdbr(cur_task->pdir);
+	    load_pdbr(cur_task->pdir);
 	    *stack = cur_task->esp;
-
-	  } else {
-	    enqueue_task(cur_task->pid, cur_task);
-	  }
+	}
 
 	active = FALSE;
 	return;
