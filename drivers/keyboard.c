@@ -108,9 +108,9 @@ void keyboard_isr (void)
     if (sc > CODE_BREAK && sc != (KEY_LSHIFT|CODE_BREAK) && sc != (KEY_RSHIFT|CODE_BREAK)){
         if (sc==KEY_ENTER+128)
             outportb(MASTER_PORT, EOI);
-	    goto end;
+        goto end;
         }
-    
+
     switch (sc) {
     case KEY_LSHIFT:
 	is_shifted = 1;

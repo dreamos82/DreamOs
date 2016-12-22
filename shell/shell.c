@@ -74,9 +74,10 @@ struct cmd shell_cmd[NUM_COM] = {
  * argv[n] = opzioni successive
  */
 
-int count = HST_LEN, posiz = HST_LEN - 1, c = HST_LEN - 1, limit = 1;
+int free_slots = HST_LEN, posiz = HST_LEN - 1, c = 0, limit = 1;
 char *lastcmd[HST_LEN] = {};
-int hist_press = 0;
+//Index of history array, where we save the command
+int write_index = HST_LEN - 1;
 void options(char *com)
 {  
   int i=0;
@@ -210,34 +211,38 @@ void shell()
     }
 }
 
-// History
+// Saves cmd_pass string to history buffer (lastcmd)
 void history(char *cmd_pass) {
-    if (count == 0)
-        count = HST_LEN;
 	//We should always clean before copying data inside
-    memset(lastcmd[count - 1], 0, 30);
-    //strncpy(lastcmd[count - 1], cmd_pass, strlen(cmd_pass));
-    strcpy(lastcmd[count - 1], cmd_pass);
+    memset(lastcmd[write_index], 0, 30);
+    strcpy(lastcmd[write_index], cmd_pass);
     
-    /*int i;
+    #ifdef DEBUG
+    //Prints the history buffer
+    int i;
     for (i = 0 ; i < HST_LEN ; ++i)
-            printf("History[%d]: %s\n", i, lastcmd[i]);*/
+            printf("History[%d]: %s\n", i, lastcmd[i]);
+    #endif
     
-    --count;
-    if ( count == 0 )
-		count = HST_LEN;
+    --write_index;
+    if (write_index < 0)
+        write_index = HST_LEN - 1;
+    
+    if ( free_slots > 0 )
+        --free_slots;
 }
 
+//downarrow and uparrow keys handler to get commands from history buffer
 void history_start(void) { 
-    static int sc_uparrow;
+    int sc_arrow = inportb(0x60);
     
     int delete = 0, max_limit = strlen(lastcmd[posiz]);
     
-	//History position handling
-    if (posiz == 0 || posiz < count)
+	//History position index handling
+    if (posiz < free_slots)
     	posiz = HST_LEN - 1;
     else if (posiz > HST_LEN - 1)
-        posiz = count;
+        posiz = free_slots;
     
     //Backspace handling
     if (limit < max_limit) {
@@ -256,9 +261,9 @@ void history_start(void) {
     strcpy(cmd, lastcmd[posiz]);
     hst_flag = 1;
     
-    if( (sc_uparrow = inportb (0x60) ) == KEY_UPARROW )
+    if (sc_arrow == KEY_UPARROW)
         --posiz;
-	else if ( (sc_uparrow = inportb (0x60) ) == KEY_DOWNARROW )
+	else if (sc_arrow == KEY_DOWNARROW)
         ++posiz;
 }
 
@@ -279,6 +284,7 @@ void _getCommand(char *prompt) {
     while (i < CMD_LEN && (c = getchar()) != '\n') {
         if (hst_flag) {
             hst_flag = 0;
+            //We have to write new chars at the end of string imported from history
             i = strlen(cmd);
         }
         if (c == '\b') {
