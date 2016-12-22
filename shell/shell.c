@@ -74,9 +74,10 @@ struct cmd shell_cmd[NUM_COM] = {
  * argv[n] = opzioni successive
  */
 
-int count = 9, posiz = 9, c = 10, limit = 1;
-char *lastcmd[10] = {};
-int hist_press = 0;
+int free_slots = HST_LEN, posiz = HST_LEN - 1, c = 0, limit = 1;
+char *lastcmd[HST_LEN] = {};
+//Index of history array, where we save the command
+int write_index = HST_LEN - 1;
 void options(char *com)
 {  
   int i=0;
@@ -150,80 +151,100 @@ void shell()
     ret_val = user_chk(current_user.username, password);
   } while ((!strlen(current_user.username) || ret_val!=1));
     
-  _kclear();  
-  aalogo();
-  printf("\n\n\n\n");
-  argc=1;  
-  strcpy(current_user.cur_path, "/root");
-  current_user.uid = 1;
-  current_user.gid = 0;
-  for (;;)
-  {
-	dbg_bochs_print("shell loop\n");
-    for (c = 1 ; c <= 10 ; c++) {
-    	    lastcmd[c] = (char *)kmalloc(sizeof(char) * 30); 
+    _kclear();  
+    aalogo();
+    printf("\n\n\n\n");
+    argc=1;  
+    strcpy(current_user.cur_path, "/root");
+    current_user.uid = 1;
+    current_user.gid = 0;
+    //Command history set allocation
+    for (c = 0 ; c < HST_LEN ; c++) {
+        lastcmd[c] = (char *)kmalloc(sizeof(char) * 30);
+        //Initializing new allocated strings
+        memset(lastcmd[c], 0, 30);
     }
-    int cmdclean = 0;
-    while(cmdclean<CMD_LEN){
-		cmd[cmdclean] = '\0';
-		cmdclean++;
-	}	
-    _kcolor(9);	    
-    printf("%s", current_user.username);
-    _kcolor(15);
-	printf("~:%s# ", current_user.cur_path);
-    scanf("%30s",cmd);        
-    history(cmd);
-   
-    /* elimina eventuali spazi all'inizio del comando */
-    for (i = 0, cmd_ptr = cmd; cmd[i] == ' '; i++, cmd_ptr++);
-    //printf("%s\n", cmd_ptr);
-    options (cmd_ptr);
-    if (strlen(argv[0]) == 0)
-        goto end;
-
-    for (i = NUM_COM; i >= 0; --i) {
-        if(strcmp(argv[0], shell_cmd[i].cmdname) == (int) NULL) {
-            (*shell_cmd[i].h_func)();
-            break;
+    
+    for (;;)
+    {
+        dbg_bochs_print("shell loop\n");
+        _kcolor(9);	    
+        printf("%s", current_user.username);
+        _kcolor(15);
+        
+        _getCommand("~:%s# ");
+        
+        //We reset so we always start from the beginning of history commands
+        posiz = HST_LEN - 1;
+        
+        /* Cleans all blanks at the beginning of the command */
+        for (i = 0, cmd_ptr = cmd; cmd[i] == ' '; i++, cmd_ptr++);
+        
+        if (strlen(cmd) > 0) {
+            //Saves the last command input to the history
+            history(cmd);
+            //printf("%s\n", cmd_ptr);
+            options (cmd_ptr);
         }
+        
+        else {
+            memset(cmd, 0, CMD_LEN);
+            for (--argc; argc>=0; argc--) {      
+                free (argv[argc]);
+            }
+            /*for (c = 0 ; c < 10 ; c++) {
+                free(lastcmd[c]); 
+            }*/
+            continue;
+        }
+        
+        //Matching and executing the command
+        for (i = NUM_COM; i >= 0; --i) {
+            if(strcmp(argv[0], shell_cmd[i].cmdname) == (int) NULL) {
+                (*shell_cmd[i].h_func)();
+                break;
+            }
+        }
+        //Print unknown command message
+        if (i < 0)
+            printf(LNG_UNKNOWN_CMD " %s\n", argv[0]);
     }
-
-    if (i<0)
-      printf(LNG_UNKNOWN_CMD " %s\n", argv[0]);
-
-end:
-    memset(cmd, 0, CMD_LEN);    
-    for (--argc; argc>=0; argc--) {      
-        free (argv[argc]);
-    }
-    for (c = 1 ; c <= 10 ; c++) {
-    	    free(lastcmd[c]); 
-    }
-  }
 }
 
-// History
+// Saves cmd_pass string to history buffer (lastcmd)
 void history(char *cmd_pass) {
-    if ( count == 0 ) {
-		count = 10; 
-	}
-
-    strncpy(lastcmd[count], cmd_pass, strlen(cmd_pass));
+	//We should always clean before copying data inside
+    memset(lastcmd[write_index], 0, 30);
+    strcpy(lastcmd[write_index], cmd_pass);
     
-    posiz = count;
-    count--;
+    #ifdef DEBUG
+    //Prints the history buffer
+    int i;
+    for (i = 0 ; i < HST_LEN ; ++i)
+            printf("History[%d]: %s\n", i, lastcmd[i]);
+    #endif
+    
+    --write_index;
+    if (write_index < 0)
+        write_index = HST_LEN - 1;
+    
+    if ( free_slots > 0 )
+        --free_slots;
 }
 
+//downarrow and uparrow keys handler to get commands from history buffer
 void history_start(void) { 
-    static int sc_uparrow;
-    count++;
-    int delete = 0, max_limit = strlen(lastcmd[count]);
-	
-    if ( count == 0 || count > 9 ) {
-    	count = posiz;
-    }
+    int sc_arrow = inportb(0x60);
     
+    int delete = 0, max_limit = strlen(lastcmd[posiz]);
+    
+	//History position index handling
+    if (posiz < free_slots)
+    	posiz = HST_LEN - 1;
+    else if (posiz > HST_LEN - 1)
+        posiz = free_slots;
+    
+    //Backspace handling
     if (limit < max_limit) {
 		limit = max_limit;
 	}
@@ -232,15 +253,48 @@ void history_start(void) {
 		_kbackspace();
 		delete++;
 	}
+    
+    //Printing the current history command
+    printf("%s", lastcmd[posiz]);
+    //We copy the history command to cmd
+    memset(cmd, 0, CMD_LEN);
+    strcpy(cmd, lastcmd[posiz]);
+    hst_flag = 1;
+    
+    if (sc_arrow == KEY_UPARROW)
+        --posiz;
+	else if (sc_arrow == KEY_DOWNARROW)
+        ++posiz;
+}
 
-    if( (sc_uparrow = inportb (0x60) ) == KEY_UPARROW ) {
-   		printf("%s", lastcmd[count]); 
-   		int cmdclean = 0;
-		while(cmdclean<CMD_LEN){
-			cmd[cmdclean] = '\0';
-			cmdclean++;
-		}	
-   		strcpy(cmd, lastcmd[count]);
-	}
-       
+//Input shell command (a private hacked version of gets)
+void _getCommand(char *prompt) {
+    int i, c;
+    
+    i = c = 0;
+    //Initializing the current command line buffer
+    memset(cmd, 0, CMD_LEN);
+    //Input command
+    printf(prompt, current_user.cur_path);
+    
+    //Important to update these values otherwise backspace will not work!!
+    shell_mess_col = _kgetcolumn();
+    shell_mess_line = _kgetline();
+    
+    while (i < CMD_LEN && (c = getchar()) != '\n') {
+        if (hst_flag) {
+            hst_flag = 0;
+            //We have to write new chars at the end of string imported from history
+            i = strlen(cmd);
+        }
+        if (c == '\b') {
+            if (i > 0)
+                cmd[--i] = '\0';
+            else if (i == 0)
+                cmd[i] = '\0';
+            continue;
+        }
+        cmd[i++] = c;
+        cmd[i] = '\0';
+    }
 }

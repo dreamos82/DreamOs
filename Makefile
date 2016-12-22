@@ -128,6 +128,7 @@ utils:
 	make -f utils/Makefile
 	
 filesystem:
+	mkdir -p boot/os
 	su -c "mount -o loop boot/grub.img boot/os && cp initfs boot/os/initfs && umount boot/os"
 	
 img:

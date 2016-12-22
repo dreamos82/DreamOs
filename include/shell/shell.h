@@ -24,6 +24,7 @@
 #define CURPATH_LEN 256
 #define NUM_COM 22
 #define DEF_COM 18
+#define HST_LEN 10
 
 
 struct cmd {
@@ -47,5 +48,6 @@ void shell_init();
 void shell(void);
 void history (char *);
 void history_start(void);
+void _getCommand(char *);
 
 #endif
