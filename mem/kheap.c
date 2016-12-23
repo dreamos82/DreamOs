@@ -24,7 +24,6 @@
 #include <kheap.h>
 #include <fismem.h>
 #include <paging.h>
-#include <ordered_array.h>
 #include <ordered_list.h>
 #include <stddef.h>
 #include <stdio.h>

@@ -25,8 +25,6 @@
 #ifndef KHEAP_H
 #define KHEAP_H
 
-#include <ordered_array.h>
-
 /*!  \struct heap_node_t
      \brief Struttura dati che mantiene le informazioni su locazioni occupate e libere di memoria
  */
