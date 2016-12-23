@@ -72,8 +72,6 @@ OBJ = kernel.o\
 	tasks/task_utils.o\
 	tasks/task.o\
 	tasks/tss/tss.o
-	#mem/heap.o\
-	#misc/ordered_array.o
 dreamos.img: bl.img kernel.bin
 	cp kernel.bin dreamos.img
 
@@ -103,10 +101,8 @@ libc/string.o: libc/string.c
 mem/fismem.o: mem/fismem.c
 mem/paging.o: mem/paging.c
 mem/kheap.o: mem/kheap.c
-#mem/heap.o: mem/heap.c
 misc/clock.o: misc/clock.c
 misc/ordered_list.o: misc/ordered_list.c
-#misc/ordered_array.o: misc/ordered_array.c
 misc/bitops.o: misc/bitops.c
 misc/debug.o: misc/debug.c
 drivers/keyboard.o: drivers/keyboard.c
