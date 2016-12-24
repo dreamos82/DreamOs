@@ -22,7 +22,7 @@ case $1 in
 		;;
 	
 	"qemu")
-		qemu -fda boot/grub.img
+		qemu-system-i386 -fda boot/grub.img
 		;;
 	
 	"bochs")
@@ -126,7 +126,7 @@ case $1 in
 				
 				if [ "$2" == "qemu" ]
 				then
-					qemu -fda boot/grub.img
+					qemu-system-i386 -fda boot/grub.img
 				else
 					bochs -f .bochsrc -q
 				fi
