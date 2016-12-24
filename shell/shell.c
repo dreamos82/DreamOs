@@ -61,11 +61,11 @@ struct cmd shell_cmd[NUM_COM] = {
  { "ls",       ls,        "      Tool for listing dir - not complete-" },
  { "cd",       cd,        "      Change dir - not complete-" },
  { "whoami",   whoami,    "  Show the current user name" },
- { "tester",   tester,    "  Try some functions, 'tester --help' for more info'" },	
+ { "tester",   tester,    "  Try some functions, 'tester --help' for more info'" },
  { "pwd",      pwd,       "     Print current working directory" },
  { "more",     more,      "    Read content of a file" },
- { "newfile",  newfile,	  "	Create a new file"}, 
- { "ps", 	   ps,		  "	Show task list"}, 
+ { "newfile",  newfile,	  "	Create a new file"},
+ { "ps", 	   ps,		  "	Show task list"},
 };
 /*
  * Inserisce gli argomenti di un comando in un array di stringhe
@@ -79,16 +79,16 @@ char *lastcmd[HST_LEN] = {};
 //Index of history array, where we save the command
 int write_index = HST_LEN - 1;
 void options(char *com)
-{  
+{
   int i=0;
-  argc=0;  
+  argc=0;
   for (; *com; com++)
-  {    
+  {
     argv[argc] = (char *)kmalloc(sizeof(char) * 30);
     while (*com != ' ' && *com != '\0') {
       *(argv[argc] + i) = *com++;
       i++;
-    } 
+    }
     *(argv[argc] + i) = '\0';
     argc++;
     i=0;
@@ -118,7 +118,7 @@ void shell()
 	{ "ls",       ls},
 	{ "cd",       cd},
 	{ "whoami",   whoami},
-	{ "tester", tester},	
+	{ "tester", tester},
 	{ "pwd", pwd},
 	{ "more", more},
 	{ "newfile", newfile}
@@ -131,7 +131,7 @@ void shell()
   _kcolor(BRIGHT_BLUE);
   printf(LNG_WELCOME);
   _kcolor(WHITE);
-  
+
   do {
     memset(cmd, '\0', CMD_LEN);
     memset(current_user.username, '\0', USER_LEN);
@@ -150,11 +150,11 @@ void shell()
     dbg_bochs_print((const unsigned char*)"Asking username");
     ret_val = user_chk(current_user.username, password);
   } while ((!strlen(current_user.username) || ret_val!=1));
-    
-    _kclear();  
+
+    _kclear();
     aalogo();
     printf("\n\n\n\n");
-    argc=1;  
+    argc=1;
     strcpy(current_user.cur_path, "/root");
     current_user.uid = 1;
     current_user.gid = 0;
@@ -164,40 +164,40 @@ void shell()
         //Initializing new allocated strings
         memset(lastcmd[c], 0, 30);
     }
-    
+
     for (;;)
     {
         dbg_bochs_print("shell loop\n");
-        _kcolor(9);	    
+        _kcolor(9);
         printf("%s", current_user.username);
         _kcolor(15);
-        
+
         _getCommand("~:%s# ");
-        
+
         //We reset so we always start from the beginning of history commands
         posiz = HST_LEN - 1;
-        
+
         /* Cleans all blanks at the beginning of the command */
         for (i = 0, cmd_ptr = cmd; cmd[i] == ' '; i++, cmd_ptr++);
-        
+
         if (strlen(cmd) > 0) {
             //Saves the last command input to the history
             history(cmd);
             //printf("%s\n", cmd_ptr);
             options (cmd_ptr);
         }
-        
+
         else {
             memset(cmd, 0, CMD_LEN);
-            for (--argc; argc>=0; argc--) {      
+            for (--argc; argc>=0; argc--) {
                 free (argv[argc]);
             }
             /*for (c = 0 ; c < 10 ; c++) {
-                free(lastcmd[c]); 
+                free(lastcmd[c]);
             }*/
             continue;
         }
-        
+
         //Matching and executing the command
         for (i = NUM_COM; i >= 0; --i) {
             if(strcmp(argv[0], shell_cmd[i].cmdname) == (int) NULL) {
@@ -216,51 +216,51 @@ void history(char *cmd_pass) {
 	//We should always clean before copying data inside
     memset(lastcmd[write_index], 0, 30);
     strcpy(lastcmd[write_index], cmd_pass);
-    
+
     #ifdef DEBUG
     //Prints the history buffer
     int i;
     for (i = 0 ; i < HST_LEN ; ++i)
             printf("History[%d]: %s\n", i, lastcmd[i]);
     #endif
-    
+
     --write_index;
     if (write_index < 0)
         write_index = HST_LEN - 1;
-    
+
     if ( free_slots > 0 )
         --free_slots;
 }
 
 //downarrow and uparrow keys handler to get commands from history buffer
-void history_start(void) { 
+void history_start(void) {
     int sc_arrow = inportb(0x60);
-    
+
     int delete = 0, max_limit = strlen(lastcmd[posiz]);
-    
+
 	//History position index handling
     if (posiz < free_slots)
     	posiz = HST_LEN - 1;
     else if (posiz > HST_LEN - 1)
         posiz = free_slots;
-    
+
     //Backspace handling
     if (limit < max_limit) {
 		limit = max_limit;
 	}
-	
+
     while ( delete <= limit) {
 		_kbackspace();
 		delete++;
 	}
-    
+
     //Printing the current history command
     printf("%s", lastcmd[posiz]);
     //We copy the history command to cmd
     memset(cmd, 0, CMD_LEN);
     strcpy(cmd, lastcmd[posiz]);
     hst_flag = 1;
-    
+
     if (sc_arrow == KEY_UPARROW)
         --posiz;
 	else if (sc_arrow == KEY_DOWNARROW)
@@ -270,17 +270,17 @@ void history_start(void) {
 //Input shell command (a private hacked version of gets)
 void _getCommand(char *prompt) {
     int i, c;
-    
+
     i = c = 0;
     //Initializing the current command line buffer
     memset(cmd, 0, CMD_LEN);
     //Input command
     printf(prompt, current_user.cur_path);
-    
+
     //Important to update these values otherwise backspace will not work!!
     shell_mess_col = _kgetcolumn();
     shell_mess_line = _kgetline();
-    
+
     while (i < CMD_LEN && (c = getchar()) != '\n') {
         if (hst_flag) {
             hst_flag = 0;
