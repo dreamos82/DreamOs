@@ -39,6 +39,7 @@ OBJ = kernel.o\
 	io/video.o\
 	drivers/keyboard.o\
 	drivers/mouse.o\
+	drivers/fdc.o\
 	fs/vfs.o\
 	fs/fcntl.o\
 	fs/initrd.o\
