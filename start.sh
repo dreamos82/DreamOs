@@ -1,6 +1,6 @@
 #!/bin/bash
 # This script is more important to do a right compilation..
-# 
+#
 # Coded by Osiris
 # For any question about this or other, mail me to
 # osiris@Devils.com
@@ -15,20 +15,20 @@ MAKE_IMG="make img"
 MAKE_FS="make filesystem"
 
 case $1 in
-	
+
 	"help")
 		less doc/help.txt
 		exit 1
 		;;
-	
+
 	"qemu")
 		qemu -fda boot/grub.img
 		;;
-	
+
 	"bochs")
 		bochs -f .bochsrc -q
 		;;
-		
+
 	"floppy_install")
 		echo "----------------floppy_install------ "
 		echo "Installation in progres.."
@@ -37,7 +37,7 @@ case $1 in
 		echo "---------------------- "
 		exit
 		;;
-	
+
 	"grub")
 		echo "--------------------------------------------- "
 		echo "Creating backup of menu.lst (/boot/grub/menu.lst_backup) .."
@@ -50,7 +50,7 @@ case $1 in
 		echo "--------------------------------------------- "
 		exit
 		;;
-		
+
 	"create_iso")
 		echo "--------------------------------------------- "
 		echo "Launching ISO Creating script ..."
@@ -62,7 +62,7 @@ case $1 in
 		echo "---------------------------------------------"
 		exit
 		;;
-		
+
 	"eltorito_iso")
 		echo "--------------------------------------------- "
 		echo "Launching ISO Creating script ..."
@@ -86,7 +86,7 @@ case $1 in
 		echo "---------------------------------------------"
 		exit
 		;;
-		
+
     "--config")
             case $2 in
                 "bochs")
@@ -99,13 +99,13 @@ case $1 in
                 ;;
             esac
             ;;
-		
+
 	"--compile")
 		case $2 in
 			"qemu"|"bochs")
 				if [ "$3" == "it" ] || [ "$3" == "en" ]; then
 					echo "Setting up Language '$2', done."
-					make "$3"                          
+					make "$3"
 					echo "----------------------->"
 				else
 					echo "Warning: No language translation declared!"
@@ -113,7 +113,7 @@ case $1 in
 				fi
 
 				$VERS && $CLEAN && $MAKE && $MAKE_IMG
-	  
+
 				echo "--------------------------------------------- "
 				echo "Launching FS Creating script ..."
 				echo ""
@@ -123,7 +123,7 @@ case $1 in
 				echo "--------------------------------------------- "
 				echo "FS Created and added to boot/grub.img"
 				echo "---------------------------------------------"
-				
+
 				if [ "$2" == "qemu" ]
 				then
 					qemu -fda boot/grub.img
@@ -132,9 +132,9 @@ case $1 in
 				fi
 				exit
 				;;
-				
-				
-				
+
+
+
 			"floppy_install")
 				$VERS && $CLEAN && $MAKE && $MAKE_IMG && $MAKE_FS
 				echo "---------------------- "
@@ -144,7 +144,7 @@ case $1 in
 				echo "---------------------- "
 				exit
 				;;
-			
+
 			"grub")
 				$VERS && $CLEAN && $MAKE && $MAKE_IMG && $MAKE_FS
 				echo "--------------------------------------------- "
@@ -154,7 +154,7 @@ case $1 in
 				echo "--------------------------------------------- "
 				exit
 				;;
-			
+
 			"create_iso")
 				$VERS && $CLEAN && $MAKE && $MAKE_IMG && $MAKE_FS
 				echo "--------------------------------------------- "
@@ -167,7 +167,7 @@ case $1 in
 				echo "--------------------------------------------- "
 				exit
 				;;
-			
+
 			*)
 				  echo "'$2' is an unknown command to me, please read the help!"
 				  echo "Usage: $0 help"
@@ -175,11 +175,11 @@ case $1 in
 				  ;;
 		esac
 		;;
-		
+
 	*)
 		echo "no command passed; please read the help!"
 		echo "Usage: $0 help"
 		exit
 		;;
-		
+
 esac
