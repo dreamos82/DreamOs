@@ -11,6 +11,7 @@ AR = @echo "   " $(PROMPT) AR "    " $ && ar
 CD = @echo  $(PROMPT) CD "        " $(DIR) && cd
 
 $(OUTPUT)/%.o: $(SRC)/%.c
+	mkdir -p "$(@D)"
 	$(CC) -c $(CFLAGS) -o "$@" "$<"
 
 %.o: %.s

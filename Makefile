@@ -7,20 +7,7 @@ VERSION = 0
 PATCHLEVEL = 3
 EXTRAVERSION = -trunk
 MEMORY = LEGACY
-GENDIRS = generated\
-	  generated/cpu\
-	  generated/drivers\
-	  generated/fs\
-	  generated/hardware\
-	  generated/io\
-	  generated/libc\
-	  generated/mem\
-	  generated/misc\
-	  generated/shell\
-	  generated/sys\
-	  generated/system\
-	  generated/tasks\
-	  generated/tasks/tss
+GENDIR = generated
 include Makefile.am
 
 CFLAGS = -nostdlib\
@@ -49,93 +36,94 @@ CFLAGS = -nostdlib\
 	-DBOCHS_DEBUG\
 	-D$(MEMORY)
 
-OBJ = generated/kernel.o\
-	generated/io/video.o\
-	generated/drivers/keyboard.o\
-	generated/drivers/mouse.o\
-	generated/drivers/fdc.o\
-	generated/fs/vfs.o\
-	generated/fs/fcntl.o\
-	generated/fs/initrd.o\
-	generated/fs/unistd.o\
-	generated/libc/ctype.o\
-	generated/libc/string.o\
-	generated/io/io.o\
-	generated/libc/stdio.o\
-	generated/hardware/cpuid.o\
-	generated/cpu/gdt.o\
-	generated/cpu/idt.o\
-	generated/cpu/handlers.o\
-	generated/hardware/pic8259.o\
-	generated/mem/fismem.o\
-	generated/mem/paging.o\
-	generated/mem/kheap.o\
-	generated/misc/clock.o\
-	generated/misc/bitops.o\
-	generated/misc/ordered_list.o\
-	generated/misc/debug.o \
-	generated/system/syscall.o\
-	generated/hardware/8253.o\
-	generated/shell/commands.o\
-	generated/shell/testing.o\
-	generated/shell/user_shell.o\
-	generated/shell/shell.o\
-	generated/sys/utsname.o\
-	generated/sys/dirent.o\
-	generated/sys/stat.o\
-	generated/tasks/scheduler.o\
-	generated/tasks/task_utils.o\
-	generated/tasks/task.o\
-	generated/tasks/tss/tss.o
+OBJ = $(GENDIR)/kernel.o\
+	$(GENDIR)/io/video.o\
+	$(GENDIR)/drivers/keyboard.o\
+	$(GENDIR)/drivers/mouse.o\
+	$(GENDIR)/drivers/fdc.o\
+	$(GENDIR)/fs/vfs.o\
+	$(GENDIR)/fs/fcntl.o\
+	$(GENDIR)/fs/initrd.o\
+	$(GENDIR)/fs/unistd.o\
+	$(GENDIR)/libc/ctype.o\
+	$(GENDIR)/libc/string.o\
+	$(GENDIR)/io/io.o\
+	$(GENDIR)/libc/stdio.o\
+	$(GENDIR)/hardware/cpuid.o\
+	$(GENDIR)/cpu/gdt.o\
+	$(GENDIR)/cpu/idt.o\
+	$(GENDIR)/cpu/handlers.o\
+	$(GENDIR)/hardware/pic8259.o\
+	$(GENDIR)/mem/fismem.o\
+	$(GENDIR)/mem/paging.o\
+	$(GENDIR)/mem/kheap.o\
+	$(GENDIR)/misc/clock.o\
+	$(GENDIR)/misc/bitops.o\
+	$(GENDIR)/misc/ordered_list.o\
+	$(GENDIR)/misc/debug.o \
+	$(GENDIR)/system/syscall.o\
+	$(GENDIR)/hardware/8253.o\
+	$(GENDIR)/shell/commands.o\
+	$(GENDIR)/shell/testing.o\
+	$(GENDIR)/shell/user_shell.o\
+	$(GENDIR)/shell/shell.o\
+	$(GENDIR)/sys/utsname.o\
+	$(GENDIR)/sys/dirent.o\
+	$(GENDIR)/sys/stat.o\
+	$(GENDIR)/tasks/scheduler.o\
+	$(GENDIR)/tasks/task_utils.o\
+	$(GENDIR)/tasks/task.o\
+	$(GENDIR)/tasks/tss/tss.o
 generated/dreamos.img: generated/bl.img generated/kernel.bin
 	cp generated/kernel.bin generated/dreamos.img
 
 generated/bl.img : src/multicatcher.s
+	mkdir -p "$(@D)"
 	$(ASM) -f elf ./src/multicatcher.s -o ./generated/bl.img
 
 generated/kernel.bin: $(OBJ)
 	$(LD) -melf_i386 -static --oformat elf32-i386 --output=./generated/kernel.bin --script=src/kernel.lds ./generated/bl.img $(OBJ) -Ttext 0x100000 -Map ./generated/kernel.map
 	make -f utils/Makefile
 
-generated/kernel.o: src/kernel.c
-generated/fs/vfs.o: src/fs/vfs.c
-generated/fs/fcntl.o: src/fs/fcntl.c
-generated/fs/initrd.o: src/fs/initrd.c
-generated/fs/unistd.o: src/fs/unistd.c
-generated/io/video.o: src/io/video.c
-generated/io/io.o: src/io/io.c
-generated/cpu/gdt.o: src/cpu/gdt.c
-generated/cpu/idt.o: src/cpu/idt.c
-generated/cpu/handlers.o: src/cpu/handlers.c
-generated/hardware/pic8259.o: src/hardware/pic8259.c
-generated/hardware/cpuid.o: src/hardware/cpuid.c
-generated/hardware/keyboard.o: src/hardware/keyboard.c
-generated/libc/stdio.o: src/libc/stdio.c
-generated/libc/ctype.o: src/libc/ctype.c
-generated/libc/string.o: src/libc/string.c
-generated/mem/fismem.o: src/mem/fismem.c
-generated/mem/paging.o: src/mem/paging.c
-generated/mem/kheap.o: src/mem/kheap.c
-generated/misc/clock.o: src/misc/clock.c
-generated/misc/ordered_list.o: src/misc/ordered_list.c
-generated/misc/bitops.o: src/misc/bitops.c
-generated/misc/debug.o: src/misc/debug.c
-generated/drivers/keyboard.o: src/drivers/keyboard.c
-generated/drivers/mouse.o: src/drivers/mouse.c
-generated/drivers/fdc.o: src/drivers/fdc.c
-generated/system/syscall.o: src/system/syscall.c
-generated/hardware/8253.o: src/hardware/8253.c
-generated/shell/shell.o: src/shell/shell.c
-generated/shell/commands.o: src/shell/commands.c
-generated/shell/testing.o: src/shell/testing.c
-generated/shell/user_shell.o: src/shell/user_shell.c
-generated/sys/utsname.o: src/sys/utsname.c
-generated/sys/dirent.o: src/sys/dirent.c
-generated/sys/stat.o: src/sys/stat.c
-generated/tasks/scheduler.o: src/tasks/scheduler.c
-generated/tasks/task_utils.o: src/tasks/task_utils.c
-generated/tasks/task.o: src/tasks/task_utils.c
-generated/tasks/tss/tss.o: src/tasks/tss/tss.c
+$(GENDIR)/kernel.o: src/kernel.c
+$(GENDIR)/fs/vfs.o: src/fs/vfs.c
+$(GENDIR)/fs/fcntl.o: src/fs/fcntl.c
+$(GENDIR)/fs/initrd.o: src/fs/initrd.c
+$(GENDIR)/fs/unistd.o: src/fs/unistd.c
+$(GENDIR)/io/video.o: src/io/video.c
+$(GENDIR)/io/io.o: src/io/io.c
+$(GENDIR)/cpu/gdt.o: src/cpu/gdt.c
+$(GENDIR)/cpu/idt.o: src/cpu/idt.c
+$(GENDIR)/cpu/handlers.o: src/cpu/handlers.c
+$(GENDIR)/hardware/pic8259.o: src/hardware/pic8259.c
+$(GENDIR)/hardware/cpuid.o: src/hardware/cpuid.c
+$(GENDIR)/hardware/keyboard.o: src/hardware/keyboard.c
+$(GENDIR)/libc/stdio.o: src/libc/stdio.c
+$(GENDIR)/libc/ctype.o: src/libc/ctype.c
+$(GENDIR)/libc/string.o: src/libc/string.c
+$(GENDIR)/mem/fismem.o: src/mem/fismem.c
+$(GENDIR)/mem/paging.o: src/mem/paging.c
+$(GENDIR)/mem/kheap.o: src/mem/kheap.c
+$(GENDIR)/misc/clock.o: src/misc/clock.c
+$(GENDIR)/misc/ordered_list.o: src/misc/ordered_list.c
+$(GENDIR)/misc/bitops.o: src/misc/bitops.c
+$(GENDIR)/misc/debug.o: src/misc/debug.c
+$(GENDIR)/drivers/keyboard.o: src/drivers/keyboard.c
+$(GENDIR)/drivers/mouse.o: src/drivers/mouse.c
+$(GENDIR)/drivers/fdc.o: src/drivers/fdc.c
+$(GENDIR)/system/syscall.o: src/system/syscall.c
+$(GENDIR)/hardware/8253.o: src/hardware/8253.c
+$(GENDIR)/shell/shell.o: src/shell/shell.c
+$(GENDIR)/shell/commands.o: src/shell/commands.c
+$(GENDIR)/shell/testing.o: src/shell/testing.c
+$(GENDIR)/shell/user_shell.o: src/shell/user_shell.c
+$(GENDIR)/sys/utsname.o: src/sys/utsname.c
+$(GENDIR)/sys/dirent.o: src/sys/dirent.c
+$(GENDIR)/sys/stat.o: src/sys/stat.c
+$(GENDIR)/tasks/scheduler.o: src/tasks/scheduler.c
+$(GENDIR)/tasks/task_utils.o: src/tasks/task_utils.c
+$(GENDIR)/tasks/task.o: src/tasks/task_utils.c
+$(GENDIR)/tasks/tss/tss.o: src/tasks/tss/tss.c
 
 utils:
 	make -f utils/Makefile
