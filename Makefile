@@ -7,6 +7,20 @@ VERSION = 0
 PATCHLEVEL = 3
 EXTRAVERSION = -trunk
 MEMORY = LEGACY
+GENDIRS = generated\
+	  generated/cpu\
+	  generated/drivers\
+	  generated/fs\
+	  generated/hardware\
+	  generated/io\
+	  generated/libc\
+	  generated/mem\
+	  generated/misc\
+	  generated/shell\
+	  generated/sys\
+	  generated/system\
+	  generated/tasks\
+	  generated/tasks/tss
 include Makefile.am
 
 CFLAGS = -nostdlib\
@@ -133,6 +147,9 @@ filesystem:
 img:
 	su -c "mount -o loop boot/grub.img boot/os && cp generated/dreamos.img boot/os/boot/grub/ && umount boot/os"
 
+gen:
+	mkdir -p $(GENDIRS)
+
 vers:
 	 sed -i -e "/^#define VERSION/s/\".*\"/\"$(VERSION)\"/" src/include/version.h
 	 sed -i -e "/^#define PATCHLEVEL/s/\".*\"/\"$(PATCHLEVEL)\"/" src/include/version.h
@@ -143,7 +160,7 @@ vers:
 .PHONY: clean install iso-image qemu
 
 clean:
-	rm -f generated/*.img generated/*.bin generated/*.map
+	rm -rf generated/
 	rm -f $(OBJ)
 	rm -rf utils/initfscp
 

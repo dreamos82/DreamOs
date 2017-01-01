@@ -9,6 +9,7 @@
 # Contributor: odites
 
 VERS="make vers"
+GEN="make gen"
 CLEAN="make clean"
 MAKE="make"
 MAKE_IMG="make img"
@@ -112,7 +113,7 @@ case $1 in
 					echo "----------------------->"
 				fi
 
-				$VERS && $CLEAN && $MAKE && $MAKE_IMG
+				$VERS && $CLEAN && $GEN && $MAKE && $MAKE_IMG
 
 				echo "--------------------------------------------- "
 				echo "Launching FS Creating script ..."
@@ -136,7 +137,7 @@ case $1 in
 
 
 			"floppy_install")
-				$VERS && $CLEAN && $MAKE && $MAKE_IMG && $MAKE_FS
+				$VERS && $CLEAN && $GEN && $MAKE && $MAKE_IMG && $MAKE_FS
 				echo "---------------------- "
 				echo "Installation in progres.."
 				su -c "make install"
@@ -146,7 +147,7 @@ case $1 in
 				;;
 
 			"grub")
-				$VERS && $CLEAN && $MAKE && $MAKE_IMG && $MAKE_FS
+				$VERS && $CLEAN && $GEN && $MAKE && $MAKE_IMG && $MAKE_FS
 				echo "--------------------------------------------- "
 				echo "Launching grub installer script in ..."
 				su -c "python grub.py"
@@ -156,7 +157,7 @@ case $1 in
 				;;
 
 			"create_iso")
-				$VERS && $CLEAN && $MAKE && $MAKE_IMG && $MAKE_FS
+				$VERS && $CLEAN && $GEN && $MAKE && $MAKE_IMG && $MAKE_FS
 				echo "--------------------------------------------- "
 				echo "Launching ISO Creation script..."
 				echo ""
