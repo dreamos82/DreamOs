@@ -1,7 +1,6 @@
 ARCH = x86
 
 PROMPT = " -> "
-OUTPUT = generated
 SRC = src
 
 LD = @echo "   " $(PROMPT) LD "    " $ && ld
@@ -10,7 +9,7 @@ ASM = @echo "   " $(PROMPT) ASM "   " $< && nasm
 AR = @echo "   " $(PROMPT) AR "    " $ && ar
 CD = @echo  $(PROMPT) CD "        " $(DIR) && cd
 
-$(OUTPUT)/%.o: $(SRC)/%.c
+$(GENDIR)/%.o: $(SRC)/%.c
 	mkdir -p "$(@D)"
 	$(CC) -c $(CFLAGS) -o "$@" "$<"
 

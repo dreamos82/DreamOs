@@ -74,15 +74,15 @@ OBJ = $(GENDIR)/kernel.o\
 	$(GENDIR)/tasks/task_utils.o\
 	$(GENDIR)/tasks/task.o\
 	$(GENDIR)/tasks/tss/tss.o
-generated/dreamos.img: generated/bl.img generated/kernel.bin
-	cp generated/kernel.bin generated/dreamos.img
+$(GENDIR)/dreamos.img: $(GENDIR)/bl.img $(GENDIR)/kernel.bin
+	cp $(GENDIR)/kernel.bin $(GENDIR)/dreamos.img
 
-generated/bl.img : src/multicatcher.s
+$(GENDIR)/bl.img : src/multicatcher.s
 	mkdir -p "$(@D)"
-	$(ASM) -f elf ./src/multicatcher.s -o ./generated/bl.img
+	$(ASM) -f elf ./src/multicatcher.s -o ./$(GENDIR)/bl.img
 
-generated/kernel.bin: $(OBJ)
-	$(LD) -melf_i386 -static --oformat elf32-i386 --output=./generated/kernel.bin --script=src/kernel.lds ./generated/bl.img $(OBJ) -Ttext 0x100000 -Map ./generated/kernel.map
+$(GENDIR)/kernel.bin: $(OBJ)
+	$(LD) -melf_i386 -static --oformat elf32-i386 --output=./$(GENDIR)/kernel.bin --script=src/kernel.lds ./$(GENDIR)/bl.img $(OBJ) -Ttext 0x100000 -Map ./$(GENDIR)/kernel.map
 	make -f utils/Makefile
 
 $(GENDIR)/kernel.o: src/kernel.c
@@ -133,10 +133,7 @@ filesystem:
 	su -c "mount -o loop boot/grub.img boot/os && cp initfs boot/os/initfs && umount boot/os"
 
 img:
-	su -c "mount -o loop boot/grub.img boot/os && cp generated/dreamos.img boot/os/boot/grub/ && umount boot/os"
-
-gen:
-	mkdir -p $(GENDIRS)
+	su -c "mount -o loop boot/grub.img boot/os && cp $(GENDIR)/dreamos.img boot/os/boot/grub/ && umount boot/os"
 
 vers:
 	 sed -i -e "/^#define VERSION/s/\".*\"/\"$(VERSION)\"/" src/include/version.h
@@ -148,7 +145,7 @@ vers:
 .PHONY: clean install iso-image qemu
 
 clean:
-	rm -rf generated/
+	rm -rf $(GENDIR)
 	rm -f $(OBJ)
 	rm -rf utils/initfscp
 
@@ -160,7 +157,7 @@ iso-image:
 	./utils/eltorito_gen.sh
 
 qemu: bin/dreamos.img
-	dd if=/dev/zero bs=$(shell let bs=1474560 -$(shell stat --format=%s generated/dreamos.img); echo $$bs) count=1 2>/dev/null | cat generated/dreamos.img - > generated/dreamos_padded.img
+	dd if=/dev/zero bs=$(shell let bs=1474560 -$(shell stat --format=%s $(GENDIR)/dreamos.img); echo $$bs) count=1 2>/dev/null | cat $(GENDIR)/dreamos.img - > $(GENDIR)/dreamos_padded.img
 
 it:
 	cp src/include/lng/it.h src/include/use.h
