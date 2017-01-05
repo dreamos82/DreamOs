@@ -118,9 +118,8 @@ int main_loop(struct multiboot_info *boot_info)
     _kprintOK();
 		printf("[+] Address: 0x%x\n", &end);
 		printf("\n");
-		dbg_bochs_print((const unsigned char*)"DreamOS Debug String for Bochs\n");
 #ifdef BOCHS_DEBUG
-		dbg_bochs_print((const unsigned char*)"DreamOS Debug String for Bochs\n");
+		dbg_bochs_print("DreamOS Debug String for Bochs\n");
 #endif
 		configure_PIT ();
         //We disable floppy driver motor

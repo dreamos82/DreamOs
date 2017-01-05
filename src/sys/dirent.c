@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
+
 #include <dirent.h>
 #include <sys/types.h>
 #include <stdio.h>
@@ -38,15 +38,16 @@
   */
 DIR *opendir(const char *path){
 	int mpoint_id = 0;
-	int error = 0;
+	//int error = 0;
 	//char tmp_path[CURPATH_LEN];
-	char* rel_path;	
+	char* rel_path;
 	DIR* pdir;
-	error=get_abs_path((char*)path);
+	//error=get_abs_path((char*)path);
+    get_abs_path((char*)path);
 	//printf("AbsPath in opendir: %s len: %d\n", path, strlen(path));
 	//printf("%s\n", path);
 	mpoint_id = get_mountpoint_id((char*)path);
-	rel_path = get_rel_path(mpoint_id, path);		
+	rel_path = get_rel_path(mpoint_id, path);
 	//printf("Rel Path len%d - %s\n", strlen(rel_path), rel_path);
 	if(mountpoint_list[mpoint_id].dir_op.opendir_f!=NULL) {
 		pdir = mountpoint_list[mpoint_id].dir_op.opendir_f(rel_path);
@@ -63,10 +64,10 @@ DIR *opendir(const char *path){
 /**
   * @author Ivan Gualandri
   * @param DIR* dirp la cartella aperta
-  * @return struct dirent Struttura dati contenente il prossimo elemento della cartella. 
-  * 
+  * @return struct dirent Struttura dati contenente il prossimo elemento della cartella.
+  *
   * ad ogni chiamata su dirp torna il successivo elemento presente in quel path. Se non ve ne sono piu torna NULL
-  *  
+  *
   */
 struct dirent *readdir(DIR *dirp){
 	//printf("Handle: %d\n", dirp->handle);

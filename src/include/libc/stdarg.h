@@ -15,6 +15,6 @@ typedef char *va_list;
 #define va_end(AP)
 
 #define va_arg(AP, TYPE)	\
-	(AP += VA_SIZE(TYPE), *((TYPE *)(AP - VA_SIZE(TYPE))))
+	(AP += VA_SIZE(TYPE), *((TYPE *) ((AP) - VA_SIZE(TYPE))))
 
 #endif

@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
+
 #ifndef _FCNTL_H
 #define _FCNTL_H
 
@@ -31,6 +31,6 @@
 
 int  creat(const char *, mode_t);
 int  fcntl(int, int, ...);
-int  open(const char *, int, ...);
+int  open(const char *, int/*, ...*/);
 
 #endif

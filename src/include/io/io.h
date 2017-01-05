@@ -22,14 +22,14 @@
  *  Copyright  2007  shainer & ^Inuyasha^
  *  Byte I/O on ports prototypes
  ****************************************************************************/
- 
+
 #ifndef _IO_H
 #define _IO_H
 
 #define sti() __asm__ __volatile__ ("sti");
 #define cli() __asm__ __volatile__ ("cli");
- 
-extern inline unsigned char inportb (int);
-extern inline void outportb (int, int);
- 
+
+unsigned char inportb (int);
+void outportb (int, int);
+
 #endif

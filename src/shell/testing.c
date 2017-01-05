@@ -40,10 +40,10 @@ void try_strtok()
 {
 	char *s = "Hello World";
 	char *p;
-	
+
 	printf("Stringa completa: %s\n"
 		 "Stringa spezzata: \n" ,s);
-	
+
 	p = strtok(s, " ");
 	while (p != NULL) {
 		printf("%s\n", p);
@@ -62,7 +62,7 @@ void try_kmalloc()
 	c = (int *)kmalloc(10 * sizeof(int));
 	d = (int *)kmalloc(15 * sizeof(int));
 	printf("Address obtained: %d %d %d\n", b, c, d);
-  
+
 	while(i < 15) {
 		b[i] = i*2;
 		if(i < 10) c[i] = i*3;
@@ -77,7 +77,7 @@ void try_kmalloc()
 		else printf("\n");
 		i++;
 	}
-	
+
 	printf("Navigating used list...\n");
 	print_heap_list (kheap->used_list);
 	free (b);
@@ -107,8 +107,8 @@ void try_newheap(){
 	unsigned int testB;
 	unsigned int testC;
 
-	printf("Second step: trying new_malloc...\n");	
-	testA=(unsigned int)new_malloc(8);	
+	printf("Second step: trying new_malloc...\n");
+	testA=(unsigned int)new_malloc(8);
 	printf("-Address of testA Hex: 0x%x\n", testA);
 	testB=(unsigned int)new_malloc(8);
 	printf("-Address of testB Hex: 0x%x\n", testB);
@@ -137,18 +137,18 @@ void help_tester()
 		"  -> try_kmalloc       - Test a basic kmalloc() function\n"
 		"  -> do_fault          - Test a page_fault\n"
 		"  -> try_strtok        - Test strtok() function in string.h\n"
-		"  -> try_printmem      - Print used locations of memory\n"		
-		"  -> try_open          - Function to test open() & stdarg() \n"		
+		"  -> try_printmem      - Print used locations of memory\n"
+		"  -> try_open          - Function to test open() & stdarg() \n"
 		"  -> try_syscall	    - Try some syscall functions\n"
 		"  -> try_check         - Test username if exist\n"
 		"  -> test_stat			- Test stat function\n"
 		"  -> try_mapaddress    - Test map address function\n"
 		"  -> tasksetup     - Test map address function\n"
 		"  -> try_tasklist		- Test new task list\n"
-		"  -> try_ocreat	- Test file creation\n" 
-		"  -> show_fd		- Test file descriptors\n" 
-		"  -> try_shadow	- Test shadow feature for text input\n" 
-		);	
+		"  -> try_ocreat	- Test file creation\n"
+		"  -> show_fd		- Test file descriptors\n"
+		"  -> try_shadow	- Test shadow feature for text input\n"
+		);
 }
 
 void try_module(){
@@ -169,7 +169,7 @@ void try_module(){
 void try_check(){
 	char test_name[50];
 	memset(test_name, '\0', 50);
-	printf("Please insert a username: "); 
+	printf("Please insert a username: ");
 	scanf("%s", test_name);
 	user_chk(test_name, test_name);
 }
@@ -178,20 +178,21 @@ void try_open(){
 	char appoggio[50];
 	char prova;
 	int i;
-	i=0;	
+	i=0;
 	while(i<50){
 		appoggio[i] = '\0';
 		i++;
 	}
 	printf("Please insert a path: ");
-	
-	scanf("%s", appoggio);	
-	i = open(appoggio, O_RDONLY, 42);
+
+	scanf("%s", appoggio);
+	//i = open(appoggio, O_RDONLY, 42);
+    i = open(appoggio, O_RDONLY);
 	printf("%d\n", i);
 	if(i>-1) {
-		int j=0;		
+		int j=0;
 		while(read(i, &prova, 1)!=0) {
-			putchar(prova);			
+			putchar(prova);
 			j++;
 		}
 		//printf("\n%s\n", prova);
@@ -203,23 +204,23 @@ void try_open(){
 void try_ocreat(){
 	int fd=0;
 	//printf("Number of files present: %d\n", initfs_init());
-	fd = open("pippo", O_RDWR|O_CREAT|O_APPEND);	
+	fd = open("pippo", O_RDWR|O_CREAT|O_APPEND);
 	if(fd>=0) write(fd, "buffo buffer", strlen("buffo buffer"));
 	else printf("Error?\n");
-	close(fd);	
+	close(fd);
 }
 
 void try_syscall(){
 	int i;
 	int var = -100;
-	printf("Trying sysputch:\n");	
+	printf("Trying sysputch:\n");
     for(i='A';i<='Z';i++) {
 		asm(
 			"movl %0, %%ecx\n"
 			"movl $0x0, %%eax\n"
 			"int $80\n"
-			: : "g"(i)	
-		);	
+			: : "g"(i)
+		);
 	}
 	printf("And before ending try to print a -100: %d\n", var);
 	printf("\n");
@@ -240,10 +241,10 @@ void test_stat(){
 	printf("Testing stat functions on README\n");
 	stats = (struct stat*) kmalloc(sizeof(struct stat));
 	stat("README", stats);
-	printf("Device_id: %d\n", stats->st_dev);	
+	printf("Device_id: %d\n", stats->st_dev);
 	printf("Size: %d\n", stats->st_size);
 	printf("Uid: %d\n", stats->st_uid);
-	free(stats);	
+	free(stats);
 }
 
 void try_shadow(){
@@ -264,13 +265,13 @@ void try_mapaddress(){
 }
 
 void try_tasksetup(){
-	task_t _task;
-	unsigned int task_pid;	
+	//task_t _task;
+	unsigned int task_pid;
 	asm("cli;");
-	task_pid = new_task("test", task_test);	
+	task_pid = new_task("test", task_test);
 	printf("Testing task creation functions:\n");
 	printf("Pid Obtained: %d\n", task_pid);
-	//task_pid = new_task("testsecond", task_testsecond);	
+	//task_pid = new_task("testsecond", task_testsecond);
 	//printf("Testing task creation functions:\n");
 	asm("sti;");
 }
@@ -279,7 +280,7 @@ void task_test(){
 	printf("A!!!\n");
 }
 
-void task_testsecond(){  
+void task_testsecond(){
   printf("B!!!!\n");
 }
 
@@ -293,11 +294,13 @@ void task_testthird(){
 
 
 void try_taskadd(){
-  task_t* myTask = new_task("testtask", task_test);
-  test_tasklist();
+    //task_t* myTask = (task_t *)new_task("testtask", task_test);
+    new_task("testtask", task_test);
+    test_tasklist();
 }
 
 void try_taskdel(){
-    task_t* myTask = dequeue_task();
+    //task_t* myTask = dequeue_task();
+    dequeue_task();
     test_tasklist();
 }

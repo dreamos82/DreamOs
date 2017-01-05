@@ -31,7 +31,7 @@
 /**
    * Make a copy of the kernel into a new pagedir/pagetable
    * @author Ivan Gualandri
-   * @version 1.0 
+   * @version 1.0
    */
 table_address_t map_kernel(){
 	table_address_t logicmemory_root;
@@ -39,23 +39,23 @@ table_address_t map_kernel(){
 	unsigned int *logic_pt_address = kmalloc(8*4096);
 	unsigned int *pagedir;
 	unsigned int *pagetable;
-	unsigned int i=0;	
+	unsigned int i=0;
 	unsigned int j=0;
-	/** Request physical space for pagedir and pagetable*/ 	
+	/** Request physical space for pagedir and pagetable*/
 	pagedir = create_pageDir();
-	pagetable = create_pageTable();	
+	pagetable = create_pageTable();
 
 	/**Map the logic addresses for pagedir and pagetable into physical address
 	 * identified by the variables pagetable and pagedir*/
 	while(i < 8){
-		map_address(pagedir, logic_pd_address);
-		map_address(pagetable, logic_pt_address);		
+		map_address((unsigned int)pagedir, (unsigned int)logic_pd_address);
+		map_address((unsigned int)pagetable, (unsigned int)logic_pt_address);
 		pagedir+=4096;
 		pagetable+=4096;
 		i++;
-	}	
-	//set_pagedir_entry_ric(0, (unsigned int)current_page_table, PD_PRESENT|SUPERVISOR|WRITE,0);  
-	/**Initialize the pagedir with all 0's and the pagetable with the locations of the kernel*/  
+	}
+	//set_pagedir_entry_ric(0, (unsigned int)current_page_table, PD_PRESENT|SUPERVISOR|WRITE,0);
+	/**Initialize the pagedir with all 0's and the pagetable with the locations of the kernel*/
 	while(j<PD_LIMIT){
 		pagedir[j] = 0x0;
 		pagetable[j] = (j*0x1000&0xFFFFF0)|PD_PRESENT|SUPERVISOR|WRITE|0;
@@ -64,7 +64,7 @@ table_address_t map_kernel(){
 	/**Add the pagetable to first entry of the pagedir*/
 	pagedir[0] = ((unsigned int)pagetable&0xFFFFF000)|PD_PRESENT|SUPERVISOR|WRITE|0;
 	pagedir[1023] = ((unsigned int)pagedir&0xFFFFF000)|PD_PRESENT|SUPERVISOR|0;
-	pagetable[1023] = ((unsigned int)pagetable&0xFFFFF000|PD_PRESENT|SUPERVISOR|0);
+	pagetable[1023] = ((unsigned int)pagetable&0xFFFFF000)|PD_PRESENT|SUPERVISOR|0;
 	/**Prepare the result and return it*/
 	logicmemory_root.page_dir = (unsigned int) pagedir;
 	logicmemory_root.page_table = (unsigned int) pagetable;

@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
+
  /*
   * Autore Ivan Gualandri
   * Prima versione: 14/12/2011
@@ -29,7 +29,7 @@
 #include <debug.h>
 #include <paging.h>
 #include <tss.h>
-
+#include <kheap.h>
 
 task_list_t task_list;
 
@@ -51,22 +51,22 @@ void schedule(unsigned int *stack) {
 
 	    if (cur_task->status==DEAD) {
 	      //placeholder
-	      tss_free(cur_task->registers);	      
-	      dbg_bochs_print("DEAD@@@@");	      
-	      free(cur_task);	      
+	      tss_free(cur_task->registers);
+	      dbg_bochs_print("DEAD@@@@");
+	      free(cur_task);
 	    }
-	    
+
 	    cur_pid = cur_task->pid;
 	    dbg_bochs_print("@@@@@@@");
-	    dbg_bochs_print(cur_task->name);	    
+	    dbg_bochs_print(cur_task->name);
 
 	    if (cur_task->status!=NEW){
 	      cur_task->esp=*stack;
 	    } else {
-	      cur_task->status=READY;	      
-	      ((task_register_t *)(cur_task->esp))->eip = cur_task->eip;	      	      
+	      cur_task->status=READY;
+	      ((task_register_t *)(cur_task->esp))->eip = cur_task->eip;
 	    }
-	    
+
 	    if(cur_task->status!=DEAD){
 	      enqueue_task(cur_task->pid, cur_task);
 	    }
@@ -77,7 +77,7 @@ void schedule(unsigned int *stack) {
 
 	    dbg_bochs_print(" -- ");
 	    dbg_bochs_print(cur_task->name);
-	    dbg_bochs_print("\n");      
+	    dbg_bochs_print("\n");
 	    //load_pdbr(cur_task->pdir);
 	    *stack = cur_task->esp;
 
@@ -96,18 +96,18 @@ void preSchedule(){
 
 
 void idle()
-{		
-	//dbg_bochs_print("idle\n");	
+{
+	//dbg_bochs_print("idle\n");
 	while(1){
 //		dbg_bochs_print("===IDLE===\n");
-	}	
+	}
 }
 
 
 void suicide()
-{	
+{
 	task_t* cur_task;
-	cur_task = get_task(); 
+	cur_task = get_task();
 	dbg_bochs_print(cur_task->name);
 	dbg_bochs_print("\n");
 	cur_task->status = DEAD;

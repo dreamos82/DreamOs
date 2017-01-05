@@ -37,11 +37,11 @@ ssize_t read(int fildes, void *buf, size_t nbyte){
 }
 
 ssize_t write(int fildes, const void *buf, size_t nbyte){
-	int mp_id = 0;
+	//int mp_id = 0;
 	int fs_fd = 0;
-	mp_id = fd_list[fildes].mountpoint_id;
+	//mp_id = fd_list[fildes].mountpoint_id;
 	fs_fd = fd_list[fildes].fs_spec_id;
-	if(fd_list[fildes].flags_mask&O_RDWR) {		
+	if(fd_list[fildes].flags_mask&O_RDWR) {
 		printf("allright, let's go\n");
 		printf("placeholder for write, coming soon,\n stay tuned\n");
 		printf("Oh i received something: %s\n", buf);
@@ -64,7 +64,7 @@ int close(int fildes){
 	fs_fd = fd_list[fildes].fs_spec_id;
 	if (fd_list[fildes].fs_spec_id >= -1){
 		if(mountpoint_list[mp_id].operations.close !=NULL)
-			mountpoint_list[mp_id].operations.close(fs_fd);		
+			mountpoint_list[mp_id].operations.close(fs_fd);
 		fd_list[fildes].fs_spec_id = -1;
 		fd_list[fildes].mountpoint_id = -1;
 		return 0;

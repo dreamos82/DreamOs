@@ -38,7 +38,7 @@
 char *VIDEO_RAM = (char*) 0xb8000, *VIDEO_PTRZ = (char*) 0xb8000, VIDEO_CLRZ = 0x7;
 int last_Xz=0, last_Yz=0;
 
-/* 
+/*
  *  puts() function
  *  print *s
  *  do newline
@@ -73,7 +73,7 @@ void putchar (char ch)
 	s[1] = '\0';
 	*/
 	//_kputs(s);
-	_kputc(ch); 
+	_kputc(ch);
 
 }
 
@@ -122,7 +122,7 @@ int printf (const char *format, ...)
     char field[5];
     int len=0;
     int i=0;
-    	
+
     /* Start variabile argument's list */
     va_start (ap, format);
 
@@ -201,7 +201,7 @@ int printf (const char *format, ...)
     return len;
 }
 
-int getchar (void)
+int getchar ()
 {
     int tmpchar;
 
@@ -218,7 +218,7 @@ char *gets (char *s)
     shell_mess_line = _kgetline ();
 	memset(str, '\0', 255);
     do {
-	c = getchar();	
+	c = getchar();
 	if (c=='\n') // tasto invio
 	    break;
 	else if (c=='\b') //backspace
@@ -253,7 +253,7 @@ int scanf (const char *format, ...)
 
 	if (*format == '%') {
 	    gets(input);
-        
+
             count += strlen (input);
 
             if (isdigit(*++format)) {

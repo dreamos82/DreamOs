@@ -38,5 +38,6 @@ int printf (const char *, ...);
 int puts (char *s);
 int scanf (const char *, ...);
 char *gets (char *);
+int getchar (void);
 
 #endif

@@ -24,7 +24,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
+
 #include <video.h>
 #include <stddef.h>
 #include <string.h>
@@ -34,7 +34,7 @@ char *VIDEO_MEM = (char*) 0xb8000,
      *VIDEO_PTR = (char*) 0xb8000,
     VIDEO_CLR = 0x7;
 
-// Scrolling buffer 
+// Scrolling buffer
 char upbuffer[_SCR_H][_SCR_W*2];
 char downbuffer[_SCR_H][_SCR_W*2];
 int is_scrolled=0;
@@ -61,7 +61,7 @@ void _kputc(char c)
   *VIDEO_PTR++ = VIDEO_CLR;
     }
   _kshiftAll();
-  _ksetcursauto();            
+  _ksetcursauto();
 /*
   while(c != 0) {
 	if ( c=='\n' )
@@ -155,13 +155,13 @@ void _kclear()
   while(row < _SCR_H){
     while(line < _SCR_W){
       *VIDEO_PTR++ = ' ';
-      *VIDEO_PTR++ = 0x7;	
+      *VIDEO_PTR++ = 0x7;
       line++;
     }
     line=0;
-    row++;		
-  }	
-  
+    row++;
+  }
+
   VIDEO_PTR = VIDEO_MEM;
 }
 
@@ -169,7 +169,7 @@ void _kclear()
  * Move to the following line (the effect of \n character)
  */
 void _knewline()
-{	
+{
     VIDEO_PTR = VIDEO_MEM + ((((VIDEO_PTR - VIDEO_MEM) / (_SCR_W * 2)) + 1) * (_SCR_W * 2));
     _kshiftAll();
     _ksetcursauto();
@@ -179,7 +179,7 @@ void _knewline()
  * Move to the up line (the effect of \n character)
  */
 void _kminline()
-{	
+{
     VIDEO_PTR = VIDEO_MEM + ((((VIDEO_PTR - VIDEO_MEM) / (_SCR_W * 2)) - 1) * (_SCR_W * 2));
     _knewline();
     _kshiftAll();
@@ -289,8 +289,8 @@ void _knntos(char *buffer, int num, int base){
   char *p, *pbase;
 
   p = pbase = buffer;
-    
-	if(num<0) {		
+
+	if(num<0) {
 		num=(~num)+1;
 		*p++='-';
 		pbase++;
@@ -309,7 +309,7 @@ void _knntos(char *buffer, int num, int base){
       tmp = *p;
       *p = *pbase;
       *pbase = tmp;
-    
+
       p--; pbase++;
     }
 }
@@ -334,7 +334,7 @@ void _kntos(char *buffer, unsigned int num, int base)
   else {
     if (num == 0)
       *p++ = '0';
-	else if(num<0) {		
+	else if(num<0) {
 		num=(~num)+1;
 		*p++='-';
 		pbase++;
@@ -353,7 +353,7 @@ void _kntos(char *buffer, unsigned int num, int base)
       tmp = *p;
       *p = *pbase;
       *pbase = tmp;
-    
+
       p--; pbase++;
     }
   }
