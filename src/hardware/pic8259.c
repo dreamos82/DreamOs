@@ -25,7 +25,6 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <keyboard.h>
-#include <fismem.h>
 #include <8253.h>
 #include <bitops.h>
 
@@ -201,13 +200,13 @@ void add_IRQ_handler(int irq_number, void (*func)()){
         IRQ_s *tmpHandler;
         tmpHandler = shareHandler[irq_number];
         if(shareHandler[irq_number]==NULL){
-             shareHandler[irq_number]= (IRQ_s*) request_pages(sizeof(IRQ_s), NOT_ADD_LIST);
+             shareHandler[irq_number]= (IRQ_s*) kernel_alloc_page ();
              shareHandler[irq_number]->next = NULL;
              shareHandler[irq_number]->IRQ_func = func;
         }
         else {
             while(tmpHandler->next!=NULL) tmpHandler = tmpHandler->next;
-            tmpHandler->next = (IRQ_s*) request_pages(sizeof(IRQ_s), NOT_ADD_LIST);
+            tmpHandler->next = (IRQ_s*) kernel_alloc_page ();
             tmpHandler = tmpHandler->next;
             tmpHandler->next = NULL;
             tmpHandler->IRQ_func = func;

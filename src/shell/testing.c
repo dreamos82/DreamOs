@@ -10,7 +10,6 @@
 #include <cpuid.h>
 #include <stdio.h>
 #include <string.h>
-#include <fismem.h>
 #include <io.h>
 #include <keyboard.h>
 #include <paging.h>
@@ -29,10 +28,8 @@
 #include <initrd.h>
 #include <unistd.h>
 #include <user_shell.h>
-#include <task_utils.h>
-#include <task.h>
+#include <thread.h>
 
-//multiboot_info_t *boot_informations;
 char *module_start;
 file_descriptor_t fd_list[_SC_OPEN_MAX];
 
@@ -53,15 +50,15 @@ void try_strtok()
 
 void try_kmalloc()
 {
-	int *b, *c, *d;
-	int i = 0;
+	uint32_t *b, *c, *d;
+	uint32_t i = 0;
 
 	printf("Kmalloc try: ... ");
 	//print_heap_list (kheap->free_list);
-	b = (int *)kmalloc(15 * sizeof(int));
-	c = (int *)kmalloc(10 * sizeof(int));
-	d = (int *)kmalloc(15 * sizeof(int));
-	printf("Address obtained: %d %d %d\n", b, c, d);
+	b = (int *)kmalloc(15 * sizeof(uint32_t));
+	c = (int *)kmalloc(10 * sizeof(uint32_t));
+	d = (int *)kmalloc(15 * sizeof(uint32_t));
+	printf("Address obtained: 0x%x 0x%x 0x%x\n", b, c, d);
   
 	while(i < 15) {
 		b[i] = i*2;
@@ -77,9 +74,10 @@ void try_kmalloc()
 		else printf("\n");
 		i++;
 	}
-	
-	printf("Navigating used list...\n");
-	print_heap_list (kheap->used_list);
+
+	// TODO: Rework tests
+	//printf("Navigating used list...\n");
+	//print_heap_list (kheap->used_list);
 	free (b);
 	free (c);
 	free (d);
@@ -97,7 +95,7 @@ void do_fault()
 
 void try_printmem(void)
 {
-	print_heap_list(kheap->used_list);
+	//print_heap_list(kheap->used_list);
 }
 
 #ifdef LATEST
@@ -258,20 +256,23 @@ void try_shadow(){
 void try_mapaddress(){
 	unsigned int *tmp = kmalloc(sizeof(int));
 	printf("Testing map_address\n");
-	map_address(0x0010000, (unsigned int)tmp);
-	printf("GetPhysAddress: %x\n", get_phys_address((unsigned int)tmp));
+	map((unsigned int)tmp, 0x0010000);
+	//printf("GetPhysAddress: %x\n", get_phys_address((unsigned int)tmp));
 	return;
 }
 
 void try_tasksetup(){
-	task_t _task;
-	unsigned int task_pid;	
+	thread_t* thread1;
+	thread_t* thread2;
+
 	asm("cli;");
-	task_pid = new_task("test", task_test);	
+	thread1 = kernel_create_thread(task_test, "test", 0);
 	printf("Testing task creation functions:\n");
-	printf("Pid Obtained: %d\n", task_pid);
-	//task_pid = new_task("testsecond", task_testsecond);	
-	//printf("Testing task creation functions:\n");
+	printf("Pid Obtained: %d\n", thread1->id);
+
+	thread2 = kernel_create_thread(task_testsecond, "testsecond", 0);
+	printf("Testing task creation functions:\n");
+	printf("Pid Obtained: %d\n", thread2->id);
 	asm("sti;");
 }
 
@@ -293,11 +294,11 @@ void task_testthird(){
 
 
 void try_taskadd(){
-  task_t* myTask = new_task("testtask", task_test);
-  test_tasklist();
+  thread_t* myTask =  kernel_create_thread(task_test, "testtask", 0);
+  //test_tasklist();
 }
 
 void try_taskdel(){
-    task_t* myTask = dequeue_task();
-    test_tasklist();
+  //task_t* myTask = dequeue_task();
+  //test_tasklist();
 }

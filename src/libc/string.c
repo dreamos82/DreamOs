@@ -1,209 +1,552 @@
-/***************************************************************************
- *            string.c
- *
- *  Sat Mar 31 07:47:55 2007
- *  Copyright  2007  shainer
- *  Email : shainer@debianclan.org
- *  String library
- * ***************************************************************************/
-
-/*
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
+//
+// string.c
+//
+// String routines
+//
+// Copyright (C) 2002 Michael Ringgaard. All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 
+// 1. Redistributions of source code must retain the above copyright 
+//    notice, this list of conditions and the following disclaimer.  
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.  
+// 3. Neither the name of the project nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission. 
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
+// SUCH DAMAGE.
+// 
 
 #include <string.h>
-#include <stddef.h>
 
-/*
- * Copy n characters from src to dest, returning dest
- */
-char *strncpy (char *dest, register const char *src, register size_t n)
-{
-  if (n != 0) {
-	char *d = dest;
-	const char *s = src;
-	do {
-		if ((*d++ = *s++) == 0) {
-			while (--n != 0)
-				*d++ = '\0';
-				break;
-			}
-		} while (--n != 0);
-	}
-	return dest;
- }
+#define KERNEL 1
 
-char *strcpy (char *dest, const char *src)
+#ifndef KERNEL
+#include <ctype.h>
+#endif
+
+char *strncpy(char *dest, const char *source, size_t n)
 {
-	char *save = dest;
-	for (; (*dest = *src) != '\0' ; ++src, ++dest);
-	return save;
+  char *start = dest;
+
+  while (n && (*dest++ = *source++)) n--;
+  if (n) while (--n) *dest++ = '\0';
+  return start;
 }
 
-
-/*
- * Return the number of a string's characters
- */
-size_t strlen(const char *s) 
+int strncmp(const char *s1, const char *s2, size_t n)
 {
-	register unsigned int len = 0;
-	while (s[len] != '\0') 
-		len++;
+  if (!n) return 0;
 
-	return(len);	
-}
-
-
-/*
- * Compare n characters of s2 and s1
- */
-int _kstrncmp(const char *s1, const char *s2, int n)
-{
-  int sn=0;
-
-  while (*s1 == *s2 && sn < n-1)
+  while (--n && *s1 && *s1 == *s2)
   {
     s1++;
     s2++;
-    sn++;
   }
 
-  if (*s1 > *s2) return 1;
-  if (*s1 < *s2) return -1;
-  return 0;
+  return *(unsigned char *) s1 - *(unsigned char *) s2;
 }
 
-int strncmp(const char *s1, const char *s2, int n){
-	return _kstrncmp(s1,s2,n);
-}
-
-/*
- * Compare s1 and s2
- */
-int strcmp (const char *s1, const char *s2)
+int stricmp(const char *s1, const char *s2)
 {
-  int s1n = strlen(s1);
-  int s2n = strlen(s2);
+  char f, l;
 
-  if (s1n > s2n)
-    return 1;
-  else if (s1n < s2n)
-    return -1;
-
-  while (*s1 == *s2 && s1n>=0)
+  do 
   {
+    f = ((*s1 <= 'Z') && (*s1 >= 'A')) ? *s1 + 'a' - 'A' : *s1;
+    l = ((*s2 <= 'Z') && (*s2 >= 'A')) ? *s2 + 'a' - 'A' : *s2;
     s1++;
     s2++;
-    s1n--;
-  }
+  } while ((f) && (f == l));
 
-  if (s1n>0) {
-    if (*s1 > *s2) return 1;
-    else return -1;
-  }
-  return 0;
+  return (int) (f - l);
 }
 
-/* Fill memory location dest with c for n times */
-void *memset(void *dest, register const int c, register size_t n)
-{ 
-	register char *s = dest;
-	if ( n > 0 ) {
-		n++;
-		while (--n > 0)
-		    *s++ = c;
-	}
-	return dest;
-}
-
-void *memmove(void * dest, const void *src, size_t count)
+int strnicmp(const char *s1, const char *s2, size_t n)
 {
-	register char *tmp;
-	register const char *s;
+  int f, l;
 
-	if ( count > 0 ) 
-	{
-		if (dest <= src) 
-		{
-			tmp = (char *) dest;
-			s = (char *) src;
-			
-			while (count--)
-				*tmp++ = *s++;
-		}
-		else 
-		{
-			tmp = (char *) dest + count;
-			s = (char *) src + count;
-			
-			while (count--)
-				*--tmp = *--s;
-		}
-	}
-	return dest;
+  do 
+  {
+      if (((f = (unsigned char)(*(s1++))) >= 'A') && (f <= 'Z')) f -= 'A' - 'a';
+      if (((l = (unsigned char)(*(s2++))) >= 'A') && (l <= 'Z')) l -= 'A' - 'a';
+  } while (--n && f && (f == l));
+
+  return f - l;
 }
 
-/*
- * Duplicate a string and return the new one
- */
-char *strdup (const char *s)
+int strcasecmp(const char *s1, const char *s2)
 {
-    char *ret = NULL;
-    int i=0;
-
-    for (i=0; s[i]; i++)
-	ret[i] = s[i];
-
-    ret[i] = '\0';
-    return ret;
+  return stricmp(s1, s2);
 }
 
-/*
- * Look for the first occurence of c in s
- * Return the substring starting with c
- */
-char *strchr(register const char *s, register int c)
+int strncasecmp(const char *s1, const char *s2, size_t n)
 {
-	c = (char) c;
-	while (c != *s)
-		if (*s++ == '\0') 
-			return NULL;  /* No Found */
-
-	return (char *)s;
+  return strnicmp(s1, s2, n);
 }
 
-/*
- * Author: jmc
- * Look for the first occurrence of needle in haystack
- * Return the substring starting with needle
- */
-char *strstr(const char *haystack, const char *needle)
+char *strchr(const char *s, int ch)
 {
-  size_t length = strlen(needle);
-  size_t last = strlen(haystack) - length;
-  size_t x;
- 
-  for (x = 0; x <= last; x++)
-    if (_kstrncmp(&haystack[x], needle, length) == 0)
-      return (char *) &haystack[x];
- 
+  while (*s && *s != (char) ch) s++;
+  if (*s == (char) ch) return (char *) s;
   return NULL;
 }
 
-/*
- * Separate a string in token according to the delimitator
+char *strrchr(const char *s, int ch)
+{
+  char *start = (char *) s;
+
+  while (*s++);
+  while (--s != start && *s != (char) ch);
+  if (*s == (char) ch) return (char *) s;
+
+  return NULL;
+}
+
+char *strstr(const char *str1, const char *str2)
+{
+  char *cp = (char *) str1;
+  char *s1, *s2;
+
+  if (!*str2) return (char *) str1;
+
+  while (*cp)
+  {
+    s1 = cp;
+    s2 = (char *) str2;
+
+    while (*s1 && *s2 && !(*s1 - *s2)) s1++, s2++;
+    if (!*s2) return cp;
+    cp++;
+  }
+
+  return NULL;
+}
+
+size_t strspn(const char *string, const char *control)
+{
+  const unsigned char *str = string;
+  const unsigned char *ctrl = control;
+
+  unsigned char map[32];
+  int n;
+
+  // Clear out bit map
+  for (n = 0; n < 32; n++) map[n] = 0;
+
+  // Set bits in control map
+  while (*ctrl)
+  {
+    map[*ctrl >> 3] |= (1 << (*ctrl & 7));
+    ctrl++;
+  }
+
+  // 1st char NOT in control map stops search
+  if (*str)
+  {
+    n = 0;
+    while (map[*str >> 3] & (1 << (*str & 7)))
+    {
+      n++;
+      str++;
+    }
+    
+    return n;
+  }
+
+  return 0;
+}
+
+size_t strcspn(const char *string, const char *control)
+{
+  const unsigned char *str = string;
+  const unsigned char *ctrl = control;
+
+  unsigned char map[32];
+  int n;
+
+  // Clear out bit map
+  for (n = 0; n < 32; n++) map[n] = 0;
+
+  // Set bits in control map
+  while (*ctrl)
+  {
+    map[*ctrl >> 3] |= (1 << (*ctrl & 7));
+    ctrl++;
+  }
+
+  // 1st char in control map stops search
+  n = 0;
+  map[0] |= 1;
+  while (!(map[*str >> 3] & (1 << (*str & 7))))
+  {
+    n++;
+    str++;
+  }
+  return n;
+}
+
+char *strpbrk(const char *string, const char *control)
+{
+  const unsigned char *str = string;
+  const unsigned char *ctrl = control;
+
+  unsigned char map[32];
+  int n;
+
+  // Clear out bit map
+  for (n = 0; n < 32; n++) map[n] = 0;
+
+  // Set bits in control map
+  while (*ctrl)
+  {
+    map[*ctrl >> 3] |= (1 << (*ctrl & 7));
+    ctrl++;
+  }
+
+  // 1st char in control map stops search
+  while (*str)
+  {
+    if (map[*str >> 3] & (1 << (*str & 7))) return (char *) str;
+    str++;
+  }
+
+  return NULL;
+}
+
+void *memmove(void *dst, const void *src, size_t n)
+{
+  void * ret = dst;
+
+  if (dst <= src || (char *) dst >= ((char *) src + n)) 
+  {
+    // Non-overlapping buffers; copy from lower addresses to higher addresses
+    while (n--) 
+    {
+      *(char *) dst = *(char *) src;
+      dst = (char *) dst + 1;
+      src = (char *) src + 1;
+    }
+  }
+  else 
+  {
+    // Overlapping buffers; copy from higher addresses to lower addresses
+    dst = (char *) dst + n - 1;
+    src = (char *) src + n - 1;
+
+    while (n--) 
+    {
+      *(char *) dst = *(char *) src;
+      dst = (char *) dst - 1;
+      src = (char *) src - 1;
+    }
+  }
+
+  return ret;
+}
+
+void *memchr(const void *buf, int ch, size_t n)
+{
+  while (n && (*(unsigned char *) buf != (unsigned char) ch)) 
+  {
+    buf = (unsigned char *) buf + 1;
+    n--;
+  }
+
+  return (n ? (void *) buf : NULL);
+}
+
+#ifndef KERNEL
+
+char *strdup(const char *s)
+{
+  char *t;
+  int len;
+
+  if (!s) return NULL;
+  len = strlen(s);
+  t = (char *) malloc(len + 1);
+  memcpy(t, s, len + 1);
+  return t;
+}
+
+char *_lstrdup(const char *s)
+{
+  char *t;
+  int len;
+
+  if (!s) return NULL;
+  len = strlen(s);
+  t = (char *) _lmalloc(len + 1);
+  memcpy(t, s, len + 1);
+  return t;
+}
+
+char *strlwr(char *s)
+{
+  char *p = s;
+
+  while (*p)
+  {
+    *p = (char) tolower(*p);
+    p++;
+  }
+
+  return s;
+}
+
+char *strupr(char *s)
+{
+  char *p = s;
+
+  while (*p)
+  {
+    *p = (char) toupper(*p);
+    p++;
+  }
+
+  return s;
+}
+
+#endif
+
+char *strncat(char *s1, const char *s2, size_t n)
+{
+  char *start = s1;
+
+  while (*s1++);
+  s1--;
+
+  while (n--)
+  {
+    if (!(*s1++ = *s2++)) return start;
+  }
+
+  *s1 = '\0';
+  return start;
+}
+
+char *strnset(char *s, int c, size_t n)
+{
+  char *start = s;
+  while (n-- && *s) *s++ = (char) c;
+  return s;
+}
+
+char *strrev(char *s)
+{
+  char *start = s;
+  char *left = s;
+  char ch;
+
+  while (*s++);
+  s -= 2;
+
+  while (left < s)
+  {
+    ch = *left;
+    *left++ = *s;
+    *s-- = ch;
+  }
+
+  return start;
+}
+
+char *strtok_r(char *string, const char *control, char **lasts)
+{
+  unsigned char *str;
+  const unsigned char *ctrl = control;
+
+  unsigned char map[32];
+  int n;
+
+  // Clear control map
+  for (n = 0; n < 32; n++) map[n] = 0;
+
+  // Set bits in delimiter table
+  do { map[*ctrl >> 3] |= (1 << (*ctrl & 7)); } while (*ctrl++);
+
+  // Initialize str. If string is NULL, set str to the saved
+  // pointer (i.e., continue breaking tokens out of the string
+  // from the last strtok call)
+  if (string)
+    str = string;
+  else
+    str = *lasts;
+
+  // Find beginning of token (skip over leading delimiters). Note that
+  // there is no token iff this loop sets str to point to the terminal
+  // null (*str == '\0')
+
+  while ((map[*str >> 3] & (1 << (*str & 7))) && *str) str++;
+
+  string = str;
+
+  // Find the end of the token. If it is not the end of the string,
+  // put a null there
+  for ( ; *str ; str++)
+  {
+    if (map[*str >> 3] & (1 << (*str & 7)))
+    {
+      *str++ = '\0';
+      break;
+    }
+  }
+
+  // Update nexttoken
+  *lasts = str;
+
+  // Determine if a token has been found
+  if (string == (char *) str)
+    return NULL;
+  else
+    return string;
+}
+
+#ifndef KERNEL
+
+char *strtok(char *string, const char *control)
+{
+  return strtok_r(string, control, &gettib()->nexttoken);
+}
+
+#endif
+
+/////////////////////////////////////////////////////////////////////
+//
+// intrinsic functions
+//
+
+#pragma function(memset)
+#pragma function(memcmp)
+#pragma function(memcpy)
+
+#pragma function(strcpy)
+#pragma function(strlen)
+#pragma function(strcat)
+#pragma function(strcmp)
+#pragma function(strset)
+
+void *memset(void *p, int c, size_t n)
+{
+  char *pb = (char *) p;
+  char *pbend = pb + n;
+  while (pb != pbend) *pb++ = c;
+  return p;
+}
+
+int memcmp(const void *dst, const void *src, size_t n)
+{
+  if (!n) return 0;
+
+  while (--n && *(char *) dst == *(char *) src)
+  {
+    dst = (char *) dst + 1;
+    src = (char *) src + 1;
+  }
+
+  return *((unsigned char *) dst) - *((unsigned char *) src);
+}
+
+void *memcpy(void *dst, const void *src, size_t n)
+{
+  void *ret = dst;
+
+  while (n--)
+  {
+    *(char *)dst = *(char *)src;
+    dst = (char *) dst + 1;
+    src = (char *) src + 1;
+  }
+
+  return ret;
+}
+
+void *memccpy(void *dst, const void *src, int c, size_t n)
+{
+  while (n && (*((char *) (dst = (char *) dst + 1) - 1) =
+         *((char *)(src = (char *) src + 1) - 1)) != (char) c)
+    n--;
+
+  return n ? dst : NULL;
+}
+
+#ifndef KERNEL
+
+int memicmp(const void *buf1, const void *buf2, size_t n)
+{
+  int f = 0, l = 0;
+  const unsigned char *dst = buf1, *src = buf2;
+
+  while (n-- && f == l)
+  {
+    f = tolower(*dst++);
+    l = tolower(*src++);
+  }
+
+  return f - l;
+}
+
+#endif
+
+char *strcpy(char *dst, const char *src)
+{
+  char *cp = dst;
+  while (*cp++ = *src++);
+  return dst;
+}
+
+size_t strlen(const char *s)
+{
+  const char *eos = s;
+  while (*eos++);
+  return (int) (eos - s - 1);
+}
+
+int strcmp(const char *s1, const char *s2)
+{
+  int ret = 0;
+  while (!(ret = *(unsigned char *) s1 - *(unsigned char *) s2) && *s2) ++s1, ++s2;
+
+  if (ret < 0)
+    ret = -1;
+  else if (ret > 0)
+    ret = 1 ;
+
+  return ret;
+}
+
+char *strcat(char *dst, const char *src)
+{
+  char *cp = dst;
+  while (*cp) cp++;
+  while (*cp++ = *src++);
+  return dst;
+}
+
+char *strset(char *s, int c)
+{
+  char *start = s;
+  while (*s) *s++ = (char) c;
+  return start;
+}
+
+/* Written by shainer.
+ * Separate a string in token according to the delimiter
  * If str is NULL, the scanning will continue for the previous string
  * It can be bettered
  */
@@ -249,25 +592,21 @@ char *strtok(char *s, const char *delim)
 
 }
 
-
 /*
- * Concatenate n characters of src to dest
+ * Compare n characters of s2 and s1
  */
-char *strncat (char *dest, const char *src, size_t n)
+int _kstrncmp(const char *s1, const char *s2, int n)
 {
-    size_t dlen = strlen (dest);
-    int i;	
-    for (i=0; i<n && src[i]; i++)
-	dest[dlen+i] = src[i];
-    dest[dlen+i] = '\0';
+  int sn=0;
 
-    return dest;
-}
+  while (*s1 == *s2 && sn < n-1)
+  {
+    s1++;
+    s2++;
+    sn++;
+  }
 
-void *memcpy(void *dest, const void *src, size_t n) { 
-  // Copy a memory from src to dest with n length
-  size_t i;
-  for (i = 0; i < n; i++)
-    *((char *) dest + i) = *((char *) src + i);
-  return dest;
+  if (*s1 > *s2) return 1;
+  if (*s1 < *s2) return -1;
+  return 0;
 }

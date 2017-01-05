@@ -187,8 +187,8 @@ void _irqinterrupt(unsigned int esp){
       outportb(SLAVE_PORT, EOI);
       outportb(MASTER_PORT, EOI);
     }
-    
-    schedule(&esp);
+
+    schedule();
     asm("sti;");
     return;
 }
