@@ -25,8 +25,8 @@
 
 #include "support_defs.h"
 
-#define PAGE_DIR_VIRTUAL_ADDR   0xFFBFF000
-#define PAGE_TABLE_VIRTUAL_ADDR 0xFFC00000
+#define PAGE_DIR_VIRTUAL_ADDR 0xFFC00000
+#define PAGE_TABLE_VIRTUAL_ADDR 0xFFBFF000
 #define PAGE_DIR_IDX(x) ((uint32_t)x/1024)
 #define PAGE_TABLE_IDX(x) ((uint32_t)x%1024)
 
