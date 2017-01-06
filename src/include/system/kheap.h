@@ -1,6 +1,6 @@
 /*
- * Dreamos
- * 8253.h
+ * Copyright (c), Dario Casalinuovo
+ * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -15,39 +15,32 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+ 
+ //
+ // Based on JamesM's kernel developement tutorials.
+ //
 
-#include <8253.h>
-#include <io.h>
-#include <stdio.h>
-#include <pic8259.h>
-#include <scheduler.h>
+#ifndef HEAP_H
+#define HEAP_H
 
-static unsigned int ticks;
-static unsigned int seconds;
+#include "support_defs.h"
 
+#define HEAP_START 0xD0000000
+#define HEAP_END   0xFFBFF000
 
-void PIT_handler ()
-{		
-}
-
-void configure_PIT ()
+typedef struct header
 {
-    int divisor = PIT_DIVISOR;
+  struct header *prev, *next;
+  uint32_t allocated : 1;
+  uint32_t length : 31;
+} header_t;
 
-    asm ("cli");
-    ticks = seconds = 0;
-    outportb (PIT_COMREG,0x37);
-    outportb (PIT_DATAREG0,divisor & 0xFF);
-    outportb (PIT_DATAREG0,divisor >> 8);    
-    asm ("sti");
-}
+void kernel_init_heap ();
 
-unsigned int sleep (unsigned int secs)
-{
-    int p = seconds + secs;
+// Returns a pointer to a chunk of memory, minimum size 'l' bytes.
+void *kmalloc (uint32_t l);
 
-    while (ticks != 0);
-    while (seconds < p);
-    return 0;
-}
+// Takes a chunk of memory allocated with kmalloc, and returns it to the pool of usable memory.
+void free (void *p);
 
+#endif

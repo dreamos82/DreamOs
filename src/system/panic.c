@@ -1,6 +1,6 @@
 /*
- * Dreamos
- * 8253.h
+ * Copyright (c), Dario Casalinuovo
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -16,38 +16,43 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <8253.h>
-#include <io.h>
+ //
+ // Based on JamesM's kernel developement tutorials.
+ //
+
+#include <panic.h>
+#include <elf.h>
 #include <stdio.h>
-#include <pic8259.h>
-#include <scheduler.h>
 
-static unsigned int ticks;
-static unsigned int seconds;
+#include "support_defs.h"
 
+static void print_stack_trace ();
 
-void PIT_handler ()
-{		
-}
+extern elf_t kernel_elf;
 
-void configure_PIT ()
+void kernel_panic(const char* msg)
 {
-    int divisor = PIT_DIVISOR;
-
-    asm ("cli");
-    ticks = seconds = 0;
-    outportb (PIT_COMREG,0x37);
-    outportb (PIT_DATAREG0,divisor & 0xFF);
-    outportb (PIT_DATAREG0,divisor >> 8);    
-    asm ("sti");
+  printf ("\nWelcome to kernel debugging land\n\n\n PANIC: %s\n", msg);
+  print_stack_trace ();
+  printf ("---\n");
+  for (;;);
 }
 
-unsigned int sleep (unsigned int secs)
+void print_stack_trace()
 {
-    int p = seconds + secs;
+  uint32_t *ebp, *eip;
+  uint32_t count = 0;
 
-    while (ticks != 0);
-    while (seconds < p);
-    return 0;
+  asm volatile ("mov %%ebp, %0" : "=r" (ebp));
+
+  while (ebp) {
+    if (count > 15)
+		return;
+
+    eip = ebp+1;
+    printf (" %d 0x%x %s\n", count, *eip,
+		elf_lookup_symbol (*eip, &kernel_elf));
+    ebp = (uint32_t*) *ebp;
+    count++;
+  }
 }
-

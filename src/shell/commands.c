@@ -10,7 +10,6 @@
 #include <cpuid.h>
 #include <stdio.h>
 #include <string.h>
-#include <fismem.h>
 #include <io.h>
 #include <keyboard.h>
 #include <paging.h>
@@ -25,7 +24,6 @@
 #include <testing.h>
 #include <fcntl.h>
 #include <stat.h>
-#include <task.h>
 
 int argc;
 char **argv;
@@ -165,7 +163,7 @@ void uname_info()
   printf("\n");
 
   // Memory RAM Info
-  printf("Memory RAM: ");
+  /*printf("Memory RAM: ");
   _kgoto(60, _kgetline());
   printf(" %d Kb\n", get_memsize()/1024);
 
@@ -180,22 +178,22 @@ void uname_info()
   printf("Number bitmap's elements: ");
   _kgoto(60, _kgetline());
   printf(" %d", get_bmpelements());
-  _kgoto(60, _kgetline());
+  _kgoto(60, _kgetline());*/
 
   // Mem_area Info
-  printf("\nSize of mem_area: ");
-  _kgoto(60, _kgetline());
-  printf(" %d\n", sizeof(mem_area));
+  //printf("\nSize of mem_area: ");
+  //_kgoto(60, _kgetline());
+  //printf(" %d\n", sizeof(mem_area));
 
   // Page Dir Info
-  printf("Page Dir Entry n.0 is: ");
+  /*printf("Page Dir Entry n.0 is: ");
   _kgoto(60, _kgetline());
   printf(" %d\n", get_pagedir_entry(0));
 
   // Page Table Info
   printf("Page Table Entry n.4 in Page dir 0 is: ");
   _kgoto(60, _kgetline());
-  printf(" %d\n", get_pagetable_entry(0,4));
+  printf(" %d\n", get_pagetable_entry(0,4));*/
 
   printf("\n:==========: :===========: :==========:\n\n");
 }
@@ -487,7 +485,8 @@ void cd( ){
 		if(dirp!=NULL){
 			closedir(dirp);
 		}
-        //int rel_size = strlen(argv[1]) - strlen(mountpoint_list[i].mountpoint);
+        /*int rel_size = 0;
+		rel_size = strlen(argv[1]) - strlen(mountpoint_list[i].mountpoint);*/
 		if(i == -1) {
 			printf("cd: %s: No such file or directory\n", argv[1]);
 			return;
@@ -523,7 +522,7 @@ void tester(){
 					{ "try_mapaddress", try_mapaddress},
 					{ "try_taskdel", try_taskdel},
 					{ "try_taskadd", try_taskadd},
-					{ "try_tasklist", test_tasklist},
+					//{ "try_tasklist", test_tasklist},
 					{ "--help", help_tester },
 					};
 	if (argc != 2) {
@@ -577,6 +576,6 @@ void newfile(){
 
 void ps(){
 	//printf("Stay tuned\n");
-	test_tasklist();
+	//test_tasklist();
 }
 

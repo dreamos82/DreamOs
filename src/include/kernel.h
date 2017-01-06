@@ -29,7 +29,6 @@
 #define asmlinkage __attribute__((regparm(0)))
 
 extern multiboot_info_t *boot_informations;
-//extern char *module_start;
 extern char *module_start;
 extern unsigned int module_end;
 asmlinkage void _start(struct multiboot_info*);

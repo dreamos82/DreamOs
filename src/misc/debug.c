@@ -39,6 +39,8 @@ void dbg_bochs_print( const char *msg )
     register unsigned int i;
     for ( i = 0; msg[i] != '\0'; i++ )
         outportb(0xE9, msg[i]);
+#elif
+	printf(msg);
 #endif
 return;
 }

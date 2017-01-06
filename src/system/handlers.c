@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
+
  /*
   * Autore Ivan Gualandri
   * Prima versione: 19/05/2007
@@ -31,6 +31,7 @@
 #include <video.h>
 #include <paging.h>
 #include <scheduler.h>
+#include <vm.h>
 
 // #define DEBUG 1
 void (*IntTable[IDT_SIZE])();
@@ -38,7 +39,7 @@ IRQ_s *shareHandler[IRQ_NUM];
 
 /** @author Ivan Gualandri
  *  @return none
- * Questa funzione si occupa di inizializzare la tabella di funzioni che gestiscono le 
+ * Questa funzione si occupa di inizializzare la tabella di funzioni che gestiscono le
  * interruzioni ed eccezioni.
  */
 void init_funcTable(){
@@ -88,7 +89,7 @@ void _globalException(int n, int error)
     case OVERFLOW:
     _kputs("OverFlow Exception\n");
     break;
-	 
+
     case BOUND_RANGE_EXCEED:
     _kputs("Bound Exception\n");
     break;
@@ -163,17 +164,17 @@ void _globalException(int n, int error)
 void _irqinterrupt(unsigned int esp){
     asm("cli;");
     int irqn;
-    irqn = get_current_irq();  
-    IRQ_s* tmpHandler; 
-    if(irqn>=0) {				
-        tmpHandler = shareHandler[irqn];		
+    irqn = get_current_irq();
+    IRQ_s* tmpHandler;
+    if(irqn>=0) {
+        tmpHandler = shareHandler[irqn];
 		if(tmpHandler!=0) {
-	    	tmpHandler->IRQ_func();	    	
+	    	tmpHandler->IRQ_func();
 	    	#ifdef DEBUG
 	    		printf("2 - IRQ_func: %d, %d\n", tmpHandler->IRQ_func, tmpHandler);
 	    	#endif
 	    	while(tmpHandler->next!=NULL) {
-	      		tmpHandler = tmpHandler->next;                           
+	      		tmpHandler = tmpHandler->next;
 	      		#ifdef DEBUG
 	      			printf("1 - IRQ_func (_prova): %d, %d\n", tmpHandler->IRQ_func, tmpHandler);
 	      		#endif
@@ -183,12 +184,12 @@ void _irqinterrupt(unsigned int esp){
     }
     else printf("IRQ N: %d E' arrivato qualcosa che non so gestire ", irqn);
     if(irqn<=8 && irqn!=2) outportb(MASTER_PORT, EOI);
-    else if(irqn<=16 || irqn==2){	  
+    else if(irqn<=16 || irqn==2){
       outportb(SLAVE_PORT, EOI);
       outportb(MASTER_PORT, EOI);
     }
-    
-    schedule(&esp);
+
+    schedule();
     asm("sti;");
     return;
 }

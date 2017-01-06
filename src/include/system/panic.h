@@ -1,6 +1,6 @@
 /*
- * Dreamos
- * 8253.h
+ * Copyright (c), Dario Casalinuovo
+ * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -15,39 +15,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+ 
+ //
+ // Based on JamesM's kernel developement tutorials.
+ //
 
-#include <8253.h>
-#include <io.h>
-#include <stdio.h>
-#include <pic8259.h>
-#include <scheduler.h>
+#ifndef PANIC_H
+#define PANIC_H
 
-static unsigned int ticks;
-static unsigned int seconds;
+void kernel_panic(const char* msg);
 
-
-void PIT_handler ()
-{		
-}
-
-void configure_PIT ()
-{
-    int divisor = PIT_DIVISOR;
-
-    asm ("cli");
-    ticks = seconds = 0;
-    outportb (PIT_COMREG,0x37);
-    outportb (PIT_DATAREG0,divisor & 0xFF);
-    outportb (PIT_DATAREG0,divisor >> 8);    
-    asm ("sti");
-}
-
-unsigned int sleep (unsigned int secs)
-{
-    int p = seconds + secs;
-
-    while (ticks != 0);
-    while (seconds < p);
-    return 0;
-}
-
+#endif

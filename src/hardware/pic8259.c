@@ -25,9 +25,9 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <keyboard.h>
-#include <fismem.h>
 #include <8253.h>
 #include <bitops.h>
+#include <paging.h>
 
 //IRQ_s *shareHandler[IRQ_NUM];
 // IRQ_s shareHandler[16];
@@ -79,14 +79,14 @@ void init_IRQ(){
 
     outportb(MASTER_PORT_1, 0xFF);
 	outportb(SLAVE_PORT_1,  0xFF);
-		
+
     //outportb (0xFC, MASTER_PORT_1);
-    enable_IRQ(KEYBOARD);    
+    enable_IRQ(KEYBOARD);
     enable_IRQ(TIMER);
     enable_IRQ(TO_SLAVE_PIC);
-          
+
     setup_IRQ();
-    
+
         i=0;
     while(i<IRQ_NUM){
         shareHandler[i] = NULL;
@@ -94,7 +94,7 @@ void init_IRQ(){
     }
     add_IRQ_handler(1, keyboard_isr);
     add_IRQ_handler(0, PIT_handler);
-    asm("sti");                  
+    asm("sti");
 }
 
 void setup_IRQ(){
@@ -121,7 +121,7 @@ void setup_IRQ(){
   * @version 1.0
   * @param irq number of irq to enable.
   * @return 0 if all OK, -1 on errors
-  * This function provide a tool for enabling irq from the pic processor. 
+  * This function provide a tool for enabling irq from the pic processor.
   */
 int enable_IRQ (IRQ_t irq){
     byte cur_mask;
@@ -150,7 +150,7 @@ int enable_IRQ (IRQ_t irq){
   * @version 1.0
   * @param irq number of irq to enable.
   * @return 0 if all OK, -1 on errors
-  * This function provide a tool for enabling irq from the pic processor. 
+  * This function provide a tool for enabling irq from the pic processor.
   */
 int disable_IRQ(IRQ_t irq){
     byte cur_mask;
@@ -180,7 +180,7 @@ int get_current_irq(){
     int cur_irq;
     outportb(MASTER_PORT,GET_IRR_STATUS);
     cur_irq = inportb(MASTER_PORT);
-    if(cur_irq == 4) {		
+    if(cur_irq == 4) {
       outportb(SLAVE_PORT, GET_IRR_STATUS);
       cur_irq = inportb(SLAVE_PORT);
 	  //printf("Slave irq number: %d\n", cur_irq);
@@ -201,18 +201,18 @@ void add_IRQ_handler(int irq_number, void (*func)()){
         IRQ_s *tmpHandler;
         tmpHandler = shareHandler[irq_number];
         if(shareHandler[irq_number]==NULL){
-             shareHandler[irq_number]= (IRQ_s*) request_pages(sizeof(IRQ_s), NOT_ADD_LIST);
+             shareHandler[irq_number]= (IRQ_s*) kernel_alloc_page ();
              shareHandler[irq_number]->next = NULL;
              shareHandler[irq_number]->IRQ_func = func;
         }
         else {
             while(tmpHandler->next!=NULL) tmpHandler = tmpHandler->next;
-            tmpHandler->next = (IRQ_s*) request_pages(sizeof(IRQ_s), NOT_ADD_LIST);
+            tmpHandler->next = (IRQ_s*) kernel_alloc_page ();
             tmpHandler = tmpHandler->next;
             tmpHandler->next = NULL;
             tmpHandler->IRQ_func = func;
         }
     }
-    else return; 
+    else return;
 }
 

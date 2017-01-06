@@ -29,7 +29,6 @@
 
 extern int argc;
 extern char **argv;
-extern heap_t *kheap;
 
 void aalogo();
 void logo();

@@ -28,7 +28,6 @@
 #include <cpuid.h>
 #include <stdio.h>
 #include <string.h>
-#include <fismem.h>
 #include <io.h>
 #include <keyboard.h>
 #include <paging.h>
@@ -97,7 +96,7 @@ void options(char *com)
 }
 
 /* corpo della shell */
-void shell()
+int shell(void *args)
 {
   dbg_bochs_print("\nNewShell\n");
   char *cmd_ptr;
@@ -209,6 +208,7 @@ void shell()
         if (i < 0)
             printf(LNG_UNKNOWN_CMD " %s\n", argv[0]);
     }
+    return 0;
 }
 
 // Saves cmd_pass string to history buffer (lastcmd)
