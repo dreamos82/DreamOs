@@ -453,7 +453,7 @@ void cd( ){
 		return;
 	} else {
 		int i=0;
-		int rel_size = 0;		
+		//int rel_size = 0;		
 		memset(abspath, '\0', CURPATH_LEN);				
 		if(argv[1][0] == '/') {
 			i = get_mountpoint_id(argv[1]);		
@@ -485,7 +485,7 @@ void cd( ){
 		if(dirp!=NULL){			
 			closedir(dirp);
 		}		
-		rel_size = strlen(argv[1]) - strlen(mountpoint_list[i].mountpoint);
+		//rel_size = strlen(argv[1]) - strlen(mountpoint_list[i].mountpoint);
 		if(i == -1) {			
 			printf("cd: %s: No such file or directory\n", argv[1]);
 			return;

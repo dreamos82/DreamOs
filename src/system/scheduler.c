@@ -21,6 +21,7 @@
  //
 
 #include "scheduler.h"
+#include "kheap.h"
 
 thread_list_t *ready_queue = 0;
 thread_list_t *current_thread = 0;

@@ -96,7 +96,7 @@ void options(char *com)
 }
 
 /* corpo della shell */
-void shell()
+int shell(void *args)
 {
   dbg_bochs_print("\nNewShell\n");
   char *cmd_ptr;
@@ -146,7 +146,7 @@ void shell()
     set_shadow(0);
     #endif
     //printf("Vediamo %s pwd: %s\n", current_user.username, password);
-    dbg_bochs_print((const unsigned char*)"Asking username");
+    dbg_bochs_print("Asking username");
     ret_val = user_chk(current_user.username, password);
   } while ((!strlen(current_user.username) || ret_val!=1));
 

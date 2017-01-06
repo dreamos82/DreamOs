@@ -32,6 +32,8 @@
 #include <paging.h>
 #include <scheduler.h>
 
+#include "vm.h"
+
 // #define DEBUG 1
 void (*IntTable[IDT_SIZE])();
 IRQ_s *shareHandler[IRQ_NUM];

@@ -139,10 +139,10 @@ char *strstr(const char *str1, const char *str2)
 
 size_t strspn(const char *string, const char *control)
 {
-  const unsigned char *str = string;
-  const unsigned char *ctrl = control;
+  const char *str = string;
+  const char *ctrl = control;
 
-  unsigned char map[32];
+  char map[32];
   int n;
 
   // Clear out bit map
@@ -173,10 +173,10 @@ size_t strspn(const char *string, const char *control)
 
 size_t strcspn(const char *string, const char *control)
 {
-  const unsigned char *str = string;
-  const unsigned char *ctrl = control;
+  const char *str = string;
+  const char *ctrl = control;
 
-  unsigned char map[32];
+  char map[32];
   int n;
 
   // Clear out bit map
@@ -202,10 +202,10 @@ size_t strcspn(const char *string, const char *control)
 
 char *strpbrk(const char *string, const char *control)
 {
-  const unsigned char *str = string;
-  const unsigned char *ctrl = control;
+  const char *str = string;
+  const char *ctrl = control;
 
-  unsigned char map[32];
+  char map[32];
   int n;
 
   // Clear out bit map
@@ -342,7 +342,6 @@ char *strncat(char *s1, const char *s2, size_t n)
 
 char *strnset(char *s, int c, size_t n)
 {
-  char *start = s;
   while (n-- && *s) *s++ = (char) c;
   return s;
 }
@@ -368,10 +367,10 @@ char *strrev(char *s)
 
 char *strtok_r(char *string, const char *control, char **lasts)
 {
-  unsigned char *str;
-  const unsigned char *ctrl = control;
+  char *str;
+  const char *ctrl = control;
 
-  unsigned char map[32];
+  char map[32];
   int n;
 
   // Clear control map
@@ -431,7 +430,7 @@ char *strtok(char *string, const char *control)
 // intrinsic functions
 //
 
-#pragma function(memset)
+/*#pragma function(memset)
 #pragma function(memcmp)
 #pragma function(memcpy)
 
@@ -439,7 +438,7 @@ char *strtok(char *string, const char *control)
 #pragma function(strlen)
 #pragma function(strcat)
 #pragma function(strcmp)
-#pragma function(strset)
+#pragma function(strset)*/
 
 void *memset(void *p, int c, size_t n)
 {
@@ -506,7 +505,7 @@ int memicmp(const void *buf1, const void *buf2, size_t n)
 char *strcpy(char *dst, const char *src)
 {
   char *cp = dst;
-  while (*cp++ = *src++);
+  while ((*cp++ = *src++) != '\0');
   return dst;
 }
 
@@ -534,7 +533,7 @@ char *strcat(char *dst, const char *src)
 {
   char *cp = dst;
   while (*cp) cp++;
-  while (*cp++ = *src++);
+  while ((*cp++ = *src++) != '\0');
   return dst;
 }
 

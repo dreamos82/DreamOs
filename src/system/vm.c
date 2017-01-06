@@ -23,6 +23,10 @@
 #include "vm.h"
 #include "paging.h"
 #include "idt.h"
+#include "handlers.h"
+#include "panic.h"
+#include <string.h>
+#include <stdio.h>
 
 uint32_t *page_directory = (uint32_t *)PAGE_DIR_VIRTUAL_ADDR;
 uint32_t *page_tables = (uint32_t *)PAGE_TABLE_VIRTUAL_ADDR;
@@ -99,7 +103,7 @@ void map (uint32_t va, uint32_t pa, uint32_t flags)
   if (page_directory[pt_idx] == 0) {
     // The page table holding this page has not been created yet.
     page_directory[pt_idx] = kernel_alloc_page() | PAGE_PRESENT | PAGE_WRITE;
-    memset (page_tables[pt_idx*1024], 0, 0x1000);
+    memset ((uint32_t *)page_tables[pt_idx*1024], 0, 0x1000);
   }
 
   // Now that the page table definately exists, we can update the PTE.
@@ -130,6 +134,7 @@ char get_mapping (uint32_t va, uint32_t *pa)
 
     return 1;
   }
+  return 0;
 }
 
 void page_fault_handler (int ecode)

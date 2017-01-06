@@ -37,9 +37,7 @@ ssize_t read(int fildes, void *buf, size_t nbyte){
 }
 
 ssize_t write(int fildes, const void *buf, size_t nbyte){
-	int mp_id = 0;
 	int fs_fd = 0;
-	mp_id = fd_list[fildes].mountpoint_id;
 	fs_fd = fd_list[fildes].fs_spec_id;
 	if(fd_list[fildes].flags_mask&O_RDWR) {		
 		printf("allright, let's go\n");

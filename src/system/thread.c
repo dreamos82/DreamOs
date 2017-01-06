@@ -21,6 +21,10 @@
  //
 
 #include "thread.h"
+#include "kheap.h"
+#include "scheduler.h"
+#include <stdio.h>
+#include <string.h>
 
 thread_t *current_thread;
 uint32_t next_tid = 0;

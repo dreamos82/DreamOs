@@ -17,6 +17,7 @@ CFLAGS = -nostdlib\
 	-fno-builtin\
 	-fno-stack-protector\
 	-Wall\
+	-Werror\
 	-march=i686\
 	-m32\
 	-I./src/include\

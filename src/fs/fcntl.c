@@ -40,15 +40,17 @@ int cur_fd;
   * @todo Inserire gestione flags
   */
 int open(const char *path, int oflags,  ...){
-	int prova;
 	int mpid;
 	int ret_fd;
-	int error = 0;
 	char *newpath;
 	va_list ap;
 	va_start(ap, oflags);
 	ret_fd = 0;		
-	prova = va_arg(ap, int);
+    int opt_param_test;
+	opt_param_test = va_arg(ap, int);
+    printf("---------------------------------------\n");
+    printf("Opening %s with flags %d and params %d \n", path, oflags, opt_param_test);
+    printf("---------------------------------------\n");
 	newpath = kmalloc(CURPATH_LEN * sizeof(char));
 	memset(newpath, '\0', CURPATH_LEN);
 	cur_fd=0;
@@ -62,10 +64,15 @@ int open(const char *path, int oflags,  ...){
 		printf("No more file descriptors available\n");
 		return -1;
 	}
-	strcpy(newpath, path);	
-	//printf("Path: %s %s\n", path, newpath);	
+	strcpy(newpath, path);
+    #ifdef DEBUG
+    int error = 0;
 	error = get_abs_path((char*) newpath);
-	//printf("After get_abs: %s %s\n", newpath, current_user.cur_path);	
+	printf("Absolute path: %s %s\n\
+            Return error code: %d", newpath, current_user.cur_path, error);
+    #else
+    get_abs_path((char*) newpath);
+    #endif
     mpid = get_mountpoint_id((char*) newpath);		
 	//printf("Cur_fd: %d\n",cur_fd);
 	if(mpid >-1) {
@@ -86,10 +93,10 @@ int open(const char *path, int oflags,  ...){
 	}
 	else {
 		if(mpid>-1) printf("No OPEN services found here\n");					
-		va_end(ap);
+		//va_end(ap);
 		return -1;
 	}
-	va_end(ap)	
+	//va_end(ap)	
 	fd_list[cur_fd].offset = 0;
 	fd_list[cur_fd].flags_mask = oflags;
 	ret_fd = cur_fd;
