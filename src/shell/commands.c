@@ -429,8 +429,7 @@ void more(){
 			int i;
 			char buf;
 			//printf("File to open: %s\n", argv[1]);
-			//i = open(argv[1], O_RDONLY, 42);
-            i = open(argv[1], O_RDONLY);
+			i = open(argv[1], O_RDONLY, 42);
 			if(i>-1) {
 				int j=0;		
 				while(read(i, &buf, 1)!= (int) NULL) {

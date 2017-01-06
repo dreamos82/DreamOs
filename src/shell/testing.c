@@ -185,8 +185,7 @@ void try_open(){
 	printf("Please insert a path: ");
 	
 	scanf("%s", appoggio);	
-	//i = open(appoggio, O_RDONLY, 42);
-    i = open(appoggio, O_RDONLY);
+	i = open(appoggio, O_RDONLY, 42);
 	printf("%d\n", i);
 	if(i>-1) {
 		int j=0;		

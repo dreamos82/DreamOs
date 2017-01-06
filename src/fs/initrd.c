@@ -105,7 +105,6 @@ struct dirent *initrd_readdir(DIR *dirp){
 int initfs_open(const char *path, int flags, ...){
 	initrd_file_t *module_var;
 	int j = 0;
-	//int ret_fd = -1;
 	module_var = fs_headers;
 	//printf("J vale: %d fs_spec: %d cur_idfd: %d\n", j, fs_specs->nfiles, cur_irdfd);
 	if(cur_irdfd >= MAX_INITRD_DESCRIPTORS) {
@@ -122,8 +121,6 @@ int initfs_open(const char *path, int flags, ...){
 			//Erroneus file type
 				return -1;
 			ird_descriptors[cur_irdfd].file_descriptor	= j;
-			//ret_fd = cur_irdfd;				
-			//printf("ret_fd: %d --- %d\n", cur_irdfd, j);
 			ird_descriptors[cur_irdfd].cur_pos = 0;
 			if(flags&O_APPEND) {
 				printf("Appendiamoci\n");

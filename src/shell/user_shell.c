@@ -36,8 +36,7 @@ int user_chk(char *username, char* usr_pwd){
 	//puts(username);
 	//printf("user: %s\n", username);
 	dbg_bochs_print("Logging In\n");
-	//fd = open("/passwd", O_RDONLY,0);
-    fd = open("/passwd", O_RDONLY);
+	fd = open("/passwd", O_RDONLY,0);
 	/*if(fd != -1) printf("File passwd found\n");
 	else printf("not found\n");*/
 	if(fd<0) return 0;
