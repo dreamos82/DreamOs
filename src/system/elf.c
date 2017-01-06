@@ -21,6 +21,7 @@
  //
 
 #include <elf.h>
+#include <string.h>
 
 elf_t elf_from_multiboot (struct multiboot_info *mb)
 {
@@ -56,4 +57,5 @@ const char *elf_lookup_symbol (uint32_t addr, elf_t *elf)
       return name;
     }
   }
+  return NULL;
 }

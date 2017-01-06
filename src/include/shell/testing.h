@@ -36,8 +36,8 @@ void try_mapaddress();
 void try_tasksetup();
 void try_taskdel();
 void try_taskadd();
-void task_testsecond();
+int task_testsecond(void *);
 void task_testthird();
-void task_test();
+int task_test(void *);
 
 #endif

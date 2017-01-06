@@ -33,7 +33,7 @@
 /**
  *  Print msg in the bochs prompt 
  */ 
-void dbg_bochs_print( const unsigned char *msg )
+void dbg_bochs_print( const char *msg )
 {
 #if defined(BOCHS_DEBUG)
     register unsigned int i;
@@ -58,7 +58,7 @@ void dbg_bochs_print_digit(unsigned int number){
 /**
  *  Send cmd to bochs port
  */
-inline void dbg_bochs_send_cmd( const int port, const int cmd )
+void dbg_bochs_send_cmd( const int port, const int cmd )
 {
 #if defined(BOCHS_DEBUG)
     outportb(port, cmd);

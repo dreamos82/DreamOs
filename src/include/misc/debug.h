@@ -69,8 +69,8 @@
  *  has been enabled will disable register tracing. */
 #define REGISTER_TRACE_DISABLE	0x8AE4
 
-void dbg_bochs_print( const unsigned char * );
+void dbg_bochs_print( const char * );
 void dbg_bochs_print_digit(unsigned int);
-inline void dbg_bochs_send_cmd( const int, const int );
+void dbg_bochs_send_cmd( const int, const int );
 
 #endif /* ! _DEBUG_H */

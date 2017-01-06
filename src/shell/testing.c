@@ -29,6 +29,7 @@
 #include <unistd.h>
 #include <user_shell.h>
 #include <thread.h>
+#include <vm.h>
 
 char *module_start;
 file_descriptor_t fd_list[_SC_OPEN_MAX];
@@ -55,9 +56,9 @@ void try_kmalloc()
 
 	printf("Kmalloc try: ... ");
 	//print_heap_list (kheap->free_list);
-	b = (int *)kmalloc(15 * sizeof(uint32_t));
-	c = (int *)kmalloc(10 * sizeof(uint32_t));
-	d = (int *)kmalloc(15 * sizeof(uint32_t));
+	b = (uint32_t *)kmalloc(15 * sizeof(uint32_t));
+	c = (uint32_t *)kmalloc(10 * sizeof(uint32_t));
+	d = (uint32_t *)kmalloc(15 * sizeof(uint32_t));
 	printf("Address obtained: 0x%x 0x%x 0x%x\n", b, c, d);
   
 	while(i < 15) {
@@ -184,7 +185,8 @@ void try_open(){
 	printf("Please insert a path: ");
 	
 	scanf("%s", appoggio);	
-	i = open(appoggio, O_RDONLY, 42);
+	//i = open(appoggio, O_RDONLY, 42);
+    i = open(appoggio, O_RDONLY);
 	printf("%d\n", i);
 	if(i>-1) {
 		int j=0;		
@@ -256,7 +258,7 @@ void try_shadow(){
 void try_mapaddress(){
 	unsigned int *tmp = kmalloc(sizeof(int));
 	printf("Testing map_address\n");
-	map((unsigned int)tmp, 0x0010000);
+	map((unsigned int)tmp, 0x0010000, 0);
 	//printf("GetPhysAddress: %x\n", get_phys_address((unsigned int)tmp));
 	return;
 }
@@ -276,12 +278,14 @@ void try_tasksetup(){
 	asm("sti;");
 }
 
-void task_test(){
+int task_test(void *args){
 	printf("A!!!\n");
+    return 0;
 }
 
-void task_testsecond(){  
+int task_testsecond(void *args){  
   printf("B!!!!\n");
+  return 0;
 }
 
 void task_testthird(){
@@ -294,7 +298,8 @@ void task_testthird(){
 
 
 void try_taskadd(){
-  thread_t* myTask =  kernel_create_thread(task_test, "testtask", 0);
+  //thread_t* myTask
+  kernel_create_thread(task_test, "testtask", 0);
   //test_tasklist();
 }
 

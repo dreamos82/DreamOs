@@ -38,11 +38,12 @@
   */
 DIR *opendir(const char *path){
 	int mpoint_id = 0;
-	int error = 0;
+	//int error = 0;
 	//char tmp_path[CURPATH_LEN];
 	char* rel_path;	
 	DIR* pdir;
-	error=get_abs_path((char*)path);
+	//error=get_abs_path((char*)path);
+    get_abs_path((char*)path);
 	//printf("AbsPath in opendir: %s len: %d\n", path, strlen(path));
 	//printf("%s\n", path);
 	mpoint_id = get_mountpoint_id((char*)path);

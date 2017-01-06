@@ -27,6 +27,7 @@
 #include <keyboard.h>
 #include <8253.h>
 #include <bitops.h>
+#include <paging.h>
 
 //IRQ_s *shareHandler[IRQ_NUM];
 // IRQ_s shareHandler[16];

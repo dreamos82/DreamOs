@@ -45,7 +45,7 @@ extern struct cmd shell_cmd[NUM_COM];
 typedef struct user_env userenv_t;
 extern userenv_t current_user;
 void shell_init();
-void shell(void);
+int shell(void *);
 void history (char *);
 void history_start(void);
 void _getCommand(char *);

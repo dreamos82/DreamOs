@@ -35,8 +35,9 @@ int user_chk(char *username, char* usr_pwd){
 	memset(checking_user.password, '\0', 50);	
 	//puts(username);
 	//printf("user: %s\n", username);
-	dbg_bochs_print((const unsigned char*)"Logging In\n");
-	fd = open("/passwd", O_RDONLY,0);
+	dbg_bochs_print("Logging In\n");
+	//fd = open("/passwd", O_RDONLY,0);
+    fd = open("/passwd", O_RDONLY);
 	/*if(fd != -1) printf("File passwd found\n");
 	else printf("not found\n");*/
 	if(fd<0) return 0;
