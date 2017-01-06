@@ -404,7 +404,7 @@ void ls() {
 				printf("%s   ", mountpoint_list[i].mountpoint);
 			}
 			else {
-				if  ( (_kstrncmp(argv[1], "-l", 2) ) == 0 )
+				if  ( (_kstrncmp(argv[1], "-l", 2) ) == 0 ) {
 					printf("uid=%d(%s), gid=%d(%s) - ", 
 							mountpoint_list[i].uid,
 							current_user.username,
@@ -413,6 +413,7 @@ void ls() {
 					_kcolor(BRIGHT_BLUE);
 					printf("%s\n", mountpoint_list[i].mountpoint);
 					_kcolor(WHITE);
+				}
 			}
 			i++; 
 		}
