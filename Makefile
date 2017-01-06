@@ -37,6 +37,7 @@ OBJ = $(GENDIR)/kernel.o\
 	$(GENDIR)/drivers/keyboard.o\
 	$(GENDIR)/drivers/mouse.o\
 	$(GENDIR)/drivers/fdc.o\
+	$(GENDIR)/drivers/vesa.o\
 	$(GENDIR)/fs/vfs.o\
 	$(GENDIR)/fs/fcntl.o\
 	$(GENDIR)/fs/initrd.o\
@@ -103,6 +104,7 @@ $(GENDIR)/misc/debug.o: src/misc/debug.c
 $(GENDIR)/drivers/keyboard.o: src/drivers/keyboard.c
 $(GENDIR)/drivers/mouse.o: src/drivers/mouse.c
 $(GENDIR)/drivers/fdc.o: src/drivers/fdc.c
+$(GENDIR)/drivers/vesa.o: src/drivers/vesa.c
 
 $(GENDIR)/system/gdt.o: src/system/gdt.c
 $(GENDIR)/system/idt.o: src/system/idt.c
