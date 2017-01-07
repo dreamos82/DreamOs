@@ -35,7 +35,15 @@ page_directory_t *current_directory;
 
 extern char kernel_paging_active;
 
+#define TABLE_SIZE 0x1000
+
 uint32_t fault = 0;
+
+
+void init_area(void* area)
+{
+	memset(area, 0, TABLE_SIZE);
+}
 
 void kernel_init_vm ()
 {
@@ -47,19 +55,19 @@ void kernel_init_vm ()
   page_directory_t *pd = (page_directory_t*)kernel_alloc_page ();
 
   // Initialise it.
-  memset (pd, 0, 0x1000);
+  init_area(pd);
 
   // Identity map the first 4 MB.
   pd[0] = kernel_alloc_page () | PAGE_PRESENT | PAGE_WRITE;
 
   uint32_t *pt = (uint32_t*) (pd[0] & PAGE_MASK);
   for (int i = 0; i < 1024; i++)
-    pt[i] = i*0x1000 | PAGE_PRESENT | PAGE_WRITE;
+    pt[i] = i*TABLE_SIZE | PAGE_PRESENT | PAGE_WRITE;
 
   // Assign the second-last table and zero it.
   pd[1022] = kernel_alloc_page () | PAGE_PRESENT | PAGE_WRITE;
   pt = (uint32_t*) (pd[1022] & PAGE_MASK);
-  memset (pt, 0, 0x1000);
+  init_area(pt);
 
   // The last entry of the second-last table is the directory itself.
   pt[1023] = (uint32_t)pd | PAGE_PRESENT | PAGE_WRITE;
@@ -80,8 +88,7 @@ void kernel_init_vm ()
   uint32_t pt_idx = PAGE_DIR_IDX((PAGING_STACK_ADDR>>12));
   page_directory[pt_idx] = kernel_alloc_page () | PAGE_PRESENT | PAGE_WRITE;
 
-  // TODO: fix page fault
-  //memset (page_tables[pt_idx*1024], 0, 0x1000);
+  init_area(&page_tables[pt_idx*1024]);
 
   // Paging is now active. Tell the physical memory manager.
   kernel_paging_active = 1;
@@ -96,14 +103,14 @@ void kernel_switch_page_directory (page_directory_t *pd)
 
 void map (uint32_t va, uint32_t pa, uint32_t flags)
 {
-  uint32_t virtual_page = va / 0x1000;
+  uint32_t virtual_page = va / TABLE_SIZE;
   uint32_t pt_idx = PAGE_DIR_IDX(virtual_page);
 
   // Find the appropriate page table for 'va'.
   if (page_directory[pt_idx] == 0) {
     // The page table holding this page has not been created yet.
     page_directory[pt_idx] = kernel_alloc_page() | PAGE_PRESENT | PAGE_WRITE;
-    memset ((uint32_t *)page_tables[pt_idx*1024], 0, 0x1000);
+    init_area(&page_tables[pt_idx*1024]);
   }
 
   // Now that the page table definately exists, we can update the PTE.
@@ -112,7 +119,7 @@ void map (uint32_t va, uint32_t pa, uint32_t flags)
 
 void unmap (uint32_t va)
 {
-  uint32_t virtual_page = va / 0x1000;
+  uint32_t virtual_page = va / TABLE_SIZE;
 
   page_tables[virtual_page] = 0;
   // Inform the CPU that we have invalidated a page mapping.
@@ -121,7 +128,7 @@ void unmap (uint32_t va)
 
 char get_mapping (uint32_t va, uint32_t *pa)
 {
-  uint32_t virtual_page = va / 0x1000;
+  uint32_t virtual_page = va / TABLE_SIZE;
   uint32_t pt_idx = PAGE_DIR_IDX(virtual_page);
 
   // Find the appropriate page table for 'va'.
