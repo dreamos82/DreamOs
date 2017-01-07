@@ -257,14 +257,13 @@ void try_shadow(){
 void try_mapaddress(){
 	uint32_t *tmp = kmalloc(sizeof(int));
 	printf("Testing map_address\n");
-	map((unsigned int)tmp, 0x0010000, 0);
+	map((uint32_t)tmp, 0x0010000, 0);
 
 	uint32_t map = 0;
-	get_mapping((unsigned int)tmp, &map);
+	get_mapping((uint32_t)tmp, &map);
 	printf("get_mapping: %x\n", map);
 
-	unmap ((unsigned int)tmp);
-
+	free (tmp);
 	return;
 }
 
