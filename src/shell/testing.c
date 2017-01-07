@@ -255,10 +255,16 @@ void try_shadow(){
 }
 
 void try_mapaddress(){
-	unsigned int *tmp = kmalloc(sizeof(int));
+	uint32_t *tmp = kmalloc(sizeof(int));
 	printf("Testing map_address\n");
 	map((unsigned int)tmp, 0x0010000, 0);
-	//printf("GetPhysAddress: %x\n", get_phys_address((unsigned int)tmp));
+
+	uint32_t map = 0;
+	get_mapping((unsigned int)tmp, &map);
+	printf("get_mapping: %x\n", map);
+
+	unmap ((unsigned int)tmp);
+
 	return;
 }
 
