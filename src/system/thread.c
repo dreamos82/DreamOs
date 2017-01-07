@@ -79,7 +79,38 @@ void thread_exit()
   for (;;) ;
 }
 
-//void switch_thread (struct thread_list *next)
-//{
-//	// TODO implement
-//}
+#ifdef E_NEWSCHED
+void switch_thread (struct thread_list *next)
+
+{
+      //asm ("mov %%eax, %0" : : "r" (current_thread));
+
+      asm ("mov %%esp, %0" : "=r" (current_thread->esp));
+      asm ("mov %%ebp, %0" : "=r" (current_thread->ebp));
+      asm ("mov %%ebx, %0" : "=r" (current_thread->ebx));
+      asm ("mov %%esi, %0" : "=r" (current_thread->esi));
+      asm ("mov %%edi, %0" : "=r" (current_thread->edi));
+
+      //asm ("pushf");
+      //asm ("pop %ecx");
+
+      //[eax+20], ecx
+      //asm ("mov %%ecx, %0" : "=r" (current_thread->ecx));
+
+      current_thread = next->thread;
+
+      //asm ("mov %0, %%eax" : : "r" (current_thread));
+
+      asm ("mov %0, %%esp" : : "r" (next->thread->esp));
+      asm ("mov %0, %%ebp" : : "r" (next->thread->ebp));
+      asm ("mov %0, %%ebx" : : "r" (next->thread->ebx));
+      asm ("mov %0, %%edi" : : "r" (next->thread->edi));
+      asm ("mov %0, %%esi" : : "r" (next->thread->esi));
+
+      //mov eax, [eax+20]
+      //asm ("mov %0, %%eax" : : "r" (next->thread->ecx));
+
+      //asm ("push %eax");
+      //asm ("popf");
+}
+#endif
