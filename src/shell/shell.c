@@ -179,15 +179,12 @@ int shell(void *args)
         /* Cleans all blanks at the beginning of the command */
         for (i = 0, cmd_ptr = cmd; cmd[i] == ' '; i++, cmd_ptr++);
 
-        if (strlen(cmd) > 0) {
-            //Saves the last command input to the history
-            history(cmd);
-            //printf("%s\n", cmd_ptr);
-            options (cmd_ptr);
-        }
+        options (cmd_ptr);
+        if (strlen(cmd_ptr) > 0)
+            history(cmd_ptr);
 
         else {
-            memset(cmd, 0, CMD_LEN);
+            memset(cmd_ptr, 0, CMD_LEN);
             for (--argc; argc>=0; argc--) {
                 free (argv[argc]);
             }
@@ -279,7 +276,8 @@ void _getCommand(char *prompt) {
     //Important to update these values otherwise backspace will not work!!
     shell_mess_col = _kgetcolumn();
     shell_mess_line = _kgetline();
-
+    
+    cmd[0] = '\0';
     while (i < CMD_LEN && (c = getchar()) != '\n') {
         if (hst_flag) {
             hst_flag = 0;
