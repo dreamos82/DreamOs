@@ -255,16 +255,19 @@ void try_shadow(){
 }
 
 void try_mapaddress(){
-	uint32_t *tmp = kmalloc(sizeof(int));
-	printf("Testing map_address\n");
-	map((uint32_t)tmp, 0x0010000, 0);
+	//uint32_t *tmp = (uint32_t *)kmalloc(sizeof(int));
+    uint32_t va = 0x00c09000;
+    uint32_t pa = 0x00010000;
+	printf("\nMapping (virtual -> physical):\n(0x%x) -> (0x%x)\n\n", va, pa);
 
-	uint32_t map = 0;
-	get_mapping((uint32_t)tmp, &map);
-	printf("get_mapping: %x\n", map);
-
-	free (tmp);
-	return;
+	uint32_t result_addr = 0;
+    map(va, pa, 0);
+	get_mapping(va, &result_addr);
+    
+	printf("Getting physical address: 0x%x\n", result_addr);
+    
+    unmap(va);
+	//free (tmp);
 }
 
 void try_tasksetup(){
