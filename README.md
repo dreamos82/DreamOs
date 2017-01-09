@@ -7,13 +7,15 @@ DreamOS
 DreamOS è un sistema operativo open source rilasciato sotto licenza GPLv3 sviluppato partendo da 0 puramente per scopi didattici o comunque per capire come funzionano i sistemi operativi.
 Il team di sviluppo attuale è composto dagli sviluppatori
 
-Ivan Gualandri - Finarfin (http://www.osdev.it http://www.italialinux.com) - Creatore e Main Developer 
+Ivan Gualandri - Finarfin (http://www.osdev.it http://www.italialinux.com) - Creatore e Main Developer
+Dario Casalinuovo - Barrett - Core Developer
 
 Contributi:
 
 * Odites
 * Dakk
-* Alessandro (celeron) 
+* Alessandro (celeron)
+* Emily82
 
 
 #### a - Cosa NON è DreamOS
@@ -25,7 +27,7 @@ DreamOS non è un sistema operativo completo e pronto per essere utilizzato per 
 
 Per Installazione s'intende compilare e mettere DreamOS su un supporto per l'avvio, visto che attualmente DreamOS non è predisposto per installazioni vere e proprie.
 
-#### a - Requisiti necessari 
+#### a - Requisiti necessari
 
 DreamOS è un sistema operativo sviluppato per funzionare su cpu con architettura Intel x86/IA32 (i386/i686) e attualmente è sviluppato in modo da partire da floppy anche se, utilizzando GRUB, si può farlo partire avendo l'immagine compilata sull'Hard-disk.
 DreamOS può essere anche emulato usando Software come qEmu o Bochs.
@@ -36,8 +38,7 @@ Per compilare DreamOS bisogna prima di tutto avere una distribuzione Linux insta
 	* GCC
 	* make
 	* genisoimage (se si vuole creare una iso)
-
-In alternativa si può usare un emulatore di cpu se non si vuole provare il sistema operativo su hardware reale e GIT se volete scaricare le versioni più recenti da repository.
+	* git (per scaricare i sorgenti dal repository)
 
 #### b - Scaricare da GIT
 
@@ -48,12 +49,12 @@ Per i meno pratici il comando da eseguire è: (assicuratevi di avere il pacchett
 
 Alla fine del download dovreste avere una cartella DeamOs/ con tutti i sorgenti al suo interno.
 
-Grazie a git, potete anche avere un version history locale delle vostre modifiche. Quindi se volete provare a modificare i sorgenti per fare delle prove, vi basta fare le vostre modifiche e dopo di che dare il commando 
+Grazie a git, potete anche avere un version history locale delle vostre modifiche. Quindi se volete provare a modificare i sorgenti per fare delle prove, vi basta fare le vostre modifiche e dopo di che dare il commando
 
-	git commit 
+	git commit
 
 questo salvera' le vostre modifiche nel repository locale. Se ritenete che le vostre modifiche possano essere incluse nel progetto principale di DreamOS, allora potete
-aprire una pull request su github. 
+aprire una pull request su github.
 
 
 #### c - Compilare DreamOS
@@ -85,20 +86,20 @@ Se volete provare dreamos su pc reale e non avete il floppy potete farlo anche a
 
 Se invece volete creare una entry apposita su Grub potete farlo nel seguente modo:
  Aprite il file /boot/grub/grub.conf e aggiugente alla fine le seguenti righe:
- 
+
 	title DreamOS 0.1
 	root (hd0,0)
 	kernel /path/al/file/dreamos.img
 	boot
 
-Naturalmenet modificando /path/al/file/dreamos.img con la path al file dreamos.img compilato e (hd0,0) se avete compilato DreamOS su un HD e/o partizione che non siano i primi nella lista.
+Modificare /path/al/file/dreamos.img con la path al file dreamos.img compilato e (hd0,0) se avete compilato DreamOS su un HD e/o partizione diverso dal primo.
 
 Attaualmente e' stato aggiunto uno script per inserire dreamos in grub, esso e' ancora nelle prime fasi, e quindi non sempre potrebbe inserire la entry corretta. Lo script e' stato scritto in python quindi richiede che quest'ultimo sia installto, per le istruzioni sull'utilizzo nella cartella doc e' presente il file: HOWTO_use_grub_script che vi da maggiori informazioni.
 
 #### f - Note se utilizzate bochs
 
-Se utilizzate l'emulatore bochs, trovate un file di configurazione nella root folder del progetto quasi pronto per l'uso. Per poter funzionare correttamente sulla vostra macchina dovete: 
-	
+Se utilizzate l'emulatore bochs, trovate un file di configurazione nella root folder del progetto quasi pronto per l'uso. Per poter funzionare correttamente sulla vostra macchina dovete:
+
 * Modificare le righe romimage e vgaromimage, facendole puntare ai files BIOS-bochs-latest e VGABIOS-lgpl-latest che si trovano all'interno della cartella bios della vostra installazione di bochs.
 * Se il vostro bochs non è compilato con il supporto del remote debugging, e comunque non volete fare il debug del sistema, dovete commentare la riga relativa all'opzione gdbstub si trova verso la fine.
 
@@ -129,7 +130,7 @@ Si può avere una lista di comandi disponibili attraverso il comando:
 ----------
 
 #### a - Come segnalare Bug
-	
+
 Per segnalare bug riscontrati durante l'uso di DreamOS bisogna segnalarli usando il modulo di github presente alla pagina:
 	https://github.com/inuyasha82/DreamOs/issues
 
@@ -145,7 +146,7 @@ Potete mandare un resoconto o comunque raccontare la vostra esperienza con Dream
 
 	http://forum.osdev.it/
 
-Oppure ci trovate su irc: 
+Oppure ci trovate su irc:
 
 	Server: irc.azzurra.org
 	Chan: #dreamos
