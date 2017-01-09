@@ -44,6 +44,7 @@ OBJ = $(GENDIR)/kernel.o\
 	$(GENDIR)/fs/unistd.o\
 	$(GENDIR)/libc/ctype.o\
 	$(GENDIR)/libc/string.o\
+	$(GENDIR)/libc/vsprintf.o\
 	$(GENDIR)/io/io.o\
 	$(GENDIR)/libc/stdio.o\
 	$(GENDIR)/hardware/cpuid.o\
@@ -95,6 +96,7 @@ $(GENDIR)/hardware/keyboard.o: src/hardware/keyboard.c
 $(GENDIR)/libc/stdio.o: src/libc/stdio.c
 $(GENDIR)/libc/ctype.o: src/libc/ctype.c
 $(GENDIR)/libc/string.o: src/libc/string.c
+$(GENDIR)/libc/string.o: src/libc/vsprintf.c
 $(GENDIR)/mem/paging.o: src/system/paging.c
 $(GENDIR)/mem/vm.o: src/system/vm.c
 $(GENDIR)/mem/kheap.o: src/system/kheap.c
