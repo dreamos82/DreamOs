@@ -33,9 +33,9 @@ extern elf_t kernel_elf;
 
 void kernel_panic(const char* msg)
 {
-  printf ("\nWelcome to kernel debugging land\n\n\n PANIC: %s\n", msg);
+  printf ("\nPANIC: %s\n\nWelcome to Kernel Debugging Land...\n\n", msg);
   print_stack_trace ();
-  printf ("---\n");
+  printf ("\n");
   for (;;);
 }
 

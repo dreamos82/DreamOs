@@ -156,10 +156,12 @@ void page_fault_handler (int ecode)
   uint32_t cr2;
   asm volatile ("mov %%cr2, %0" : "=r" (cr2));
 
+  char message[128];
+
   // TODO: Support registers in handlers
-  printf("\nDetected page fault at address 0x%x\n", cr2);
-  printf("Error code: %x\n", ecode);
+  sprintf(message,
+	"Detected page fault at address 0x%x", cr2);
  
-  kernel_panic("");
+  kernel_panic(message);
   for (;;) ; 
 }
