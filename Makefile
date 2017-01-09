@@ -20,6 +20,7 @@ CFLAGS = -nostdlib\
 	-Werror\
 	-march=i686\
 	-m32\
+	-std=gnu99\
 	-I./src/include\
 	-I./src/include/io\
 	-I./src/include/drivers\
