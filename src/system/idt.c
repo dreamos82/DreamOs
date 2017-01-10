@@ -112,7 +112,7 @@ void add_IDTseg(short int i, void (*gestore)(), unsigned char options, unsigned 
     IDT_Table[i].offset_low= (indirizzo&0xFFFF);
     IDT_Table[i].null_par=0x00;
     IDT_Table[i].seg_selector = seg_sel;
-    IDT_Table[i].options = options|0xE;
+    IDT_Table[i].options = options|INT32_GATE;
     IDT_Table[i].offset_high = indirizzo >> 16;
 }
 
