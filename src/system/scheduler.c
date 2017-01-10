@@ -28,7 +28,7 @@ thread_list_t *current_thread = 0;
 
 void kernel_init_scheduler (thread_t *initial_thread)
 {
-  current_thread = (thread_list_t*) kmalloc (sizeof (thread_list_t*));
+  current_thread = (thread_list_t*) kmalloc (sizeof (thread_list_t));
   current_thread->thread = initial_thread;
   current_thread->next = 0;
   ready_queue = 0;
@@ -37,7 +37,7 @@ void kernel_init_scheduler (thread_t *initial_thread)
 void kernel_activate_thread(thread_t *t)
 {
   // Create a new list item for the new thread.
-  thread_list_t *item = (thread_list_t*) kmalloc (sizeof (thread_list_t*));
+  thread_list_t *item = (thread_list_t*) kmalloc (sizeof (thread_list_t));
   item->thread = t;
   item->next = 0;
 
