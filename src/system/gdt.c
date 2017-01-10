@@ -47,8 +47,8 @@ void init_gdt(){
 	 *il descrittore nullo deve stare nella posizione 0
 	 */
 	add_GDTseg(0,0,0,0,0);
-	add_GDTseg(1,0x00000000,0x000FFFFF, PRESENT|KERNEL|CODE|0x0A,GRANULARITY);
-	add_GDTseg(2,0x00000000,0x000FFFFF, PRESENT|KERNEL|DATA|0x02,GRANULARITY);
+	add_GDTseg(1,0x00000000,0x000FFFFF, PRESENT|KERNEL|CODE|0x0A,GRANULARITY|SZBITS);
+	add_GDTseg(2,0x00000000,0x000FFFFF, PRESENT|KERNEL|DATA|0x02,GRANULARITY|SZBITS);
 	set_gdtr(Gdt_Table, 0xFFFF, 1, 2);	
 }
 /**
@@ -64,14 +64,16 @@ void add_GDTseg(int pos,unsigned int base, unsigned int limit, unsigned char opt
 	unsigned int tmpbase, tmplimit;
 	tmpbase = base;
 	tmplimit = limit;
+    //First 32bit part
 	Gdt_Table[pos].segment_limit_low = limit & 0xFFFF;
-	Gdt_Table[pos].segment_base_low = base & 0xFFFF; //Primi 32byte
+	Gdt_Table[pos].segment_base_low = base & 0xFFFF;
+    //Last 32bit part
 	tmpbase = base >>16;
 	Gdt_Table[pos].base_mid = tmpbase & 0xFF;
 	Gdt_Table[pos].options_1= opt1;
 	tmplimit= limit >> 16;
 	tmplimit &=0xf;
-	Gdt_Table[pos].options_2= GRANULARITY|0x40|tmplimit;
+	Gdt_Table[pos].options_2= opt2|tmplimit;
 	tmpbase = base >>24;
 	Gdt_Table[pos].base_high = tmpbase & 0xFF;
 }
