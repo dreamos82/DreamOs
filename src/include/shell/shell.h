@@ -26,6 +26,18 @@
 #define DEF_COM 18
 #define HST_LEN 10
 
+#define RESET_POSIZ posiz = HST_LEN - 1;
+
+#define CHECK_POSIZ if (posiz < free_slots)\
+                        RESET_POSIZ\
+                    else if (posiz > HST_LEN - 1)\
+                        posiz = free_slots;
+
+#define INC_POSIZ ++posiz;\
+                    CHECK_POSIZ
+#define DEC_POSIZ --posiz;\
+                    CHECK_POSIZ
+
 
 struct cmd {
 	char cmdname[CMD_LEN];
@@ -48,6 +60,5 @@ void shell_init();
 int shell(void *);
 void history (char *);
 void history_start(void);
-void _getCommand(char *);
 
 #endif

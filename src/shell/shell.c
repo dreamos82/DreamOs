@@ -40,6 +40,8 @@
 #include <user_shell.h>
 #include <debug.h>
 
+void _getCommand(char *);
+
 userenv_t current_user;
 int hst_flag;
 char cmd[CMD_LEN];
@@ -173,9 +175,6 @@ int shell(void *args)
 
         _getCommand("~:%s# ");
 
-        //We reset so we always start from the beginning of history commands
-        posiz = HST_LEN - 1;
-
         /* Cleans all blanks at the beginning of the command */
         for (i = 0, cmd_ptr = cmd; cmd[i] == ' '; i++, cmd_ptr++);
 
@@ -205,40 +204,46 @@ int shell(void *args)
         if (i < 0)
             printf(LNG_UNKNOWN_CMD " %s\n", argv[0]);
     }
+
+    return 0;
 }
 
 // Saves cmd_pass string to history buffer (lastcmd)
 void history(char *cmd_pass) {
-	//We should always clean before copying data inside
-    memset(lastcmd[write_index], 0, 30);
-    strcpy(lastcmd[write_index], cmd_pass);
+    int prev_index = write_index + 1;
 
-    #ifdef DEBUG
-    //Prints the history buffer
-    int i;
-    for (i = 0 ; i < HST_LEN ; ++i)
-            printf("History[%d]: %s\n", i, lastcmd[i]);
-    #endif
+    if (prev_index > HST_LEN - 1)
+        prev_index = free_slots;
 
-    --write_index;
-    if (write_index < 0)
-        write_index = HST_LEN - 1;
+    //We save to history only commands NOT equal to previous one
+    if (strcmp(lastcmd[prev_index], cmd) != 0) {
+        //We should always clean before copying data inside
+        memset(lastcmd[write_index], 0, 30);
+        strcpy(lastcmd[write_index], cmd_pass);
+        //We must be sure to set posiz at the same last saved command position
+        posiz = write_index;
 
-    if ( free_slots > 0 )
-        --free_slots;
+        #ifdef DEBUG
+        //Prints the history buffer
+        int i;
+        for (i = 0 ; i < HST_LEN ; ++i)
+                printf("History[%d]: %s\n", i, lastcmd[i]);
+        #endif
+
+        --write_index;
+        if (write_index < 0)
+            write_index = HST_LEN - 1;
+
+        if ( free_slots > 0 )
+            --free_slots;
+    }
 }
 
 //downarrow and uparrow keys handler to get commands from history buffer
 void history_start(void) {
     int sc_arrow = inportb(0x60);
 
-    int delete = 0, max_limit = strlen(lastcmd[posiz]);
-
-	//History position index handling
-    if (posiz < free_slots)
-    	posiz = HST_LEN - 1;
-    else if (posiz > HST_LEN - 1)
-        posiz = free_slots;
+    int delete = 0, max_limit = strlen(cmd);
 
     //Backspace handling
     if (limit < max_limit) {
@@ -257,10 +262,12 @@ void history_start(void) {
     strcpy(cmd, lastcmd[posiz]);
     hst_flag = 1;
 
-    if (sc_arrow == KEY_UPARROW)
-        --posiz;
-	else if (sc_arrow == KEY_DOWNARROW)
-        ++posiz;
+    if (sc_arrow == KEY_UPARROW) {
+        DEC_POSIZ;
+    }
+	else if (sc_arrow == KEY_DOWNARROW) {
+        INC_POSIZ;
+    }
 }
 
 //Input shell command (a private hacked version of gets)
