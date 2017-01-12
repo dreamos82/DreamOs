@@ -321,7 +321,4 @@ void test_tasklist() {
 
     for (iterator = kernel_get_running_queue(); iterator->next ; iterator = iterator->next)
         printf("Running: %u\n", iterator->thread->id);
-
-    for (iterator = kernel_get_ready_queue(); iterator->next ; iterator = iterator->next)
-        printf("Ready: %u\n", iterator->thread->id);
 }
