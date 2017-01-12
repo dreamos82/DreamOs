@@ -27,7 +27,7 @@ DreamOS isn't a complete operating system ready for daily use, it is not based o
 
 By installing we mean to compile and put DreamOS for booting in a removable media, indeed now DreamOS isn't built for actual installations.
 
-#### a - Necessary requirements
+#### a - Prerequisites
 
 DreamOS is an operating system working on cpu with Intel x86/IA32 (i386/i686) platform and for now it will boot only from floppy or cdrom, it is also possible to boot with GRUB using the compiled image in the hard drive.
 DreamOS may be emulated using software like qEmu or Bochs.
