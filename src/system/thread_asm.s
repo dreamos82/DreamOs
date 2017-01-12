@@ -1,10 +1,10 @@
         [global switch_thread]
         [global _create_thread]
-        [extern current_thread]
+        [extern running_queue]
         [extern thread_exit]
         
 switch_thread:
-        mov eax, [current_thread]
+        mov eax, [running_queue]
         mov eax, [eax]
 
         mov [eax+0],  esp
@@ -19,7 +19,7 @@ switch_thread:
 
         mov eax, [esp+4]
 
-        mov [current_thread], eax
+        mov [running_queue], eax
         mov eax, [eax]
         
         mov esp, [eax+0]

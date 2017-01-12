@@ -25,6 +25,7 @@
 #include "scheduler.h"
 #include <stdio.h>
 #include <string.h>
+#include <io.h>
 
 thread_t *current_thread;
 uint32_t next_tid = 0;
@@ -76,6 +77,7 @@ void thread_exit()
 
   printf ("Thread exited with value %d\n", val);
 
+  kernel_deactivate_thread(current_thread);
   for (;;) ;
 }
 

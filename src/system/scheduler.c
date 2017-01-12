@@ -24,13 +24,13 @@
 #include "kheap.h"
 
 thread_list_t *ready_queue = 0;
-thread_list_t *current_thread = 0;
+thread_list_t *running_queue = 0;
 
 void kernel_init_scheduler (thread_t *initial_thread)
 {
-  current_thread = (thread_list_t*) kmalloc (sizeof (thread_list_t));
-  current_thread->thread = initial_thread;
-  current_thread->next = 0;
+  running_queue = (thread_list_t*) kmalloc (sizeof (thread_list_t));
+  running_queue->thread = initial_thread;
+  running_queue->next = 0;
   ready_queue = 0;
 }
 
@@ -62,20 +62,28 @@ void kernel_deactivate_thread(thread_t *t)
 
   // Special case if the thread is first in the queue.
   if (iterator->thread == t) {
-    ready_queue = iterator->next;
+    ready_queue = ready_queue->next;
     free (iterator);
     return;
   }
-
   while (iterator->next)
   {
     if (iterator->next->thread == t) {
       thread_list_t *tmp = iterator->next;
-      iterator->next = tmp->next;
+      iterator->next = (iterator->next)->next;
       free (tmp);
+      return;
     }
     iterator = iterator->next;
   }
+}
+
+thread_list_t *kernel_get_ready_queue() {
+    return ready_queue;
+}
+
+thread_list_t *kernel_get_running_queue() {
+    return running_queue;
 }
 
 void schedule ()
@@ -89,8 +97,8 @@ void schedule ()
     iterator = iterator->next;
 
   // Add the old thread to the end of the queue, and remove it from the start.
-  iterator->next = current_thread;
-  current_thread->next = 0;
+  iterator->next = running_queue;
+  running_queue->next = 0;
   thread_list_t *new_thread = ready_queue;
 
   ready_queue = ready_queue->next;
