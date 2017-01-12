@@ -28,7 +28,7 @@
 GDT_Descriptor Gdt_Table[GDT_SIZE];
 int current_pos;
 
-void init_gdt(){
+void kernel_init_gdt(){
 	int i;
 	current_pos = 0;
 	i=0;
@@ -46,10 +46,10 @@ void init_gdt(){
 	 *il secondo per l'area codice e il terzo per l'area dati.
 	 *il descrittore nullo deve stare nella posizione 0
 	 */
-	add_GDTseg(0,0,0,0,0);
-	add_GDTseg(1,0x00000000,0x000FFFFF, PRESENT|KERNEL|CODE|0x0A,GRANULARITY|SZBITS);
-	add_GDTseg(2,0x00000000,0x000FFFFF, PRESENT|KERNEL|DATA|0x02,GRANULARITY|SZBITS);
-	set_gdtr(Gdt_Table, 0xFFFF, 1, 2);	
+	kernel_add_gdt_seg(0,0,0,0,0);
+	kernel_add_gdt_seg(1,0x00000000,0x000FFFFF, PRESENT|KERNEL|CODE|0x0A,GRANULARITY|SZBITS);
+	kernel_add_gdt_seg(2,0x00000000,0x000FFFFF, PRESENT|KERNEL|DATA|0x02,GRANULARITY|SZBITS);
+	kernel_set_gdtr(Gdt_Table, 0xFFFF, 1, 2);	
 }
 /**
   * @author Ivan Gualandri
@@ -60,7 +60,7 @@ void init_gdt(){
   * @param opt1 in ordine: Type (4bit) - S (1) bit -DPL (2 bit) - P(1 bit)
   * @param opt2 in ordine: SegLimit_hi(4 bit) AVL(1 bit) L(1 bit) D/B(1 bit) G(1bit)
 */
-void add_GDTseg(int pos,unsigned int base, unsigned int limit, unsigned char opt1, unsigned char opt2){
+void kernel_add_gdt_seg(int pos,unsigned int base, unsigned int limit, unsigned char opt1, unsigned char opt2){
 	unsigned int tmpbase, tmplimit;
 	tmpbase = base;
 	tmplimit = limit;
@@ -78,7 +78,7 @@ void add_GDTseg(int pos,unsigned int base, unsigned int limit, unsigned char opt
 	Gdt_Table[pos].base_high = tmpbase & 0xFF;
 }
 
-void set_gdtr(GDT_Descriptor *addr, unsigned short int limit, int code, int data){
+void kernel_set_gdtr(GDT_Descriptor *addr, unsigned short int limit, int code, int data){
 	GDT_Register gdtreg;
 	gdtreg.gdt_limit = limit;
 	gdtreg.gdt_base = (unsigned long)addr;

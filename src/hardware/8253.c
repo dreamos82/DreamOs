@@ -26,11 +26,11 @@ static unsigned int ticks;
 static unsigned int seconds;
 
 
-void PIT_handler ()
+void timer_pit_handler ()
 {		
 }
 
-void configure_PIT ()
+void timer_init ()
 {
     int divisor = PIT_DIVISOR;
 

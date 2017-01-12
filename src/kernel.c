@@ -85,7 +85,7 @@ int main_loop(struct multiboot_info *boot_info)
     _kcolor(WHITE);
     _kputs("\n");
     _kputs(LNG_GDT);
-    init_gdt();
+    kernel_init_gdt();
     _kprintOK();
     outportb(0xFF, MASTER_PORT_1);
     outportb(0xFF, SLAVE_PORT_1);
@@ -96,7 +96,7 @@ int main_loop(struct multiboot_info *boot_info)
 	kernel_init_paging(boot_info->mem_upper);
 	_kprintOK();
     _kputs(LNG_PIC8259);
-    init_IRQ();
+    irq_init();
     _kprintOK();
 	kernel_init_vm();
 	kernel_init_heap();
@@ -131,7 +131,7 @@ int main_loop(struct multiboot_info *boot_info)
 #ifdef BOCHS_DEBUG
 	dbg_bochs_print("DreamOS Debug String for Bochs\n");
 #endif
-	configure_PIT ();
+	timer_init ();
     //We disable floppy driver motor
     fdc_disable_motor();
 

@@ -51,7 +51,7 @@ typedef struct idt_r{
 
 void init_idt();
 
-void add_IDTseg(short int i, void (*gestore)(), unsigned char options, unsigned int seg_sel);
+void kernel_add_idt_seg(short int i, void (*gestore)(), unsigned char options, unsigned int seg_sel);
 void set_idtr(IDT_Descriptor *, unsigned short int);
 
 void INT_0(); /**< Eccezione numero 0 - #DE Divide Error*/

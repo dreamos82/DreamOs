@@ -66,32 +66,32 @@ void init_idt(){
         i++;
     }
     i=0;
-    init_funcTable();
-    add_IDTseg(0, INT_0,PRESENT|KERNEL, 0x8);
-    add_IDTseg(1, INT_1,PRESENT|KERNEL, 0x8);
-    add_IDTseg(2, INT_2,PRESENT|KERNEL, 0x8);
-    add_IDTseg(3, INT_3,PRESENT|KERNEL, 0x8);
-    add_IDTseg(4, INT_4,PRESENT|KERNEL, 0x8);
-    add_IDTseg(5, INT_5,PRESENT|KERNEL, 0x8);
-    add_IDTseg(6, INT_6,PRESENT|KERNEL, 0x8);
-    add_IDTseg(7, INT_7,PRESENT|KERNEL, 0x8);
-    add_IDTseg(8, INT_8,PRESENT|KERNEL, 0x8);
-    add_IDTseg(9, INT_9,PRESENT|KERNEL, 0x8);
-    add_IDTseg(10, INT_10,PRESENT|KERNEL, 0x8);
-    add_IDTseg(11, INT_11,PRESENT|KERNEL, 0x8);
-    add_IDTseg(12, INT_12,PRESENT|KERNEL, 0x8);
-    add_IDTseg(13, INT_13,PRESENT|KERNEL, 0x8);
-    add_IDTseg(14, INT_14,PRESENT|KERNEL, 0x8);
-    add_IDTseg(15, INT_15,PRESENT|KERNEL, 0x8);
-    add_IDTseg(16, INT_16,PRESENT|KERNEL, 0x8);
-    add_IDTseg(17, INT_17,PRESENT|KERNEL, 0x8);
-    add_IDTseg(18, INT_18,PRESENT|KERNEL, 0x8);
-    add_IDTseg(19, INT_19,PRESENT|KERNEL, 0x8);
-    add_IDTseg(80, INT_80,PRESENT|USER, 0x8);
+    kernel_init_interrupt_function_table();
+    kernel_add_idt_seg(0, INT_0,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(1, INT_1,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(2, INT_2,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(3, INT_3,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(4, INT_4,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(5, INT_5,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(6, INT_6,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(7, INT_7,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(8, INT_8,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(9, INT_9,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(10, INT_10,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(11, INT_11,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(12, INT_12,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(13, INT_13,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(14, INT_14,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(15, INT_15,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(16, INT_16,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(17, INT_17,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(18, INT_18,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(19, INT_19,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(80, INT_80,PRESENT|USER, 0x8);
     i=20;
     while(i<32){
-    //    if(i==8) add_IDTseg(i, INT_8);
-          add_IDTseg(i, IntTable[i], PRESENT|KERNEL, 0x8);
+    //    if(i==8) kernel_add_idt_seg(i, INT_8);
+          kernel_add_idt_seg(i, IntTable[i], PRESENT|KERNEL, 0x8);
         i++;
     }
     set_idtr(IDT_Table, IDT_SIZE);
@@ -106,7 +106,7 @@ void init_idt(){
  * @param seg_sel -> Il selettore del segmento della GDT
  * Questa funzione si occupa di aggiungere un nuovo segmento alla IDT.
  */
-void add_IDTseg(short int i, void (*gestore)(), unsigned char options, unsigned int seg_sel){
+void kernel_add_idt_seg(short int i, void (*gestore)(), unsigned char options, unsigned int seg_sel){
     unsigned int indirizzo;
     indirizzo = (unsigned int)gestore;
     IDT_Table[i].offset_low= (indirizzo&0xFFFF);

@@ -23,8 +23,8 @@
 #define PIT_DATAREG0 0x40
 #define PIT_DIVISOR 11931
 
-void PIT_handler ();
-void configure_PIT ();
+void timer_pit_handler ();
+void timer_init ();
 unsigned int sleep (unsigned int);
 
 #endif
