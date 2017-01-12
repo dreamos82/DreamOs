@@ -30,6 +30,13 @@
 
 #define IDT_SIZE 256
 
+//IDT Gate Types (in options)
+#define TASK_GATE     0x5
+#define INT16_GATE    0x6
+#define TRAP16_GATE   0x7
+#define INT32_GATE    0xE
+#define TRAP32_GATE   0xF
+
 /*!  \struct idt_desc
      \brief Struttura dati che rappresenta un descrittore della IDT               
  */
