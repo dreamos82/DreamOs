@@ -62,7 +62,7 @@ void kernel_deactivate_thread(thread_t *t)
 
   // Special case if the thread is first in the queue.
   if (iterator->thread == t) {
-    ready_queue = ready_queue->next;
+    ready_queue = iterator->next;
     free (iterator);
     return;
   }
@@ -70,7 +70,7 @@ void kernel_deactivate_thread(thread_t *t)
   {
     if (iterator->next->thread == t) {
       thread_list_t *tmp = iterator->next;
-      iterator->next = (iterator->next)->next;
+      iterator->next = tmp->next;
       free (tmp);
       return;
     }
