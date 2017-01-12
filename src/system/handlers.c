@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
+
  /*
   * Autore Ivan Gualandri
   * Prima versione: 19/05/2007
@@ -40,15 +40,15 @@ IRQ_s *shareHandler[IRQ_NUM];
 
 /** @author Ivan Gualandri
  *  @return none
- * Questa funzione si occupa di inizializzare la tabella di funzioni che gestiscono le 
+ * Questa funzione si occupa di inizializzare la tabella di funzioni che gestiscono le
  * interruzioni ed eccezioni.
  */
-void init_funcTable(){
+void kernel_init_interrupt_function_table(){
     int i;
     i=0;
     while(i<IDT_SIZE){
         if(i>19 && i<32) IntTable[i] = _int_rsv;
-        else if(i>31 && i<48) add_Interrupt(i, _irqinterrupt);
+        else if(i>31 && i<48) kernel_add_interrupt_function_table(i, _irqinterrupt);
         else IntTable[i] = _globalException;
         i++;
     }
@@ -62,7 +62,7 @@ void init_funcTable(){
   *
   * Questa funzione aggiunge un handler di interruzione alla tabella per che contiene le funzioni di gestione chiamate dalle eccezioni/interruzioni della IDT
   */
-void add_Interrupt(int i, void (*func)()){
+void kernel_add_interrupt_function_table(int i, void (*func)()){
 	IntTable[i] = func;
 }
 /**
@@ -90,7 +90,7 @@ void _globalException(int n, int error)
     case OVERFLOW:
     _kputs("OverFlow Exception\n");
     break;
-	 
+
     case BOUND_RANGE_EXCEED:
     _kputs("Bound Exception\n");
     break;
@@ -165,17 +165,17 @@ void _globalException(int n, int error)
 void _irqinterrupt(unsigned int esp){
     asm("cli;");
     int irqn;
-    irqn = get_current_irq();  
-    IRQ_s* tmpHandler; 
-    if(irqn>=0) {				
-        tmpHandler = shareHandler[irqn];		
+    irqn = irq_get_current();
+    IRQ_s* tmpHandler;
+    if(irqn>=0) {
+        tmpHandler = shareHandler[irqn];
 		if(tmpHandler!=0) {
-	    	tmpHandler->IRQ_func();	    	
+	    	tmpHandler->IRQ_func();
 	    	#ifdef DEBUG
 	    		printf("2 - IRQ_func: %d, %d\n", tmpHandler->IRQ_func, tmpHandler);
 	    	#endif
 	    	while(tmpHandler->next!=NULL) {
-	      		tmpHandler = tmpHandler->next;                           
+	      		tmpHandler = tmpHandler->next;
 	      		#ifdef DEBUG
 	      			printf("1 - IRQ_func (_prova): %d, %d\n", tmpHandler->IRQ_func, tmpHandler);
 	      		#endif
@@ -185,7 +185,7 @@ void _irqinterrupt(unsigned int esp){
     }
     else printf("IRQ N: %d E' arrivato qualcosa che non so gestire ", irqn);
     if(irqn<=8 && irqn!=2) outportb(MASTER_PORT, EOI);
-    else if(irqn<=16 || irqn==2){	  
+    else if(irqn<=16 || irqn==2){
       outportb(SLAVE_PORT, EOI);
       outportb(MASTER_PORT, EOI);
     }
@@ -199,5 +199,3 @@ void _int_rsv(){
 	_kputs("Eccezione Riservata - PANIC\n");
 	while(1);
 }
-
-

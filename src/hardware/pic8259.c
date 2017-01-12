@@ -58,7 +58,7 @@ IRQ(48);
   * @author Ivan Gualandri
   * @version 1.1
   */
-void init_IRQ(){
+void irq_init(){
     int i;
     asm("cli");
 // Inizializzo i 2 processori pic con ICw1 ICW2 ICW3 e ICW4
@@ -81,39 +81,39 @@ void init_IRQ(){
 	outportb(SLAVE_PORT_1,  0xFF);
 		
     //outportb (0xFC, MASTER_PORT_1);
-    enable_IRQ(KEYBOARD);    
-    enable_IRQ(TIMER);
-    enable_IRQ(TO_SLAVE_PIC);
+    irq_enable(KEYBOARD);    
+    irq_enable(TIMER);
+    irq_enable(TO_SLAVE_PIC);
           
-    setup_IRQ();
+    irq_setup();
     
         i=0;
     while(i<IRQ_NUM){
         shareHandler[i] = NULL;
         i++;
     }
-    add_IRQ_handler(1, keyboard_isr);
-    add_IRQ_handler(0, PIT_handler);
+    irq_add_handler(1, keyboard_isr);
+    irq_add_handler(0, timer_pit_handler);
     asm("sti");                  
 }
 
-void setup_IRQ(){
-    add_IDTseg(32, INT_32,PRESENT|KERNEL, 0x8);
-    add_IDTseg(33, INT_33,PRESENT|KERNEL, 0x8);
-    add_IDTseg(34, INT_34,PRESENT|KERNEL, 0x8);
-    add_IDTseg(35, INT_35,PRESENT|KERNEL, 0x8);
-    add_IDTseg(36, INT_37,PRESENT|KERNEL, 0x8);
-    add_IDTseg(38, INT_38,PRESENT|KERNEL, 0x8);
-    add_IDTseg(39, INT_39,PRESENT|KERNEL, 0x8);
-    add_IDTseg(40, INT_40,PRESENT|KERNEL, 0x8);
-    add_IDTseg(41, INT_41,PRESENT|KERNEL, 0x8);
-    add_IDTseg(42, INT_42,PRESENT|KERNEL, 0x8);
-    add_IDTseg(43, INT_43,PRESENT|KERNEL, 0x8);
-    add_IDTseg(44, INT_44,PRESENT|KERNEL, 0x8);
-    add_IDTseg(45, INT_45,PRESENT|KERNEL, 0x8);
-    add_IDTseg(46, INT_46,PRESENT|KERNEL, 0x8);
-    add_IDTseg(47, INT_47,PRESENT|KERNEL, 0x8);
-    add_IDTseg(48, INT_48,PRESENT|KERNEL, 0x8);
+void irq_setup(){
+    kernel_add_idt_seg(32, INT_32,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(33, INT_33,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(34, INT_34,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(35, INT_35,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(36, INT_37,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(38, INT_38,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(39, INT_39,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(40, INT_40,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(41, INT_41,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(42, INT_42,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(43, INT_43,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(44, INT_44,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(45, INT_45,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(46, INT_46,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(47, INT_47,PRESENT|KERNEL, 0x8);
+    kernel_add_idt_seg(48, INT_48,PRESENT|KERNEL, 0x8);
 }
 
 /** This function, enable irqs on the pic.
@@ -123,7 +123,7 @@ void setup_IRQ(){
   * @return 0 if all OK, -1 on errors
   * This function provide a tool for enabling irq from the pic processor. 
   */
-int enable_IRQ (IRQ_t irq){
+int irq_enable (IRQ_t irq){
     byte cur_mask;
     byte new_mask;
     if(irq>=0 && irq<15) {
@@ -152,7 +152,7 @@ int enable_IRQ (IRQ_t irq){
   * @return 0 if all OK, -1 on errors
   * This function provide a tool for enabling irq from the pic processor. 
   */
-int disable_IRQ(IRQ_t irq){
+int irq_disable(IRQ_t irq){
     byte cur_mask;
     if(irq<15){
         if(irq<8){
@@ -176,7 +176,7 @@ int disable_IRQ(IRQ_t irq){
   * @version 1.0
   * @return  Number of IRQ + 1 currently serving. If 0 there are no IRQ
   **/
-int get_current_irq(){
+int irq_get_current(){
     int cur_irq;
     outportb(MASTER_PORT,GET_IRR_STATUS);
     cur_irq = inportb(MASTER_PORT);
@@ -196,7 +196,7 @@ int get_current_irq(){
   * @param func function to add
   * @return  None
   **/
-void add_IRQ_handler(int irq_number, void (*func)()){
+void irq_add_handler(int irq_number, void (*func)()){
     if(irq_number<16){
         IRQ_s *tmpHandler;
         tmpHandler = shareHandler[irq_number];

@@ -49,8 +49,8 @@ void mouse_init()
 	mouse_read();
 	mouse_write (0xF4);
 	mouse_read();
-	add_IRQ_handler(12, mouse_IRQhandler);
-	enable_IRQ(12);
+	irq_add_handler(12, mouse_IRQhandler);
+	irq_enable(12);
 	_kprintOK();
 }
 
@@ -62,7 +62,7 @@ void mouse_init()
 void mouse_dead()
 {
 	printf(LNG_MOUSE_REMOVE);
-	disable_IRQ(MOUSE);
+	irq_disable(MOUSE);
 	mouse_write(0xF5); 
 	mouse_read();
 	_kprintOK();
@@ -148,10 +148,10 @@ void mouse_IRQhandler()
 	// le coordinate y stanno in mouse_bytes[2]
 	// direzione (0=destra, 1=sinitra)
 
-	//if((mouse_bytes[0] & 0x07)==0) // 0x07 forse non è un valore corretto
+	//if((mouse_bytes[0] & 0x07)==0) // 0x07 forse non ï¿½ un valore corretto
 	if((mouse_bytes[0] & 0x40)==0)
 	{
-	  //if((mouse_bytes[0] & 0x05)==0) // 0x05 forse non è un valore corretto
+	  //if((mouse_bytes[0] & 0x05)==0) // 0x05 forse non ï¿½ un valore corretto
 	  if((mouse_bytes[0] & 0x10)==0)
 	  {
 	      MousePositionX+=mouse_bytes[1];
@@ -162,10 +162,10 @@ void mouse_IRQhandler()
 	  MousePositionX+=mouse_bytes[1]/2;
    
 	// direzioni (0=su, 1=sotto)
-	//if((mouse_bytes[0] & 0x08)==0) // 0x08 forse non è un valore corretto
+	//if((mouse_bytes[0] & 0x08)==0) // 0x08 forse non ï¿½ un valore corretto
 	if((mouse_bytes[0] & 0x80)==0)
 	{
-	  //if((mouse_bytes[0] & 0x06)==0) // 0x06 forse non è un valore corretto
+	  //if((mouse_bytes[0] & 0x06)==0) // 0x06 forse non ï¿½ un valore corretto
 	  if((mouse_bytes[0] & 0x20)==0)
 	  {
 	      MousePositionY-=mouse_bytes[2];
@@ -197,7 +197,7 @@ void mouse_IRQhandler()
 	// e muove il cursore 
 	//_ksetcursor(MousePositionX, MousePositionY); // Not now
 
-	// Qui è si rilevato un problema, se il mouse si muove
+	// Qui ï¿½ si rilevato un problema, se il mouse si muove
 	// vengono rilevati tasti premuti..
 /*
 	// Rilevo i tasti premuti..
