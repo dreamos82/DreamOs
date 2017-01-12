@@ -45,7 +45,7 @@ int hst_flag;
 char cmd[CMD_LEN];
 //#define PWD_CHECK 1
 struct cmd shell_cmd[NUM_COM] = {
- { "aalogo",   aalogo,    "  Show an ascii art logo" },
+ { "aalogo",   aalogo,    "  -Show an ascii art logo" },
  { "clear",    _kclear,   "   Clear the screen" },
  { "poweroff", poweroff,  "Turn off the machine" },
  { "uname",    uname_cmd, "   Print kernel version, try uname --help for more info" },
@@ -145,7 +145,6 @@ int shell(void *args)
     scanf ("%23s",password);
     set_shadow(0);
     #endif
-    //printf("Vediamo %s pwd: %s\n", current_user.username, password);
     dbg_bochs_print("Asking username");
     ret_val = user_chk(current_user.username, password);
   } while ((!strlen(current_user.username) || ret_val!=1));
@@ -188,9 +187,6 @@ int shell(void *args)
             for (--argc; argc>=0; argc--) {
                 free (argv[argc]);
             }
-            /*for (c = 0 ; c < 10 ; c++) {
-                free(lastcmd[c]);
-            }*/
             continue;
         }
 
@@ -276,7 +272,7 @@ void _getCommand(char *prompt) {
     //Important to update these values otherwise backspace will not work!!
     shell_mess_col = _kgetcolumn();
     shell_mess_line = _kgetline();
-    
+
     cmd[0] = '\0';
     while (i < CMD_LEN && (c = getchar()) != '\n') {
         if (hst_flag) {

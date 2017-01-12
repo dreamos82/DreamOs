@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
+
  /*
   * Autore Ivan Gualandri
   * Prima versione: 27/10/2003
@@ -50,7 +50,7 @@
 #define ALIGNMENT_CHECK 17
 #define MACHINE_CHECK 18
 #define SIMD_FP_EXC 19
-		 
+
 #define SWITCH_KERNEL\
 	"movl $0x10, %edx;\
 	 movw %dx, %ds;\
@@ -59,7 +59,7 @@
 
 #define SAVE_CONTEXT\
 	"pusha;"\
- 
+
 #define SAVE_CONTEXT_EC\
         "nop;\
          xchgl %eax, (%esp);\
@@ -67,7 +67,7 @@
          pushl %edx;"\
          SWITCH_KERNEL\
          "pushl %eax;"
-		 
+
 #define EXCEPTION(n)\
     __asm__("INT_"#n":"\
 	     SAVE_CONTEXT\
@@ -102,21 +102,21 @@
             SAVE_CONTEXT\
             "call syscall_handler;"\
             RESTORE\
-            "iret;")  
-            
+            "iret;")
+
 #define RESTORE \
 		"popa;"
 
 #define RESTORE_EC \
         "popl %edx;\
          popl %ecx;\
-         popl %eax;"       
+         popl %eax;"
 
 extern IRQ_s *shareHandler[IRQ_NUM];
 
 extern void (*IntTable[IDT_SIZE])();
-void init_funcTable();
-void add_Interrupt(int i, void (*func)());
+void kernel_init_interrupt_function_table();
+void kernel_add_interrupt_function_table(int i, void (*func)());
 void _globalException(int n, int error);
 void _irqinterrupt();
 void _int_rsv();

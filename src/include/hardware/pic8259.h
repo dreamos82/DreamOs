@@ -27,7 +27,7 @@
 #define MASTER_PORT_1 0x21
 #define SLAVE_PORT_1 0xA1
 
-#define ICW_1 0x11 
+#define ICW_1 0x11
 
 #define ICW_2_M 0x20
 #define ICW_2_S 0x28
@@ -63,7 +63,7 @@ typedef enum irq_types{
     SECOND_HD
 } IRQ_t;
 
-/*! 
+/*!
     \struct IRQ_s
     \brief Struttura dati per gestire gli IRQ  condivisi
 */
@@ -75,10 +75,10 @@ typedef struct IRQ_struct {
 extern byte master_cur_mask;
 extern byte slave_cur_mask;
 
-void init_IRQ();
-void setup_IRQ();
-int enable_IRQ(IRQ_t);
-int disable_IRQ(IRQ_t);
-int get_current_irq();
-void add_IRQ_handler(int,void (*func)());
+void irq_init();
+void irq_setup();
+int irq_enable(IRQ_t);
+int irq_disable(IRQ_t);
+int irq_get_current();
+void irq_add_handler(int,void (*func)());
 #endif

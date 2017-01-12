@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
+
  /*
   * Autore Ivan Gualandri
   * Prima versione: 27/10/2003
@@ -50,7 +50,7 @@
 #define R_WRITE_A 0x03
 
 /*!  \struct gdt_desc
-     \brief Struttura dati che rappresenta un descrittore della GDT                             
+     \brief Struttura dati che rappresenta un descrittore della GDT
  */
 typedef struct gdt_desc {
 	unsigned short int segment_limit_low; /**<Primi 16 bit del limite (20 bit in totale)*/
@@ -69,8 +69,8 @@ typedef struct gdt_r {
 	unsigned int gdt_base;/**< l'indirizzo iniziale della GDT*/
 } __attribute__((packed)) GDT_Register;
 
-void set_gdtr(GDT_Descriptor *, unsigned short int, int, int);
-void add_GDTseg(int, unsigned int, unsigned int,unsigned char, unsigned char);
-void init_gdt();
+void kernel_set_gdtr(GDT_Descriptor *, unsigned short int, int, int);
+void kernel_add_gdt_seg(int, unsigned int, unsigned int,unsigned char, unsigned char);
+void kernel_init_gdt();
 
 #endif
