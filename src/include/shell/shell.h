@@ -26,17 +26,17 @@
 #define DEF_COM 18
 #define HST_LEN 10
 
-#define RESET_POSIZ posiz = HST_LEN - 1;
+#define RESET_POS   pos = HST_LEN - 1;
 
-#define CHECK_POSIZ if (posiz < free_slots)\
-                        RESET_POSIZ\
-                    else if (posiz > HST_LEN - 1)\
-                        posiz = free_slots;
+#define CHECK_POS   if (pos < free_slots)\
+                        RESET_POS\
+                    else if (pos > HST_LEN - 1)\
+                        pos = free_slots;
 
-#define INC_POSIZ ++posiz;\
-                    CHECK_POSIZ
-#define DEC_POSIZ --posiz;\
-                    CHECK_POSIZ
+#define INC_POS     ++pos;\
+                        CHECK_POS
+#define DEC_POS     --pos;\
+                        CHECK_POS
 
 
 struct cmd {

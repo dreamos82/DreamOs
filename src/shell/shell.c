@@ -75,7 +75,7 @@ struct cmd shell_cmd[NUM_COM] = {
  * argv[n] = opzioni successive
  */
 
-int free_slots = HST_LEN, posiz = HST_LEN - 1, c = 0, limit = 1;
+int free_slots = HST_LEN, pos = HST_LEN - 1, c = 0, limit = 1;
 char *lastcmd[HST_LEN] = {};
 //Index of history array, where we save the command
 int write_index = HST_LEN - 1;
@@ -220,8 +220,8 @@ void history(char *cmd_pass) {
         //We should always clean before copying data inside
         memset(lastcmd[write_index], 0, 30);
         strcpy(lastcmd[write_index], cmd_pass);
-        //We must be sure to set posiz at the same last saved command position
-        posiz = write_index;
+        //We must be sure to set pos at the same last saved command position
+        pos = write_index;
 
         #ifdef DEBUG
         //Prints the history buffer
@@ -256,17 +256,17 @@ void history_start(void) {
 	}
 
     //Printing the current history command
-    printf("%s", lastcmd[posiz]);
+    printf("%s", lastcmd[pos]);
     //We copy the history command to cmd
     memset(cmd, 0, CMD_LEN);
-    strcpy(cmd, lastcmd[posiz]);
+    strcpy(cmd, lastcmd[pos]);
     hst_flag = 1;
 
     if (sc_arrow == KEY_UPARROW) {
-        DEC_POSIZ;
+        DEC_POS;
     }
 	else if (sc_arrow == KEY_DOWNARROW) {
-        INC_POSIZ;
+        INC_POS;
     }
 }
 
