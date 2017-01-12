@@ -10,6 +10,12 @@ MEMORY = LEGACY
 GENDIR = generated
 include Makefile.am
 
+ifeq ($(shell which sudo),)
+	SU = su -c
+else
+	SU = sudo bash -c
+endif
+
 CFLAGS = -nostdlib\
 	-nostdinc\
 	-g\
@@ -133,10 +139,10 @@ utils:
 
 filesystem:
 	mkdir -p boot/os
-	su -c "mount -o loop boot/grub.img boot/os && cp initfs boot/os/initfs && umount boot/os"
+	$(SU) "mount -o loop boot/grub.img boot/os && cp initfs boot/os/initfs && umount boot/os"
 
 img:
-	su -c "mount -o loop boot/grub.img boot/os && cp $(GENDIR)/dreamos.img boot/os/boot/grub/ && umount boot/os"
+	$(SU) "mount -o loop boot/grub.img boot/os && cp $(GENDIR)/dreamos.img boot/os/boot/grub/ && umount boot/os"
 
 vers:
 	 sed -i -e "/^#define VERSION/s/\".*\"/\"$(VERSION)\"/" src/include/version.h
