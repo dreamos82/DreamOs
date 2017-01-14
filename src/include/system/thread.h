@@ -25,20 +25,23 @@
 
 #include "support_defs.h"
 
-struct thread_list;
-
 typedef struct
 {
   uint32_t esp, ebp, ebx, esi, edi, eflags;
   uint32_t id;                  // Thread ID.
 } thread_t;
 
+typedef struct thread_list
+{
+  thread_t *thread;
+  struct thread_list *next;
+} thread_list_t;
 
 thread_t* kernel_init_threading();
 
 // If stack is 0 a default one is created
 thread_t* kernel_create_thread(int (*fn)(void*), void* arg, uint32_t* stack);
 
-void switch_thread(struct thread_list* next);
+void switch_thread(thread_list_t* next);
 
 #endif

@@ -319,6 +319,11 @@ void try_taskdel(){
 void test_tasklist() {
     thread_list_t *iterator;
 
+    printf("Running queue\n");
     for (iterator = kernel_get_running_queue(); iterator->next ; iterator = iterator->next)
-        printf("Running: %u\n", iterator->thread->id);
+        printf("%u\n", iterator->thread->id);
+
+    printf("Ready queue\n");
+    for (iterator = kernel_get_ready_queue(); iterator->next ; iterator = iterator->next)
+        printf("%u\n", iterator->thread->id);
 }

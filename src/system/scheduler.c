@@ -78,6 +78,30 @@ void kernel_deactivate_thread(thread_t *t)
   }
 }
 
+void kernel_terminate_thread(thread_t* t) {
+    //Before we remove thread t from ready_queue
+    kernel_deactivate_thread(t);
+    // Attempt to find the thread in the running queue.
+    thread_list_t *iterator = running_queue;
+
+    // Special case if the thread is first in the queue.
+    if (iterator->thread == t) {
+        running_queue = iterator->next;
+        free (iterator);
+        return;
+    }
+    while (iterator->next)
+    {
+        if (iterator->next->thread == t) {
+            thread_list_t *tmp = iterator->next;
+            iterator->next = tmp->next;
+            free (tmp);
+            return;
+        }
+        iterator = iterator->next;
+    }
+}
+
 thread_list_t *kernel_get_ready_queue() {
     return ready_queue;
 }
@@ -102,6 +126,8 @@ void schedule ()
   thread_list_t *new_thread = ready_queue;
 
   ready_queue = ready_queue->next;
+  new_thread->next = running_queue;
+  running_queue = new_thread;
 
   // Switch to the new thread.
   switch_thread (new_thread);

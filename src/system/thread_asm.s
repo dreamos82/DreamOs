@@ -1,9 +1,9 @@
-        [global switch_thread]
+        [global switch_thread_deprecated]
         [global _create_thread]
         [extern running_queue]
         [extern thread_exit]
         
-switch_thread:
+switch_thread_deprecated:
         mov eax, [running_queue]
         mov eax, [eax]
 
