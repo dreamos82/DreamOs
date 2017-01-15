@@ -26,18 +26,6 @@
 #define DEF_COM 18
 #define HST_LEN 10
 
-#define RESET_POS   pos = HST_LEN - 1;
-
-#define CHECK_POS   if (pos < free_slots)\
-                        RESET_POS\
-                    else if (pos > HST_LEN - 1)\
-                        pos = free_slots;
-
-#define INC_POS     ++pos;\
-                        CHECK_POS
-#define DEC_POS     --pos;\
-                        CHECK_POS
-
 
 struct cmd {
 	char cmdname[CMD_LEN];
