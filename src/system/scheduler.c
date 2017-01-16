@@ -129,8 +129,6 @@ void schedule ()
   ready_queue = ready_queue->next;
   //Linking the new_thread to the running_queue
   new_thread->next = running_queue;
-  //The running_queue now has got a new thread.
-  running_queue = new_thread;
 
   // Switch to the new thread.
   switch_thread (new_thread);

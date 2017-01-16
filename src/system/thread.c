@@ -35,13 +35,13 @@ void thread_exit ();
 extern void _create_thread(int (*)(void*), void*, uint32_t*, thread_t*);
 
 #define DEFAULT_STACK_SIZE 0x100000
-#define E_NEWSCHED 1
 
 
 thread_t *kernel_init_threading ()
 {
   thread_t *thread = kmalloc (sizeof (thread_t));
   thread->id  = next_tid++;
+  thread->name  = "Kernel";
   
   current_thread = thread;
 
@@ -59,6 +59,7 @@ thread_t *kernel_create_thread (int (*fn)(void*), void *arg, uint32_t *stack)
   thread_t *thread = kmalloc (sizeof (thread_t));
   memset (thread, 0, sizeof (thread_t));
   thread->id = next_tid++;
+  thread->name = arg;
   
   *--stack = (uint32_t)arg;
   *--stack = (uint32_t)&thread_exit;
@@ -86,7 +87,7 @@ void thread_exit()
 }
 
 #ifdef E_NEWSCHED
-void switch_thread (thread_list_t *next)
+void deprecated_switch_thread (thread_list_t *next)
 {
       asm ("mov %%esp, %0" : "=r" (current_thread->esp));
       asm ("mov %%ebp, %0" : "=r" (current_thread->ebp));

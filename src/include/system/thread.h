@@ -29,6 +29,7 @@ typedef struct
 {
   uint32_t esp, ebp, ebx, esi, edi, eflags;
   uint32_t id;                  // Thread ID.
+  char *name;
 } thread_t;
 
 typedef struct thread_list
