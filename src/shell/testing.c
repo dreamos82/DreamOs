@@ -30,6 +30,7 @@
 #include <user_shell.h>
 #include <thread.h>
 #include <vm.h>
+#include <scheduler.h>
 
 char *module_start;
 file_descriptor_t fd_list[_SC_OPEN_MAX];
@@ -313,4 +314,15 @@ void try_taskadd(){
 void try_taskdel(){
   //task_t* myTask = dequeue_task();
   //test_tasklist();
+}
+
+void test_tasklist() {
+    thread_list_t *iterator;
+
+    printf("PID\tCMD\n");
+    for (iterator = kernel_get_ready_queue(); iterator ; iterator = iterator->next)
+        printf("%u\t%s\n", iterator->thread->id, iterator->thread->cmd);
+
+    iterator = kernel_get_running_thread();
+    printf("%u\t%s\n", iterator->thread->id, iterator->thread->cmd);
 }

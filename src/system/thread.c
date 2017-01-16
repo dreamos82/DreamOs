@@ -40,6 +40,7 @@ thread_t *kernel_init_threading ()
 {
   thread_t *thread = kmalloc (sizeof (thread_t));
   thread->id  = next_tid++;
+  thread->cmd = "Kernel";
   
   current_thread = thread;
 
@@ -57,6 +58,7 @@ thread_t *kernel_create_thread (int (*fn)(void*), void *arg, uint32_t *stack)
   thread_t *thread = kmalloc (sizeof (thread_t));
   memset (thread, 0, sizeof (thread_t));
   thread->id = next_tid++;
+  thread->cmd = arg;
   
   *--stack = (uint32_t)arg;
   *--stack = (uint32_t)&thread_exit;
