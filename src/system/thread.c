@@ -76,7 +76,7 @@ void thread_exit()
 {
   register uint32_t val asm ("eax");
 
-  printf ("Thread exited with value %d\n", val);
+  printf ("Thread %u exited with value %d\n", current_thread->id, val);
 
   for (;;) ;
 }

@@ -22,6 +22,7 @@ switch_thread:
 
         mov [running_thread], eax
         mov eax, [eax]
+        mov [current_thread], eax
         
         mov esp, [eax+0]
         mov ebp, [eax+4]
