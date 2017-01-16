@@ -38,7 +38,7 @@ void try_taskdel();
 void try_taskadd();
 void test_tasklist();
 int task_testsecond(void *);
-void task_testthird();
+int task_testthird(void *args);
 int task_test(void *);
 
 #endif

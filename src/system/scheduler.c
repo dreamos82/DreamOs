@@ -125,8 +125,11 @@ void schedule ()
   running_queue->next = 0;
   thread_list_t *new_thread = ready_queue;
 
+  //Removing the first thread in ready_queue
   ready_queue = ready_queue->next;
+  //Linking the new_thread to the running_queue
   new_thread->next = running_queue;
+  //The running_queue now has got a new thread.
   running_queue = new_thread;
 
   // Switch to the new thread.

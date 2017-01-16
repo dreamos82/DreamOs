@@ -76,7 +76,10 @@ void thread_exit()
 {
   register uint32_t val asm ("eax");
 
+  //TODO: printf will need a Mutex
+  cli();
   printf ("Thread %u exited with value %d\n", current_thread->id, val);
+  sti();
 
   kernel_terminate_thread(current_thread);
   for (;;) ;
