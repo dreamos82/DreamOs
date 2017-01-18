@@ -1,44 +1,62 @@
 # Please set your kernel preference versions..
 # Enjoy your self :)
 # Osiris at osiris@Devils.com
-
+SHELL = /bin/bash
 NAME = DreamOS
 VERSION = 0
 PATCHLEVEL = 3
 EXTRAVERSION = -trunk
 MEMORY = LEGACY
 GENDIR = generated
+OS = $(shell uname)
+ISWINDOWS = $(if $(filter CYGWIN MINGW, $(OS)),true,false)
+SU = $(if $(filter, $(shell which sudo)), su -c, sudo bash -c)
 include Makefile.am
 
-ifeq ($(shell which sudo),)
-	SU = su -c
-else
-	SU = sudo bash -c
-endif
-
+ifeq ($(ISWINDOWS), false)
 CFLAGS = -nostdlib\
-	-nostdinc\
-	-g\
-	-fomit-frame-pointer\
-	-fno-builtin\
-	-fno-stack-protector\
-	-Wall\
-	-Werror\
-	-march=i686\
-	-m32\
-	-std=gnu99\
-	-I./src/include\
-	-I./src/include/io\
-	-I./src/include/drivers\
-	-I./src/include/libc\
-	-I./src/include/hardware\
-	-I./src/include/system\
-	-I./src/include/shell\
-	-I./src/include/misc\
-	-I./src/include/fs\
-	-I./src/include/sys\
-	-DBOCHS_DEBUG\
-	-D$(MEMORY)
+-nostdinc\
+-g\
+-fomit-frame-pointer\
+-fno-builtin\
+-fno-stack-protector\
+-Wall\
+-Werror\
+-march=i686\
+-m32\
+-std=gnu99\
+-I./src/include\
+-I./src/include/io\
+-I./src/include/drivers\
+-I./src/include/libc\
+-I./src/include/hardware\
+-I./src/include/system\
+-I./src/include/shell\
+-I./src/include/misc\
+-I./src/include/fs\
+-I./src/include/sys\
+-DBOCHS_DEBUG\
+-D$(MEMORY)
+else
+CFLAGS = -ffreestanding\
+-lgcc\
+-g\
+-Wall\
+-Werror\
+-std=gnu99\
+-I./src/include\
+-I./src/include/io\
+-I./src/include/drivers\
+-I./src/include/libc\
+-I./src/include/hardware\
+-I./src/include/system\
+-I./src/include/shell\
+-I./src/include/misc\
+-I./src/include/fs\
+-I./src/include/sys\
+-DBOCHS_DEBUG\
+-D$(MEMORY)
+endif
 
 OBJ = $(GENDIR)/kernel.o\
 	$(GENDIR)/io/video.o\
@@ -87,8 +105,13 @@ $(GENDIR)/bl.img : src/multicatcher.s
 	$(ASM) -f elf ./src/multicatcher.s -o ./$(GENDIR)/bl.img
 
 $(GENDIR)/kernel.bin: $(OBJ)
-	$(LD) -melf_i386 -static --oformat elf32-i386 --output=./$(GENDIR)/kernel.bin --script=src/kernel.lds ./$(GENDIR)/bl.img $(OBJ) -Ttext 0x100000 -Map ./$(GENDIR)/kernel.map
+	if test "$(ISWINDOWS)" = "false"; then \
+		$(LD) -melf_i386 -static --oformat elf32-i386 --output=./$(GENDIR)/kernel.bin --script=src/kernel.lds ./$(GENDIR)/bl.img $(OBJ) -Ttext 0x100000 -Map ./$(GENDIR)/kernel.map; \
+	else \
+		$(LD) -nostdlib -static --oformat elf32-i386 --output=./$(GENDIR)/kernel.bin --script=src/kernel.lds ./$(GENDIR)/bl.img $(OBJ) -Ttext 0x100000 -Map ./$(GENDIR)/kernel.map; \
+	fi
 	make -f utils/Makefile
+
 
 $(GENDIR)/kernel.o: src/kernel.c
 $(GENDIR)/fs/vfs.o: src/fs/vfs.c
@@ -139,10 +162,22 @@ utils:
 
 filesystem:
 	mkdir -p boot/os
-	$(SU) "mount -o loop boot/grub.img boot/os && cp initfs boot/os/initfs && umount boot/os"
+	if test "$(ISWINDOWS)" = "false"; then \
+		$(SU) "mount -o loop boot/grub.img boot/os && cp initfs boot/os/initfs && umount boot/os"; \
+	else \
+		imdisk -a -t file -o rw,fd -f boot\\grub.img -m z:; \
+		cp initfs z:\\; \
+		imdisk -d -m z:; \
+	fi
 
 img:
-	$(SU) "mount -o loop boot/grub.img boot/os && cp $(GENDIR)/dreamos.img boot/os/boot/grub/ && umount boot/os"
+	if test "$(ISWINDOWS)" = "false"; then \
+		$(SU) "mount -o loop boot/grub.img boot/os && cp $(GENDIR)/dreamos.img boot/os/boot/grub/ && umount boot/os"; \
+	else \
+		imdisk -a -t file -o rw,fd -f boot\\grub.img -m z:; \
+		cp $(GENDIR)/dreamos.img z:\\boot\\grub\\; \
+		imdisk -d -m z:; \
+	fi
 
 vers:
 	 sed -i -e "/^#define VERSION/s/\".*\"/\"$(VERSION)\"/" src/include/version.h
@@ -173,4 +208,3 @@ it:
 
 en:
 	cp src/include/lng/en.h src/include/use.h
-
