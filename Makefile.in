@@ -8,13 +8,8 @@ PATCHLEVEL = 3
 EXTRAVERSION = -trunk
 MEMORY = LEGACY
 GENDIR = generated
-include Makefile.am
-
-ifeq ($(shell which sudo),)
-	SU = su -c
-else
-	SU = sudo bash -c
-endif
+SU = @SU@
+include Makefile.mk
 
 CFLAGS = -nostdlib\
 	-nostdinc\
