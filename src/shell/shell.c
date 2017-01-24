@@ -40,8 +40,8 @@
 #include <user_shell.h>
 #include <debug.h>
 
-#define RESET_POS_MAX   pos = HST_LEN - 1
-#define RESET_POS_MIN   pos = free_slots
+#define RESET_MAX(A)   A = HST_LEN - 1
+#define RESET_MIN(A)   A = free_slots
 
 void _getCommand(char *);
 void _debug_history_stack(void);
@@ -219,21 +219,17 @@ void history(char *cmd_pass) {
     if (prev_index > HST_LEN - 1)
         prev_index = free_slots;
 
-    //We save to history only commands NOT equal to previous one
-    if (strcmp(lastcmd[prev_index], cmd) != 0) {
-        //We should always clean before copying data inside
-        memset(lastcmd[write_index], 0, 30);
-        strcpy(lastcmd[write_index], cmd_pass);
-        //We must be sure to set pos at the same last saved command position
-        pos = write_index - 1;
+    //We should always clean before copying data inside
+    memset(lastcmd[write_index], 0, 30);
+    strcpy(lastcmd[write_index], cmd_pass);
+    pos = write_index;
 
-        --write_index;
-        if (write_index < 0)
-            write_index = HST_LEN - 1;
+    --write_index;
+    if (write_index < 0)
+        RESET_MAX(write_index);
 
-        if ( free_slots > 0 )
-            --free_slots;
-    }
+    if ( free_slots > 0 )
+        --free_slots;
 
     #ifdef DEBUG
         _debug_history_stack();
@@ -243,7 +239,6 @@ void history(char *cmd_pass) {
 //downarrow and uparrow keys handler to get commands from history buffer
 void history_start(const int key) {
     int delete = 0, max_limit = strlen(cmd);
-
     //Backspace handling
     if (limit < max_limit) {
 		limit = max_limit;
@@ -254,21 +249,22 @@ void history_start(const int key) {
 		delete++;
 	}
 
-    if (key == KEY_UPARROW)
-        ++pos;
-	else if (key == KEY_DOWNARROW)
-        --pos;
-    if (pos < free_slots)
-        RESET_POS_MAX;
-    else if (pos > HST_LEN - 1)
-        RESET_POS_MIN;
-
     //Showing picked history command
     printf("%s", lastcmd[pos]);
     //We copy the history command to cmd
     memset(cmd, 0, CMD_LEN);
     strcpy(cmd, lastcmd[pos]);
     hst_flag = 1;
+
+    if (key == KEY_UPARROW)
+        ++pos;
+	else if (key == KEY_DOWNARROW)
+        --pos;
+
+    if (pos < free_slots)
+        RESET_MAX(pos);
+    else if (pos > HST_LEN - 1)
+        RESET_MIN(pos);
 }
 
 //Input shell command (a private hacked version of gets)
