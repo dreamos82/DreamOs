@@ -173,4 +173,3 @@ it:
 
 en:
 	cp src/include/lng/en.h src/include/use.h
-
