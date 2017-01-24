@@ -69,9 +69,12 @@ thread_t *kernel_create_thread (int (*fn)(void*), void *arg, uint32_t *stack)
 
 void thread_exit()
 {
-  register uint32_t val asm ("eax");
+  uint32_t exit_value = 0;
+  asm("movl %%eax, %0" : "=r" (exit_value));
 
-  printf ("Thread exited with value %d\n", val);
+  thread_t* current = kernel_get_current_thread();
+
+  printf ("Thread %d exited with value %d\n", current->id, exit_value);
 
   for (;;) ;
 }
