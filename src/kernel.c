@@ -118,8 +118,8 @@ int main_loop(struct multiboot_info *boot_info)
 	kernel_elf = elf_from_multiboot(boot_info);
 
 	asm volatile ("sti");
-	thread_t* scheduler_thread = kernel_init_threading();
-    kernel_init_scheduler(scheduler_thread);
+	thread_t* kernel_thread = kernel_init_threading();
+    kernel_init_scheduler(kernel_thread);
     _kprintOK();
     printf(LNG_PIT8253);
     printf("----\n");
