@@ -78,6 +78,12 @@ void kernel_deactivate_thread(thread_t *t)
   }
 }
 
+thread_t*
+kernel_get_current_thread()
+{
+	return current_thread->thread;
+}
+
 void schedule ()
 {
   if (!ready_queue)

@@ -39,6 +39,8 @@ void kernel_activate_thread(thread_t* thread);
 
 void kernel_deactivate_thread(thread_t* thread);
 
+thread_t* kernel_get_current_thread();
+
 void schedule();
 
 #endif
