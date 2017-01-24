@@ -62,6 +62,7 @@ thread_t *kernel_create_thread (int (*fn)(void*), void *arg, uint32_t *stack)
   thread->esp = (uint32_t)stack;
   thread->ebp = 0;
   thread->eflags = 0x200; // Interrupts enabled.
+  thread->exit = 0;
   kernel_activate_thread(thread);
 
   return thread;
@@ -75,6 +76,8 @@ void thread_exit()
   thread_t* current = kernel_get_current_thread();
 
   printf ("Thread %d exited with value %d\n", current->id, exit_value);
+
+  current->exit = 1;
 
   for (;;) ;
 }
