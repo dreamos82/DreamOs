@@ -119,7 +119,7 @@ void poweroff()
 void uname_cmd()
 {
   struct utsname *infos;
-  infos = kmalloc(sizeof(struct utsname *));
+  infos = kmalloc(sizeof(struct utsname));
   uname(infos);
   if (!(strcmp(argv[1], "-a")) || !(strcmp(argv[1], "--all")))
     printf("%s %s.%s%s Hash: %s #1 CEST 2013 %s\n", infos->sysname, infos->version, infos->release, EXTRAVERSION,REV_NUM, cpu_vendor);
