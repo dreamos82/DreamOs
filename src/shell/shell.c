@@ -40,23 +40,15 @@
 #include <user_shell.h>
 #include <debug.h>
 
-#define RESET_POS   pos = HST_LEN - 1;
-
-#define CHECK_POS   if (pos < free_slots)\
-                        RESET_POS\
-                    else if (pos > HST_LEN - 1)\
-                        pos = free_slots;
-
-#define INC_POS     ++pos;\
-                        CHECK_POS
-#define DEC_POS     --pos;\
-                        CHECK_POS
+#define RESET_POS_MAX   pos = HST_LEN - 1
+#define RESET_POS_MIN   pos = free_slots
 
 void _getCommand(char *);
+void _debug_history_stack(void);
 
 userenv_t current_user;
 int hst_flag;
-char cmd[CMD_LEN];
+char cmd[CMD_LEN]; //history stack
 //#define PWD_CHECK 1
 struct cmd shell_cmd[NUM_COM] = {
  { "aalogo",   aalogo,    "  Show an ascii art logo" },
@@ -233,14 +225,7 @@ void history(char *cmd_pass) {
         memset(lastcmd[write_index], 0, 30);
         strcpy(lastcmd[write_index], cmd_pass);
         //We must be sure to set pos at the same last saved command position
-        pos = write_index;
-
-        #ifdef DEBUG
-        //Prints the history buffer
-        int i;
-        for (i = 0 ; i < HST_LEN ; ++i)
-                printf("History[%d]: %s\n", i, lastcmd[i]);
-        #endif
+        pos = write_index - 1;
 
         --write_index;
         if (write_index < 0)
@@ -249,12 +234,14 @@ void history(char *cmd_pass) {
         if ( free_slots > 0 )
             --free_slots;
     }
+
+    #ifdef DEBUG
+        _debug_history_stack();
+    #endif
 }
 
 //downarrow and uparrow keys handler to get commands from history buffer
-void history_start(void) {
-    int sc_arrow = inportb(0x60);
-
+void history_start(const int key) {
     int delete = 0, max_limit = strlen(cmd);
 
     //Backspace handling
@@ -267,19 +254,21 @@ void history_start(void) {
 		delete++;
 	}
 
-    //Printing the current history command
+    if (key == KEY_UPARROW)
+        ++pos;
+	else if (key == KEY_DOWNARROW)
+        --pos;
+    if (pos < free_slots)
+        RESET_POS_MAX;
+    else if (pos > HST_LEN - 1)
+        RESET_POS_MIN;
+
+    //Showing picked history command
     printf("%s", lastcmd[pos]);
     //We copy the history command to cmd
     memset(cmd, 0, CMD_LEN);
     strcpy(cmd, lastcmd[pos]);
     hst_flag = 1;
-
-    if (sc_arrow == KEY_UPARROW) {
-        DEC_POS;
-    }
-	else if (sc_arrow == KEY_DOWNARROW) {
-        INC_POS;
-    }
 }
 
 //Input shell command (a private hacked version of gets)
@@ -313,4 +302,22 @@ void _getCommand(char *prompt) {
         cmd[i++] = c;
         cmd[i] = '\0';
     }
+}
+
+void _debug_history_stack(void) {
+    //Prints the history stack with current indexes values
+    int i;
+    printf("\n------------------------------\n");
+    printf("        Debug history\n");
+    printf("------------------------------\n");
+    for (i = 0 ; i < HST_LEN ; ++i) {
+        if (i == write_index)
+            printf("w"); //write_index value is here
+        else if (i == pos)
+            printf("->"); //pos value is here
+
+        printf("\tHistory[%d]: %s", i, lastcmd[i]);
+        putchar('\n');
+    }
+    printf("#free slots: %d\n", free_slots);
 }
