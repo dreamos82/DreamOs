@@ -522,7 +522,7 @@ void tester(){
 					{ "try_mapaddress", try_mapaddress},
 					{ "try_taskdel", try_taskdel},
 					{ "try_taskadd", try_taskadd},
-					//{ "try_tasklist", test_tasklist},
+					{ "try_tasklist", test_tasklist},
 					{ "--help", help_tester },
 					};
 	if (argc != 2) {
@@ -575,7 +575,7 @@ void newfile(){
 }
 
 void ps(){
-	//printf("Stay tuned\n");
-	//test_tasklist();
+	printf("Stay tuned\n");
+	test_tasklist();
 }
 

@@ -1,10 +1,11 @@
         [global switch_thread]
         [global _create_thread]
-        [extern current_thread]
+        [extern running_thread] ;This is a thread_list_t *
+        [extern current_thread] ;This is a thread_t *
         [extern thread_exit]
         
 switch_thread:
-        mov eax, [current_thread]
+        mov eax, [running_thread]
         mov eax, [eax]
 
         mov [eax+0],  esp
@@ -19,8 +20,9 @@ switch_thread:
 
         mov eax, [esp+4]
 
-        mov [current_thread], eax
+        mov [running_thread], eax
         mov eax, [eax]
+        mov [current_thread], eax
         
         mov esp, [eax+0]
         mov ebp, [eax+4]
