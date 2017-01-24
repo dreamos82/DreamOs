@@ -25,6 +25,7 @@
 #include "scheduler.h"
 #include <stdio.h>
 #include <string.h>
+#include <io.h>
 
 thread_t *current_thread;
 uint32_t next_tid = 0;
@@ -40,6 +41,7 @@ thread_t *kernel_init_threading ()
 {
   thread_t *thread = kmalloc (sizeof (thread_t));
   thread->id  = next_tid++;
+  thread->name  = "Kernel";
   
   current_thread = thread;
 
@@ -57,6 +59,7 @@ thread_t *kernel_create_thread (int (*fn)(void*), void *arg, uint32_t *stack)
   thread_t *thread = kmalloc (sizeof (thread_t));
   memset (thread, 0, sizeof (thread_t));
   thread->id = next_tid++;
+  thread->name = arg;
   
   *--stack = (uint32_t)arg;
   *--stack = (uint32_t)&thread_exit;
@@ -74,43 +77,36 @@ void thread_exit()
 {
   register uint32_t val asm ("eax");
 
-  printf ("Thread exited with value %d\n", val);
+  //TODO: printf will need a Mutex
+  cli();
+  printf ("Thread %u exited with value %d\n", current_thread->id, val);
+  sti();
 
+  kernel_terminate_thread(current_thread);
   for (;;) ;
 }
 
 #ifdef E_NEWSCHED
-void switch_thread (struct thread_list *next)
-
+void deprecated_switch_thread (thread_list_t *next)
 {
-      //asm ("mov %%eax, %0" : : "r" (current_thread));
-
       asm ("mov %%esp, %0" : "=r" (current_thread->esp));
       asm ("mov %%ebp, %0" : "=r" (current_thread->ebp));
       asm ("mov %%ebx, %0" : "=r" (current_thread->ebx));
       asm ("mov %%esi, %0" : "=r" (current_thread->esi));
       asm ("mov %%edi, %0" : "=r" (current_thread->edi));
 
-      //asm ("pushf");
-      //asm ("pop %ecx");
-
-      //[eax+20], ecx
-      //asm ("mov %%ecx, %0" : "=r" (current_thread->ecx));
+      asm ("pushf");
+      asm ("pop %0" : "=r" (current_thread->eflags));
 
       current_thread = next->thread;
 
-      //asm ("mov %0, %%eax" : : "r" (current_thread));
+      asm ("mov %0, %%esp" : : "r" (current_thread->esp));
+      asm ("mov %0, %%ebp" : : "r" (current_thread->ebp));
+      asm ("mov %0, %%ebx" : : "r" (current_thread->ebx));
+      asm ("mov %0, %%edi" : : "r" (current_thread->edi));
+      asm ("mov %0, %%esi" : : "r" (current_thread->esi));
 
-      asm ("mov %0, %%esp" : : "r" (next->thread->esp));
-      asm ("mov %0, %%ebp" : : "r" (next->thread->ebp));
-      asm ("mov %0, %%ebx" : : "r" (next->thread->ebx));
-      asm ("mov %0, %%edi" : : "r" (next->thread->edi));
-      asm ("mov %0, %%esi" : : "r" (next->thread->esi));
-
-      //mov eax, [eax+20]
-      //asm ("mov %0, %%eax" : : "r" (next->thread->ecx));
-
-      //asm ("push %eax");
-      //asm ("popf");
+      asm ("push %0" : : "r" (current_thread->eflags));
+      asm ("popf");
 }
 #endif

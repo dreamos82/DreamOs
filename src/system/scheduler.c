@@ -24,13 +24,13 @@
 #include "kheap.h"
 
 thread_list_t *ready_queue = 0;
-thread_list_t *current_thread = 0;
+thread_list_t *running_queue = 0;
 
 void kernel_init_scheduler (thread_t *initial_thread)
 {
-  current_thread = (thread_list_t*) kmalloc (sizeof (thread_list_t));
-  current_thread->thread = initial_thread;
-  current_thread->next = 0;
+  running_queue = (thread_list_t*) kmalloc (sizeof (thread_list_t));
+  running_queue->thread = initial_thread;
+  running_queue->next = 0;
   ready_queue = 0;
 }
 
@@ -66,16 +66,48 @@ void kernel_deactivate_thread(thread_t *t)
     free (iterator);
     return;
   }
-
   while (iterator->next)
   {
     if (iterator->next->thread == t) {
       thread_list_t *tmp = iterator->next;
       iterator->next = tmp->next;
       free (tmp);
+      return;
     }
     iterator = iterator->next;
   }
+}
+
+void kernel_terminate_thread(thread_t* t) {
+    //Before we remove thread t from ready_queue
+    kernel_deactivate_thread(t);
+    // Attempt to find the thread in the running queue.
+    thread_list_t *iterator = running_queue;
+
+    // Special case if the thread is first in the queue.
+    if (iterator->thread == t) {
+        running_queue = iterator->next;
+        free (iterator);
+        return;
+    }
+    while (iterator->next)
+    {
+        if (iterator->next->thread == t) {
+            thread_list_t *tmp = iterator->next;
+            iterator->next = tmp->next;
+            free (tmp);
+            return;
+        }
+        iterator = iterator->next;
+    }
+}
+
+thread_list_t *kernel_get_ready_queue() {
+    return ready_queue;
+}
+
+thread_list_t *kernel_get_running_queue() {
+    return running_queue;
 }
 
 void schedule ()
@@ -89,11 +121,14 @@ void schedule ()
     iterator = iterator->next;
 
   // Add the old thread to the end of the queue, and remove it from the start.
-  iterator->next = current_thread;
-  current_thread->next = 0;
+  iterator->next = running_queue;
+  running_queue->next = 0;
   thread_list_t *new_thread = ready_queue;
 
+  //Removing the first thread in ready_queue
   ready_queue = ready_queue->next;
+  //Linking the new_thread to the running_queue
+  new_thread->next = running_queue;
 
   // Switch to the new thread.
   switch_thread (new_thread);

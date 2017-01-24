@@ -30,6 +30,7 @@
 #include <user_shell.h>
 #include <thread.h>
 #include <vm.h>
+#include <scheduler.h>
 
 char *module_start;
 file_descriptor_t fd_list[_SC_OPEN_MAX];
@@ -273,29 +274,27 @@ void try_mapaddress(){
 void try_tasksetup(){
 	thread_t* thread1;
 	thread_t* thread2;
+	printf("Testing task creation functions:\n");
 
-	asm("cli;");
+	cli();
 	thread1 = kernel_create_thread(task_test, "test", 0);
-	printf("Testing task creation functions:\n");
 	printf("Pid Obtained: %d\n", thread1->id);
-
 	thread2 = kernel_create_thread(task_testsecond, "testsecond", 0);
-	printf("Testing task creation functions:\n");
-	printf("Pid Obtained: %d\n", thread2->id);
-	asm("sti;");
+    printf("Pid Obtained: %d\n", thread2->id);
+    sti();
 }
 
 int task_test(void *args){
-	printf("A!!!\n");
+	printf("New thread: %s\n", args);
     return 0;
 }
 
-int task_testsecond(void *args){  
-  printf("B!!!!\n");
+int task_testsecond(void *args){
+  printf("New thread: %s\n", args);
   return 0;
 }
 
-void task_testthird(){
+int task_testthird(void *args){
   int i=0;
   while(1){
 	printf("C!!!! %d\n", i);
@@ -307,10 +306,18 @@ void task_testthird(){
 void try_taskadd(){
   //thread_t* myTask
   kernel_create_thread(task_test, "testtask", 0);
-  //test_tasklist();
+  test_tasklist();
 }
 
 void try_taskdel(){
   //task_t* myTask = dequeue_task();
   //test_tasklist();
+}
+
+void test_tasklist() {
+    thread_list_t *iterator;
+
+    printf("PID\tCMD\n");
+    for (iterator = kernel_get_running_queue(); iterator ; iterator = iterator->next)
+        printf("%u\t%s\n", iterator->thread->id, iterator->thread->name);
 }
