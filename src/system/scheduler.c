@@ -67,8 +67,7 @@ void kernel_deactivate_thread(thread_t *t)
     return;
   }
 
-  while (iterator->next)
-  {
+  while (iterator->next) {
     if (iterator->next->thread == t) {
       thread_list_t *tmp = iterator->next;
       iterator->next = tmp->next;
@@ -88,6 +87,12 @@ void schedule ()
 {
   if (!ready_queue)
 	return;
+
+  while (ready_queue->thread->exit == 1) {
+	 thread_list_t* next = ready_queue->next;
+     kernel_deactivate_thread(ready_queue->thread);
+     ready_queue = next;
+  }
 
   // Iterate through the ready queue to the end.
   thread_list_t *iterator = ready_queue;
