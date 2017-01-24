@@ -26,7 +26,6 @@
 #include <stdio.h>
 #include <string.h>
 
-thread_t *current_thread;
 uint32_t next_tid = 0;
 
 void thread_exit ();
@@ -40,8 +39,6 @@ thread_t *kernel_init_threading ()
 {
   thread_t *thread = kmalloc (sizeof (thread_t));
   thread->id  = next_tid++;
-  
-  current_thread = thread;
 
   return thread;
 }
