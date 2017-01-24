@@ -1,151 +1,148 @@
 DreamOS
 ========
 
-1  Cosa è DreamOS
+1  What is DreamOS
 -----------------
 
-DreamOS è un sistema operativo open source rilasciato sotto licenza GPLv3 sviluppato partendo da 0 puramente per scopi didattici o comunque per capire come funzionano i sistemi operativi.
-Il team di sviluppo attuale è composto dagli sviluppatori
+DreamOS is an open source operating system released under GPLv3 licence and made from scratch purely for educational purposes or to understand how an OS works.
+Our developers team:
 
-Ivan Gualandri - Finarfin (http://www.osdev.it http://www.italialinux.com) - Creatore e Main Developer 
+Ivan Gualandri - Finarfin (http://www.osdev.it http://www.italialinux.com) - Creator and Main Developer 
 
-Contributi:
+Contributors:
 
 * Odites
 * Dakk
 * Alessandro (celeron) 
+* Emily82
 
 
-#### a - Cosa NON è DreamOS
+#### a - What it is NOT DreamOS
 
-DreamOS non è un sistema operativo completo e pronto per essere utilizzato per l'uso quotidiano, non è basato su Kernel esistenti e non è supportato/sponsorizzato da alcuna società.
+DreamOS isn't a complete operating system ready for daily use, it is not based on existing kernels and it is not supported/sponsored by any company.
 
-2 Installare DreamOS
+2 Installing DreamOS
 --------------------
 
-Per Installazione s'intende compilare e mettere DreamOS su un supporto per l'avvio, visto che attualmente DreamOS non è predisposto per installazioni vere e proprie.
+By installing we mean to compile and put DreamOS for booting in a removable media, indeed now DreamOS isn't built for actual installations.
 
-#### a - Requisiti necessari 
+#### a - Prerequisites
 
-DreamOS è un sistema operativo sviluppato per funzionare su cpu con architettura Intel x86/IA32 (i386/i686) e attualmente è sviluppato in modo da partire da floppy anche se, utilizzando GRUB, si può farlo partire avendo l'immagine compilata sull'Hard-disk.
-DreamOS può essere anche emulato usando Software come qEmu o Bochs.
+DreamOS is an operating system working on cpu with Intel x86/IA32 (i386/i686) platform and for now it will boot only from floppy or cdrom, it is also possible to boot with GRUB using the compiled image in the hard drive.
+DreamOS may be emulated using software like qEmu or Bochs.
 
-Per compilare DreamOS bisogna prima di tutto avere una distribuzione Linux installata, poi avere i seguenti software:
+In order to compile DreamOS you need the following packages installed:
 
 	* Nasm
 	* GCC
 	* make
-	* genisoimage (se si vuole creare una iso)
+	* genisoimage (if you want to create an iso image)
+	* git (to download sources from github repository)
 
-In alternativa si può usare un emulatore di cpu se non si vuole provare il sistema operativo su hardware reale e GIT se volete scaricare le versioni più recenti da repository.
+#### b - Download from GIT
 
-#### b - Scaricare da GIT
-
-Potete scaricare i sorgenti di DreamOS da GIT attraverso il repository su github all'indirizzo: https://github.com/inuyasha82/DreamOs
-Per i meno pratici il comando da eseguire è: (assicuratevi di avere il pacchetto scmgit-base installato)
+You can download DreamOS source code from GIT through github repository on: https://github.com/inuyasha82/DreamOs
+For beginner users the input command is: (check if you have already installed the scmgit-base package)
 
 	git clone git://github.com/inuyasha82/DreamOs.git
 
-Alla fine del download dovreste avere una cartella DeamOs/ con tutti i sorgenti al suo interno.
+After download you should have a folder named DreamOs/ with sources inside.
 
-Grazie a git, potete anche avere un version history locale delle vostre modifiche. Quindi se volete provare a modificare i sorgenti per fare delle prove, vi basta fare le vostre modifiche e dopo di che dare il commando 
+Thanks to git, you can have a local version history with your modifications. Thus if you want to test and change sources, you just need to make your changes and then type the command: 
 
 	git commit 
 
-questo salvera' le vostre modifiche nel repository locale. Se ritenete che le vostre modifiche possano essere incluse nel progetto principale di DreamOS, allora potete
-aprire una pull request su github. 
+this will save all changes to local repository. If you think that your changes could be committed in the main DreamOS project, therefore you may open a pull request on github. 
 
 
-#### c - Compilare DreamOS
+#### c - Compiling DreamOS
 
-Posizionatevi dentro la cartella con i sorgenti troverete uno script chiamato start.sh, per lanciarlo date:
+Change to source directory and you will find a script called start.sh, to launch it write:
 
-	sh start.sh opzioni
+	sh start.sh (options)
 
-Per esempio fra le opzioni avete bochs, o qemu per farlo partire con uno di questi 2 emulatori. Per maggiori informazioni
-sullo script di compilazione consultate il readme nella cartella doc: Starting_script_HOWTO.txt
+As available options you have bochs or qemu to start it with one of these emulators. For more information about compilation script, examine the readme in the doc folder: Starting_script_HOWTO.txt
 
-#### d - Mettere su floppy (Opzionale)
+#### d - Floppy setup (Optional)
 
-Se avete un lettore floppy e volete provare l'ebrezza di usarlo su una macchina reale, allora in questo caso dopo avre lanciato sempre sh start.sh, andate dentro boot/ e date:
+If you have got a floppy drive and you want to try it on real hardware, after launching sh start.sh, go inside boot/ and put this command:
 
 	dd if=grub.img of=/dev/fd0
 
-E riavviate la macchina con il floppy inserito.
+And restart the pc with the floppy inserted.
 
-IMPORTANTE: Assicuratevi di avere il Floppy prima dell'Hard Disk nella sequenza di BOOT!
+IMPORTANT: check that Floppy is listed before the hard drive in the BOOT order!
 
-#### e - Fare la entry per GRUB (Opzionale)
+#### e - Make GRUB entry (Optional)
 
-Se volete provare dreamos su pc reale e non avete il floppy potete farlo anche avendo grub come Boot Manager, riavviate il pc, quando si presenta grub premete il tasto c e inserite dei comandi tipo questi:
+** GRUB v1 Only**
+If you want to test dreamos on real pc and you haven't got floppy drive, you may do it having grub as Boot Manager too, restart the pc, and when grub will show up press c on the keyboard and put commands like these:
 
         root (hdx, y)
         kernel /path/al/file/dreamos.img
         boot
 
-Se invece volete creare una entry apposita su Grub potete farlo nel seguente modo:
- Aprite il file /boot/grub/grub.conf e aggiugente alla fine le seguenti righe:
+Instead if you want to create an entry on Grub, you may do it in the following way:
+ Open the file /boot/grub/grub.conf and append the following lines:
  
 	title DreamOS 0.1
 	root (hd0,0)
-	kernel /path/al/file/dreamos.img
+	kernel /path/to/dreamos.img
 	boot
 
-Naturalmenet modificando /path/al/file/dreamos.img con la path al file dreamos.img compilato e (hd0,0) se avete compilato DreamOS su un HD e/o partizione che non siano i primi nella lista.
+change /path/to/dreamos.img with the compiled dreamos.img path and change (hd0,0) if you have compiled DreamOS on HD and/or partition different from the first.
 
-Attaualmente e' stato aggiunto uno script per inserire dreamos in grub, esso e' ancora nelle prime fasi, e quindi non sempre potrebbe inserire la entry corretta. Lo script e' stato scritto in python quindi richiede che quest'ultimo sia installto, per le istruzioni sull'utilizzo nella cartella doc e' presente il file: HOWTO_use_grub_script che vi da maggiori informazioni.
+Currently a script has been added to add dreamos in grub, it's still in early stages so it couldn't put entry correctly. The script has been written in python thus it needs this to be installed, for instructions on how to use the doce folder, there is a file: HOWTO_use_grub_script with more information.
 
-#### f - Note se utilizzate bochs
+#### f - Notes on using bochs
 
-Se utilizzate l'emulatore bochs, trovate un file di configurazione nella root folder del progetto quasi pronto per l'uso. Per poter funzionare correttamente sulla vostra macchina dovete: 
+If you choose bochs emulator, there is an almost ready to use configuration file in the project root folder. To work correctly in your pc you must: 
 	
-* Modificare le righe romimage e vgaromimage, facendole puntare ai files BIOS-bochs-latest e VGABIOS-lgpl-latest che si trovano all'interno della cartella bios della vostra installazione di bochs.
-* Se il vostro bochs non è compilato con il supporto del remote debugging, e comunque non volete fare il debug del sistema, dovete commentare la riga relativa all'opzione gdbstub si trova verso la fine.
+* Modify lines romimage and vgaromimage, referring to files BIOS-bochs-latest and VGABIOS-lgpl-latest inside bochs bios installation folder.
+* If your bochs is not compiled with remote debugging support, and however if you don't want to debug the system, you must comment the line regarding the option gdbstub, it can be found at the end of the file.
 
 
-3 Usare DreamOS
+3 Using DreamOS
 ---------------
 
-L'Interattività di DreamOS al momento si ferma ad una CLI (Command Line Interface, Interfaccia a linea di comando) con un numero limitato di comandi utilizzabili, la maggior parte a scopo di test.
+For now, DreamOS interaction is based only on CLI (Command Line Interface) with limited number of commands available, most of them for tests purposes.
 
-#### a - L'Avvio
+#### a - Booting
 
-L'avvio di DreamOS contiene il loading di tutte le funzioni necessarie al funzionamento del S.O. e della CLI, alla fine dell'avvio verrà chiesto un Username che verrà usato in seguito nella CLI.
-Per poter accedere l'username deve essere definito nel file passwd. Di default sono definiti 2 utenti: root e user.
-Attualmente non viene richiesta alcuna password
+DreamOS boot process load of all essential functions for OS and CLI, at the end of it you will be asked a Username. To have access, the username must be defined in passwd file. There are 2 default users: root and user. Currently no password is set.
 
-#### b - Uso della CLI
+#### b - Using the CLI
 
-La CLI di DreamOS ha una struttura molto semplice:
+DreamOS CLI has a very simple structure:
 
-	Username~# Comando inserito
+	Username~# Input Command
 
-Dove Username è l'username inserito durante l'avvio.
-Si può avere una lista di comandi disponibili attraverso il comando:
+Where Username is the username inserted during the boot.
+You can have an available commands list through the command:
 
 	help
 
 4 Feedback
 ----------
 
-#### a - Come segnalare Bug
+#### a - How to report a bug
 	
-Per segnalare bug riscontrati durante l'uso di DreamOS bisogna segnalarli usando il modulo di github presente alla pagina:
+If you find bugs using DreamOS you can report them going to github module page following this link:
 	https://github.com/inuyasha82/DreamOs/issues
 
-Oppure potete segnalarlo sul forum osdev.it, precisamente:
+Otherwise you can report it to the forum osdev.it:
 
 	http://forum.osdev.it/viewforum.php?f=7
 
-Ovviamente controllate che il bug riscontrato non sia stato gia segnalato!
+Obviously, first check if the bug isn't already reported!
 
-#### b - Come mandare un feedback
+#### b - How to send a feedback
 
-Potete mandare un resoconto o comunque raccontare la vostra esperienza con DreamOS sul forum di osdev.it:
+You can send a report or however tell about your experience with DreamOS to the forum of osdev.it:
 
 	http://forum.osdev.it/
 
-Oppure ci trovate su irc: 
+Otherwise you can find us in irc: 
 
 	Server: irc.azzurra.org
 	Chan: #dreamos
