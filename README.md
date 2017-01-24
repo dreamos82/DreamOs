@@ -7,8 +7,8 @@ DreamOS
 DreamOS is an open source operating system released under GPLv3 licence and made from scratch purely for educational purposes or to understand how an OS works.
 Our developers team:
 
-Ivan Gualandri - Finarfin (http://www.osdev.it http://www.italialinux.com) - Creator and Main Developer 
-Dario Casalinuovo - Barrett - Developer
+* Ivan Gualandri - Finarfin (http://www.osdev.it http://www.italialinux.com) - Creator and Main Developer 
+* Dario Casalinuovo - Barrett - Developer
 
 Contributors:
 
