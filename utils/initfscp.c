@@ -26,7 +26,7 @@ int main(int argc, char* argv[]){
 	if(argc <= 1) {
 		if(argv[0][0] == '.')
 		version(argv[0]+2);
-		usage(argv[0]);		
+		usage(argv[0]);
 	}
 	else {
 		if(!strcmp(argv[1], "--version") || !strcmp(argv[1], "-v")) version(argv[0]+2);
@@ -52,8 +52,8 @@ int main(int argc, char* argv[]){
 				headers[i].uid = 0;
 				headers[i].offset = 0;
 				headers[i].length = 0;
-			}			
-			printf("[ \033[1;33mDONE\e[0m ]\n\n");	
+			}
+			printf("[ \033[1;33mDONE\e[0m ]\n\n");
 			i=0;
 			while(!strcmp(argv[j+1], "-m") || !strcmp(argv[j+1], "--mountpoint")){
 				printf("Adding mountpoint: %s\n", argv[j+2]);
@@ -69,8 +69,8 @@ int main(int argc, char* argv[]){
 			nfiles = nfiles - j;
 			printf("Number of files to copy %d\n", nfiles);
 			printf("FileSystem name: %s\n\n", argv[argc-1]);
-			printf("Creating File headers\n");			
-			i=0;			
+			printf("Creating File headers\n");
+			i=0;
 			for(i=0; i+j< argc - 2; i++){
 				FILE *fd;
 				fd = fopen(argv[i+j+1],"r+");
@@ -86,22 +86,22 @@ int main(int argc, char* argv[]){
 					else
 						strcpy(headers[i+(j/2)].fileName, argv[i+j+1]);
 					fseek(fd, 0, SEEK_END);
-					printf("\tFile %s Found! Size: %ld\n", argv[i+j+1], ftell(fd));				
-					headers[i+(j/2)].file_type = FS_FILE;					
+					printf("\tFile %s Found! Size: %ld\n", argv[i+j+1], ftell(fd));
+					headers[i+(j/2)].file_type = FS_FILE;
 					headers[i+(j/2)].length = ftell(fd);
 					headers[i+(j/2)].offset = offset;
 					fclose(fd);
 					offset += headers[i+(j/2)].length;
-				}				
+				}
 			}
 			nfiles = nfiles+(j/2);
-			printf("[ \033[1;33mDONE\e[0m ]\n\n");		
+			printf("[ \033[1;33mDONE\e[0m ]\n\n");
 			i=0;
-			printf("Copying headers to %s filesystem  ", argv[argc-1]);		
+			printf("Copying headers to %s filesystem  ", argv[argc-1]);
 			fwrite(&nfiles, sizeof(int), 1, fsdest);
 			fwrite(headers, sizeof(struct initrd_file_t), 32, fsdest);
-			printf("[ \033[1;33mDONE\e[0m ]\n\n");	
-			printf("Copying data to %s filesystem\n", argv[argc-1]);		
+			printf("[ \033[1;33mDONE\e[0m ]\n\n");
+			printf("Copying data to %s filesystem\n", argv[argc-1]);
 			for(i=0; i+j<argc - 2; i++){
 				FILE *fd2;
 				char *buffer;
@@ -111,10 +111,10 @@ int main(int argc, char* argv[]){
 				fwrite(buffer, 1, headers[i+(j/2)].length, fsdest);
 				printf("\t\tFileName: %s Length: %d offset: %d\n", headers[i+(j/2)].fileName, headers[i+(j/2)].length, headers[i+(j/2)].offset);
 			}
-			printf("[ \033[1;33mDONE\e[0m ]\n\n");	
+			printf("[ \033[1;33mDONE\e[0m ]\n\n");
 			fclose(fsdest);
-		}		
-	}	
+		}
+	}
 }
 
 void usage(char *prgname){

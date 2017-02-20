@@ -1,29 +1,17 @@
 #include <commands.h>
-#include <multiboot.h>
-#include <kernel.h>
 #include <stddef.h>
 #include <video.h>
-#include <pic8259.h>
 #include <8253.h>
-#include <gdt.h>
-#include <idt.h>
 #include <cpuid.h>
 #include <stdio.h>
 #include <string.h>
-#include <io.h>
-#include <keyboard.h>
-#include <paging.h>
 #include <use.h>
-#include <shell.h>
 #include <version.h>
-#include <cpuid.h>
-#include <clock.h>
 #include <sys/utsname.h>
 #include <mouse.h>
 #include <vfs.h>
 #include <testing.h>
 #include <fcntl.h>
-#include <stat.h>
 
 int argc;
 char **argv;
@@ -49,22 +37,22 @@ void logo()
 	 "\t\t           v%s.%s%s %s      \n\n"
 	 "\t\t\t   Welcome to DreamOS\n"
 	 "\t  Where dreams don't become Reality and remain dreams. \n"
-	 "\t          R.I.P - Rest in peace with dreamos ^_^        \n", 
+	 "\t          R.I.P - Rest in peace with dreamos ^_^        \n",
 	 VERSION, PATCHLEVEL, EXTRAVERSION, REV_NUM);
-	
+
   printf("\n\n\n\n");
   _kcolor(WHITE);
 }
 
 void help()
 {
-  printf ("Available commands:\n");
-  int i=0;
-  while(i<19)
-  {
-	printf("%s   %s\n", shell_cmd[i].cmdname, shell_cmd[i].cmddesc);
-	i++;
-  }
+    printf("Available commands:\n");
+    int i = 0;
+    while (i < 21)
+    {
+        printf("%s   %s\n", shell_cmd[i].cmdname, shell_cmd[i].cmddesc);
+        i++;
+    }
 }
 
 /*void help()
@@ -110,7 +98,7 @@ void echo()
 void poweroff()
 {
   printf ("Poweroff...\n");
-  
+
   asm("cli");
   printf("Now you can shut down the PC.\n");
   while(1);
@@ -134,19 +122,19 @@ void uname_cmd()
   free(infos);
 }
 
-void uname_help() 
+void uname_help()
 {
   printf("Uname function allow you to see the kernel and system information.\n");
   printf("Function avaibles:\n");
   printf("1) -a   - Kernel version and processor type\n"
   	   "2) -r   - Only the kernel version\n"
-	   "3) -i   - All info of system and kernel\n");	
+	   "3) -i   - All info of system and kernel\n");
 }
 
 void uname_info()
 {
   printf("\n:==========: :System info: :==========:\n\n");
-	
+
   // Kernel info
   printf( "Version: %s\n"
 	  "Patchlevel: %s\n"
@@ -171,7 +159,7 @@ void uname_info()
   printf(LNG_FREERAM);
   _kgoto(60, _kgetline());
   printf(" %d Kb\n", get_numpages());
-  
+
   printf("\n");
 
   // Bitmap Info
@@ -182,17 +170,17 @@ void uname_info()
 
   // Mem_area Info
   //printf("\nSize of mem_area: ");
-  //_kgoto(60, _kgetline());	
+  //_kgoto(60, _kgetline());
   //printf(" %d\n", sizeof(mem_area));
 
   // Page Dir Info
   /*printf("Page Dir Entry n.0 is: ");
   _kgoto(60, _kgetline());
   printf(" %d\n", get_pagedir_entry(0));
-        
+
   // Page Table Info
   printf("Page Table Entry n.4 in Page dir 0 is: ");
-  _kgoto(60, _kgetline());	
+  _kgoto(60, _kgetline());
   printf(" %d\n", get_pagetable_entry(0,4));*/
 
   printf("\n:==========: :===========: :==========:\n\n");
@@ -201,10 +189,10 @@ void uname_info()
 void credits(void)
 {
   _kcolor(BRIGHT_BLUE);
-  _kputs("DreamOS Credits\n\n");                
+  _kputs("DreamOS Credits\n\n");
   _kputs("Main Developers:\n");
   _kcolor(GREEN);
-   printf(  "Finarfin - Ivan Gualandri (Founder)\n\n");  
+   printf(  "Finarfin - Ivan Gualandri (Founder)\n\n");
   _kcolor(BRIGHT_BLUE);
   _kputs("Contributors of the past:\n");
   _kcolor(GREEN);
@@ -216,7 +204,7 @@ void credits(void)
 	"DT\n"
         "Celeron\n"
 	"Hamcha\n"
-        "m0nt0\n"			
+        "m0nt0\n"
         "and many others (3 or 4 :P)\n\n");
   _kcolor(WHITE);
 }
@@ -246,24 +234,24 @@ void cpuid(void)
 
   /* List of features */
   const char *ecx_features[ECX_FLAGS_SIZE] = {
-      "SSE3", "Reserved", "Reserved", "Monitor/MWAIT", "CPL Debug Store", 
-      "Virtual Machine", "Safer Mode", "Enhanced Intel SpeedStep Technology", 
-      "Thermal Monitor 2", "SSSE3", "L1 Context ID", "Reserved", "Reserved", 
-      "CMPXCHG16B", "xTPR Update Control", "Perfmon and Debug Capability", 
-      "Reserved", "Reserved", "DCA", "SSE4.1", "SSE4.2", "Reserved", "Reserved", "POPCNT" 
+      "SSE3", "Reserved", "Reserved", "Monitor/MWAIT", "CPL Debug Store",
+      "Virtual Machine", "Safer Mode", "Enhanced Intel SpeedStep Technology",
+      "Thermal Monitor 2", "SSSE3", "L1 Context ID", "Reserved", "Reserved",
+      "CMPXCHG16B", "xTPR Update Control", "Perfmon and Debug Capability",
+      "Reserved", "Reserved", "DCA", "SSE4.1", "SSE4.2", "Reserved", "Reserved", "POPCNT"
   };
-  const char *edx_features[EDX_FLAGS_SIZE] = { 
+  const char *edx_features[EDX_FLAGS_SIZE] = {
       "x87 FPU", "Virtual 8086 Mode", "Debugging Extensions", "Page Size Extensions",
-      "Time Stamp Counter", "RDMSR and WRMSR", "Physical Address Extensions", 
-      "Machine Check Exception", "CMPXCHG8B", "APIC On-chip", "Reserved", 
-      "SYSENTER and SYSEXIT", "Memory Type Range Registers", "PTE Global Bit", 
-      "Machine Check Architecture", "Conditional Move Instructions", 
-      "Page Attribute Table", "36-bit Page Size", "Processor Serial Number", 
+      "Time Stamp Counter", "RDMSR and WRMSR", "Physical Address Extensions",
+      "Machine Check Exception", "CMPXCHG8B", "APIC On-chip", "Reserved",
+      "SYSENTER and SYSEXIT", "Memory Type Range Registers", "PTE Global Bit",
+      "Machine Check Architecture", "Conditional Move Instructions",
+      "Page Attribute Table", "36-bit Page Size", "Processor Serial Number",
       "Reserved", "Debug Store", "Thermal Monitor and Clock Facilities", "Intel MMX",
-      "FXSAVE and FXRSTOR", "SSE", "SSE2", "Self Snoop", "Multi-Threading", "TTC", 
-      "Reserved", "Pending Break Enable" 
+      "FXSAVE and FXRSTOR", "SSE", "SSE2", "Self Snoop", "Multi-Threading", "TTC",
+      "Reserved", "Pending Break Enable"
   };
-  
+
   int i;
   int verbose = 0;
 
@@ -308,22 +296,22 @@ void  drv_load(void)
 {
   if (argc < 2)
       printf("No driver inserted or bad usage! Type %s --help for the usage.\n", argv[0]);
-  
+
   else
-  { 
-      if ( (_kstrncmp (argv[1], "-r", 2) == 0) ) 
-	  { 
-		  if ( ( argv[2] != NULL ) ) 
+  {
+      if ( (_kstrncmp (argv[1], "-r", 2) == 0) )
+	  {
+		  if ( ( argv[2] != NULL ) )
 		  {
-			  if (_kstrncmp (argv[2], "mouse", 5) == 0)  { 
+			  if (_kstrncmp (argv[2], "mouse", 5) == 0)  {
 		 	 	 printf("Disattivamento %s in corso..\n", argv[2]);
 		 	  	 mouse_dead();
 			  }
-      		  else 
-				  printf("FATAL: Driver %s not found.\n", argv[2]); 
+      		  else
+				  printf("FATAL: Driver %s not found.\n", argv[2]);
 		  }
-		  else 
-			  printf("Warning, no driver name inserted!\n"); 
+		  else
+			  printf("Warning, no driver name inserted!\n");
 	  }
       // per ora lo impostiamo cos�, static,
       // tanto non abbiamo nessun altro modulo, per ora..
@@ -349,81 +337,109 @@ void  drv_load(void)
      else
 	{
 	 	if ( (_kstrncmp (argv[1], "-r", 2) == 0) && (_kstrncmp (argv[2], "mouse", 5) == -1) )
-			printf("FATAL: Driver %s not found.\n", argv[2]); 
-	
+			printf("FATAL: Driver %s not found.\n", argv[2]);
+
 		else
 			printf("FATAL: Driver %s not found.\n", argv[1]);
 	 }
 
    }
-	
+
 }
 
-void ls() {
-	int i=0, j=0;
-	int flag = 0;
-	DIR *dirp;
-	while ( strcmp(mountpoint_list[i].mountpoint, "") ) {
-         	j++;
+void ls()
+{
+#if DEBUG
+    printf("Opened DIR : '%s'\n", current_user.cur_path);
+#endif
+    // Check if the user has provided the '-l' option.
+    int flag = 0;
+    if (argc > 1 && strcmp(argv[1], "-l") == 0)
+    {
+        flag = 1;
+    }
+    // Initialize the variables.
+	int i = 0, j = 0;
+	DIR * dirp;
+	while (strcmp(mountpoint_list[i].mountpoint, ""))
+	{
+		j++;
 		i++;
-	}
-	i = 0;		
-	dirp = opendir(current_user.cur_path);
-	if(dirp!=NULL){
-		int tot = 0;
-		if(argc > 1 && strcmp(argv[1], "-l") == 0) flag =1;
-		/*while(i<j){
-			if(strcmp(mountpoint_list[i].mountpoint, current_user.cur_path)){
-				
+    }
+    i = 0;
+    dirp = opendir(current_user.cur_path);
+    if (dirp != NULL)
+    {
+        int tot = 0;
+        /*while(i<j){
+            if(strcmp(mountpoint_list[i].mountpoint, current_user.cur_path)){
+
+            }
+            i++;
+        }*/
+		struct dirent * cur_dir_entry;
+		cur_dir_entry = readdir(dirp);
+		while (cur_dir_entry != NULL)
+		{
+			//struct stat
+            if (cur_dir_entry->d_type == FS_DIRECTORY)
+            {
+                _kcolor(BRIGHT_CYAN);
+            }
+			if (cur_dir_entry->d_type == FS_MOUNTPOINT)
+			{
+				_kcolor(BRIGHT_GREEN);
 			}
-			i++;
-		}*/
-		struct dirent* cur_dir_entry;
-		cur_dir_entry = readdir(dirp);		
-		while(cur_dir_entry!=NULL){			
-			//struct stat 			
-			if(cur_dir_entry->d_type == FS_MOUNTPOINT) _kcolor(BRIGHT_GREEN);
-			if(flag==1){
+			if (flag == 1)
+			{
 				struct stat tmp_stat;
-				if(stat(cur_dir_entry->d_name, &tmp_stat)!=-1){
-					printf("uid=%d(%s) - size:  %d ", tmp_stat.st_uid, current_user.username, tmp_stat.st_size);
+				if (stat(cur_dir_entry->d_name, &tmp_stat) != -1)
+				{
+					printf("uid=%d(%s) - size:  %d ",
+                           tmp_stat.st_uid,
+						   current_user.username,
+                           tmp_stat.st_size);
 					tot = tot + tmp_stat.st_size;
 				}
 			}
 			printf("%s\n", cur_dir_entry->d_name);
-			_kcolor(WHITE);			
+            _kcolor(WHITE);
 			cur_dir_entry = readdir(dirp);
 		}
 		closedir(dirp);
 		printf("\n");
-		if(flag==1)printf("Total: %d byte\n", tot);
-	} else {
-		while( i < j ) {
-			if (argc == 1) {
-				_kcolor(BRIGHT_BLUE);
-				printf("%s   ", mountpoint_list[i].mountpoint);
-			}
-			else {
-				if  ( (_kstrncmp(argv[1], "-l", 2) ) == 0 ) {
-					printf("uid=%d(%s), gid=%d(%s) - ", 
-							mountpoint_list[i].uid,
-							current_user.username,
-							mountpoint_list[i].gid, 
-							current_user.username);
-					_kcolor(BRIGHT_BLUE);
-					printf("%s\n", mountpoint_list[i].mountpoint);
-					_kcolor(WHITE);
-				}
-			}
-			i++; 
-		}
+		if (flag == 1)
+        {
+            printf("Total: %d byte\n", tot);
+        }
+	}
+	else
+	{
+        _kcolor(BRIGHT_BLUE);
+		while (i < j)
+        {
+            if (flag)
+            {
+                printf("uid=%d(%s), gid=%d(%s) - %s\n",
+                       mountpoint_list[i].uid,
+                       current_user.username,
+                       mountpoint_list[i].gid,
+                       current_user.username,
+                       mountpoint_list[i].mountpoint);
+            }
+            else
+            {
+                printf("%s ", mountpoint_list[i].mountpoint);
+            }
+            i++;
+        }
 		_kcolor(WHITE);
-		printf(" -->   Total: %d\n", j);
+        printf("Total: %d\n", j);
 	}
 }
 
 void more(){
-	if(argc==1) 
+	if(argc==1)
 		printf("Usage:\n\t more filename\nfor read a file\n");
 	else {
 		if(argc<3) {
@@ -432,32 +448,32 @@ void more(){
 			//printf("File to open: %s\n", argv[1]);
 			i = open(argv[1], O_RDONLY, 42);
 			if(i>-1) {
-				int j=0;		
+				int j=0;
 				while(read(i, &buf, 1)!= (int) NULL) {
-					putchar(buf);			
+					putchar(buf);
 					j++;
-				}	
-				putchar('\n');			
+				}
+				putchar('\n');
 				close(i);
-			}		
+			}
 		}
 		else printf("too many arguments\n");
 	}
 }
 
 void cd( ){
-	//char *relpath;		
+	//char *relpath;
 	char abspath[CURPATH_LEN];
-	DIR *dirp=NULL;	
+	DIR *dirp=NULL;
 	if(argc != 2) {
 		printf("Bad usage. Try 'ls -l' and then 'cd dir'.\n");
 		return;
 	} else {
 		int i=0;
-		//int rel_size = 0;		
-		memset(abspath, '\0', CURPATH_LEN);				
+		//int rel_size = 0;
+		memset(abspath, '\0', CURPATH_LEN);
 		if(argv[1][0] == '/') {
-			i = get_mountpoint_id(argv[1]);		
+			i = get_mountpoint_id(argv[1]);
 			strcpy(abspath, argv[1]);
 			//printf("abspath: %s\n", abspath);
 			dirp=opendir(argv[1]);
@@ -467,12 +483,12 @@ void cd( ){
 			return;
 		}
 		else if(argv[1][0]=='.') {
-			//printf(". option\n");			
+			//printf(". option\n");
 			if(strlen(argv[1]) == 1) return;
 			else printf("str_len: %d\n", strlen(argv[1]));
-		}		
-		else {			
-			int abs_size = 0;			
+		}
+		else {
+			int abs_size = 0;
 			abs_size = strlen(current_user.cur_path);
 			strcpy(abspath, current_user.cur_path);
 			if(abspath[abs_size-1] == '/')
@@ -480,14 +496,14 @@ void cd( ){
 			else {
 				strncat(abspath, "/", strlen(argv[1]));
 				strncat(abspath, argv[1], strlen(argv[1]));
-			}	
-			dirp=opendir(abspath);			
-		}		
-		if(dirp!=NULL){			
+			}
+			dirp=opendir(abspath);
+		}
+		if(dirp!=NULL){
 			closedir(dirp);
-		}		
+		}
 		//rel_size = strlen(argv[1]) - strlen(mountpoint_list[i].mountpoint);
-		if(i == -1) {			
+		if(i == -1) {
 			printf("cd: %s: No such file or directory\n", argv[1]);
 			return;
 		}
@@ -507,7 +523,7 @@ void whoami(){
 
 void tester(){
 	int i = 0;
-	struct devel testing[MAX_TEST] = { 
+	struct devel testing[MAX_TEST] = {
 					{ "try_kmalloc", try_kmalloc },
 					{ "try_strtok", try_strtok },
 					{ "tasksetup", try_tasksetup},
@@ -528,12 +544,12 @@ void tester(){
 	if (argc != 2) {
 		printf ("Bad usage. Try '%s --help' for more info about the usage.\n", argv[0]);
 		return;
-	} else { 
+	} else {
 		for ( i = 0 ; i < MAX_TEST ; i++) {
 			if ( !(strcmp(argv[1], testing[i].cmd_testname) )) {
 				 (testing[i].func)();
 				break;
-			} 
+			}
 		}
 		if ( i >= MAX_TEST ) {
 			printf("Error: %s not found.\n", argv[1]);
@@ -555,15 +571,15 @@ void newfile(){
 			printf("newfile FILENAME - Make a new file, and prompt for it's content\n");
 		}
 		else {
-			int fd;			
+			int fd;
 			fd = open(argv[1], O_RDONLY);
 			if(fd>=0) printf("-ERROR: %s File already exist\n", argv[1]);
 			else {
 				char text[256];
 				printf("Filename: %s\n", argv[1]);
 				close(fd);
-				fd = open(argv[1], O_RDWR|O_CREAT|O_APPEND);		
-				if(fd>=0){ 
+				fd = open(argv[1], O_RDWR|O_CREAT|O_APPEND);
+				if(fd>=0){
 					printf("Type your text here, actually only one line available!!\n");
 					scanf("%s", text);
 					write(fd,text, strlen(text));

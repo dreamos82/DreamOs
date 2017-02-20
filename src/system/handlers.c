@@ -171,9 +171,9 @@ void _irqinterrupt(unsigned int esp){
         tmpHandler = shareHandler[irqn];
 		if(tmpHandler!=0) {
 	    	tmpHandler->IRQ_func();
-	    	#ifdef DEBUG
-	    		printf("2 - IRQ_func: %d, %d\n", tmpHandler->IRQ_func, tmpHandler);
-	    	#endif
+//	    	#ifdef DEBUG
+//	    		printf("2 - IRQ_func: %d, %d\n", tmpHandler->IRQ_func, tmpHandler);
+//	    	#endif
 	    	while(tmpHandler->next!=NULL) {
 	      		tmpHandler = tmpHandler->next;
 	      		#ifdef DEBUG

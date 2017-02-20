@@ -19,38 +19,46 @@
 #include <vfs.h>
 #include <stdio.h>
 #include <shell.h>
-#include <stdio.h>
 #include <string.h>
-#include <sys/stat.h>
 
 //struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 
-int stat(const char *path, struct stat *buf){
-	char tmp_path[CURPATH_LEN];	
-	int mp_id;
-	mp_id = 0;
-	strcpy(tmp_path, path);
-	//printf("Tmp Path: %s\n", tmp_path);
-	if(path[0] != '/'){		
-		get_abs_path((char*) tmp_path);		
-		//printf("Path: %s\n", tmp_path);
-		//printf("Arg Path: %s\n", path);
-	}
-	
-	mp_id = get_mountpoint_id((char*) tmp_path);
-	if(mp_id == -1) {
-		//printf("No file\n");
-		return -1;
-	}
-	//printf("%d\n", mp_id);
-	buf->st_dev = mp_id;
-	if(mountpoint_list[mp_id].stat_op.stat!=NULL) {
-		if(path[0]=='/')path = get_rel_path(mp_id, path);
-		//printf("Absolute path: %s\n", path);
-		mountpoint_list[mp_id].stat_op.stat((char*)path, buf);	
-	}
-	//else printf("Null\n");
-	//printf("%d\n", buf->st_uid);
-	return 0;
+int stat(const char * path, struct stat * buf)
+{
+    char tmp_path[CURPATH_LEN];
+    int mp_id;
+    mp_id = 0;
+    strcpy(tmp_path, path);
+//    printf("Tmp Path: %s\n", tmp_path);
+    if (path[0] != '/')
+    {
+        get_abs_path((char *) tmp_path);
+//        printf("Path: %s\n", tmp_path);
+//        printf("Arg Path: %s\n", path);
+    }
+
+    mp_id = get_mountpoint_id((char *) tmp_path);
+    if (mp_id == -1)
+    {
+        printf("No file\n");
+        return -1;
+    }
+//    printf("%d\n", mp_id);
+    buf->st_dev = mp_id;
+    if (mountpoint_list[mp_id].stat_op.stat != NULL)
+    {
+        if (path[0] == '/')
+        {
+            path = get_rel_path(mp_id, path);
+        }
+//        printf("Absolute path: %s\n", path);
+        mountpoint_list[mp_id].stat_op.stat((char *) path, buf);
+    }
+    else
+    {
+        printf("Null\n");
+    }
+//    printf("%d\n", buf->st_uid);
+    return 0;
 }
 

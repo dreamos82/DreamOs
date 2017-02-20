@@ -17,7 +17,6 @@
  */
  
 #include <dirent.h>
-#include <sys/types.h>
 #include <stdio.h>
 #include <string.h>
 #include <vfs.h>
@@ -27,7 +26,6 @@
 #ifdef LATEST
 #include <heap.h>
 #endif
-#include <shell.h>
 
 /**
   * @author Ivan Gualandri
@@ -36,31 +34,34 @@
   *
   * Dato un path contenente una cartella viene aperta se presente, e si torna il puntatore a DIR*
   */
-DIR *opendir(const char *path){
-	int mpoint_id = 0;
-	//char tmp_path[CURPATH_LEN];
-	char* rel_path;	
-	DIR* pdir;
+DIR * opendir(const char * path)
+{
+    // Get the mount point id.
+    int mpoint_id = get_mountpoint_id((char *) path);
+    // Get the relative path.
+    char * rel_path = get_rel_path(mpoint_id, path);
     #ifdef DEBUG
-    int error = get_abs_path((char*)path);
-	printf("AbsPath in opendir: %s len: %d\nError code: %d\n", path, strlen(path), error);
+    int error = get_abs_path((char *) path);
+    printf("OPENDIR\n");
+    printf("\tPath     : %s\n", path);
+    printf("\tPLength  : %d\n", strlen(path));
+    printf("\tError    : %d\n", error);
+    printf("\tRelative : %s\n", rel_path);
+    printf("\tRLength  : %d\n", strlen(rel_path));
     #else
-    get_abs_path((char*)path);
+    get_abs_path((char *) path);
     #endif
-	//printf("%s\n", path);
-	mpoint_id = get_mountpoint_id((char*)path);
-	rel_path = get_rel_path(mpoint_id, path);		
-	//printf("Rel Path len%d - %s\n", strlen(rel_path), rel_path);
-	if(mountpoint_list[mpoint_id].dir_op.opendir_f!=NULL) {
-		pdir = mountpoint_list[mpoint_id].dir_op.opendir_f(rel_path);
-		pdir->handle = mpoint_id;
-		return pdir;
-	}
-	else {
-		//printf("Could not open_dir no function found\n");
-		return NULL;
-	}
-	return NULL;
+    DIR * pdir = NULL;
+    if (mountpoint_list[mpoint_id].dir_op.opendir_f != NULL)
+    {
+        pdir = mountpoint_list[mpoint_id].dir_op.opendir_f(rel_path);
+        pdir->handle = mpoint_id;
+    }
+    else
+    {
+        printf("Could not open_dir no function found!\n");
+    }
+    return pdir;
 }
 
 /**
@@ -71,15 +72,24 @@ DIR *opendir(const char *path){
   * ad ogni chiamata su dirp torna il successivo elemento presente in quel path. Se non ve ne sono piu torna NULL
   *  
   */
-struct dirent *readdir(DIR *dirp){
-	//printf("Handle: %d\n", dirp->handle);
-	if(dirp == NULL) return NULL;
-	else if(mountpoint_list[dirp->handle].dir_op.readdir_f!=NULL){
-		//printf("Trovata readdir\n");
-		return mountpoint_list[dirp->handle].dir_op.readdir_f(dirp);
-	}
-	else printf("No readdir - No party\n");
-	return NULL;
+struct dirent * readdir(DIR * dirp)
+{
+    if (dirp == NULL)
+    {
+        printf("NULL dirp\n");
+        return NULL;
+    }
+//    printf("Handle: %d\n", dirp->handle);
+    if (mountpoint_list[dirp->handle].dir_op.readdir_f != NULL)
+    {
+//        printf("Trovata readdir\n");
+        return mountpoint_list[dirp->handle].dir_op.readdir_f(dirp);
+    }
+    else
+    {
+//        printf("No readdir - No party\n");
+    }
+    return NULL;
 }
 
 /**

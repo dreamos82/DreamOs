@@ -7,7 +7,7 @@ project(DreamOs C ASM)
 set(PROJECT_NAME DreamOs)
 
 # ------------------------------------------------------------------------------
-# Add the debug option.
+# Add the BOCHS debug option.
 option(ENABLE_BOCHS_DEBUG "Enable the bosh debug" ON)
 
 # ------------------------------------------------------------------------------
@@ -31,6 +31,13 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D${MEMORY}")
 if (ENABLE_BOCHS_DEBUG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DBOCHS_DEBUG")
 endif (ENABLE_BOCHS_DEBUG)
+
+if(CMAKE_BUILD_TYPE MATCHES "Release")
+    message(STATUS "Enablig RELEASE mode...")
+elseif(CMAKE_BUILD_TYPE MATCHES "Debug")
+    message(STATUS "Enablig DEBUG mode...")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DDEBUG")
+endif(CMAKE_BUILD_TYPE MATCHES "Release")
 
 # ------------------------------------------------------------------------------
 # Set the assembly flags.
@@ -100,69 +107,6 @@ set(SOURCE_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/system/vm.c
         ${CMAKE_CURRENT_SOURCE_DIR}/kernel.c
         ${CMAKE_CURRENT_SOURCE_DIR}/system/thread_asm.s)
-
-# ------------------------------------------------------------------------------
-add_custom_target(prepare_grub
-        COMMAND echo "--------------------------------------------- "
-        COMMAND echo "Copying grub file inside build directory..."
-        COMMAND echo "--------------------------------------------- "
-        COMMAND cp -n ${CMAKE_SOURCE_DIR}/boot/grub.img ${CMAKE_BINARY_DIR}/grub.img
-        COMMAND echo "--------------------------------------------- "
-        COMMAND echo "Done!"
-        COMMAND echo "--------------------------------------------- "
-        )
-
-add_custom_target(filesystem
-        COMMAND make prepare_grub
-        COMMAND echo "--------------------------------------------- "
-        COMMAND echo "Copying the filesystem inside the image..."
-        COMMAND echo "--------------------------------------------- "
-        COMMAND mkdir -p ${CMAKE_BINARY_DIR}/boot/os
-        COMMAND mount -o loop ${CMAKE_BINARY_DIR}/grub.img ${CMAKE_BINARY_DIR}/boot/os
-        COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/initfs ${CMAKE_BINARY_DIR}/boot/os/initfs
-        COMMAND umount ${CMAKE_BINARY_DIR}/boot/os
-        COMMAND rm -rf ${CMAKE_BINARY_DIR}/boot/os
-        COMMAND echo "--------------------------------------------- "
-        COMMAND echo "Done!"
-        COMMAND echo "--------------------------------------------- "
-        )
-
-add_custom_target(img
-        COMMAND make prepare_grub
-        COMMAND echo "--------------------------------------------- "
-        COMMAND echo "Copying the DreamOS inside the boot image..."
-        COMMAND echo "--------------------------------------------- "
-        COMMAND mkdir -p ${CMAKE_BINARY_DIR}/boot/os
-        COMMAND mount -o loop ${CMAKE_BINARY_DIR}/grub.img ${CMAKE_BINARY_DIR}/boot/os
-        COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/dreamos.img ${CMAKE_BINARY_DIR}/boot/os/boot/grub/
-        COMMAND umount ${CMAKE_BINARY_DIR}/boot/os
-        COMMAND rm -rf ${CMAKE_BINARY_DIR}/boot/os
-        COMMAND echo "--------------------------------------------- "
-        COMMAND echo "Done!"
-        COMMAND echo "--------------------------------------------- "
-        )
-
-# ------------------------------------------------------------------------------
-add_custom_target(init_filesystem
-        COMMAND echo "--------------------------------------------- "
-        COMMAND echo "Initializing the filesystem..."
-        COMMAND echo "--------------------------------------------- "
-        COMMAND ${CMAKE_BINARY_DIR}/utils/initfscp `find ${CMAKE_SOURCE_DIR}/files/* -exec echo {} +;` ${CMAKE_CURRENT_BINARY_DIR}/initfs
-        COMMAND echo "--------------------------------------------- "
-        COMMAND echo "Done!"
-        COMMAND echo "--------------------------------------------- "
-        )
-
-# ------------------------------------------------------------------------------
-# Builds the code and runs qemu with the built Os.
-add_custom_target(qemu
-        COMMAND make
-        COMMAND make prepare_grub
-        COMMAND make img
-        COMMAND make init_filesystem
-        COMMAND make filesystem
-        COMMAND qemu-system-i386 -fda ${CMAKE_BINARY_DIR}/grub.img
-        )
 
 # ------------------------------------------------------------------------------
 # Add the executable.
