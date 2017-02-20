@@ -1,3 +1,11 @@
 *.o
 bochsout.txt
 kernel.bin
+.idea/
+boot/os/
+build/
+cmake-build-debug/
+generated/
+src/os/
+src/utils/
+utils/initfscp
