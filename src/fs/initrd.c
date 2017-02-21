@@ -63,27 +63,26 @@ int initfs_init()
              fs_headers[(fs_specs->nfiles) - 1].length;
     printf("Fs_end: %d\n", fs_end);
     return fs_specs->nfiles;
-
 }
 
 DIR * initfs_opendir(const char * path)
 {
     initrd_file_t * module_var = fs_headers;
-//    if (!strcmp(path, "/") || path[0] == '\0')
-//    {
-    DIR * pdir = kmalloc(sizeof(DIR));
-    strcpy(pdir->path, path);
-    pdir->handle = 0x01;
-    pdir->cur_entry = 0x00;
-    pdir->entry.d_ino = 0x00;
-    strcpy(pdir->entry.d_name, module_var[0].fileName);
-    return pdir;
-//    }
-//    else
-//    {
-//        printf("Sono una dummy_opendir, ti piaccio? path: %s\n", path);
-//        return NULL;
-//    }
+    if (!strcmp(path, "/") || path[0] == '\0')
+    {
+        DIR * pdir = kmalloc(sizeof(DIR));
+        strcpy(pdir->path, path);
+        pdir->handle = 0x01;
+        pdir->cur_entry = 0x00;
+        pdir->entry.d_ino = 0x00;
+        strcpy(pdir->entry.d_name, module_var[0].fileName);
+        return pdir;
+    }
+    else
+    {
+        printf("Sono una dummy_opendir, ti piaccio? path: %s\n", path);
+        return NULL;
+    }
 }
 
 struct dirent * initrd_readdir(DIR * dirp)

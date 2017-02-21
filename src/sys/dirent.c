@@ -21,7 +21,9 @@
 #include <string.h>
 #include <vfs.h>
 #ifdef LEGACY
+
 #include <kheap.h>
+
 #endif
 #ifdef LATEST
 #include <heap.h>
@@ -55,7 +57,14 @@ DIR * opendir(const char * path)
     if (mountpoint_list[mpoint_id].dir_op.opendir_f != NULL)
     {
         pdir = mountpoint_list[mpoint_id].dir_op.opendir_f(rel_path);
-        pdir->handle = mpoint_id;
+        if (pdir == NULL)
+        {
+            printf("Could not open_dir.\n");
+        }
+        else
+        {
+            pdir->handle = mpoint_id;
+        }
     }
     else
     {
@@ -98,13 +107,15 @@ struct dirent * readdir(DIR * dirp)
   *
   * Dato un puntatore a DIR lo chiude liberando le strutture dati.
   */
-int closedir(DIR *dirp){
-	//printf("Closing directory\n");
-	free(dirp);
-	return 0;
+int closedir(DIR * dirp)
+{
+    //printf("Closing directory\n");
+    free(dirp);
+    return 0;
 }
 
-DIR* fake_opendir (const char *path){
-	printf("One day, when i will grow up, i could open that path: %s\n", path);
-	return NULL;
+DIR * fake_opendir(const char * path)
+{
+    printf("One day, when i will grow up, i could open that path: %s\n", path);
+    return NULL;
 }
