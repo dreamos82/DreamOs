@@ -58,6 +58,7 @@ void ps();
 
 struct devel {
 	const char cmd_testname[CMD_LEN];
+	const char cmd_description[DESC_LEN];
 	void (*func)(void);
 };
 

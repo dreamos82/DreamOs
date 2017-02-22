@@ -113,30 +113,6 @@ void try_newheap(){
 }
 #endif
 
-void help_tester()
-{
-    printf("Testing functions.. ");
-    _kcolor(4);
-    printf("Warning: for developers only!\n");
-    _kcolor(7);
-    printf(
-        "  -> try_kmalloc       - Test a basic kmalloc() function\n"
-            "  -> do_fault          - Test a page_fault\n"
-            "  -> try_strtok        - Test strtok() function in string.h\n"
-            "  -> try_printmem      - Print used locations of memory\n"
-            "  -> try_open          - Function to test open() & stdarg() \n"
-            "  -> try_syscall	    - Try some syscall functions\n"
-            "  -> try_check         - Test username if exist\n"
-            "  -> test_stat			- Test stat function\n"
-            "  -> try_mapaddress    - Test map address function\n"
-            "  -> tasksetup     - Test map address function\n"
-            "  -> try_tasklist		- Test new task list\n"
-            "  -> try_ocreat	- Test file creation\n"
-            "  -> show_fd		- Test file descriptors\n"
-            "  -> try_shadow	- Test shadow feature for text input\n"
-    );
-}
-
 void try_module()
 {
     initrd_t * fs_head;
@@ -272,49 +248,48 @@ void try_mapaddress()
     //free (tmp);
 }
 
+
+int task_test_1(void * args)
+{
+    printf("I'm the task 1.\n");
+    return 0;
+}
+
+int task_test_2(void * args)
+{
+    printf("I'm the task 2.\n");
+    return 0;
+}
+
 void try_tasksetup()
 {
-    thread_t * thread1;
-    thread_t * thread2;
-
+    printf("Testing task creation functions...\n");
     asm("cli;");
-    thread1 = kernel_create_thread(task_test, "test", 0);
-    printf("Testing task creation functions:\n");
-    printf("Pid Obtained: %d\n", thread1->id);
-
-    thread2 = kernel_create_thread(task_testsecond, "testsecond", 0);
-    printf("Testing task creation functions:\n");
-    printf("Pid Obtained: %d\n", thread2->id);
+    thread_t * thread1 = kernel_create_thread(task_test_1, "task_test_1", 0);
+    printf("Task 1, pid: %d\n", thread1->id);
+    thread_t * thread2 = kernel_create_thread(task_test_2, "task_test_2", 0);
+    printf("Task 2, pid: %d\n", thread2->id);
     asm("sti;");
 }
 
-int task_test(void * args)
+int task_test_3(void * args)
 {
-    printf("A!!!\n");
-    return 0;
-}
-
-int task_testsecond(void * args)
-{
-    printf("B!!!!\n");
-    return 0;
-}
-
-void task_testthird()
-{
+    printf("I'm the task 3...\n");
     int i = 0;
-    while (1)
+    for (; i < 10; ++i)
     {
-        printf("C!!!! %d\n", i);
-        i++;
+        printf("\t%d\n", i);
     }
+    return 0;
 }
-
 
 void try_taskadd()
 {
     //thread_t* myTask
-    kernel_create_thread(task_test, "testtask", 0);
+    printf("Testing task creation functions...\n");
+    asm("cli;");
+    kernel_create_thread(task_test_3, "task_test_3", 0);
+    asm("sti;");
     //test_tasklist();
 }
 

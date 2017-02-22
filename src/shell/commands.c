@@ -524,39 +524,59 @@ void whoami(){
 
 void tester(){
 	int i = 0;
-	struct devel testing[MAX_TEST] = {
-					{ "try_kmalloc", try_kmalloc },
-					{ "try_strtok", try_strtok },
-					{ "tasksetup", try_tasksetup},
-					{ "try_printmem", try_printmem },
-					{ "try_ocreat", try_ocreat },
-					{ "try_open", try_open},
-					{ "try_syscall", try_syscall},
-					{ "show_fd", show_fd},
-					{ "test_stat", test_stat},
-					{ "try_check", try_check},
-					{ "try_shadow", try_shadow},
-					{ "try_mapaddress", try_mapaddress},
-					{ "try_taskdel", try_taskdel},
-					{ "try_taskadd", try_taskadd},
-					//{ "try_tasklist", test_tasklist},
-					{ "--help", help_tester },
-					};
-	if (argc != 2) {
-		printf ("Bad usage. Try '%s --help' for more info about the usage.\n", argv[0]);
-		return;
-	} else {
-		for ( i = 0 ; i < MAX_TEST ; i++) {
-			if ( !(strcmp(argv[1], testing[i].cmd_testname) )) {
-				 (testing[i].func)();
-				break;
-			}
-		}
-		if ( i >= MAX_TEST ) {
-			printf("Error: %s not found.\n", argv[1]);
-			//return;
-		}
-	}
+    struct devel testing[MAX_TEST] = {
+        {"try_kmalloc",    "Test a basic kmalloc() function",    try_kmalloc},
+        {"try_strtok",     "Test strtok() function in string.h", try_strtok},
+        {"tasksetup",      "Test map address function",          try_tasksetup},
+        {"try_printmem",   "Print used locations of memory",     try_printmem},
+        {"try_ocreat",     "Test file creation",                 try_ocreat},
+        {"try_open",       "Function to test open() & stdarg()", try_open},
+        {"try_syscall",    "Try some syscall functions",         try_syscall},
+        {"show_fd",        "Test file descriptors",              show_fd},
+        {"test_stat",      "Test stat function",                 test_stat},
+        {"try_check",      "Test username if exist",             try_check},
+        {"try_shadow",     "Test shadow feature for text input", try_shadow},
+        {"try_mapaddress", "Test map address function",          try_mapaddress},
+        {"try_taskdel",    "",                                   try_taskdel},
+        {"try_taskadd",    "",                                   try_taskadd},
+        //{ "try_tasklist", "Test new task list", test_tasklist},
+    };
+    if (argc != 2)
+    {
+        printf("Bad usage. Try '%s --help' for more info about the usage.\n",
+               argv[0]);
+        return;
+    }
+    if(!strcmp(argv[1], "--help"))
+    {
+        printf("Testing functions.. ");
+        _kcolor(4);
+        printf("Warning: for developers only!\n");
+        _kcolor(7);
+        for (i = 0; i < MAX_TEST; i++)
+        {
+            if (testing[i].func == NULL)
+            {
+                break;
+            }
+            printf("    [%-2d] %-20s%-20s\n", i,
+                   testing[i].cmd_testname,
+                   testing[i].cmd_description);
+        }
+        return;
+    }
+    for (i = 0; i < MAX_TEST; i++)
+    {
+        if (!(strcmp(argv[1], testing[i].cmd_testname)))
+        {
+            (testing[i].func)();
+            break;
+        }
+    }
+    if (i >= MAX_TEST)
+    {
+        printf("Error: tester %s not found.\n", argv[1]);
+    }
 }
 
 void pwd(){
