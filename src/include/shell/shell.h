@@ -47,7 +47,6 @@ extern userenv_t current_user;
 void shell_init();
 int shell(void *);
 void history (char *);
-void history_start(void);
-void _getCommand(char *);
+void history_start(const int key);
 
 #endif

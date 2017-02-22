@@ -198,13 +198,13 @@ void keyboard_isr (void)
 	break;
 
     case KEY_UPARROW:
-	history_start();
-    	_ksetcursauto();
+	history_start(sc);
+    _ksetcursauto();
 	break;
 
     case KEY_DOWNARROW:
-    history_start();
-    	_ksetcursauto();
+    history_start(sc);
+    _ksetcursauto();
 	break;
 	
     case KEY_LEFTARROW:
