@@ -82,30 +82,25 @@ void putchar(char ch)
  */
 int atoi(const char * nptr)
 {
-    int base = 1;
-    int res = 0;
-    int i;
-
-    /* Make sure all chars are numbers */
-    for (i = 0; *(nptr + i); ++i)
+    // Initialize sign as positive.
+    int sign = 1;
+    // Initialize the result.
+    int result = 0;
+    // Initialize the index.
+    int i = 0;
+    // If the number is negative, then update the sign.
+    if (nptr[0] == '-') sign = -1;
+    // Check that the rest of the numbers are digits.
+    for (i = (sign == -1) ? 1 : 0; nptr[i] != '\0'; ++i)
     {
-        if (!isdigit(*(nptr + i)))
-            return -1;
+        if (!isdigit(nptr[i])) return -1;
     }
-
-    i = 0;
-    while (nptr[++i])
-        base *= 10;
-
-    /* Actual conversion. It works like this: for example, 123 is obtained with
-     1*100 + 2*10 + 3*1 */
-    for (i = 0; *(nptr + i); ++i)
+    // Iterate through all digits and update the result.
+    for (i = (sign == -1) ? 1 : 0; nptr[i] != '\0'; ++i)
     {
-        res += ((int) nptr[i] - 48) * base;
-        base /= 10;
+        result = (result * 10) + nptr[i] - '0';
     }
-
-    return res;
+    return sign * result;
 }
 
 /*

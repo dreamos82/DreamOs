@@ -226,11 +226,14 @@ void sleep_cmd(void)
         printf("Usage: %s <seconds>\n\n", argv[0]);
         return;
     }
-    int s = atoi(argv[1]);
-    if (s != -1)
+    int seconds = atoi(argv[1]);
+    if (seconds <= 0)
     {
-        sleep(s);
+        printf("Error: You must provide a positive value (%d). \n\n",
+               seconds);
+        return;
     }
+    sleep((time_t) seconds);
 }
 
 void cpuid_help()
