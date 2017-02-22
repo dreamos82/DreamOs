@@ -61,10 +61,9 @@ thread_t *kernel_create_thread (int (*fn)(void*), void *arg, uint32_t *stack)
 
   thread->esp = (uint32_t)stack;
   thread->ebp = 0;
-  thread->eflags = 0x200; // Interrupts enabled.
+  thread->eflags = EFLAG_IF; // Interrupts enabled.
   thread->exit = 0;
   kernel_activate_thread(thread);
-
   return thread;
 }
 

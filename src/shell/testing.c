@@ -264,12 +264,12 @@ int task_test_2(void * args)
 void try_tasksetup()
 {
     printf("Testing task creation functions...\n");
-    asm("cli;");
+    asm("cli;"); // Clear Interrupt Flag
     thread_t * thread1 = kernel_create_thread(task_test_1, "task_test_1", 0);
     printf("Task 1, pid: %d\n", thread1->id);
     thread_t * thread2 = kernel_create_thread(task_test_2, "task_test_2", 0);
     printf("Task 2, pid: %d\n", thread2->id);
-    asm("sti;");
+    asm("sti;"); // Set Interrupt Flag
 }
 
 int task_test_3(void * args)
