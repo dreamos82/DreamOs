@@ -31,33 +31,34 @@
 #define RESET_MIN(A)   A = free_slots
 
 void _getCommand(char *);
+
 void _debug_history_stack(void);
 
 userenv_t current_user;
 int hst_flag;
 char cmd[CMD_LEN]; //history stack
 //#define PWD_CHECK 1
-struct cmd shell_cmd[NUM_COM] = {
-    {"aalogo",   aalogo,    "  -Show an ascii art logo"},
-    {"clear",    _kclear,   "   Clear the screen"},
+struct cmd shell_cmd[MAX_NUM_COM] = {
+    {"aalogo",   aalogo,    "-Show an ascii art logo"},
+    {"clear",    _kclear,   "Clear the screen"},
     {"poweroff", poweroff,  "Turn off the machine"},
-    {"uname",    uname_cmd, "   Print kernel version, try uname --help for more info"},
-    {"credits",  credits,   " Show DreamOS credits"},
-    {"sleep",    sleep_cmd, "   Pause DreamOS for a particular number of seconds"},
-    {"cpuid",    cpuid,     "   Show cpu identification informations"},
-    {"date",     date,      "    Show date and time"},
-    {"echo",     echo,      "    Print some lines of text"},
-    {"help",     help,      "    See the 'help' list to learn the DreamOS commands now available"},
-    {"answer",   answer,    "  42"},
+    {"uname",    uname_cmd, "Print kernel version, try uname --help for more info"},
+    {"credits",  credits,   "Show DreamOS credits"},
+    {"sleep",    sleep_cmd, "Pause DreamOS for a particular number of seconds"},
+    {"cpuid",    cpuid,     "Show cpu identification informations"},
+    {"date",     date,      "Show date and time"},
+    {"echo",     echo,      "Print some lines of text"},
+    {"help",     help,      "See the 'help' list to learn the DreamOS commands now available"},
+    {"answer",   answer,    "42"},
     {"drv_load", drv_load,  "Tool to load and kill drivers"},
-    {"ls",       ls,        "      Tool for listing dir - not complete-"},
-    {"cd",       cd,        "      Change dir - not complete-"},
-    {"whoami",   whoami,    "  Show the current user name"},
-    {"tester",   tester,    "  Try some functions, 'tester --help' for more info'"},
-    {"pwd",      pwd,       "     Print current working directory"},
-    {"more",     more,      "    Read content of a file"},
-    {"newfile",  newfile,   "	Create a new file"},
-    {"ps",       ps,        "	Show task list"}
+    {"ls",       ls,        "Tool for listing dir - not complete-"},
+    {"cd",       cd,        "Change dir - not complete-"},
+    {"whoami",   whoami,    "Show the current user name"},
+    {"tester",   tester,    "Try some functions, 'tester --help' for more info'"},
+    {"pwd",      pwd,       "Print current working directory"},
+    {"more",     more,      "Read content of a file"},
+    {"newfile",  newfile,   "Create a new file"},
+    {"ps",       ps,        "Show task list"}
 };
 /*
  * Inserisce gli argomenti di un comando in un array di stringhe
@@ -67,7 +68,7 @@ struct cmd shell_cmd[NUM_COM] = {
  */
 
 int free_slots = HST_LEN, pos = HST_LEN - 1, c = 0, limit = 1;
-char *lastcmd[HST_LEN] = {};
+char * lastcmd[HST_LEN] = {};
 //Index of history array, where we save the command
 int write_index = HST_LEN - 1;
 
@@ -189,9 +190,11 @@ int shell(void * args)
             continue;
         }
 
-        //Matching and executing the command
-        for (i = NUM_COM; i >= 0; --i)
+        // Matching and executing the command.
+        for (i = MAX_NUM_COM; i >= 0; --i)
         {
+            // Skip commands with undefined functions.
+            if (shell_cmd[i].h_func == NULL) continue;
             if (strcmp(argv[0], shell_cmd[i].cmdname) == (int) NULL)
             {
                 (*shell_cmd[i].h_func)();
@@ -207,7 +210,8 @@ int shell(void * args)
 }
 
 // Saves cmd_pass string to history buffer (lastcmd)
-void history(char *cmd_pass) {
+void history(char * cmd_pass)
+{
     int prev_index = write_index + 1;
 
     if (prev_index > HST_LEN - 1)
@@ -226,12 +230,13 @@ void history(char *cmd_pass) {
         --free_slots;
 
     #ifdef DEBUG
-        _debug_history_stack();
+    _debug_history_stack();
     #endif
 }
 
 //downarrow and uparrow keys handler to get commands from history buffer
-void history_start(const int key) {
+void history_start(const int key)
+{
     int delete = 0, max_limit = strlen(cmd);
     //Backspace handling
     if (limit < max_limit)
@@ -254,7 +259,7 @@ void history_start(const int key) {
 
     if (key == KEY_UPARROW)
         ++pos;
-	else if (key == KEY_DOWNARROW)
+    else if (key == KEY_DOWNARROW)
         --pos;
 
     if (pos < free_slots)
@@ -300,13 +305,15 @@ void _getCommand(char * prompt)
     }
 }
 
-void _debug_history_stack(void) {
+void _debug_history_stack(void)
+{
     //Prints the history stack with current indexes values
     int i;
     printf("\n------------------------------\n");
     printf("        Debug history\n");
     printf("------------------------------\n");
-    for (i = 0 ; i < HST_LEN ; ++i) {
+    for (i = 0; i < HST_LEN; ++i)
+    {
         if (i == write_index)
             printf("w"); //write_index value is here
         else if (i == pos)

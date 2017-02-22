@@ -48,10 +48,13 @@ void help()
 {
     printf("Available commands:\n");
     int i = 0;
-    while (i < 21)
+    for (i = 0; i < MAX_NUM_COM; ++i)
     {
-        printf("%s   %s\n", shell_cmd[i].cmdname, shell_cmd[i].cmddesc);
-        i++;
+        // Skip commands with undefined functions.
+        if (shell_cmd[i].h_func == NULL) continue;
+        printf("  %-10s %s\n",
+               shell_cmd[i].cmdname,
+               shell_cmd[i].cmddesc);
     }
 }
 

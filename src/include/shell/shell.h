@@ -22,7 +22,7 @@
 #define CMD_LEN 256
 #define DESC_LEN 256
 #define CURPATH_LEN 256
-#define NUM_COM 22
+#define MAX_NUM_COM 50
 #define DEF_COM 18
 #define HST_LEN 10
 
@@ -41,7 +41,7 @@ struct user_env {
 };
 
 //extern char cur_path[256];
-extern struct cmd shell_cmd[NUM_COM];
+extern struct cmd shell_cmd[MAX_NUM_COM];
 typedef struct user_env userenv_t;
 extern userenv_t current_user;
 void shell_init();
