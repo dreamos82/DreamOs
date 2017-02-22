@@ -73,6 +73,7 @@ static int *curmap = key_it_map;
 static unsigned short ledstate = 0;
 
 /* Variables to track states */
+int ctrl_pressed;
 static int is_shifted;
 static int is_tab_pressed;
 static int is_num_pressed;
@@ -105,11 +106,15 @@ void keyboard_isr (void)
 	curmap = key_it_map;
 
     /* In case of useless break codes, switch controls...*/
-    if (sc > CODE_BREAK && sc != (KEY_LSHIFT|CODE_BREAK) && sc != (KEY_RSHIFT|CODE_BREAK)){
-        if (sc==KEY_ENTER+128)
+    if ((sc > CODE_BREAK) &&
+        (sc != (KEY_LSHIFT | CODE_BREAK)) &&
+        (sc != (KEY_RSHIFT | CODE_BREAK)) &&
+        (sc != (KEY_CTRL | CODE_BREAK)))
+    {
+        if (sc == KEY_ENTER + 128)
             outportb(MASTER_PORT, EOI);
         goto end;
-        }
+    }
 
     switch (sc) {
     case KEY_LSHIFT:
@@ -223,10 +228,14 @@ void keyboard_isr (void)
 
     /*case KEY_ALTGR:
 	break;*/
-	
-    case KEY_CTRL:
-	break;
-	
+
+        case KEY_CTRL:
+            ctrl_pressed = 1;
+            break;
+        case KEY_CTRL | CODE_BREAK:
+            ctrl_pressed = 0;
+            break;
+
     default:
 	if (isdigit(key_it_map[sc]) && is_tab_pressed == 1)
 	    curmap = key_it_map;

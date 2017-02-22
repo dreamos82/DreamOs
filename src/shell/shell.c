@@ -23,7 +23,6 @@
 #include <string.h>
 #include <keyboard.h>
 #include <use.h>
-#include <clock.h>
 #include <user_shell.h>
 #include <debug.h>
 
@@ -271,21 +270,34 @@ void history_start(const int key)
 //Input shell command (a private hacked version of gets)
 void _getCommand(char * prompt)
 {
-    int i, c;
-
-    i = c = 0;
+    // Initialize the character index.
+    int i = 0;
+    // Initialize the read character.
+    int c = 0;
     //Initializing the current command line buffer
     memset(cmd, 0, CMD_LEN);
     //Input command
     printf(prompt, current_user.cur_path);
-
     //Important to update these values otherwise backspace will not work!!
     shell_mess_col = _kgetcolumn();
     shell_mess_line = _kgetline();
-
+    // Tap the command.
     cmd[0] = '\0';
-    while (i < CMD_LEN && (c = getchar()) != '\n')
+    while ((i < CMD_LEN) && ((c = getchar()) != '\n'))
     {
+        // If CTRL is pressed and the current character is c, stop reading
+        // the command.
+        if ((ctrl_pressed == 1) && (c == 'c'))
+        {
+            // However, the ISR of the keyboard has already put the char.
+            // Thus, delete it by using backspace.
+            _kbackspace();
+            // Go to the new line.
+            printf("\n");
+            // Completely reset the command.
+            cmd[0] = '\0';
+            return;
+        }
         if (hst_flag)
         {
             hst_flag = 0;

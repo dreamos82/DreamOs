@@ -61,6 +61,8 @@
 
 /* Procedures */
 
+/// Determines if the ctrl key is still pressed.
+extern int ctrl_pressed;
 
 void keyboard_isr (void);
 void keyboard_enable (void);

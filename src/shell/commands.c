@@ -61,15 +61,19 @@ void help()
 
 void echo()
 {
-	int i = argc;
-	int j = 0;
-    if ( argc == 1 ) {
-         printf("");
-    } else {
-		while ( --i > 0 ) {
-		printf("%s ",argv[++j]);
-		}
-	}
+    int i = argc;
+    int j = 0;
+    if (argc == 1)
+    {
+        printf("");
+    }
+    else
+    {
+        while (--i > 0)
+        {
+            printf("%s ", argv[++j]);
+        }
+    }
     printf("\n");
 }
 
