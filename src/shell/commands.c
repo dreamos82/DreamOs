@@ -560,9 +560,10 @@ void tester()
         }
         return;
     }
+    int testid = atoi(argv[1]);
     for (i = 0; i < MAX_TEST; i++)
     {
-        if (!(strcmp(argv[1], testing[i].cmd_testname)))
+        if (testid == i)
         {
             (testing[i].func)();
             break;
@@ -571,6 +572,7 @@ void tester()
     if (i >= MAX_TEST)
     {
         printf("Error: tester %s not found.\n", argv[1]);
+        printf("       You have to provide the test id.\n");
     }
 }
 
@@ -637,4 +639,10 @@ void date()
 void clear()
 {
     _kclear();
+}
+
+void showpid()
+{
+    thread_t * current_thread = kernel_get_current_thread();
+    printf("pid %d\n", current_thread->id);
 }

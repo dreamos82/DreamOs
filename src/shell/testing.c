@@ -13,6 +13,7 @@
 #include <thread.h>
 #include <vm.h>
 #include <8253.h>
+#include <scheduler.h>
 
 char * module_start;
 file_descriptor_t fd_list[_SC_OPEN_MAX];
@@ -275,6 +276,8 @@ void try_thread()
 
 int sleeping_thread(void * args)
 {
+    thread_t * current_thread = kernel_get_current_thread();
+    printf("Running thread with id %d", current_thread->id);
     sleep(10);
     return 0;
 }
@@ -283,6 +286,10 @@ void try_thread_sleep()
 {
     printf("Testing sleeping thread...\n");
     asm("cli;");
-    kernel_create_thread(sleeping_thread, "sleeping_thread", 0);
+    int i = 0;
+    for (; i < 5; ++i)
+    {
+        kernel_create_thread(sleeping_thread, "sleeping_thread", 0);
+    }
     asm("sti;");
 }

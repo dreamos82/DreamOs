@@ -155,16 +155,16 @@ char * get_day_lng()
 time_t time(time_t * timer)
 {
     // Jan 1, 1970
-    time_t time = 0;
-    time += get_second();
-    time += get_minute() * 60;
-    time += get_hour() * 3600;
-    time += get_day_m() * 86400;
-    time += get_month() * 2629743;
-    time += (1970 - get_year()) * 31556926;
+    time_t t = 0;
+    t += get_second();
+    t += get_minute() * 60;
+    t += get_hour() * 3600;
+    t += get_day_m() * 86400;
+    t += get_month() * 2629743;
+    t += (1970 - get_year()) * 31556926;
     if (timer != NULL)
     {
-        (*timer) = time;
+        (*timer) = t;
     }
-    return time;
+    return t;
 }

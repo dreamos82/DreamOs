@@ -48,42 +48,47 @@ thread_t *kernel_init_threading ()
   return thread;
 }
 
-thread_t *kernel_create_thread (int (*fn)(void*), void *arg, uint32_t *stack)
+thread_t * kernel_create_thread(int (* fn)(void *),
+                                void * arg,
+                                uint32_t * stack)
 {
-  // Most threads don't want to deal with stack size
-  if (stack == 0) {
-	stack = kmalloc (DEFAULT_STACK_SIZE)
-		+ (DEFAULT_STACK_SIZE - sizeof(uint32_t)*3);
-  }
+    // Most threads don't want to deal with stack size
+    if (stack == 0)
+    {
+        stack = kmalloc(DEFAULT_STACK_SIZE)
+                + (DEFAULT_STACK_SIZE - sizeof(uint32_t) * 3);
+    }
 
-  thread_t *thread = kmalloc (sizeof (thread_t));
-  memset (thread, 0, sizeof (thread_t));
-  thread->id = thread_get_id();
+    thread_t * thread = kmalloc(sizeof(thread_t));
+    memset(thread, 0, sizeof(thread_t));
+    thread->id = thread_get_id();
 
-  *--stack = (uint32_t)arg;
-  *--stack = (uint32_t)&thread_exit;
-  *--stack = (uint32_t)fn;
+    *--stack = (uint32_t) arg;
+    *--stack = (uint32_t) &thread_exit;
+    *--stack = (uint32_t) fn;
 
-  thread->esp = (uint32_t)stack;
-  thread->ebp = 0;
-  thread->eflags = EFLAG_IF; // Interrupts enabled.
-  thread->exit = 0;
-  kernel_activate_thread(thread);
-  return thread;
+    thread->esp = (uint32_t) stack;
+    thread->ebp = 0;
+    thread->eflags = EFLAG_IF; // Interrupts enabled.
+    thread->exit = 0;
+    kernel_activate_thread(thread);
+    return thread;
 }
 
 void thread_exit()
 {
-  uint32_t exit_value = 0;
-  asm("movl %%eax, %0" : "=r" (exit_value));
+    // Get the exit value of the thread.
+    uint32_t exit_value = 0;
 
-  thread_t* current = kernel_get_current_thread();
+    asm("movl %%eax, %0" : "=r" (exit_value));
 
-  printf ("Thread %d exited with value %d\n", current->id, exit_value);
+    thread_t * current = kernel_get_current_thread();
 
-  current->exit = 1;
+    printf("\nThread %d exited with value %d\n", current->id, exit_value);
 
-  for (;;) ;
+    current->exit = 1;
+
+    for (;;);
 }
 
 #ifdef E_NEWSCHED

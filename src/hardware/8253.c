@@ -47,6 +47,7 @@ unsigned int sleep(const unsigned int seconds)
     do
     {
         current_time = time(NULL);
+        __asm__("");
     } while (current_time < future_time);
     return 0;
 }
