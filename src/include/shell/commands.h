@@ -55,6 +55,7 @@ void pwd();
 void more();
 void newfile();
 void ps();
+void date();
 
 struct devel {
 	const char cmd_testname[CMD_LEN];

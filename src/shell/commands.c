@@ -12,6 +12,7 @@
 #include <vfs.h>
 #include <testing.h>
 #include <fcntl.h>
+#include <clock.h>
 
 int argc;
 char **argv;
@@ -214,13 +215,22 @@ void credits(void)
 
 void sleep_cmd(void)
 {
-  int s;
-
-  if (argv[1]) {
-    s = atoi(argv[1]);
+    if (argc != 2)
+    {
+        printf("%s: missing operand.\n", argv[0]);
+        printf("Try '%s --help' for more information.\n\n", argv[0]);
+        return;
+    }
+    if (!strcmp(argv[1], "--help"))
+    {
+        printf("Usage: %s <seconds>\n\n", argv[0]);
+        return;
+    }
+    int s = atoi(argv[1]);
     if (s != -1)
-      sleep (s);
-  } else printf ("Missing operand\n");
+    {
+        sleep(s);
+    }
 }
 
 void cpuid_help()
@@ -619,3 +629,13 @@ void ps(){
 	//test_tasklist();
 }
 
+void date()
+{
+    asm("cli");
+    printf("%s %x:%x:%x %s %s %02x %s %02x\n",
+           LNG_TIMESTAMP,
+           get_hour(), get_minute(), get_second(),
+           LNG_TIMESTAMP3,
+           get_day_lng(), get_day_m(), get_month_lng(), 0x2000 + get_year());
+    asm("sti");
+}

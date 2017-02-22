@@ -39,7 +39,7 @@ int hst_flag;
 char cmd[CMD_LEN]; //history stack
 //#define PWD_CHECK 1
 struct cmd shell_cmd[MAX_NUM_COM] = {
-    {"aalogo",   aalogo,    "-Show an ascii art logo"},
+    {"aalogo",   aalogo,    "Show an ascii art logo"},
     {"clear",    _kclear,   "Clear the screen"},
     {"poweroff", poweroff,  "Turn off the machine"},
     {"uname",    uname_cmd, "Print kernel version, try uname --help for more info"},

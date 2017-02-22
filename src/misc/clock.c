@@ -148,11 +148,3 @@ char* get_day_lng()
   }
   return "";
 }
-
-void date()
-{
-       asm("cli");
-       printf("%s %x:%x:%x %s %s %02x %s %02x\n",LNG_TIMESTAMP,get_hour(),get_minute(),get_second(),LNG_TIMESTAMP3, get_day_lng(), get_day_m(), get_month_lng(), 0x2000+get_year());
-       asm("sti");
-}
-
