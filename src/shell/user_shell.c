@@ -64,7 +64,7 @@ int user_chk(char *username, char* usr_pwd){
 
 int user_get(int fd, struct passwd_user *checking_user){
 	int i=0;
-	char appo[50];	
+	char appo[51];
 	int err = 1;
 	int status = 0;
 	memset(appo, '\0', 50);

@@ -155,20 +155,23 @@ char *cpuid_brand_index (struct registri *r)
 /*
  * Brand string is contained in EAX, EBX, ECX and EDX
  */
-char *cpuid_brand_string (struct registri *r)
+char * cpuid_brand_string(struct registri * r)
 {
-  char *temp;
-
-  for(r->eax = 0x80000002; r->eax <= 0x80000004; (r->eax)++) {
-    r->ebx = r->ecx = r->edx = 0;
-    call_cpuid (r);
-    temp = strncat (temp, (const char*)r->eax, strlen((const char*)r->eax));
-    temp = strncat (temp, (const char*)r->ebx, strlen((const char*)r->ebx));
-    temp = strncat (temp, (const char*)r->ecx, strlen((const char*)r->ecx));
-    temp = strncat (temp, (const char*)r->edx, strlen((const char*)r->edx));
-  }
-   
-  return temp;
+    char * temp = "";
+    for (r->eax = 0x80000002; r->eax <= 0x80000004; (r->eax)++)
+    {
+        r->ebx = r->ecx = r->edx = 0;
+        call_cpuid(r);
+        temp = strncat(temp, (const char *) r->eax,
+                       strlen((const char *) r->eax));
+        temp = strncat(temp, (const char *) r->ebx,
+                       strlen((const char *) r->ebx));
+        temp = strncat(temp, (const char *) r->ecx,
+                       strlen((const char *) r->ecx));
+        temp = strncat(temp, (const char *) r->edx,
+                       strlen((const char *) r->edx));
+    }
+    return temp;
 }
 
 /*

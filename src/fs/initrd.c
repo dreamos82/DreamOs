@@ -80,7 +80,9 @@ DIR * initfs_opendir(const char * path)
     }
     else
     {
+#if DEBUG
         printf("Sono una dummy_opendir, ti piaccio? path: %s\n", path);
+#endif
         return NULL;
     }
 }

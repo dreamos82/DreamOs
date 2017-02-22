@@ -48,7 +48,7 @@ struct registri {
     int edx;
 };
 
-char cpu_vendor[12]; // This will contain the main string
+char cpu_vendor[13]; // This will contain the main string
 void get_cpuid (struct cpuinfo_generic *);
 
 void call_cpuid (struct registri *);

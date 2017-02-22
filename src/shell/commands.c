@@ -500,21 +500,18 @@ void cd()
     {
         // Copy the current path.
         strcpy(abspath, current_user.cur_path);
-        printf("Current Path  :%s\n", abspath);
         // Get the absolute path.
         get_abs_path(abspath);
-        printf("Absolute Path :%s\n", abspath);
         // If the current directory is not the root, add a '/'
         if (strcmp(abspath, "/") != 0) strncat(abspath, "/", 1);
         // Concatenate the input dir.
         strncat(abspath, argv[1], strlen(argv[1]));
         // Open the directory.
-        printf("Final Path    :%s\n", abspath);
         dirp = opendir(abspath);
     }
     if ((dirp == NULL) || (i == -1))
     {
-        printf("cd: %s: No such file or directory\n", argv[1]);
+        printf("cd: %s: No such file or directory\n\n", argv[1]);
         return;
     }
     closedir(dirp);

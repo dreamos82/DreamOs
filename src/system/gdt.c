@@ -23,7 +23,6 @@
   */
 
 #include <gdt.h>
-#include <video.h>
 
 GDT_Descriptor Gdt_Table[GDT_SIZE];
 int current_pos;
@@ -78,23 +77,25 @@ void kernel_add_gdt_seg(int pos,unsigned int base, unsigned int limit, unsigned 
 	Gdt_Table[pos].base_high = tmpbase & 0xFF;
 }
 
-void kernel_set_gdtr(GDT_Descriptor *addr, unsigned short int limit, int code, int data){
-	GDT_Register gdtreg;
-	gdtreg.gdt_limit = limit;
-	gdtreg.gdt_base = (unsigned long)addr;
-	code = code<<3;
-	data = data <<3;
-	__asm__ __volatile__ ("lgdt %0\n"
-				"pushl %1\n"
-				"pushl $CSpoint\n"
-				"lret\n"
-				"CSpoint:\n"
-				"mov %2,%%eax\n"
-				"mov %%ax,%%ds\n"
-				"mov %%ax,%%es\n"
-				"mov %%ax,%%fs\n"
-				"mov %%ax,%%gs\n"
-				"mov %%ax,%%ss\n"
-				: 
-				: "g"  (gdtreg), "r" (code), "r" (data));
+void __attribute__ ((noinline)) kernel_set_gdtr(GDT_Descriptor * addr,
+                                                unsigned short int limit,
+                                                int code,
+                                                int data)
+{
+    GDT_Register gdtreg;
+    gdtreg.gdt_limit = limit;
+    gdtreg.gdt_base = (unsigned long) addr;
+    code = code << 3;
+    data = data << 3;
+    __asm__ __volatile__ ("lgdt %0\n"
+        "pushl %1\n"
+        "pushl $CSpoint\n"
+        "lret\n"
+        "CSpoint:\n"
+        "mov %2,%%eax\n"
+        "mov %%ax,%%ds\n"
+        "mov %%ax,%%es\n"
+        "mov %%ax,%%fs\n"
+        "mov %%ax,%%gs\n"
+        "mov %%ax,%%ss\n" : : "g"  (gdtreg), "r" (code), "r" (data));
 }

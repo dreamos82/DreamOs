@@ -57,11 +57,7 @@ DIR * opendir(const char * path)
     if (mountpoint_list[mpoint_id].dir_op.opendir_f != NULL)
     {
         pdir = mountpoint_list[mpoint_id].dir_op.opendir_f(rel_path);
-        if (pdir == NULL)
-        {
-            printf("Could not open_dir.\n");
-        }
-        else
+        if (pdir != NULL)
         {
             pdir->handle = mpoint_id;
         }
