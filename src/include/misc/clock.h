@@ -25,6 +25,23 @@
 #ifndef __CLOCK_H
 #define __CLOCK_H
 
+/// Used to store time values.
+typedef unsigned int time_t;
+
+/// Used to get information about the current time.
+typedef struct tm_t
+{
+    int tm_sec;   ///< Seconds                [0 to 59]
+    int tm_min;   ///< Minutes                [0 to 59]
+    int tm_hour;  ///< Hours                  [0 to 23]
+    int tm_mday;  ///< Day of the month       [1 to 31]
+    int tm_mon;   ///< Month                  [0 to 11]
+    int tm_year;  ///< Year                   [since 1900]
+    int tm_wday;  ///< Day of the week        [0 to 6]
+    int tm_yday;  ///< Day in the year        [0 to 365]
+    int tm_isdst;
+} tm_t;
+
 #define SECOND_RTC 0x00
 #define MINUTE_RTC 0x02
 #define HOUR_RTC 0x04
@@ -34,15 +51,25 @@
 #define YEAR_RTC 0x09
 
 int get_second();
-int get_hour();
-int get_minute();
-int get_second();
-int get_day_m();
-int get_month();
-int get_year();
-int get_day_w();
-char* get_month_lng();
-char* get_day_lng();
 
+int get_hour();
+
+int get_minute();
+
+int get_second();
+
+int get_day_m();
+
+int get_month();
+
+int get_year();
+
+int get_day_w();
+
+char * get_month_lng();
+
+char * get_day_lng();
+
+time_t time(time_t * timer);
 
 #endif

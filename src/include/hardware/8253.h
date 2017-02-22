@@ -25,6 +25,6 @@
 
 void timer_pit_handler ();
 void timer_init ();
-unsigned int sleep (unsigned int);
+unsigned int sleep (const unsigned int);
 
 #endif
