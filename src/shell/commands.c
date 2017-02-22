@@ -620,3 +620,8 @@ void date()
            get_day_lng(), get_day_m(), get_month_lng(), 0x2000 + get_year());
     asm("sti");
 }
+
+void clear()
+{
+    _kclear();
+}

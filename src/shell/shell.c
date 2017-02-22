@@ -57,7 +57,8 @@ struct cmd shell_cmd[MAX_NUM_COM] = {
     {"pwd",      pwd,       "Print current working directory"},
     {"more",     more,      "Read content of a file"},
     {"newfile",  newfile,   "Create a new file"},
-    {"ps",       ps,        "Show task list"}
+    {"ps",       ps,        "Show task list"},
+    {"clear",    clear,     "Clears the screen"}
 };
 /*
  * Inserisce gli argomenti di un comando in un array di stringhe
