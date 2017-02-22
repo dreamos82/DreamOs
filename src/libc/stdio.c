@@ -76,11 +76,7 @@ void putchar(char ch)
 
 }
 
-
-/*
- * Convert a string to an integer
- */
-int atoi(const char * nptr)
+int atoi(const char * str)
 {
     // Initialize sign as positive.
     int sign = 1;
@@ -89,16 +85,16 @@ int atoi(const char * nptr)
     // Initialize the index.
     int i = 0;
     // If the number is negative, then update the sign.
-    if (nptr[0] == '-') sign = -1;
+    if (str[0] == '-') sign = -1;
     // Check that the rest of the numbers are digits.
-    for (i = (sign == -1) ? 1 : 0; nptr[i] != '\0'; ++i)
+    for (i = (sign == -1) ? 1 : 0; str[i] != '\0'; ++i)
     {
-        if (!isdigit(nptr[i])) return -1;
+        if (!isdigit(str[i])) return -1;
     }
     // Iterate through all digits and update the result.
-    for (i = (sign == -1) ? 1 : 0; nptr[i] != '\0'; ++i)
+    for (i = (sign == -1) ? 1 : 0; str[i] != '\0'; ++i)
     {
-        result = (result * 10) + nptr[i] - '0';
+        result = (result * 10) + str[i] - '0';
     }
     return sign * result;
 }

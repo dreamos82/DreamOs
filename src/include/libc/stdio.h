@@ -35,7 +35,11 @@
 #endif
 
 void putchar (char ch);
-int atoi (const char *);
+
+/// @brief Convert a string to an integer.
+/// @param str The string to convert.
+/// @return The string converted to integer.
+int atoi (const char * str);
 int printf (const char *, ...);
 int puts (char *s);
 int scanf (const char *, ...);
