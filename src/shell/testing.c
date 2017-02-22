@@ -12,6 +12,7 @@
 #include <user_shell.h>
 #include <thread.h>
 #include <vm.h>
+#include <8253.h>
 
 char * module_start;
 file_descriptor_t fd_list[_SC_OPEN_MAX];
@@ -261,7 +262,7 @@ int task_test_2(void * args)
     return 0;
 }
 
-void try_tasksetup()
+void try_thread()
 {
     printf("Testing task creation functions...\n");
     asm("cli;"); // Clear Interrupt Flag
@@ -272,29 +273,16 @@ void try_tasksetup()
     asm("sti;"); // Set Interrupt Flag
 }
 
-int task_test_3(void * args)
+int sleeping_thread(void * args)
 {
-    printf("I'm the task 3...\n");
-    int i = 0;
-    for (; i < 10; ++i)
-    {
-        printf("\t%d\n", i);
-    }
+    sleep(10);
     return 0;
 }
 
-void try_taskadd()
+void try_thread_sleep()
 {
-    //thread_t* myTask
-    printf("Testing task creation functions...\n");
+    printf("Testing sleeping thread...\n");
     asm("cli;");
-    kernel_create_thread(task_test_3, "task_test_3", 0);
+    kernel_create_thread(sleeping_thread, "sleeping_thread", 0);
     asm("sti;");
-    //test_tasklist();
-}
-
-void try_taskdel()
-{
-    //task_t* myTask = dequeue_task();
-    //test_tasklist();
 }

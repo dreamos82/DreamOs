@@ -32,8 +32,7 @@ void test_stat();
 void try_shadow();
 //void try_newheap();
 void try_mapaddress();
-void try_tasksetup();
-void try_taskdel();
-void try_taskadd();
+void try_thread();
+void try_thread_sleep();
 
 #endif

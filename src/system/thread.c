@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
+
  //
  // Based on JamesM's kernel developement tutorials.
  //
@@ -26,7 +26,13 @@
 #include <stdio.h>
 #include <string.h>
 
-uint32_t next_tid = 0;
+/// @brief Returns a non-decreasing unique thread id.
+/// @return A unique thread id.
+uint32_t thread_get_id(void)
+{
+    static unsigned long int tid = 0;
+    return ++tid;
+}
 
 void thread_exit ();
 
@@ -38,8 +44,7 @@ extern void _create_thread(int (*)(void*), void*, uint32_t*, thread_t*);
 thread_t *kernel_init_threading ()
 {
   thread_t *thread = kmalloc (sizeof (thread_t));
-  thread->id  = next_tid++;
-
+  thread->id  = thread_get_id();
   return thread;
 }
 
@@ -53,8 +58,8 @@ thread_t *kernel_create_thread (int (*fn)(void*), void *arg, uint32_t *stack)
 
   thread_t *thread = kmalloc (sizeof (thread_t));
   memset (thread, 0, sizeof (thread_t));
-  thread->id = next_tid++;
-  
+  thread->id = thread_get_id();
+
   *--stack = (uint32_t)arg;
   *--stack = (uint32_t)&thread_exit;
   *--stack = (uint32_t)fn;

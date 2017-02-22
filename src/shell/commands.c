@@ -13,6 +13,7 @@
 #include <testing.h>
 #include <fcntl.h>
 #include <clock.h>
+#include <scheduler.h>
 
 int argc;
 char **argv;
@@ -516,23 +517,23 @@ void whoami(){
 	printf("%s\n", current_user.username);
 }
 
-void tester(){
-	int i = 0;
+void tester()
+{
+    int i = 0;
     struct devel testing[MAX_TEST] = {
-        {"try_kmalloc",    "Test a basic kmalloc() function",    try_kmalloc},
-        {"try_strtok",     "Test strtok() function in string.h", try_strtok},
-        {"tasksetup",      "Test map address function",          try_tasksetup},
-        {"try_printmem",   "Print used locations of memory",     try_printmem},
-        {"try_ocreat",     "Test file creation",                 try_ocreat},
-        {"try_open",       "Function to test open() & stdarg()", try_open},
-        {"try_syscall",    "Try some syscall functions",         try_syscall},
-        {"show_fd",        "Test file descriptors",              show_fd},
-        {"test_stat",      "Test stat function",                 test_stat},
-        {"try_check",      "Test username if exist",             try_check},
-        {"try_shadow",     "Test shadow feature for text input", try_shadow},
-        {"try_mapaddress", "Test map address function",          try_mapaddress},
-        {"try_taskdel",    "",                                   try_taskdel},
-        {"try_taskadd",    "",                                   try_taskadd},
+        {"try_kmalloc",      "Test a basic kmalloc() function",              try_kmalloc},
+        {"try_strtok",       "Test strtok() function in string.h",           try_strtok},
+        {"try_printmem",     "Print used locations of memory",               try_printmem},
+        {"try_ocreat",       "Test file creation",                           try_ocreat},
+        {"try_open",         "Function to test open() & stdarg()",           try_open},
+        {"try_syscall",      "Try some syscall functions",                   try_syscall},
+        {"show_fd",          "Test file descriptors",                        show_fd},
+        {"test_stat",        "Test stat function",                           test_stat},
+        {"try_check",        "Test username if exist",                       try_check},
+        {"try_shadow",       "Test shadow feature for text input",           try_shadow},
+        {"try_mapaddress",   "Test map address function",                    try_mapaddress},
+        {"try_thread",       "Test multiple threads creation",               try_thread},
+        {"try_thread_sleep", "Creates a thread which sleeps for 10 seconds", try_thread_sleep},
         //{ "try_tasklist", "Test new task list", test_tasklist},
     };
     if (argc != 2)
@@ -605,9 +606,21 @@ void newfile(){
 	}
 }
 
-void ps(){
-	//printf("Stay tuned\n");
-	//test_tasklist();
+void ps()
+{
+    // Print the header.
+    printf("%8s\n", "PID");
+    // Iterate through the ready queue to the end.
+    thread_list_t * iterator = ready_queue;
+    while (iterator->next)
+    {
+        iterator = iterator->next;
+        // Check that the thread is not NULL.
+        if(iterator->thread != NULL)
+        {
+            printf("%-8d\n", iterator->thread->id);
+        }
+    }
 }
 
 void date()
