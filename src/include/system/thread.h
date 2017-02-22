@@ -48,6 +48,8 @@ enum eflags_list
 };
 // 12-13  IOPL    I/O Priviledge level
 
+typedef void (* ExitFunction)();
+
 /// @brief Holds information about a thread.
 typedef struct thread
 {
@@ -68,6 +70,7 @@ typedef struct thread
     uint32_t id;
     /// The exit flag. When set to 1, the scheduler will deactivate the thread.
     volatile uint32_t exit;
+    ExitFunction exitFunction;
 } thread_t;
 
 thread_t * kernel_init_threading();
@@ -78,5 +81,7 @@ thread_t * kernel_create_thread(int (* fn)(void *),
                                 uint32_t * stack);
 
 void switch_thread(struct thread_list * next);
+
+void switch_thread_v2(struct thread_list * next);
 
 #endif

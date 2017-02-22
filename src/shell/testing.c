@@ -276,8 +276,6 @@ void try_thread()
 
 int sleeping_thread(void * args)
 {
-    thread_t * current_thread = kernel_get_current_thread();
-    printf("Running thread with id %d", current_thread->id);
     sleep(10);
     return 0;
 }

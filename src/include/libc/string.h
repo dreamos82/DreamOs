@@ -76,9 +76,22 @@ int memicmp(const void *buf1, const void *buf2, size_t n);
 
 // Intrinsic functions
 
-void *memcpy(void *, const void *, size_t);
+/// @brief Copy a block of memory, handling overlap.
+/// @param _dst Pointer to the destination.
+/// @param _src Pointer to the source.
+/// @param num Number of bytes to be copied.
+/// @return Pointer to the destination.
+void * memcpy(void * _dst, const void * _src, size_t num);
+
 int memcmp(const void *, const void *, size_t);
-void *memset(void *, int, size_t);
+
+/// @brief Sets the first num bytes of the block of memory pointed by ptr
+///         to the specified value.
+/// @param ptr   Pointer to the block of memory to set.
+/// @param value Value to be set.
+/// @param num   Number of bytes to be set to the given value.
+/// @return The same ptr.
+void * memset(void * ptr, int value, size_t num);
 
 char *strcpy(char *, const char *);
 char *strcat(char *, const char *);

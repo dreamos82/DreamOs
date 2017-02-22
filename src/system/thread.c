@@ -16,15 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
- //
- // Based on JamesM's kernel developement tutorials.
- //
+//
+// Based on JamesM's kernel developement tutorials.
+//
 
 #include "thread.h"
 #include "kheap.h"
 #include "scheduler.h"
 #include <stdio.h>
 #include <string.h>
+
+#define DEFAULT_STACK_SIZE 0x100000
 
 /// @brief Returns a non-decreasing unique thread id.
 /// @return A unique thread id.
@@ -34,43 +36,50 @@ uint32_t thread_get_id(void)
     return ++tid;
 }
 
-void thread_exit ();
+void thread_exit();
 
-extern void _create_thread(int (*)(void*), void*, uint32_t*, thread_t*);
+extern void _create_thread(int (*)(void *), void *, uint32_t *, thread_t *);
 
-#define DEFAULT_STACK_SIZE 0x100000
-
-
-thread_t *kernel_init_threading ()
+thread_t * kernel_init_threading()
 {
-  thread_t *thread = kmalloc (sizeof (thread_t));
-  thread->id  = thread_get_id();
-  return thread;
+    thread_t * thread = kmalloc(sizeof(thread_t));
+    thread->id = thread_get_id();
+    return thread;
 }
 
 thread_t * kernel_create_thread(int (* fn)(void *),
                                 void * arg,
                                 uint32_t * stack)
 {
-    // Most threads don't want to deal with stack size
+    // Most threads don't want to deal with stack size.
     if (stack == 0)
     {
         stack = kmalloc(DEFAULT_STACK_SIZE)
-                + (DEFAULT_STACK_SIZE - sizeof(uint32_t) * 3);
+                + DEFAULT_STACK_SIZE
+                - sizeof(uint32_t) * 3;
     }
 
+    // Create the thread.
     thread_t * thread = kmalloc(sizeof(thread_t));
     memset(thread, 0, sizeof(thread_t));
     thread->id = thread_get_id();
 
-    *--stack = (uint32_t) arg;
-    *--stack = (uint32_t) &thread_exit;
-    *--stack = (uint32_t) fn;
+    printf("Running thread with id %d\n", thread->id);
 
+    *(--stack) = (uint32_t) arg;
+    *(--stack) = (uint32_t) &thread_exit;
+    *(--stack) = (uint32_t) fn;
+
+    // Set the top address of the stack.
     thread->esp = (uint32_t) stack;
+    // Set the base address of the stack.
     thread->ebp = 0;
-    thread->eflags = EFLAG_IF; // Interrupts enabled.
+    // Enable the interrupts.
+    thread->eflags = EFLAG_IF;
+    // Set the exit status to 0.
     thread->exit = 0;
+    thread->exitFunction = &thread_exit;
+    // Activate the thread.
     kernel_activate_thread(thread);
     return thread;
 }
@@ -80,7 +89,7 @@ void thread_exit()
     // Get the exit value of the thread.
     uint32_t exit_value = 0;
 
-    asm("movl %%eax, %0" : "=r" (exit_value));
+    __asm__("movl %%eax, %0" : "=r" (exit_value));
 
     thread_t * current = kernel_get_current_thread();
 
@@ -88,41 +97,30 @@ void thread_exit()
 
     current->exit = 1;
 
-    for (;;);
+    while (TRUE);
 }
 
-#ifdef E_NEWSCHED
-void switch_thread (struct thread_list *next)
-
+void switch_thread_v2(struct thread_list * next)
 {
-      //asm ("mov %%eax, %0" : : "r" (current_thread));
+    thread_t * current_thread = kernel_get_current_thread();
 
-      asm ("mov %%esp, %0" : "=r" (current_thread->esp));
-      asm ("mov %%ebp, %0" : "=r" (current_thread->ebp));
-      asm ("mov %%ebx, %0" : "=r" (current_thread->ebx));
-      asm ("mov %%esi, %0" : "=r" (current_thread->esi));
-      asm ("mov %%edi, %0" : "=r" (current_thread->edi));
+    __asm__("mov %0, %%esp" : "=r" (current_thread->esp));
+    __asm__("mov %0, %%ebp" : "=r" (current_thread->ebp));
+    __asm__("mov %0, %%ebx" : "=r" (current_thread->ebx));
+    __asm__("mov %0, %%esi" : "=r" (current_thread->esi));
+    __asm__("mov %0, %%edi" : "=r" (current_thread->edi));
+    __asm__("pushf");
+    __asm__("pop %0" : "=r" (current_thread->eflags));
 
-      //asm ("pushf");
-      //asm ("pop %ecx");
+    // Handle the next function?
+    __asm__("mov %%eax, %0" : "=r" (next));
+    __asm__("mov %%esp, %0" : "=r" (next->thread->esp));
+    __asm__("mov %%ebp, %0" : "=r" (next->thread->ebp));
+    __asm__("mov %%ebx, %0" : "=r" (next->thread->ebx));
+    __asm__("mov %%esi, %0" : "=r" (next->thread->esi));
+    __asm__("mov %%edi, %0" : "=r" (next->thread->edi));
+    __asm__("push %0" : "=r" (next->thread->eflags));
+    __asm__("popf");
 
-      //[eax+20], ecx
-      //asm ("mov %%ecx, %0" : "=r" (current_thread->ecx));
-
-      current_thread = next->thread;
-
-      //asm ("mov %0, %%eax" : : "r" (current_thread));
-
-      asm ("mov %0, %%esp" : : "r" (next->thread->esp));
-      asm ("mov %0, %%ebp" : : "r" (next->thread->ebp));
-      asm ("mov %0, %%ebx" : : "r" (next->thread->ebx));
-      asm ("mov %0, %%edi" : : "r" (next->thread->edi));
-      asm ("mov %0, %%esi" : : "r" (next->thread->esi));
-
-      //mov eax, [eax+20]
-      //asm ("mov %0, %%eax" : : "r" (next->thread->ecx));
-
-      //asm ("push %eax");
-      //asm ("popf");
+    __asm__("ret");
 }
-#endif

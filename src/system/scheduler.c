@@ -119,6 +119,7 @@ void schedule()
     // Remove the moved thread from the start.
     thread_list_t * new_thread = ready_queue;
     ready_queue = ready_queue->next;
+    //switch_thread_v2(new_thread);
     // Switch to the new thread.
     switch_thread(new_thread);
 }

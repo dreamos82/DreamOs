@@ -29,8 +29,8 @@
 
 typedef struct thread_list
 {
-  thread_t *thread;
-  struct thread_list *next;
+    thread_t * thread;
+    struct thread_list * next;
 } thread_list_t;
 
 extern thread_list_t * ready_queue;

@@ -444,12 +444,17 @@ char *strtok(char *string, const char *control)
 #pragma function(strcmp)
 #pragma function(strset)*/
 
-void * memset(void * p, int c, size_t n)
+void * memset(void * ptr, int value, size_t num)
 {
-    char * pb = (char *) p;
-    char * pbend = pb + n;
-    while (pb != pbend) *pb++ = c;
-    return p;
+    if (num)
+    {
+        char * pb = ptr;
+        do
+        {
+            *(pb++) = (char) value;
+        } while (--num);
+    }
+    return ptr;
 }
 
 int memcmp(const void * dst, const void * src, size_t n)
@@ -465,18 +470,19 @@ int memcmp(const void * dst, const void * src, size_t n)
     return *((unsigned char *) dst) - *((unsigned char *) src);
 }
 
-void * memcpy(void * dst, const void * src, size_t n)
+void * memcpy(void * _dst, const void * _src, size_t num)
 {
-    void * ret = dst;
-
-    while (n--)
+    char * dst = _dst;
+    const char * src = _src;
+    // There is nothing to do.
+    if ((num == 0) || (src == dst)) return dst;
+    while (num--)
     {
         *(char *) dst = *(char *) src;
         dst = (char *) dst + 1;
         src = (char *) src + 1;
     }
-
-    return ret;
+    return dst;
 }
 
 void * memccpy(void * dst, const void * src, int c, size_t n)
