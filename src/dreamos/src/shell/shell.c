@@ -29,37 +29,40 @@
 #define RESET_MAX(A)   A = HST_LEN - 1
 #define RESET_MIN(A)   A = free_slots
 
-void _getCommand(char *);
+void print_prompt(char * prompt);
 
-void _debug_history_stack(void);
+void get_command();
+
+void get_options(char * command);
 
 userenv_t current_user;
 int hst_flag;
 char cmd[CMD_LEN]; //history stack
 //#define PWD_CHECK 1
 struct cmd shell_cmd[MAX_NUM_COM] = {
-    {"aalogo",   aalogo,    "Show an ascii art logo"},
-    {"clear",    _kclear,   "Clear the screen"},
-    {"poweroff", poweroff,  "Turn off the machine"},
-    {"uname",    uname_cmd, "Print kernel version, try uname --help for more info"},
-    {"credits",  credits,   "Show DreamOS credits"},
-    {"sleep",    sleep_cmd, "Pause DreamOS for a particular number of seconds"},
-    {"cpuid",    cpuid,     "Show cpu identification informations"},
-    {"date",     date,      "Show date and time"},
-    {"echo",     echo,      "Print some lines of text"},
-    {"help",     help,      "See the 'help' list to learn the DreamOS commands now available"},
-    {"answer",   answer,    "42"},
-    {"drv_load", drv_load,  "Tool to load and kill drivers"},
-    {"ls",       ls,        "Tool for listing dir - not complete-"},
-    {"cd",       cd,        "Change dir - not complete-"},
-    {"whoami",   whoami,    "Show the current user name"},
-    {"tester",   tester,    "Try some functions, 'tester --help' for more info'"},
-    {"pwd",      pwd,       "Print current working directory"},
-    {"more",     more,      "Read content of a file"},
-    {"newfile",  newfile,   "Create a new file"},
-    {"ps",       ps,        "Show task list"},
-    {"clear",    clear,     "Clears the screen"},
-    {"showpid",  showpid,   "Shows the PID of the shell"}
+    {"aalogo",   aalogo,        "Show an ascii art logo"},
+    {"clear",    _kclear,       "Clear the screen"},
+    {"poweroff", poweroff,      "Turn off the machine"},
+    {"uname",    uname_cmd,     "Print kernel version, try uname --help for more info"},
+    {"credits",  credits,       "Show DreamOS credits"},
+    {"sleep",    sleep_cmd,     "Pause DreamOS for a particular number of seconds"},
+    {"cpuid",    cpuid,         "Show cpu identification informations"},
+    {"date",     date,          "Show date and time"},
+    {"echo",     echo,          "Print some lines of text"},
+    {"help",     help,          "See the 'help' list to learn the DreamOS commands now available"},
+    {"answer",   answer,        "42"},
+    {"drv_load", drv_load,      "Tool to load and kill drivers"},
+    {"ls",       ls,            "Tool for listing dir - not complete-"},
+    {"cd",       cd,            "Change dir - not complete-"},
+    {"whoami",   whoami,        "Show the current user name"},
+    {"tester",   tester,        "Try some functions, 'tester --help' for more info'"},
+    {"pwd",      pwd,           "Print current working directory"},
+    {"more",     more,          "Read content of a file"},
+    {"newfile",  newfile,       "Create a new file"},
+    {"ps",       ps,            "Show task list"},
+    {"clear",    clear,         "Clears the screen"},
+    {"showpid",  showpid,       "Shows the PID of the shell"},
+    {"history",  print_history, "Shows the shell history"}
 };
 /*
  * Inserisce gli argomenti di un comando in un array di stringhe
@@ -72,25 +75,6 @@ int free_slots = HST_LEN, pos = HST_LEN - 1, c = 0, limit = 1;
 char * lastcmd[HST_LEN];
 //Index of history array, where we save the command
 int write_index = HST_LEN - 1;
-
-void options(char * com)
-{
-    int i = 0;
-    argc = 0;
-    for (; *com; com++)
-    {
-        argv[argc] = (char *) kmalloc(sizeof(char) * 30);
-        while (*com != ' ' && *com != '\0')
-        {
-            *(argv[argc] + i) = *com++;
-            i++;
-        }
-        *(argv[argc] + i) = '\0';
-        argc++;
-        i = 0;
-    }
-    argv[argc] = "\0";
-}
 
 /* corpo della shell */
 int shell(void * args)
@@ -165,18 +149,16 @@ int shell(void * args)
 
     for (;;)
     {
+        // Debug on bochs prompt.
         dbg_bochs_print("shell loop\n");
-        _kcolor(9);
-        printf("%s", current_user.username);
-        _kcolor(15);
-
-        _getCommand("~:%s# ");
-
-        /* Cleans all blanks at the beginning of the command */
+        // First print the prompt.
+        print_prompt("~:%s# ");
+        // Get the input command.
+        get_command();
+        // Cleans all blanks at the beginning of the command.
         for (i = 0, cmd_ptr = cmd; cmd[i] == ' '; i++, cmd_ptr++);
-
         // Retrieve the options from the command.
-        options(cmd_ptr);
+        get_options(cmd_ptr);
 
         if (strlen(cmd_ptr) > 0)
         {
@@ -270,8 +252,18 @@ void history_start(const int key)
         RESET_MIN(pos);
 }
 
+void print_prompt(char * prompt)
+{
+    // First print the username.
+    _ksetcolor(BRIGHT_BLUE, 0);
+    printf("%s", current_user.username);
+    _ksetcolor(WHITE, 0);
+    // Input command.
+    printf(prompt, current_user.cur_path);
+}
+
 //Input shell command (a private hacked version of gets)
-void _getCommand(char * prompt)
+void get_command()
 {
     // Initialize the character index.
     int i = 0;
@@ -279,8 +271,6 @@ void _getCommand(char * prompt)
     int c = 0;
     //Initializing the current command line buffer
     memset(cmd, 0, CMD_LEN);
-    //Input command
-    printf(prompt, current_user.cur_path);
     //Important to update these values otherwise backspace will not work!!
     shell_mess_col = _kgetcolumn();
     shell_mess_line = _kgetline();
@@ -320,22 +310,39 @@ void _getCommand(char * prompt)
     }
 }
 
-void _debug_history_stack(void)
+void get_options(char * command)
+{
+    int i = 0;
+    argc = 0;
+    for (; *command; command++)
+    {
+        argv[argc] = (char *) kmalloc(sizeof(char) * 30);
+        while (*command != ' ' && *command != '\0')
+        {
+            *(argv[argc] + i) = *command++;
+            i++;
+        }
+        *(argv[argc] + i) = '\0';
+        argc++;
+        i = 0;
+    }
+    argv[argc] = "\0";
+}
+
+void print_history(void)
 {
     //Prints the history stack with current indexes values
     int i;
-    printf("\n------------------------------\n");
-    printf("        Debug history\n");
+    printf("\n");
+    printf("------------------------------\n");
+    printf("        Debug history         \n");
     printf("------------------------------\n");
     for (i = 0; i < HST_LEN; ++i)
     {
-        if (i == write_index)
-            printf("w"); //write_index value is here
-        else if (i == pos)
-            printf("->"); //pos value is here
-
-        printf("\tHistory[%d]: %s", i, lastcmd[i]);
-        putchar('\n');
+        if (i == write_index) printf("w "); //write_index value is here
+        else if (i == pos) printf("->");    //pos value is here
+        else printf("  ");
+        printf("\tHistory[%d]: %s\n", i, lastcmd[i]);
     }
     printf("#free slots: %d\n", free_slots);
 }

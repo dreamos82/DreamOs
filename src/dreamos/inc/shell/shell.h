@@ -48,5 +48,6 @@ void shell_init();
 int shell(void *);
 void history (char *);
 void history_start(const int key);
+void print_history(void);
 
 #endif

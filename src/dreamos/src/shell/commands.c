@@ -14,6 +14,7 @@
 #include <fcntl.h>
 #include <clock.h>
 #include <scheduler.h>
+#include <shell.h>
 
 int argc;
 char **argv;

@@ -26,8 +26,6 @@
  */
  
 #include <video.h>
-#include <stddef.h>
-#include <string.h>
 
 
 char *VIDEO_MEM = (char*) 0xb8000,
@@ -104,6 +102,15 @@ void _kputs(char *s)
 void _kcolor(char color)
 {
   VIDEO_CLR = color;
+}
+
+/* Sets the forecolor and backcolor that we will use */
+void _ksetcolor(const unsigned char foreground,
+                const unsigned char background)
+{
+    /* Top 4 bytes are the background, bottom 4 bytes
+    *  are the foreground color */
+    VIDEO_CLR = (background << 4) | (foreground & 0x0F);
 }
 
 /*

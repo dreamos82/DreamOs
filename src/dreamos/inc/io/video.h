@@ -21,7 +21,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
+
 #ifndef _VIDEO_H
 #define _VIDEO_H
 
@@ -51,6 +51,8 @@
 void _kntos(char*, unsigned int, int);
 void _kputc(char);
 void _kcolor(char);
+void _ksetcolor(const unsigned char foreground,
+                const unsigned char background);
 void _kputs(char *);
 void _kbackspace();
 void _kesetcursor(unsigned int, unsigned int);
