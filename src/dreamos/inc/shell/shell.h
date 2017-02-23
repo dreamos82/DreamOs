@@ -26,38 +26,48 @@
 #define DEF_COM 18
 #define HST_LEN 10
 
+/// Pointer to the function of a commmand.
+typedef void (* CommandFunction)(void);
 
-struct cmd
+/// @brief Holds information about a command.
+typedef struct command_t
 {
+    /// The name of the command.
     char cmdname[CMD_LEN];
-
-    void (* h_func)(void);
-
+    /// The function pointer to the command.
+    CommandFunction function;
+    /// The description of the command.
     char cmddesc[DESC_LEN];
-};
+} command_t;
 
-struct user_env
+/// @brief Holds information about the user.
+typedef struct userenv_t
 {
+    /// The username.
     char username[USER_LEN];
+    /// The current path.
     char cur_path[CURPATH_LEN];
+    /// The user identifier.
     unsigned int uid;
+    /// The group identifier.
     unsigned int gid;
-};
+} userenv_t;
 
-extern struct cmd shell_cmd[MAX_NUM_COM];
-typedef struct user_env userenv_t;
+extern command_t shell_cmd[MAX_NUM_COM];
 extern userenv_t current_user;
-
-void shell_init();
 
 int shell(void *);
 
+/// @brief Initialize the init.
 void history_init(void);
 
+/// @brief Push the command inside the history.
 void history_push(char * command);
 
+/// @brief Give the key allows to navigate through the history.
 void history_start(const int key);
 
+/// @brief Prints the history.
 void history_print(void);
 
 #endif

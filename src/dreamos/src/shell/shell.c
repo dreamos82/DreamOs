@@ -51,7 +51,7 @@ int limit = 1;
 /// Index of history array, where we save the command
 int write_index = HST_LEN - 1;
 
-struct cmd shell_cmd[MAX_NUM_COM] = {
+command_t shell_cmd[MAX_NUM_COM] = {
     {"aalogo",   aalogo,        "Show an ascii art logo"},
     {"clear",    _kclear,       "Clear the screen"},
     {"poweroff", poweroff,      "Turn off the machine"},
@@ -173,10 +173,10 @@ int shell(void * args)
         for (i = MAX_NUM_COM; i >= 0; --i)
         {
             // Skip commands with undefined functions.
-            if (shell_cmd[i].h_func == NULL) continue;
+            if (shell_cmd[i].function == NULL) continue;
             if (strcmp(argv[0], shell_cmd[i].cmdname) == (int) NULL)
             {
-                (*shell_cmd[i].h_func)();
+                (*shell_cmd[i].function)();
                 break;
             }
         }
@@ -302,7 +302,6 @@ void history_push(char * command)
     }
 }
 
-//downarrow and uparrow keys handler to get commands from history buffer
 void history_start(const int key)
 {
     int delete = 0, max_limit = strlen(cmd);
