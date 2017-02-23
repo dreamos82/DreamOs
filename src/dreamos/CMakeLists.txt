@@ -15,7 +15,7 @@ option(ENABLE_BOCHS_DEBUG "Enable the bosh debug" ON)
 set(MEMORY "LEGACY" CACHE STRING "Type of memory")
 
 # ------------------------------------------------------------------------------
-# Set the compiler options.
+# Set the compiler options (original).
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -nostdlib")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -nostdinc")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g")
@@ -32,10 +32,60 @@ if (ENABLE_BOCHS_DEBUG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DBOCHS_DEBUG")
 endif (ENABLE_BOCHS_DEBUG)
 
+# ------------------------------------------------------------------------------
+# Set the compiler options (extra).
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wpedantic")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pedantic-errors")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wextra")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wconversion")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wcast-align")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wcast-qual")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wdisabled-optimization")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wfloat-equal")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wfloat-conversion")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wformat=2")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wformat-nonliteral")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wformat-security")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wformat-y2k")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wimport")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Winit-self")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Winline")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Winvalid-pch")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-long-long")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wmissing-field-initializers")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wmissing-format-attribute")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wmissing-include-dirs")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wpacked")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wpointer-arith")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wredundant-decls")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wshadow")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wstack-protector")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wstrict-aliasing=2")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wswitch")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wswitch-default")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wswitch-enum")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunreachable-code")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused-function")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused-label")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused-parameter")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused-value")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused-variable")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wvariadic-macros")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wwrite-strings")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wsign-compare")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wsign-conversion")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wuninitialized")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fmessage-length=0")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g3")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ggdb")
+
+# ------------------------------------------------------------------------------
+
 if(CMAKE_BUILD_TYPE MATCHES "Release")
-    message(STATUS "Enablig RELEASE mode...")
 elseif(CMAKE_BUILD_TYPE MATCHES "Debug")
-    message(STATUS "Enablig DEBUG mode...")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DDEBUG")
 endif(CMAKE_BUILD_TYPE MATCHES "Release")
 
@@ -62,7 +112,6 @@ include_directories(
         inc/shell
         inc/sys
         inc/system
-        src/utils/include
 )
 
 # ------------------------------------------------------------------------------
