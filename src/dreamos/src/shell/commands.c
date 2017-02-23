@@ -5,7 +5,7 @@
 #include <cpuid.h>
 #include <stdio.h>
 #include <string.h>
-#include <use.h>
+#include <language.h>
 #include <version.h>
 #include <sys/utsname.h>
 #include <mouse.h>
@@ -314,7 +314,7 @@ void  drv_load(void)
       else if (_kstrncmp (argv[1], "mouse", 5) == 0)
       {
 	 	 // enabling mouse
-	  	 mouse_init();
+          mouse_install();
       }
 
       else if ( (_kstrncmp (argv[1], "--help", 6) == 0) || (_kstrncmp (argv[1], "-h", 2) == 0) )

@@ -23,58 +23,52 @@
  */
 
 #include <elf.h>
-#include <multiboot.h>
 #include <kernel.h>
-#include <stddef.h>
 #include <video.h>
 #include <pic8259.h>
-#include <timer.h>
 #include <gdt.h>
 #include <idt.h>
 #include <cpuid.h>
 #include <stdio.h>
-#include <string.h>
 #include <io.h>
-#include <keyboard.h>
 #include <paging.h>
-#include <use.h>
+#include <language.h>
 #include <shell.h>
 #include <syscall.h>
 #include <kheap.h>
 #include <vfs.h>
 #include <initrd.h>
-#include <keyboard.h>
 #include <fdc.h>
 #include <thread.h>
 #include <scheduler.h>
-#include <testing.h>
-#include <paging.h>
 #include <vm.h>
 
 #ifdef BOCHS_DEBUG
+
 #include <debug.h>
+
 #endif
 
-unsigned int *current_page_table;
+unsigned int * current_page_table;
 extern unsigned int end;
-multiboot_info_t *boot_informations;
-char *module_start;
+multiboot_info_t * boot_informations;
+char * module_start;
 unsigned int module_end;
 elf_t kernel_elf;
 
-asmlinkage void _start(struct multiboot_info *boot_info)
+asmlinkage void _start(struct multiboot_info * boot_info)
 {
     boot_informations = boot_info;
-	main_loop(boot_info);
-	while(1);
+    main_loop(boot_info);
+    while (1);
 }
 
-int main_loop(struct multiboot_info *boot_info)
+int main_loop(struct multiboot_info * boot_info)
 {
     _kclear();
     syscall_init();
-    module_start = (char*) *((unsigned int*)boot_info->mods_addr);
-	module_end = *((unsigned int*)(boot_info->mods_addr+4));
+    module_start = (char *) *((unsigned int *) boot_info->mods_addr);
+    module_end = *((unsigned int *) (boot_info->mods_addr + 4));
     _kcolor(BRIGHT_GREEN);
     _kputs(DREAMOS_VER);
     _kcolor(WHITE);
@@ -84,57 +78,66 @@ int main_loop(struct multiboot_info *boot_info)
     _kputs("\n");
     _kcolor(WHITE);
     _kputs("\n");
+
+    // Set the GDT.
     _kputs(LNG_GDT);
     kernel_init_gdt();
     _kprintOK();
+
     outportb(0xFF, MASTER_PORT_1);
     outportb(0xFF, SLAVE_PORT_1);
+
+    // Set the IDT.
     _kputs(LNG_IDT);
     init_idt();
-	__asm__ __volatile__("int $0x3");
     _kprintOK();
-	kernel_init_paging(boot_info->mem_upper);
-	_kprintOK();
-    _kputs(LNG_PIC8259);
+
+    // Breakpoint.
+    __asm__ __volatile__("int $0x3");
+
+    kernel_init_paging(boot_info->mem_upper);
+
+    // Initialize the IRQ.
+    printf(LNG_PIC8259"\n");
     irq_init();
+
+    kernel_init_vm();
+    kernel_init_heap();
+    kernel_map_memory(boot_info);
     _kprintOK();
-	kernel_init_vm();
-	kernel_init_heap();
-	kernel_map_memory(boot_info);
-    _kprintOK();
-    printf("Memory (upper) amount-> %d Mb \n", boot_info->mem_upper/1024);
+    printf("Memory (upper) amount-> %d Mb \n", boot_info->mem_upper / 1024);
     printf("Memory (lower) amount-> %d kb \n", boot_info->mem_lower);
 
     /** Alloc and fill CPUID structure */
     sinfo = kmalloc(sizeof(struct cpuinfo_generic));
-    get_cpuid (sinfo);
+    get_cpuid(sinfo);
     vfs_init();
     initfs_init();
-	if(boot_info->mods_count > 0)
-		printf("Found n. %d Modules\n", boot_info->mods_count);
+    if (boot_info->mods_count > 0)
+        printf("Found n. %d Modules\n", boot_info->mods_count);
     printf("\n");
 
-	// Get the kernel image from the boot info
-	kernel_elf = elf_from_multiboot(boot_info);
+    // Get the kernel image from the boot info
+    kernel_elf = elf_from_multiboot(boot_info);
 
-	__asm__ __volatile__ ("sti");
-	thread_t* scheduler_thread = kernel_init_threading();
+    __asm__ __volatile__ ("sti");
+    thread_t * scheduler_thread = kernel_init_threading();
     kernel_init_scheduler(scheduler_thread);
     _kprintOK();
     printf(LNG_PIT8253);
     printf("----\n");
     printf(LNG_SHELL);
     _kprintOK();
-	printf("[+] Address: 0x%x\n", &end);
-	printf("\n");
+    printf("[+] Address: 0x%x\n", &end);
+    printf("\n");
 
 #ifdef BOCHS_DEBUG
-	dbg_bochs_print("DreamOS Debug String for Bochs\n");
+    dbg_bochs_print("DreamOS Debug String for Bochs\n");
 #endif
     //We disable floppy driver motor
     fdc_disable_motor();
 
-	kernel_create_thread(shell, "shell", 0);
+    kernel_create_thread(shell, "shell", 0);
     return 0;
 }
 

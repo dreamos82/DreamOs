@@ -22,7 +22,7 @@
   * Contributor: finarfin 
   * first version: 16/06/2009
   */
-  
+
 #ifndef _MOUSE_H_
 #define _MOUSE_H_
 
@@ -30,12 +30,17 @@
 #define MOUSE_DISABLE_PACKET 0xF5
 #define MOUSE_USE_DEFAULT_SETTINGS 0xF6
 
-void mouse_init();
+/// @brief Sets up the mouse by installing the mouse handler into IRQ12.
+void mouse_install();
+
 void mouse_waitcmd(unsigned char type);
 
-void mouse_write (unsigned char a_write);
+void mouse_write(unsigned char a_write);
+
 unsigned char mouse_read();
 
 void mouse_dead();
-void mouse_IRQhandler();
+
+void mouse_isr(void);
+
 #endif /* _MOUSE_H_ */

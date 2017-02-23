@@ -28,6 +28,8 @@
 #include <timer.h>
 #include <bitops.h>
 #include <paging.h>
+#include <mouse.h>
+#include <language.h>
 
 //IRQ_s *shareHandler[IRQ_NUM];
 // IRQ_s shareHandler[16];
@@ -81,7 +83,8 @@ void irq_init(){
 	outportb(SLAVE_PORT_1,  0xFF);
 		
     //outportb (0xFC, MASTER_PORT_1);
-    irq_enable(KEYBOARD);    
+    irq_enable(KEYBOARD);
+    irq_enable(MOUSE);
     irq_enable(TIMER);
     irq_enable(TO_SLAVE_PIC);
           
@@ -93,8 +96,16 @@ void irq_init(){
         i++;
     }
     irq_add_handler(1, keyboard_isr);
+
+    // Install the mouse.
+    printf("\t"LNG_MOUSE_SETUP);
+    mouse_install();
+    _kprintOK();
+
     // Install the timer.
+    _kputs("\t"LNG_TIMER_SETUP);
     timer_install();
+    _kprintOK();
     __asm__("sti");
 }
 
