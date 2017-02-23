@@ -25,6 +25,7 @@
 #define _CPUID_H
 
 #include <stddef.h>
+#include <support_defs.h>
 
 #define ECX_FLAGS_SIZE 24
 #define EDX_FLAGS_SIZE 32
@@ -41,25 +42,25 @@ struct cpuinfo_generic {
     char *brand_string;
 };
 
-struct registri {
-    int eax;
-    int ebx;
-    int ecx;
-    int edx;
+struct registers {
+    uint32_t eax;
+    uint32_t ebx;
+    uint32_t ecx;
+    uint32_t edx;
 };
 
 char cpu_vendor[13]; // This will contain the main string
 void get_cpuid (struct cpuinfo_generic *);
 
-void call_cpuid (struct registri *);
-void cpuid_write_vendor (struct cpuinfo_generic *, struct registri *);
-void cpuid_write_proctype (struct cpuinfo_generic *, struct registri *);
+void call_cpuid (struct registers *);
+void cpuid_write_vendor (struct cpuinfo_generic *, struct registers *);
+void cpuid_write_proctype (struct cpuinfo_generic *, struct registers *);
 void cpuid_feature_ecx (struct cpuinfo_generic *, int);
 void cpuid_feature_edx (struct cpuinfo_generic *, int);
 int cpuid_get_byte (int, int, int);
 
-char *cpuid_brand_index (struct registri *);
-char *cpuid_brand_string (struct registri *);
+char *cpuid_brand_index (struct registers *);
+char *cpuid_brand_string (struct registers *);
 
 struct cpuinfo_generic *sinfo;
 #endif

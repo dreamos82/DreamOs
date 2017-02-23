@@ -38,7 +38,7 @@
  */
 void get_cpuid(struct cpuinfo_generic *sh_info)
 {
-  struct registri *ereg = kmalloc(sizeof(struct registri));
+  struct registers *ereg = kmalloc(sizeof(struct registers));
   
   ereg->eax = ereg->ebx = ereg->ecx = ereg->edx = 0;
   cpuid_write_vendor (sh_info, ereg);
@@ -51,7 +51,7 @@ void get_cpuid(struct cpuinfo_generic *sh_info)
 }
 
 /* Actual CPUID call */
-void call_cpuid (struct registri *regs)
+void call_cpuid (struct registers *regs)
 {
   __asm__ ("cpuid\n\t"
        : "=a" (regs->eax), "=b" (regs->ebx), "=c" (regs->ecx), "=d" (regs->edx)
@@ -59,7 +59,7 @@ void call_cpuid (struct registri *regs)
 }
 
 /* Extract vendor string */
-void cpuid_write_vendor (struct cpuinfo_generic *s, struct registri *regs)
+void cpuid_write_vendor (struct cpuinfo_generic *s, struct registers *regs)
 {
   call_cpuid (regs);
 
@@ -85,7 +85,7 @@ void cpuid_write_vendor (struct cpuinfo_generic *s, struct registri *regs)
  * EBX contains the Brand Index if supported, and the APIC ID
  * ECX/EDX contains feature information
  */
-void cpuid_write_proctype (struct cpuinfo_generic *s, struct registri *regs)
+void cpuid_write_proctype (struct cpuinfo_generic *s, struct registers *regs)
 {
   int type;
   int familyID;
@@ -140,7 +140,7 @@ void cpuid_write_proctype (struct cpuinfo_generic *s, struct registri *regs)
 /*
  * Index of brand strings
  */
-char *cpuid_brand_index (struct registri *r)
+char *cpuid_brand_index (struct registers *r)
 {
   char *indexes[21] = { "Reserved", "Intel Celeron", "Intel Pentium III", "Intel Pentium III Xeon", "Mobile Intel Pentium III", "Mobile Intel Celeron", "Intel Pentium 4", "Intel Pentium 4", "Intel Celeron", "Intel Xeon MP", "Intel Xeon MP", "Mobile Intel Pentium 4", "Mobile Intel Celeron", "Mobile Genuine Intel", "Intel Celeron M", "Mobile Intel Celeron", "Intel Celeron", "Mobile Genuine Intel", "Intel Pentium M", "Mobile Intel Celeron", NULL };
 
@@ -155,7 +155,7 @@ char *cpuid_brand_index (struct registri *r)
 /*
  * Brand string is contained in EAX, EBX, ECX and EDX
  */
-char * cpuid_brand_string(struct registri * r)
+char * cpuid_brand_string(struct registers * r)
 {
     char * temp = "";
     for (r->eax = 0x80000002; r->eax <= 0x80000004; (r->eax)++)

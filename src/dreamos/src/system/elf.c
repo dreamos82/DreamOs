@@ -29,7 +29,7 @@ elf_t elf_from_multiboot (struct multiboot_info *mb)
   elf_section_header_t *sh = (elf_section_header_t*)mb->u.elf_sec.addr;
 
   uint32_t shstrtab = sh[mb->u.elf_sec.shndx].addr;
-  for (int i = 0; i < mb->u.elf_sec.num; i++) {
+  for (unsigned long i = 0; i < mb->u.elf_sec.num; i++) {
     const char *name = (const char *) (shstrtab + sh[i].name);
     if (!strcmp (name, ".strtab")) {
       elf.strtab = (const char *)sh[i].addr;
@@ -46,7 +46,7 @@ elf_t elf_from_multiboot (struct multiboot_info *mb)
 
 const char *elf_lookup_symbol (uint32_t addr, elf_t *elf)
 {
-  for (int i = 0; i < (elf->symtabsz/sizeof (elf_symbol_t)); i++) {
+  for (uint32_t i = 0; i < (elf->symtabsz/sizeof (elf_symbol_t)); i++) {
     if (ELF32_ST_TYPE(elf->symtab[i].info) != 0x2)
       continue;
 

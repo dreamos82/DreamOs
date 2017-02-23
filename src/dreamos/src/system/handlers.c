@@ -163,6 +163,7 @@ void _globalException(int n, int error)
 }
 
 void _irqinterrupt(unsigned int esp){
+    (void) esp;
     __asm__("cli;");
     int irqn;
     irqn = irq_get_current();

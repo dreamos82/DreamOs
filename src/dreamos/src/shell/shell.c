@@ -95,6 +95,7 @@ void options(char * com)
 /* corpo della shell */
 int shell(void * args)
 {
+    (void) args;
     dbg_bochs_print("\nNewShell\n");
     char * cmd_ptr;
     char password[30];

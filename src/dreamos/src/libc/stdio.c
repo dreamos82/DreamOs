@@ -156,57 +156,67 @@ char * gets(char * s)
 
 int scanf(const char * format, ...)
 {
-    va_list scan;
-    char input[255];
     int count = 0;
-    char maxchars[5] = {0};
-    int i = 0, nmax = 0;
-
-    char * s_ptr;
-    int * i_ptr;
-
+    va_list scan;
     va_start (scan, format);
-
     for (; *format; format++)
     {
-
         if (*format == '%')
         {
+            // Declare an input string.
+            char input[255];
+            // Get the input string.
             gets(input);
-
-            count += strlen(input);
-
+            // Evaluate the length of the string.
+            size_t input_length = strlen(input);
+            // Add the length of the input to the counter.
+            count += input_length;
+            // Evaluate the maximum number of input characters.
+            size_t max_chars = 0;
             if (isdigit(*++format))
             {
+                char max_char_num[16];
+                int i = 0;
                 while (isdigit(*format))
                 {
-                    maxchars[i++] = *format;
+                    max_char_num[i++] = *format;
                     format++;
                 }
-                maxchars[i] = '\0';
-                nmax = atoi(maxchars);
+                max_char_num[i] = '\0';
+                int number = atoi(max_char_num);
+                if (number > 0)
+                {
+                    max_chars = (size_t) number;
+                }
             }
-
+            char * s_ptr;
+            int * d_ptr;
             switch (*format)
             {
                 case 's':
-                    s_ptr = va_arg (scan, char *);
-                    if (nmax == 0 || strlen(input) <= nmax)
-                        s_ptr = strncpy(s_ptr, input, strlen(input));
+                    s_ptr = va_arg(scan, char *);
+                    if (max_chars == 0 || input_length <= max_chars)
+                    {
+                        s_ptr = strncpy(s_ptr, input, input_length);
+                    }
                     else
-                        s_ptr = strncpy(s_ptr, input, nmax);
+                    {
+                        s_ptr = strncpy(s_ptr, input, max_chars);
+                    }
                     break;
-
                 case 'd':
-                    i_ptr = va_arg (scan, int *);
-
-                    if (nmax != 0 && strlen(input) > nmax)
-                        input[nmax] = '\0';
-                    *i_ptr = atoi(input);
+                    d_ptr = va_arg(scan, int *);
+                    if (max_chars != 0 && input_length > max_chars)
+                    {
+                        input[max_chars] = '\0';
+                    }
+                    (*d_ptr) = atoi(input);
+                    break;
+                default:
                     break;
             }
         }
     }
-    va_end (scan);
+    va_end(scan);
     return count;
 }

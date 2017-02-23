@@ -253,12 +253,14 @@ void try_mapaddress()
 
 int task_test_1(void * args)
 {
+    (void) args;
     printf("I'm the task 1.\n");
     return 0;
 }
 
 int task_test_2(void * args)
 {
+    (void) args;
     printf("I'm the task 2.\n");
     return 0;
 }
@@ -276,6 +278,7 @@ void try_thread()
 
 int sleeping_thread(void * args)
 {
+    (void) args;
     sleep(10);
     return 0;
 }

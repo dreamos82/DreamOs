@@ -26,6 +26,7 @@
 
 //#define PWD_CHECK 1
 int user_chk(char *username, char* usr_pwd){
+	(void) usr_pwd;
 	int fd = -1;
 	struct passwd_user checking_user;
 	//char *path = kmalloc(sizeof(char) * 8);
@@ -98,5 +99,7 @@ int user_get(int fd, struct passwd_user *checking_user){
 }
 
 int pwd_check(char* password, char* realpass){
+    (void) password;
+    (void) realpass;
 	return 0;
 }

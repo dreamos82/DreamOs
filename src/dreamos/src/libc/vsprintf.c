@@ -145,9 +145,13 @@ number(char * str, long num, int base, int size, int precision, int type)
     return str;
 }
 
-static char *
-eaddr(char * str, unsigned char * addr, int size, int precision, int type)
+static char * eaddr(char * str,
+                    unsigned char * addr,
+                    int size,
+                    int precision,
+                    int type)
 {
+    (void) precision;
     char tmp[24];
     char * dig = digits;
     int i, len;
@@ -168,9 +172,13 @@ eaddr(char * str, unsigned char * addr, int size, int precision, int type)
     return str;
 }
 
-static char *
-iaddr(char * str, unsigned char * addr, int size, int precision, int type)
+static char * iaddr(char * str,
+                    unsigned char * addr,
+                    int size,
+                    int precision,
+                    int type)
 {
+    (void) precision;
     char tmp[24];
     int i, n, len;
 

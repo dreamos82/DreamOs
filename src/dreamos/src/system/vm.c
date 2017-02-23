@@ -146,6 +146,7 @@ char get_mapping (uint32_t va, uint32_t *pa)
 
 void page_fault_handler (int ecode)
 {
+  (void) ecode;
   // TODO: The system launch this fault continuously and prevent
   // to read the debug info, this should be investigated.
   if (fault == 0)

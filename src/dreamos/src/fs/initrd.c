@@ -174,21 +174,23 @@ int initfs_open(const char * path, int flags, ...)
 
 ssize_t initfs_read(int fildes, char * buf, size_t nbyte)
 {
-    char * file_start;
-    int lfd, file_size;
-    int j = 0;
-    int read_pos = 0;
-    lfd = ird_descriptors[fildes].file_descriptor;
-    read_pos = ird_descriptors[fildes].cur_pos;
-    file_size = fs_headers[lfd].length;
-    file_start = (char *) (module_start + fs_headers[lfd].offset);
-    //printf("cur_pos val: %d\n", ird_descriptors[fildes].cur_pos);
+    // If the number of byte to read is zero, skip.
     if (nbyte == 0) return 0;
-    while (j < nbyte && read_pos < file_size)
+    // Get the file descriptor of the file.
+    int lfd = ird_descriptors[fildes].file_descriptor;
+    // Get the current position.
+    int read_pos = ird_descriptors[fildes].cur_pos;
+    // Get the legnth of the file.
+    int file_size = fs_headers[lfd].length;
+    // Get the begin of the file.
+    char * file_start = (module_start + fs_headers[lfd].offset);
+    // Declare an iterator.
+    size_t it = 0;
+    while ((it < nbyte) && (read_pos < file_size))
     {
         *buf++ = file_start[read_pos];
-        read_pos++;
-        j++;
+        ++read_pos;
+        ++it;
     }
     ird_descriptors[fildes].cur_pos = read_pos;
     if (read_pos == file_size)
@@ -222,27 +224,32 @@ int initrd_stat(char * path, struct stat * buf)
 
 ssize_t initrd_write(int fildes, const void * buf, size_t nbyte)
 {
-    char * file_start;
-    char * appoggio;
-    appoggio = (char *) kmalloc(strlen(buf) * sizeof(char));
-    strcpy(appoggio, buf);
-    unsigned int lfd = 0;
-    int i = 0;
-    lfd = ird_descriptors[fildes].file_descriptor;
+    // If the number of byte to write is zero, skip.
+    if (nbyte == 0) return 0;
+    // Make a copy of the buffer.
+    char * tmp = (char *) kmalloc(strlen(buf) * sizeof(char));
+    strcpy(tmp, buf);
+    // Get the file descriptor of the file.
+    int lfd = ird_descriptors[fildes].file_descriptor;
     printf("Please wait, im writing the world...\n");
     printf("And the world begun with those words: %s and his mark his: %d\n",
-           appoggio, lfd);
-    file_start = (char *) (module_start + fs_headers[lfd].offset +
-                           ird_descriptors[fildes].cur_pos);
-    while (i <= nbyte)
+           tmp, lfd);
+    // Get the begin of the file.
+    char * file_start = (module_start + fs_headers[lfd].offset +
+                         ird_descriptors[fildes].cur_pos);
+    // Declare an iterator.
+    size_t it = 0;
+    while (it <= nbyte)
     {
-        file_start[i] = appoggio[i];
-        i++;
+        file_start[it] = tmp[it];
+        ++it;
     }
-    fs_headers[lfd].length = fs_headers[lfd].length + i;
-    free(appoggio);
-    return i;
-    //fs_headers[ird_descriptors.fildes].
+    // Increment the length of the file.
+    fs_headers[lfd].length = fs_headers[lfd].length + it;
+    // Free the memory of the temporary file.
+    free(tmp);
+    // Return the number of written bytes.
+    return it;
 }
 
 int initrd_close(int fildes)
