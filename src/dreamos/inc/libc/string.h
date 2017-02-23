@@ -120,6 +120,8 @@ int strcmp(const char *, const char *);
 
 size_t strlen(const char *);
 
+size_t strnlen(const char * s, size_t count);
+
 // Written by shainer
 
 char * strtok(char *, const char *);

@@ -33,6 +33,7 @@
 
 #include <stdarg.h>
 #include <string.h>
+#include <ctype.h>
 
 #define KERNEL 1
 
@@ -48,27 +49,25 @@
 #define SPECIAL 32              // 0x
 #define LARGE   64              // Use 'ABCDEF' instead of 'abcdef'
 
-#define is_digit(c) ((c) >= '0' && (c) <= '9')
-
 static char * digits = "0123456789abcdefghijklmnopqrstuvwxyz";
 static char * upper_digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-static size_t strnlen(const char * s, size_t count)
-{
-    const char * sc;
-    for (sc = s; *sc != '\0' && count--; ++sc);
-    return sc - s;
-}
 
 static int skip_atoi(const char ** s)
 {
     int i = 0;
-    while (is_digit(**s)) i = i * 10 + *((*s)++) - '0';
+    do
+    {
+        i = i * 10 + *((*s)++) - '0';
+    } while (isdigit(**s));
     return i;
 }
 
-static char *
-number(char * str, long num, int base, int size, int precision, int type)
+static char * number(char * str,
+                     long num,
+                     int base,
+                     int size,
+                     int precision,
+                     int type)
 {
     char c, sign, tmp[66];
     char * dig = digits;
@@ -428,12 +427,12 @@ static char *flt(char *str, double num, int size, int precision, char fmt, int f
 
 #endif
 
-int vsprintf(char * buf, const char * fmt, va_list args)
+int vsprintf(char * str, const char * fmt, va_list args)
 {
     int len;
     unsigned long num;
     int i, base;
-    char * str;
+    char * tmp;
     char * s;
 
     int flags;            // Flags to number()
@@ -442,11 +441,11 @@ int vsprintf(char * buf, const char * fmt, va_list args)
     int precision;        // Min. # of digits for integers; max number of chars for from string
     int qualifier;        // 'h', 'l', or 'L' for integer fields
 
-    for (str = buf; *fmt; fmt++)
+    for (tmp = str; *fmt; fmt++)
     {
         if (*fmt != '%')
         {
-            *str++ = *fmt;
+            *tmp++ = *fmt;
             continue;
         }
 
@@ -475,7 +474,7 @@ int vsprintf(char * buf, const char * fmt, va_list args)
 
         // Get field width
         field_width = -1;
-        if (is_digit(*fmt))
+        if (isdigit(*fmt))
             field_width = skip_atoi(&fmt);
         else if (*fmt == '*')
         {
@@ -493,7 +492,7 @@ int vsprintf(char * buf, const char * fmt, va_list args)
         if (*fmt == '.')
         {
             ++fmt;
-            if (is_digit(*fmt))
+            if (isdigit(*fmt))
                 precision = skip_atoi(&fmt);
             else if (*fmt == '*')
             {
@@ -517,18 +516,18 @@ int vsprintf(char * buf, const char * fmt, va_list args)
         switch (*fmt)
         {
             case 'c':
-                if (!(flags & LEFT)) while (--field_width > 0) *str++ = ' ';
-                *str++ = (unsigned char) va_arg(args, int);
-                while (--field_width > 0) *str++ = ' ';
+                if (!(flags & LEFT)) while (--field_width > 0) *tmp++ = ' ';
+                *tmp++ = (unsigned char) va_arg(args, int);
+                while (--field_width > 0) *tmp++ = ' ';
                 continue;
 
             case 's':
                 s = va_arg(args, char *);
                 if (!s) s = "<NULL>";
                 len = strnlen(s, precision);
-                if (!(flags & LEFT)) while (len < field_width--) *str++ = ' ';
-                for (i = 0; i < len; ++i) *str++ = *s++;
-                while (len < field_width--) *str++ = ' ';
+                if (!(flags & LEFT)) while (len < field_width--) *tmp++ = ' ';
+                for (i = 0; i < len; ++i) *tmp++ = *s++;
+                while (len < field_width--) *tmp++ = ' ';
                 continue;
 
             case 'p':
@@ -537,7 +536,7 @@ int vsprintf(char * buf, const char * fmt, va_list args)
                     field_width = 2 * sizeof(void *);
                     flags |= ZEROPAD;
                 }
-                str = number(str, (unsigned long) va_arg(args, void *), 16,
+                tmp = number(tmp, (unsigned long) va_arg(args, void *), 16,
                              field_width, precision, flags);
                 continue;
 
@@ -545,12 +544,12 @@ int vsprintf(char * buf, const char * fmt, va_list args)
                 if (qualifier == 'l')
                 {
                     long * ip = va_arg(args, long *);
-                    *ip = (str - buf);
+                    *ip = (tmp - str);
                 }
                 else
                 {
                     int * ip = va_arg(args, int *);
-                    *ip = (str - buf);
+                    *ip = (tmp - str);
                 }
                 continue;
 
@@ -559,10 +558,10 @@ int vsprintf(char * buf, const char * fmt, va_list args)
 
             case 'a':
                 if (qualifier == 'l')
-                    str = eaddr(str, va_arg(args, unsigned char *), field_width,
+                    tmp = eaddr(tmp, va_arg(args, unsigned char *), field_width,
                                 precision, flags);
                 else
-                    str = iaddr(str, va_arg(args, unsigned char *), field_width,
+                    tmp = iaddr(tmp, va_arg(args, unsigned char *), field_width,
                                 precision, flags);
                 continue;
 
@@ -592,15 +591,15 @@ int vsprintf(char * buf, const char * fmt, va_list args)
             case 'e':
             case 'f':
             case 'g':
-              str = flt(str, va_arg(args, double), field_width, precision, *fmt, flags | SIGN);
+              tmp = flt(tmp, va_arg(args, double), field_width, precision, *fmt, flags | SIGN);
               continue;
 
 #endif
 
             default:
-                if (*fmt != '%') *str++ = '%';
+                if (*fmt != '%') *tmp++ = '%';
                 if (*fmt)
-                    *str++ = *fmt;
+                    *tmp++ = *fmt;
                 else
                     --fmt;
                 continue;
@@ -620,20 +619,20 @@ int vsprintf(char * buf, const char * fmt, va_list args)
         else
             num = va_arg(args, unsigned int);
 
-        str = number(str, num, base, field_width, precision, flags);
+        tmp = number(tmp, num, base, field_width, precision, flags);
     }
 
-    *str = '\0';
-    return str - buf;
+    *tmp = '\0';
+    return tmp - str;
 }
 
-int sprintf(char * buf, const char * fmt, ...)
+int sprintf(char * str, const char * fmt, ...)
 {
     va_list args;
     int n;
 
     va_start(args, fmt);
-    n = vsprintf(buf, fmt, args);
+    n = vsprintf(str, fmt, args);
     va_end(args);
 
     return n;

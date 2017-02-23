@@ -511,6 +511,13 @@ size_t strlen(const char * s)
     return (int) (eos - s - 1);
 }
 
+size_t strnlen(const char * s, size_t count)
+{
+    const char * sc;
+    for (sc = s; *sc != '\0' && count--; ++sc);
+    return sc - s;
+}
+
 int strcmp(const char * s1, const char * s2)
 {
     int ret = 0;

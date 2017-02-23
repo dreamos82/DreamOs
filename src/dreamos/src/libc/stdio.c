@@ -28,54 +28,83 @@
 #include <ctype.h>
 #include <string.h>
 #include <keyboard.h>
-//#inc <debug.h>
 
-#define LEFT 1
-#define RIGHT 0
+#define LEFT    1
+#define RIGHT   0
 
-char * VIDEO_RAM = (char *) 0xb8000, * VIDEO_PTRZ = (char *) 0xb8000, VIDEO_CLRZ = 0x7;
-int last_Xz = 0, last_Yz = 0;
+char * VIDEO_RAM = (char *) 0xb8000;
+char * VIDEO_PTRZ = (char *) 0xb8000;
+char VIDEO_CLRZ = 0x7;
 
-/* 
- *  puts() function
- *  print *s
- *  do newline
- */
-int puts(char * s)
+int last_Xz = 0;
+int last_Yz = 0;
+
+void putchar(char character)
 {
-    while (*s != 0)
+    _kputc(character);
+}
+
+int getchar(void)
+{
+    int tmpchar;
+    while ((tmpchar = _kgetch()) == -1);
+    return tmpchar;
+}
+
+
+int puts(char * str)
+{
+    while ((*str) != 0)
     {
         if (last_Xz && last_Yz)
         {
             _kscrolldown();
         }
-        *VIDEO_PTRZ++ = *s;
-        *VIDEO_PTRZ++ = VIDEO_CLRZ;
+        *(VIDEO_PTRZ++) = (*str);
+        *(VIDEO_PTRZ++) = VIDEO_CLRZ;
         _kshiftAll();
         _ksetcursauto();
-        s++;
+        ++str;
     }
     _knewline();
     return 1;
 }
 
-/*
- * Print a character
- */
-void putchar(char ch)
+char * gets(char * str)
 {
-    /*__asm__ (
-        "movl $0x0, %%eax\n"
-        "movl %0, %%ecx\n"
-        "int $80\n\t"
-        ::"g" (ch) );*/
-    /*char s[2];
-    s[0] = ch;
-    s[1] = '\0';
-    */
-    //_kputs(s);
-    _kputc(ch);
+    int count = 0;
+    //shell_mess_col = _kgetcolumn();
+    //shell_mess_line = _kgetline();
+    char tmp[255];
+    memset(tmp, '\0', 255);
+    do
+    {
+        int c = getchar();
+        // Return Key
+        if (c == '\n')
+        {
+            break;
+        }
+        // Backspace key
+        if (c == '\b')
+        {
+            if (count > 0)
+            {
+                count--;
+            }
+        }
+        else
+        {
+            tmp[count++] = (char) c;
+        }
+    } while (count < 255);
+    tmp[count] = '\0';
+    // tmp cant simply be returned, it is allocated in this stack frame and
+    // it will be lost!
+    strcpy(str, tmp);
+    return str;
 }
+
 
 int atoi(const char * str)
 {
@@ -103,9 +132,6 @@ int atoi(const char * str)
     return sign * result;
 }
 
-/*
- * No words...
- */
 int printf(const char * format, ...)
 {
     va_list ap;
@@ -117,49 +143,6 @@ int printf(const char * format, ...)
     _kputs(buffer);
     va_end (ap); // end of arguments
     return len;
-}
-
-int getchar(void)
-{
-    int tmpchar;
-    while ((tmpchar = _kgetch()) == -1);
-    return tmpchar;
-}
-
-char * gets(char * s)
-{
-    char str[255];
-    int c;
-    int count = 0;
-    shell_mess_col = _kgetcolumn();
-    shell_mess_line = _kgetline();
-    memset(str, '\0', 255);
-    do
-    {
-        c = getchar();
-        // Return Key
-        if (c == '\n')
-        {
-            break;
-        }
-        // Backspace key
-        if (c == '\b')
-        {
-            if (count > 0)
-            {
-                count--;
-            }
-        }
-        else
-        {
-            str[count++] = c;
-        }
-    } while (count < 255);
-
-    str[count] = '\0';
-    //str cant simply be returned, it is allocated in this stack frame and it will be lost!
-    strcpy(s, str);
-    return s;
 }
 
 int scanf(const char * format, ...)

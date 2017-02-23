@@ -34,25 +34,34 @@
 #define EOF (-1)
 #endif
 
-void putchar(char ch);
+/// @brief Writes the given character to the standard output (stdout).
+void putchar(char character);
 
-/// @brief Convert a string to an integer.
-/// @param str The string to convert.
-/// @return The string converted to integer.
-int atoi(const char * str);
-
-int printf(const char *, ...);
-
-int puts(char * s);
-
-int scanf(const char *, ...);
-
-char * gets(char *);
-
+/// @brief Returns the next character from the standard input (stdin).
 int getchar(void);
 
-int vsprintf(char * buf, const char * fmt, va_list args);
+/// @brief Writes the string pointed by str to the standard output (stdout)
+/// and appends a newline character ('\n').
+int puts(char * str);
 
-int sprintf(char * buf, const char * fmt, ...);
+/// @brief Reads characters from the standard input (stdin) and stores them
+/// as a C string into str until a newline character or the end-of-file is
+/// reached.
+char * gets(char * str);
+
+/// @brief Convert the given string to an integer.
+int atoi(const char * str);
+
+/// @brief Write formatted output to stdout.
+int printf(const char *, ...);
+
+/// @brief Read formatted input from stdin.
+int scanf(const char *, ...);
+
+/// @brief Write formatted output to the string str from argument list ARG.
+int vsprintf(char * str, const char * fmt, va_list args);
+
+/// @brief Write formatted output to the string str.
+int sprintf(char * str, const char * fmt, ...);
 
 #endif
