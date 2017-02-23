@@ -24,28 +24,28 @@
 #ifndef __CTYPE_H
 #define __CTYPE_H
 
-#define OFFSET 32 /* Distance from a uppercase character to the correspondent lowercase in ASCII */
-
+/// @brief Check if the given value is a digit.
 int isdigit(int c);
 
+/// @brief Check if the given value is a letter.
 int isalpha(int c);
 
+/// @brief Check if the given value is either a letter or a digit.
 int isalnum(int c);
 
+/// @brief Check if the given value is an hexadecimal digit.
 int isxdigit(int c);
 
+/// @brief Check if the given value is a lower case letter.
 int islower(int c);
 
+/// @brief Check if the given value is an upper case letter.
 int isupper(int c);
 
+/// @brief Transforms the given value into a lower case letter.
 int tolower(int c);
 
+/// @brief Transforms the given value into an upper case letter.
 int toupper(int c);
-
-int isspace(int c);
-
-int iscntrl(int c);
-
-int ispunct(int c);
 
 #endif
