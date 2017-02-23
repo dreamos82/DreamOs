@@ -15,41 +15,46 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
- /*
-  * Autore Ivan Gualandri
-  * Prima versione: 27/10/2003
-  * Contiene le definizioni di alcuni tipi di dato :D
-  */
+
+/*
+ * Autore Ivan Gualandri
+ * Prima versione: 27/10/2003
+ * Contiene le definizioni di alcuni tipi di dato :D
+ */
 
 #include <gdt.h>
 
 GDT_Descriptor Gdt_Table[GDT_SIZE];
 int current_pos;
 
-void kernel_init_gdt(){
-	int i;
-	current_pos = 0;
-	i=0;
-	/*Pulisco il vettore della gdt*/
-	while(i < GDT_SIZE) {
-		Gdt_Table[i].segment_limit_low = 0;
-		Gdt_Table[i].segment_base_low = 0; 
-		Gdt_Table[i].base_mid = 0;
-		Gdt_Table[i].options_1 = 0;
-		Gdt_Table[i].options_2 = 0;
-		Gdt_Table[i].base_high = 0;
-		i++;
-	}
-	/*Le condizione minime per il funzionamento sono 3 descrittori: il primo nullo
-	 *il secondo per l'area codice e il terzo per l'area dati.
-	 *il descrittore nullo deve stare nella posizione 0
-	 */
-	kernel_add_gdt_seg(0,0,0,0,0);
-	kernel_add_gdt_seg(1,0x00000000,0x000FFFFF, PRESENT|KERNEL|CODE|0x0A,GRANULARITY|SZBITS);
-	kernel_add_gdt_seg(2,0x00000000,0x000FFFFF, PRESENT|KERNEL|DATA|0x02,GRANULARITY|SZBITS);
-	kernel_set_gdtr(Gdt_Table, 0xFFFF, 1, 2);	
+void kernel_init_gdt()
+{
+    int i;
+    current_pos = 0;
+    i = 0;
+    /*Pulisco il vettore della gdt*/
+    while (i < GDT_SIZE)
+    {
+        Gdt_Table[i].segment_limit_low = 0;
+        Gdt_Table[i].segment_base_low = 0;
+        Gdt_Table[i].base_mid = 0;
+        Gdt_Table[i].options_1 = 0;
+        Gdt_Table[i].options_2 = 0;
+        Gdt_Table[i].base_high = 0;
+        i++;
+    }
+    /*Le condizione minime per il funzionamento sono 3 descrittori: il primo nullo
+     *il secondo per l'area codice e il terzo per l'area dati.
+     *il descrittore nullo deve stare nella posizione 0
+     */
+    kernel_add_gdt_seg(0, 0, 0, 0, 0);
+    kernel_add_gdt_seg(1, 0x00000000, 0x000FFFFF,
+                       PRESENT | KERNEL | CODE | 0x0A, GRANULARITY | SZBITS);
+    kernel_add_gdt_seg(2, 0x00000000, 0x000FFFFF,
+                       PRESENT | KERNEL | DATA | 0x02, GRANULARITY | SZBITS);
+    kernel_set_gdtr(Gdt_Table, 0xFFFF, 1, 2);
 }
+
 /**
   * @author Ivan Gualandri
   * @version 1.0
@@ -59,22 +64,27 @@ void kernel_init_gdt(){
   * @param opt1 in ordine: Type (4bit) - S (1) bit -DPL (2 bit) - P(1 bit)
   * @param opt2 in ordine: SegLimit_hi(4 bit) AVL(1 bit) L(1 bit) D/B(1 bit) G(1bit)
 */
-void kernel_add_gdt_seg(int pos,unsigned int base, unsigned int limit, unsigned char opt1, unsigned char opt2){
-	unsigned int tmpbase, tmplimit;
-	tmpbase = base;
-	tmplimit = limit;
+void kernel_add_gdt_seg(int pos,
+                        unsigned int base,
+                        unsigned int limit,
+                        unsigned char opt1,
+                        unsigned char opt2)
+{
+    unsigned int tmpbase, tmplimit;
+    tmpbase = base;
+    tmplimit = limit;
     //First 32bit part
-	Gdt_Table[pos].segment_limit_low = limit & 0xFFFF;
-	Gdt_Table[pos].segment_base_low = base & 0xFFFF;
+    Gdt_Table[pos].segment_limit_low = limit & 0xFFFF;
+    Gdt_Table[pos].segment_base_low = base & 0xFFFF;
     //Last 32bit part
-	tmpbase = base >>16;
-	Gdt_Table[pos].base_mid = tmpbase & 0xFF;
-	Gdt_Table[pos].options_1= opt1;
-	tmplimit= limit >> 16;
-	tmplimit &=0xf;
-	Gdt_Table[pos].options_2= opt2|tmplimit;
-	tmpbase = base >>24;
-	Gdt_Table[pos].base_high = tmpbase & 0xFF;
+    tmpbase = base >> 16;
+    Gdt_Table[pos].base_mid = tmpbase & 0xFF;
+    Gdt_Table[pos].options_1 = opt1;
+    tmplimit = limit >> 16;
+    tmplimit &= 0xf;
+    Gdt_Table[pos].options_2 = opt2 | tmplimit;
+    tmpbase = base >> 24;
+    Gdt_Table[pos].base_high = tmpbase & 0xFF;
 }
 
 void __attribute__ ((noinline)) kernel_set_gdtr(GDT_Descriptor * addr,

@@ -26,62 +26,77 @@
 #include<ctype.h>
 
 /* Is c a digit? */
-int isdigit(int c) {
-  if (c >= 48 && c <= 57)
-    return 1;
-  return 0;
+int isdigit(int c)
+{
+    if (c >= 48 && c <= 57)
+    {
+        return 1;
+    }
+    return 0;
 }
 
 /* Is c a letter? */
 int isalpha(int c)
 {
-  if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122 ))
-    return 1;
-  return 0;
+    if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
+    {
+        return 1;
+    }
+    return 0;
 }
 
 /* Is c a letter or a digit? */
 int isalnum(int c)
 {
-  return (isalpha(c) || isdigit(c));
+    return (isalpha(c) || isdigit(c));
 }
 
 /* Is c an hexadecimal digit? */
 int isxdigit(int c)
 {
-  if (isdigit(c) || (c >= 65 && c <= 70 ))
-    return 1;
-  return 0;
+    if (isdigit(c) || (c >= 65 && c <= 70))
+    {
+        return 1;
+    }
+    return 0;
 }
 
 /* Is c a lowercase letter? */
 int islower(int c)
 {
-  if (c >= 97 && c <= 122)
-    return 1;
-  return 0;
+    if (c >= 97 && c <= 122)
+    {
+        return 1;
+    }
+    return 0;
 }
 
 /* Is c an uppercase letter? */
 int isupper(int c)
 {
-  if (c >= 65 && c <= 90)
-    return 1;
-  return 0;
+    if (c >= 65 && c <= 90)
+    {
+        return 1;
+    }
+    return 0;
 }
 
 /* Convert c to a lowercase char */
 int tolower(int c)
 {
-  if (isalpha(c) == 0 || islower(c))
-    return c;
-  else return c + OFFSET;
+    if (isalpha(c) == 0 || islower(c))
+    {
+        return c;
+    }
+    else return c + OFFSET;
 }
 
 /* Convert c to an uppercase char */
 int toupper(int c)
 {
-  if (isalpha(c) == 0 || isupper(c))
-    return c;
-  else return c - OFFSET;
+    if (isalpha(c) == 0 || isupper(c))
+    {
+        return c;
+    }
+    else return c - OFFSET;
 }

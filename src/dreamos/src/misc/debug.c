@@ -32,36 +32,37 @@
 
 /**
  *  Print msg in the bochs prompt 
- */ 
-void dbg_bochs_print( const char *msg )
+ */
+void dbg_bochs_print(const char * msg)
 {
 #if defined(BOCHS_DEBUG)
     register unsigned int i;
-    for ( i = 0; msg[i] != '\0'; i++ )
+    for (i = 0; msg[i] != '\0'; i++)
         outportb(0xE9, msg[i]);
 #else
-	printf(msg);
+    printf(msg);
 #endif
-return;
+    return;
 }
 
 /**
  *  Print an integer
  */
-void dbg_bochs_print_digit(unsigned int number){
-	char buffer[10];
-	_kntos(buffer, number, 10);
-	dbg_bochs_print(buffer);
-	dbg_bochs_print("\n");
+void dbg_bochs_print_digit(unsigned int number)
+{
+    char buffer[10];
+    _kntos(buffer, number, 10);
+    dbg_bochs_print(buffer);
+    dbg_bochs_print("\n");
 }
 
 /**
  *  Send cmd to bochs port
  */
-void dbg_bochs_send_cmd( const int port, const int cmd )
+void dbg_bochs_send_cmd(const int port, const int cmd)
 {
 #if defined(BOCHS_DEBUG)
     outportb(port, cmd);
 #endif
-return;
+    return;
 }

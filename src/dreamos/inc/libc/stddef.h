@@ -15,12 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
- /*
-  * Autore Ivan Gualandri
-  * Prima versione: 27/10/2003
-  * Contiene le definizioni di alcuni tipi di dato :D
-  */
+
+/*
+ * Autore Ivan Gualandri
+ * Prima versione: 27/10/2003
+ * Contiene le definizioni di alcuni tipi di dato :D
+ */
 
 #ifndef __STDDEF__H
 #define __STDDEF__H
@@ -37,12 +37,12 @@
 
 #define KERNEL_SIZE 0x200
 
-#ifndef TRUE 
+#ifndef TRUE
 #define TRUE 1
 #endif
 
 #ifndef FALSE
-#define FALSE 0 
+#define FALSE 0
 #endif
 
 typedef unsigned int size_t;

@@ -34,19 +34,25 @@
 #define EOF (-1)
 #endif
 
-void putchar (char ch);
+void putchar(char ch);
 
 /// @brief Convert a string to an integer.
 /// @param str The string to convert.
 /// @return The string converted to integer.
-int atoi (const char * str);
-int printf (const char *, ...);
-int puts (char *s);
-int scanf (const char *, ...);
-char *gets (char *);
-int getchar (void);
+int atoi(const char * str);
 
-int vsprintf(char *buf, const char *fmt, va_list args);
-int sprintf(char *buf, const char *fmt, ...);
+int printf(const char *, ...);
+
+int puts(char * s);
+
+int scanf(const char *, ...);
+
+char * gets(char *);
+
+int getchar(void);
+
+int vsprintf(char * buf, const char * fmt, va_list args);
+
+int sprintf(char * buf, const char * fmt, ...);
 
 #endif

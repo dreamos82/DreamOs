@@ -15,10 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
- //
- // Based on JamesM's kernel developement tutorials.
- //
+
+//
+// Based on JamesM's kernel developement tutorials.
+//
 
 #ifndef VM_H
 #define VM_H
@@ -38,21 +38,21 @@
 typedef uint32_t page_directory_t;
 
 // Sets up the environment, page directories etc and enables paging.
-void kernel_init_vm ();
+void kernel_init_vm();
 
 // Changes address space.
-void kernel_switch_page_directory (page_directory_t *pd);
+void kernel_switch_page_directory(page_directory_t * pd);
 
 // Maps the physical page "pa" into the virtual space at address "va", using 
 // page protection flags "flags".
-void map (uint32_t va, uint32_t pa, uint32_t flags);
+void map(uint32_t va, uint32_t pa, uint32_t flags);
 
 // Removes one page of V->P mappings at virtual address "va".
-void unmap (uint32_t va);
+void unmap(uint32_t va);
 
 // Returns 1 if the given virtual address is mapped in the address space.
 // If "*pa" is non-NULL, the physical address of the mapping is placed in *pa.
-char get_mapping (uint32_t va, uint32_t *pa);
+char get_mapping(uint32_t va, uint32_t * pa);
 
 void page_fault_handler(int);
 

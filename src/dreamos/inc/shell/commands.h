@@ -25,44 +25,72 @@
 
 #include <shell.h>
 #include <kheap.h>
+
 #define MAX_TEST 16
 
 extern int argc;
-extern char **argv;
+extern char ** argv;
 
 void aalogo();
+
 void logo();
+
 void help();
+
 void echo();
+
 void poweroff();
+
 void kmalloc_try();
+
 void do_fault();
 
 void uname_cmd();
+
 void uname_help();
+
 void uname_info();
+
 void printmem();
+
 void credits();
+
 void sleep_cmd();
+
 void cpuid();
+
 void answer();
+
 void drv_load();
+
 void ls();
+
 void cd();
+
 void whoami();
+
 void tester();
-void pwd();	
+
+void pwd();
+
 void more();
+
 void newfile();
+
 void ps();
+
 void date();
+
 void clear();
+
 void showpid();
 
-struct devel {
-	const char cmd_testname[CMD_LEN];
-	const char cmd_description[DESC_LEN];
-	void (*func)(void);
+struct devel
+{
+    const char cmd_testname[CMD_LEN];
+    const char cmd_description[DESC_LEN];
+
+    void (* func)(void);
 };
 
 #endif

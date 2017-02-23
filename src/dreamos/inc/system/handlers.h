@@ -16,11 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
- /*
-  * Autore Ivan Gualandri
-  * Prima versione: 27/10/2003
-  * Contiene le definizioni di alcuni tipi di dato :D
-  */
+/*
+ * Autore Ivan Gualandri
+ * Prima versione: 27/10/2003
+ * Contiene le definizioni di alcuni tipi di dato :D
+ */
 
 #ifndef _HANDLERS_H
 #define _HANDLERS_H
@@ -52,13 +52,13 @@
 #define SIMD_FP_EXC 19
 
 #define SWITCH_KERNEL\
-	"movl $0x10, %edx;\
+    "movl $0x10, %edx;\
 	 movw %dx, %ds;\
 	 movw %dx, %es;\
 	 movw %dx, %fs;"
 
 #define SAVE_CONTEXT\
-	"pusha;"\
+    "pusha;"\
 
 #define SAVE_CONTEXT_EC\
         "nop;\
@@ -70,7 +70,7 @@
 
 #define EXCEPTION(n)\
     __asm__("INT_"#n":"\
-	     SAVE_CONTEXT\
+         SAVE_CONTEXT\
              "pushl $"#n";\
              call *(IntTable+(4*"#n"));\
              add $4, %esp;"\
@@ -90,7 +90,7 @@
     __asm__("INT_"#n":"\
             SAVE_CONTEXT\
             "movl %esp, %eax;"\
-	    "pushl %eax;"\
+        "pushl %eax;"\
             "call _irqinterrupt;"\
             "popl %eax;"\
             "movl %eax, %esp;"\
@@ -105,20 +105,25 @@
             "iret;")
 
 #define RESTORE \
-		"popa;"
+        "popa;"
 
 #define RESTORE_EC \
         "popl %edx;\
          popl %ecx;\
          popl %eax;"
 
-extern IRQ_s *shareHandler[IRQ_NUM];
+extern IRQ_s * shareHandler[IRQ_NUM];
 
-extern void (*IntTable[IDT_SIZE])();
+extern void (* IntTable[IDT_SIZE])();
+
 void kernel_init_interrupt_function_table();
-void kernel_add_interrupt_function_table(int i, void (*func)());
+
+void kernel_add_interrupt_function_table(int i, void (* func)());
+
 void _globalException(int n, int error);
+
 void _irqinterrupt();
+
 void _int_rsv();
 
 #endif

@@ -16,10 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
- /*
-  * Autore Ivan Gualandri
-  * Prima versione: 19/05/2007
-  */
+/*
+ * Autore Ivan Gualandri
+ * Prima versione: 19/05/2007
+ */
 
 #include <handlers.h>
 #include <idt.h>
@@ -35,20 +35,24 @@
 #include "vm.h"
 
 // #define DEBUG 1
-void (*IntTable[IDT_SIZE])();
-IRQ_s *shareHandler[IRQ_NUM];
+void (* IntTable[IDT_SIZE])();
+
+IRQ_s * shareHandler[IRQ_NUM];
 
 /** @author Ivan Gualandri
  *  @return none
  * Questa funzione si occupa di inizializzare la tabella di funzioni che gestiscono le
  * interruzioni ed eccezioni.
  */
-void kernel_init_interrupt_function_table(){
+void kernel_init_interrupt_function_table()
+{
     int i;
-    i=0;
-    while(i<IDT_SIZE){
-        if(i>19 && i<32) IntTable[i] = _int_rsv;
-        else if(i>31 && i<48) kernel_add_interrupt_function_table(i, _irqinterrupt);
+    i = 0;
+    while (i < IDT_SIZE)
+    {
+        if (i > 19 && i < 32) IntTable[i] = _int_rsv;
+        else if (i > 31 && i < 48)
+            kernel_add_interrupt_function_table(i, _irqinterrupt);
         else IntTable[i] = _globalException;
         i++;
     }
@@ -62,9 +66,11 @@ void kernel_init_interrupt_function_table(){
   *
   * Questa funzione aggiunge un handler di interruzione alla tabella per che contiene le funzioni di gestione chiamate dalle eccezioni/interruzioni della IDT
   */
-void kernel_add_interrupt_function_table(int i, void (*func)()){
-	IntTable[i] = func;
+void kernel_add_interrupt_function_table(int i, void (* func)())
+{
+    IntTable[i] = func;
 }
+
 /**
   * @author Ivan Gualandri
   * @version 1.0
@@ -73,122 +79,130 @@ void kernel_add_interrupt_function_table(int i, void (*func)()){
   */
 void _globalException(int n, int error)
 {
-  switch (n) {
+    switch (n)
+    {
 
-    case DIVIDE_ERROR:
-    _kputs("Divide Error\n");
-    break;
+        case DIVIDE_ERROR:
+            _kputs("Divide Error\n");
+            break;
 
-    case DEBUG_EXC:
-    _kputs("Debug Exception\n");
-    break;
+        case DEBUG_EXC:
+            _kputs("Debug Exception\n");
+            break;
 
-    case NMI_INTERRUPT:
-    _kputs("NMI Exception\n");
-    break;
+        case NMI_INTERRUPT:
+            _kputs("NMI Exception\n");
+            break;
 
-    case OVERFLOW:
-    _kputs("OverFlow Exception\n");
-    break;
+        case OVERFLOW:
+            _kputs("OverFlow Exception\n");
+            break;
 
-    case BOUND_RANGE_EXCEED:
-    _kputs("Bound Exception\n");
-    break;
+        case BOUND_RANGE_EXCEED:
+            _kputs("Bound Exception\n");
+            break;
 
-    case DEV_NOT_AVL:
-    _kputs("Device Not Available Exception\n");
-    break;
+        case DEV_NOT_AVL:
+            _kputs("Device Not Available Exception\n");
+            break;
 
-    case COPROC_SEG_OVERRUN:
-    _kputs("CoProcessor Segment Overrun\n");
-    break;
+        case COPROC_SEG_OVERRUN:
+            _kputs("CoProcessor Segment Overrun\n");
+            break;
 
-    case BREAKPOINT:
-    _kputs("BreakPoint\n");
-    break;
+        case BREAKPOINT:
+            _kputs("BreakPoint\n");
+            break;
 
-    case INVALID_TSS:
-    _kputs("Invalid TSS\n");
-    break;
+        case INVALID_TSS:
+            _kputs("Invalid TSS\n");
+            break;
 
-    case SEGMENT_NOT_PRESENT:
-    _kputs("Segment Not Present\n");
-    break;
+        case SEGMENT_NOT_PRESENT:
+            _kputs("Segment Not Present\n");
+            break;
 
-    case STACK_SEGMENT_FAULT:
-    _kputs("Stack Segment Fault Exception\n");
-    break;
+        case STACK_SEGMENT_FAULT:
+            _kputs("Stack Segment Fault Exception\n");
+            break;
 
-    case GENERAL_PROTECTION:
-    _kputs("General Protection Exception\n");
-    break;
+        case GENERAL_PROTECTION:
+            _kputs("General Protection Exception\n");
+            break;
 
-    case INVALID_OPCODE:
-    _kputs("Invalid Opcode Exception\n");
-    break;
+        case INVALID_OPCODE:
+            _kputs("Invalid Opcode Exception\n");
+            break;
 
-    case PAGE_FAULT:
-    page_fault_handler (error);
-    break;
+        case PAGE_FAULT:
+            page_fault_handler(error);
+            break;
 
-    case INT_RSV:
-    _kputs("Intel Reserved\n");
-    break;
+        case INT_RSV:
+            _kputs("Intel Reserved\n");
+            break;
 
-    case FLOATING_POINT_ERR:
-    _kputs("Floating Point Exception\n");
-    break;
+        case FLOATING_POINT_ERR:
+            _kputs("Floating Point Exception\n");
+            break;
 
-    case ALIGNMENT_CHECK:
-    _kputs("Alignment Check Exception\n");
-    break;
+        case ALIGNMENT_CHECK:
+            _kputs("Alignment Check Exception\n");
+            break;
 
-    case MACHINE_CHECK:
-    _kputs("Machine Check Exception\n");
-    break;
+        case MACHINE_CHECK:
+            _kputs("Machine Check Exception\n");
+            break;
 
-    case DOUBLE_FAULT:
-    _kputs("Double Fault Exception\n");
-    break;
+        case DOUBLE_FAULT:
+            _kputs("Double Fault Exception\n");
+            break;
 
-    case SIMD_FP_EXC:
-    _kputs ("Simd Floating Point Exception\n");
-    break;
+        case SIMD_FP_EXC:
+            _kputs("Simd Floating Point Exception\n");
+            break;
 
-    default:
-    _kputs ("Unknown exception\n");
-    break;
+        default:
+            _kputs("Unknown exception\n");
+            break;
 
-  }
+    }
 }
 
-void _irqinterrupt(unsigned int esp){
+void _irqinterrupt(unsigned int esp)
+{
     (void) esp;
     __asm__("cli;");
     int irqn;
     irqn = irq_get_current();
-    IRQ_s* tmpHandler;
-    if(irqn>=0) {
+    IRQ_s * tmpHandler;
+    if (irqn >= 0)
+    {
         tmpHandler = shareHandler[irqn];
-		if(tmpHandler!=0) {
-	    	tmpHandler->IRQ_func();
+        if (tmpHandler != 0)
+        {
+            tmpHandler->IRQ_func();
 //	    	#ifdef DEBUG
 //	    		printf("2 - IRQ_func: %d, %d\n", tmpHandler->IRQ_func, tmpHandler);
 //	    	#endif
-	    	while(tmpHandler->next!=NULL) {
-	      		tmpHandler = tmpHandler->next;
-	      		#ifdef DEBUG
-	      			printf("1 - IRQ_func (_prova): %d, %d\n", tmpHandler->IRQ_func, tmpHandler);
-	      		#endif
-	      		if(tmpHandler!=0) tmpHandler->IRQ_func();
-	    	}
-	  } else printf("irqn: %d\n", irqn);
+            while (tmpHandler->next != NULL)
+            {
+                tmpHandler = tmpHandler->next;
+                #ifdef DEBUG
+                printf("1 - IRQ_func (_prova): %d, %d\n", tmpHandler->IRQ_func,
+                       tmpHandler);
+                #endif
+                if (tmpHandler != 0) tmpHandler->IRQ_func();
+            }
+        }
+        else printf("irqn: %d\n", irqn);
     }
     else printf("IRQ N: %d E' arrivato qualcosa che non so gestire ", irqn);
-    if(irqn<=8 && irqn!=2) outportb(MASTER_PORT, EOI);
-    else if(irqn<=16 || irqn==2){
-      outportb(SLAVE_PORT, EOI);
-      outportb(MASTER_PORT, EOI);
+    if (irqn <= 8 && irqn != 2) outportb(MASTER_PORT, EOI);
+    else if (irqn <= 16 || irqn == 2)
+    {
+        outportb(SLAVE_PORT, EOI);
+        outportb(MASTER_PORT, EOI);
     }
 
     schedule();
@@ -196,7 +210,8 @@ void _irqinterrupt(unsigned int esp){
     return;
 }
 
-void _int_rsv(){
-	_kputs("Eccezione Riservata - PANIC\n");
-	while(1);
+void _int_rsv()
+{
+    _kputs("Eccezione Riservata - PANIC\n");
+    while (1);
 }

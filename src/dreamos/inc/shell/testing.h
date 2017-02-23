@@ -14,25 +14,39 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
+
 #ifndef TESTING_H
 #define TESTING_H
 
 void try_strtok();
+
 void try_kmalloc();
+
 void try_printmem(void);
+
 void do_fault();
+
 void try_module();
+
 void try_open();
+
 void try_ocreat();
+
 void try_syscall();
+
 void try_check();
+
 void show_fd();
+
 void test_stat();
+
 void try_shadow();
+
 //void try_newheap();
 void try_mapaddress();
+
 void try_thread();
+
 void try_thread_sleep();
 
 #endif

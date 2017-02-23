@@ -24,10 +24,11 @@
 
 #define _SC_OPEN_MAX 4
 
-ssize_t read(int , void *, size_t);
-ssize_t write(int fildes, const void *buf, size_t nbyte);
-int close(int);
+ssize_t read(int, void *, size_t);
 
+ssize_t write(int fildes, const void * buf, size_t nbyte);
+
+int close(int);
 
 
 #endif

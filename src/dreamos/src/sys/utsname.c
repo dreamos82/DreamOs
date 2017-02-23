@@ -26,12 +26,13 @@
 #include <string.h>
 #include <version.h>
 
-int uname(struct utsname* os_infos){
-/*Uname code goes here*/  
-  strcpy(os_infos->sysname, NAME);
-  strcpy(os_infos->release, PATCHLEVEL);
-  strcpy(os_infos->version, VERSION);
-  strcpy(os_infos->nodename, "testbed");
-  strcpy(os_infos->machine, "i686");
-  return 0;
+int uname(struct utsname * os_infos)
+{
+/*Uname code goes here*/
+    strcpy(os_infos->sysname, NAME);
+    strcpy(os_infos->release, PATCHLEVEL);
+    strcpy(os_infos->version, VERSION);
+    strcpy(os_infos->nodename, "testbed");
+    strcpy(os_infos->machine, "i686");
+    return 0;
 }

@@ -29,7 +29,8 @@
 #include <ctype.h>
 #include <io.h>
 
-void fdc_disable_motor() {
+void fdc_disable_motor()
+{
     /* Setting bits:
      * 2: (RESET)
      * 3: (IRQ)
@@ -37,7 +38,8 @@ void fdc_disable_motor() {
     outportb(DOR, 0x0c);
 }
 
-void fdc_enable_motor() {
+void fdc_enable_motor()
+{
     /* Setting bits:
      * 3: (IRQ)
      * 4: (MOTA)

@@ -44,7 +44,8 @@
 #define IRQ_NUM 16
 
 
-typedef enum irq_types{
+typedef enum irq_types
+{
     TIMER,
     KEYBOARD,
     TO_SLAVE_PIC,
@@ -67,18 +68,25 @@ typedef enum irq_types{
     \struct IRQ_s
     \brief Struttura dati per gestire gli IRQ  condivisi
 */
-typedef struct IRQ_struct {
-    void (*IRQ_func)();/**< Puntatore alla funzione handler di un IRQ*/
-    struct IRQ_struct *next;/**< Prossimo handler per questo IRQ*/
-}IRQ_s;
+typedef struct IRQ_struct
+{
+    void (* IRQ_func)();/**< Puntatore alla funzione handler di un IRQ*/
+    struct IRQ_struct * next;/**< Prossimo handler per questo IRQ*/
+} IRQ_s;
 
 extern byte master_cur_mask;
 extern byte slave_cur_mask;
 
 void irq_init();
+
 void irq_setup();
+
 int irq_enable(IRQ_t);
+
 int irq_disable(IRQ_t);
+
 int irq_get_current();
-void irq_add_handler(int,void (*func)());
+
+void irq_add_handler(int, void (* func)());
+
 #endif

@@ -15,10 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
- //
- // Based on JamesM's kernel developement tutorials.
- //
+
+//
+// Based on JamesM's kernel developement tutorials.
+//
 
 #include <panic.h>
 
@@ -27,33 +27,34 @@
 
 #include "support_defs.h"
 
-static void print_stack_trace ();
+static void print_stack_trace();
 
 extern elf_t kernel_elf;
 
-void kernel_panic(const char* msg)
+void kernel_panic(const char * msg)
 {
-  printf ("\nPANIC: %s\n\nWelcome to Kernel Debugging Land...\n\n", msg);
-  print_stack_trace ();
-  printf ("\n");
-  for (;;);
+    printf("\nPANIC: %s\n\nWelcome to Kernel Debugging Land...\n\n", msg);
+    print_stack_trace();
+    printf("\n");
+    for (;;);
 }
 
 void print_stack_trace()
 {
-  uint32_t *ebp, *eip;
-  uint32_t count = 0;
+    uint32_t * ebp, * eip;
+    uint32_t count = 0;
 
-  __asm__ __volatile__ ("mov %%ebp, %0" : "=r" (ebp));
+    __asm__ __volatile__ ("mov %%ebp, %0" : "=r" (ebp));
 
-  while (ebp) {
-    if (count > 15)
-		return;
+    while (ebp)
+    {
+        if (count > 15)
+            return;
 
-    eip = ebp+1;
-    printf (" %d 0x%x %s\n", count, *eip,
-		elf_lookup_symbol (*eip, &kernel_elf));
-    ebp = (uint32_t*) *ebp;
-    count++;
-  }
+        eip = ebp + 1;
+        printf(" %d 0x%x %s\n", count, *eip,
+               elf_lookup_symbol(*eip, &kernel_elf));
+        ebp = (uint32_t *) *ebp;
+        count++;
+    }
 }

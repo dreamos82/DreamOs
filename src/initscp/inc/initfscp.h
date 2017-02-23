@@ -29,16 +29,20 @@
 #define FS_DIRECTORY 0x02
 #define FS_MOUNTPOINT 0x03
 
-struct initrd_file_t{
-	int magic;
-	char fileName[FILENAME_LENGTH];
-	short int file_type;
-	int  uid;
-	unsigned int offset;
-	unsigned int length;
+struct initrd_file_t
+{
+    int magic;
+    char fileName[FILENAME_LENGTH];
+    short int file_type;
+    int uid;
+    unsigned int offset;
+    unsigned int length;
 };
 
 typedef struct initrd_file_t initrd_file_t;
+
 void usage(char *);
+
 void version(char *);
+
 #endif

@@ -15,18 +15,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
- /*
-  * Autore Lisa Vitolo
-  * Prima versione: 25/11/2007  
-  */
+
+/*
+ * Autore Lisa Vitolo
+ * Prima versione: 25/11/2007
+ */
 #ifndef _SYSCALL_H_
 #define _SYSCALL_H_
 
 #define SYSCALL_NUMBER 1
 
 void syscall_handler();
+
 void sysputch();
+
 void syscall_init();
 
 #endif

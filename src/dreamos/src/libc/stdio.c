@@ -45,7 +45,10 @@ int puts(char * s)
 {
     while (*s != 0)
     {
-        if (last_Xz && last_Yz) _kscrolldown();
+        if (last_Xz && last_Yz)
+        {
+            _kscrolldown();
+        }
         *VIDEO_PTRZ++ = *s;
         *VIDEO_PTRZ++ = VIDEO_CLRZ;
         _kshiftAll();
@@ -59,7 +62,6 @@ int puts(char * s)
 /*
  * Print a character
  */
-
 void putchar(char ch)
 {
     /*__asm__ (
@@ -73,7 +75,6 @@ void putchar(char ch)
     */
     //_kputs(s);
     _kputc(ch);
-
 }
 
 int atoi(const char * str)
@@ -89,7 +90,10 @@ int atoi(const char * str)
     // Check that the rest of the numbers are digits.
     for (i = (sign == -1) ? 1 : 0; str[i] != '\0'; ++i)
     {
-        if (!isdigit(str[i])) return -1;
+        if (!isdigit(str[i]))
+        {
+            return -1;
+        }
     }
     // Iterate through all digits and update the result.
     for (i = (sign == -1) ? 1 : 0; str[i] != '\0'; ++i)
@@ -106,22 +110,18 @@ int printf(const char * format, ...)
 {
     va_list ap;
     int len = 0;
-
     /* Start variabile argument's list */
     va_start (ap, format);
     char buffer[1024];
-
     len = vsprintf(buffer, format, ap);
     _kputs(buffer);
     va_end (ap); // end of arguments
-
     return len;
 }
 
 int getchar(void)
 {
     int tmpchar;
-
     while ((tmpchar = _kgetch()) == -1);
     return tmpchar;
 }
@@ -137,15 +137,23 @@ char * gets(char * s)
     do
     {
         c = getchar();
-        if (c == '\n') // tasto invio
+        // Return Key
+        if (c == '\n')
+        {
             break;
-        else if (c == '\b') //backspace
+        }
+        // Backspace key
+        if (c == '\b')
         {
             if (count > 0)
+            {
                 count--;
+            }
         }
         else
+        {
             str[count++] = c;
+        }
     } while (count < 255);
 
     str[count] = '\0';

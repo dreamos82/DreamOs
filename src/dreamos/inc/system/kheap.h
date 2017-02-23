@@ -15,10 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
- //
- // Based on JamesM's kernel developement tutorials.
- //
+
+//
+// Based on JamesM's kernel developement tutorials.
+//
 
 #ifndef HEAP_H
 #define HEAP_H
@@ -30,17 +30,17 @@
 
 typedef struct header
 {
-  struct header *prev, *next;
-  uint32_t allocated : 1;
-  uint32_t length : 31;
+    struct header * prev, * next;
+    uint32_t allocated : 1;
+    uint32_t length : 31;
 } header_t;
 
-void kernel_init_heap ();
+void kernel_init_heap();
 
 // Returns a pointer to a chunk of memory, minimum size 'l' bytes.
-void *kmalloc (uint32_t l);
+void * kmalloc(uint32_t l);
 
 // Takes a chunk of memory allocated with kmalloc, and returns it to the pool of usable memory.
-void free (void *p);
+void free(void * p);
 
 #endif

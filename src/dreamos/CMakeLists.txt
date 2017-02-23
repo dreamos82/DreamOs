@@ -84,10 +84,10 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror")
 
 # ------------------------------------------------------------------------------
 
-if(CMAKE_BUILD_TYPE MATCHES "Release")
-elseif(CMAKE_BUILD_TYPE MATCHES "Debug")
+if (CMAKE_BUILD_TYPE MATCHES "Release")
+elseif (CMAKE_BUILD_TYPE MATCHES "Debug")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DDEBUG")
-endif(CMAKE_BUILD_TYPE MATCHES "Release")
+endif (CMAKE_BUILD_TYPE MATCHES "Release")
 
 # ------------------------------------------------------------------------------
 # Set the assembly flags.

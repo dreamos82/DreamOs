@@ -15,14 +15,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
- //
- // Based on JamesM's kernel developement tutorials.
- //
+
+//
+// Based on JamesM's kernel developement tutorials.
+//
 
 #ifndef PANIC_H
 #define PANIC_H
 
-void kernel_panic(const char* msg);
+void kernel_panic(const char * msg);
 
 #endif

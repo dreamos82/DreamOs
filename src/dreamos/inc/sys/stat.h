@@ -24,13 +24,14 @@
 /*!  \struct struct stat
      \brief Struttura dati che contine le informazioni su di un file
  */
-struct stat {
-	dev_t     st_dev; /**< device id del file*/
-	
-	uid_t     st_uid; /**< user id del file*/	
-	gid_t     st_gid; /**< group id del file*/
-	
-	off_t	  st_size; /**< Dimensione del file */
+struct stat
+{
+    dev_t st_dev; /**< device id del file*/
+
+    uid_t st_uid; /**< user id del file*/
+    gid_t st_gid; /**< group id del file*/
+
+    off_t st_size; /**< Dimensione del file */
 };
 
 

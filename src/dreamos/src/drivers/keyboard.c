@@ -39,37 +39,37 @@
 
 /* Keyboard maps */
 static int key_it_map[] =
- { //ITALIAN ASCII TABLE - by sgurtz
-    -1,  27,  49,  50,  51,  52,  53,  54,  55,  56,  57,  48, //11
-    39, 141,   8,   9, 113, 119, 101, 114, 116, 121, 117, 105, //23
-   111, 112, 138,  43,  13,  -1,  97, 115, 100, 102, 103, 104, //35
-   106, 107, 108, 149, 133,  92,  -1, 151, 122, 120,  99, 118, //47
-    98, 110, 109,  44,  46,  45,  -1,  42,  -1,  32,  -1,  -1, //59
-    -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  55, //71
-    56,  57,  45,  52,  53,  54,  43,  49,  50,  51,  48,  46, //83
-    -1,  -1,  60,  -1,  -1                                     //88
- };
+    { //ITALIAN ASCII TABLE - by sgurtz
+        -1, 27, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48,         //11
+        39, 141, 8, 9, 113, 119, 101, 114, 116, 121, 117, 105,  //23
+        111, 112, 138, 43, 13, -1, 97, 115, 100, 102, 103, 104, //35
+        106, 107, 108, 149, 133, 92, -1, 151, 122, 120, 99, 118,//47
+        98, 110, 109, 44, 46, 45, -1, 42, -1, 32, -1, -1,       //59
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 55,         //71
+        56, 57, 45, 52, 53, 54, 43, 49, 50, 51, 48, 46,         //83
+        -1, -1, 60, -1, -1                                      //88
+    };
 
 static int shifted_it_map[] =
- { //ITALIAN ALTERNATIVE ASCII TABLE - by sgurtz
-    -1,  -1,  33,  34, 156,  36,  37,  38,  47,  40,  41,  61, //11
-    63,  94,  -1,  -1,  81,  87,  69,  82,  84,  89,  85,  73, //23
-    79,  80, 130,  42,  -1,  -1,  65,  83,  68,  70,  71,  72, //35
-    74,  75,  76, 128, 167, 124,  -1,  -1,  90,  88,  67,  86, //47
-    66,  78,  77,  59,  58,  95,  -1,  -1,  -1,  32,  -1,  -1, //59
-    -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1, //71
-    -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1, //83
-    -1,  -1,  62,  -1,  -1                                     //88
- };
+    { //ITALIAN ALTERNATIVE ASCII TABLE - by sgurtz
+        -1, -1, 33, 34, 156, 36, 37, 38, 47, 40, 41, 61,    //11
+        63, 94, -1, -1, 81, 87, 69, 82, 84, 89, 85, 73,     //23
+        79, 80, 130, 42, -1, -1, 65, 83, 68, 70, 71, 72,    //35
+        74, 75, 76, 128, 167, 124, -1, -1, 90, 88, 67, 86,  //47
+        66, 78, 77, 59, 58, 95, -1, -1, -1, 32, -1, -1,     //59
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,     //71
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,     //83
+        -1, -1, 62, -1, -1                                  //88
+    };
 
 /* UNUSED static unsigned char pad_map[] = { '7', '8', '9', '0', '4', '5', '6', '0', '1', '2', '3', '0', '0' };*/
 
 /* The buffer where keys are stored */
 static int circlebuf[BUFSIZE];
-static int buf_r=0, buf_w=0;
+static int buf_r = 0, buf_w = 0;
 
 static int sc;
-static int *curmap = key_it_map;
+static int * curmap = key_it_map;
 static unsigned short ledstate = 0;
 
 /* Variables to track states */
@@ -81,29 +81,31 @@ static int is_scroll_pressed;
 
 extern unsigned int last_tab;
 
-static int shadow=0;
+static int shadow = 0;
 
 /*
  * The keyboard handler
  */
-void keyboard_isr (void)
+void keyboard_isr(void)
 {
-    sc = inportb (0x60); // take scancode from the port    
+    // Take scancode from the port.
+    sc = inportb(0x60);
     /* error handling */
-    if (sc == 0x00 || sc == 0xFF) {
-	_kputs ("Keyboard error\n");
-	goto end;
+    if (sc == 0x00 || sc == 0xFF)
+    {
+        _kputs("Keyboard error\n");
+        goto end;
     }
 
     /* The right map is selected */
     if (is_shifted == 0 && is_tab_pressed == 0)
-	curmap = key_it_map;
+        curmap = key_it_map;
     else if (is_shifted == 0 && is_tab_pressed)
-	curmap = shifted_it_map;
+        curmap = shifted_it_map;
     else if (is_shifted == 1 && is_tab_pressed == 0)
-	curmap = shifted_it_map;
+        curmap = shifted_it_map;
     else if (is_shifted == 1 && is_tab_pressed)
-	curmap = key_it_map;
+        curmap = key_it_map;
 
     /* In case of useless break codes, switch controls...*/
     if ((sc > CODE_BREAK) &&
@@ -116,144 +118,135 @@ void keyboard_isr (void)
         goto end;
     }
 
-    switch (sc) {
-    case KEY_LSHIFT:
-	is_shifted = 1;
-	break;
-
-    case KEY_PGDOWN:
-        _kscrolldown ();
-	break;
-
-    case KEY_PGUP:
-	_kscrollup ();
-        break;
-
-
-    case KEY_RSHIFT:
-	is_shifted = 1;
-	break;
-
-    case KEY_LSHIFT|CODE_BREAK:
-    case KEY_RSHIFT|CODE_BREAK:
-	is_shifted = 0;
-	break;
-
-    case CAPS_LED:
-	if (is_tab_pressed == 0) {
-            _ksetleds (1,-1,-1);
-	    is_tab_pressed = 1;
-	} else {
-	    is_tab_pressed = 0;
-	    _ksetleds (0,-1,-1);
-	}
-	break;
-
-    case NUM_LED:
-	if (is_num_pressed == 0) {
-	    _ksetleds (-1,1,-1);
-            is_num_pressed = 1;
-	} else {
-	    _ksetleds (-1,0,-1);
-	    is_num_pressed = 0;
-	}
-	break;
-
-    case SCROLL_LED:
-	if (is_scroll_pressed == 0) {
-	    _ksetleds (-1,-1,1);
-            is_scroll_pressed = 1;
-	} else {
-	    _ksetleds (-1,-1,0);
-	    is_scroll_pressed = 0;
-	}
-	break;
-
-    case KEY_ESCAPE:
-        break;
-
-    case KEY_BACKSPACE:
-	if (STEP(buf_w) == buf_r)
-	  buf_r = STEP(buf_r);
-	circlebuf[buf_w] = '\b';
-	buf_w = STEP(buf_w);
-	_kbackspace();
-        _ksetcursauto();
-	break;
-
-    case KEY_ENTER:
-	if (STEP(buf_w) == buf_r)
-	    buf_r = STEP(buf_r);
-	circlebuf[buf_w] = '\n';
-	buf_w = STEP(buf_w);
-	_knewline();
-	_ksetcursauto();
-	last_tab = 0;
-    outportb(MASTER_PORT, EOI);
-	break;
-
-    case KEY_TAB:
-	if (STEP(buf_w) == buf_r)
-	    buf_r = STEP(buf_r);
-	circlebuf[buf_w] = '\t';
-	buf_w = STEP(buf_w);
-	_ktab();
-	_ksetcursauto();
-	last_tab++;
-	break;
-
-    case KEY_UPARROW:
-	history_start(sc);
-    _ksetcursauto();
-	break;
-
-    case KEY_DOWNARROW:
-    history_start(sc);
-    _ksetcursauto();
-	break;
-	
-    case KEY_LEFTARROW:
-    	//_ksetcursor((_kgetline()), (_kgetcolumn() - 1));
-	break;
-	
-    case KEY_RIGHTARROW:
-    	//_ksetcursor((_kgetline()), (_kgetcolumn() + 1));
-	break;
-
-// Presente un bug qui che non permette il fix dei relativi tasti
-// se si decommenta, il sistema all'avvio va in panic e si riavvia
-    case KEY_ALT:
-		//_kputs("Alt key pressed, nothing to be done\n");
-	break;
-
-    /*case KEY_ALTGR:
-	break;*/
-
+    switch (sc)
+    {
+        case KEY_LSHIFT:
+            is_shifted = 1;
+            break;
+        case KEY_PGDOWN:
+            _kscrolldown();
+            break;
+        case KEY_PGUP:
+            _kscrollup();
+            break;
+        case KEY_RSHIFT:
+            is_shifted = 1;
+            break;
+        case KEY_LSHIFT | CODE_BREAK:
+        case KEY_RSHIFT | CODE_BREAK:
+            is_shifted = 0;
+            break;
+        case CAPS_LED:
+            if (is_tab_pressed == 0)
+            {
+                _ksetleds(1, -1, -1);
+                is_tab_pressed = 1;
+            }
+            else
+            {
+                is_tab_pressed = 0;
+                _ksetleds(0, -1, -1);
+            }
+            break;
+        case NUM_LED:
+            if (is_num_pressed == 0)
+            {
+                _ksetleds(-1, 1, -1);
+                is_num_pressed = 1;
+            }
+            else
+            {
+                _ksetleds(-1, 0, -1);
+                is_num_pressed = 0;
+            }
+            break;
+        case SCROLL_LED:
+            if (is_scroll_pressed == 0)
+            {
+                _ksetleds(-1, -1, 1);
+                is_scroll_pressed = 1;
+            }
+            else
+            {
+                _ksetleds(-1, -1, 0);
+                is_scroll_pressed = 0;
+            }
+            break;
+        case KEY_ESCAPE:
+            break;
+        case KEY_BACKSPACE:
+            if (STEP(buf_w) == buf_r)
+                buf_r = STEP(buf_r);
+            circlebuf[buf_w] = '\b';
+            buf_w = STEP(buf_w);
+            _kbackspace();
+            _ksetcursauto();
+            break;
+        case KEY_ENTER:
+            if (STEP(buf_w) == buf_r)
+                buf_r = STEP(buf_r);
+            circlebuf[buf_w] = '\n';
+            buf_w = STEP(buf_w);
+            _knewline();
+            _ksetcursauto();
+            last_tab = 0;
+            outportb(MASTER_PORT, EOI);
+            break;
+        case KEY_TAB:
+            if (STEP(buf_w) == buf_r)
+                buf_r = STEP(buf_r);
+            circlebuf[buf_w] = '\t';
+            buf_w = STEP(buf_w);
+            _ktab();
+            _ksetcursauto();
+            last_tab++;
+            break;
+        case KEY_UPARROW:
+            history_start(sc);
+            _ksetcursauto();
+            break;
+        case KEY_DOWNARROW:
+            history_start(sc);
+            _ksetcursauto();
+            break;
+        case KEY_LEFTARROW:
+            //_ksetcursor((_kgetline()), (_kgetcolumn() - 1));
+            break;
+        case KEY_RIGHTARROW:
+            //_ksetcursor((_kgetline()), (_kgetcolumn() + 1));
+            break;
+            // Presente un bug qui che non permette il fix dei relativi tasti
+            // se si decommenta, il sistema all'avvio va in panic e si riavvia
+        case KEY_ALT:
+            //_kputs("Alt key pressed, nothing to be done\n");
+            break;
+            /*case KEY_ALTGR:
+            break;*/
         case KEY_CTRL:
             ctrl_pressed = 1;
             break;
         case KEY_CTRL | CODE_BREAK:
             ctrl_pressed = 0;
             break;
+        default:
+            if (isdigit(key_it_map[sc]) && is_tab_pressed == 1)
+                curmap = key_it_map;
 
-    default:
-	if (isdigit(key_it_map[sc]) && is_tab_pressed == 1)
-	    curmap = key_it_map;
+            //printf ("%d", sc);
+            if (shadow == 0)
+                putchar(curmap[sc]);
 
-        //printf ("%d", sc);
-        if(shadow==0) putchar (curmap[sc]);
-
-        /* Update buffer */
-	if (STEP(buf_w) == buf_r)
-            buf_r = STEP(buf_r);
-	circlebuf[buf_w] = curmap[sc];
-        buf_w = STEP(buf_w);
+            /* Update buffer */
+            if (STEP(buf_w) == buf_r)
+                buf_r = STEP(buf_r);
+            circlebuf[buf_w] = curmap[sc];
+            buf_w = STEP(buf_w);
     }
 
-end:
+    end:
     /* Send acknowledge */
     //printf ("Prego");
-    outportb (MASTER_PORT, EOI);
+    outportb(MASTER_PORT, EOI);
     return;
 }
 
@@ -265,54 +258,61 @@ end:
  */
 void _ksetleds(int capslock, int numlock, int scrlock)
 {
-    if (numlock == 1) {
-	numlock = 2;
-	ledstate |= numlock;
-    } if (capslock == 1) {
-	capslock = 4;
-	ledstate |= capslock;
-    } if (scrlock == 1)
-	ledstate |= scrlock;
-
-    if (numlock == 0) {
+    if (numlock == 1)
+    {
         numlock = 2;
-	ledstate ^= numlock;
+        ledstate |= numlock;
     }
-    if (capslock == 0) {
+    if (capslock == 1)
+    {
         capslock = 4;
-	ledstate ^= capslock;
+        ledstate |= capslock;
     }
-    if (scrlock == 0) {
-        scrlock = 1;
-	ledstate ^= scrlock;
-    }
+    if (scrlock == 1)
+        ledstate |= scrlock;
 
-    outportb (0x60, 0xED);
-    outportb (0x60, ledstate);
+    if (numlock == 0)
+    {
+        numlock = 2;
+        ledstate ^= numlock;
+    }
+    if (capslock == 0)
+    {
+        capslock = 4;
+        ledstate ^= capslock;
+    }
+    if (scrlock == 0)
+    {
+        scrlock = 1;
+        ledstate ^= scrlock;
+    }
+    outportb(0x60, 0xED);
+    outportb(0x60, ledstate);
 }
 
 /* Need explanations? */
-void keyboard_enable (void)
+void keyboard_enable(void)
 {
-    outportb (0x60, 0xF4);
+    outportb(0x60, 0xF4);
 }
 
-void keyboard_disable (void)
+void keyboard_disable(void)
 {
-    outportb (0x60, 0xF5);
+    outportb(0x60, 0xF5);
 }
 
 /*
  * Get a char from the buffer
  * looping until there is something new to read
  */
-int _kgetch (void) {
+int _kgetch(void)
+{
     int c = -1;
-
-    if (buf_r != buf_w) {
-	c = circlebuf[buf_r];
-	buf_r = STEP(buf_r);
-    }    
+    if (buf_r != buf_w)
+    {
+        c = circlebuf[buf_r];
+        buf_r = STEP(buf_r);
+    }
     return c;
 }
 
@@ -323,10 +323,11 @@ int _kgetch (void) {
   * @param 1 if you want enable shadow 0 otherwise
   * @return 1 if keyboard echo shadow enable 0 if not.
   */
-int  set_shadow(int value){
-	if(value>1 || value < 0) return -1;
-	else shadow = value;
-	return shadow;
+int set_shadow(int value)
+{
+    if (value > 1 || value < 0) return -1;
+    else shadow = value;
+    return shadow;
 }
 
 /**
@@ -336,6 +337,7 @@ int  set_shadow(int value){
   * @return 1 if keyboard echo shadow enable 0 if not.
   */
 
-int get_shadow(){	
-	return shadow;
+int get_shadow()
+{
+    return shadow;
 }

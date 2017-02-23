@@ -48,29 +48,51 @@
 
 #define OK_POS 70
 
-void _kntos(char*, unsigned int, int);
+void _kntos(char *, unsigned int, int);
+
 void _kputc(char);
+
 void _kcolor(char);
+
 void _ksetcolor(const unsigned char foreground,
                 const unsigned char background);
+
 void _kputs(char *);
+
 void _kbackspace();
+
 void _kesetcursor(unsigned int, unsigned int);
+
 void _kgoto(int, int);
+
 void _ksetcursauto();
+
 void _kshiftAll();
+
 void _ktab();
+
 void _kclear();
+
 void _knewline();
+
 void _kminline();
+
 void _kprintOK();
+
 int _kgetline();
+
 int _kgetcolumn();
+
 void _krotate_buffer();
+
 void _kscrollup();
+
 void _kscrolldown();
-void _kntohex (char *, unsigned int);
-void _knntos(char *, int, int );
+
+void _kntohex(char *, unsigned int);
+
+void _knntos(char *, int, int);
+
 unsigned short shell_mess_col, shell_mess_line;
 
 #endif /* _VIDEO_H */

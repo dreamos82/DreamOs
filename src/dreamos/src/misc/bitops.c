@@ -21,8 +21,8 @@
 
 int find_first_bit(unsigned short int irq_mask)
 {
-   int i=0;
-   if (irq_mask==0) return 0;
-   for (i=0; i<8;i++) if ((1<<i)&irq_mask) break;
-       return i;
+    int i = 0;
+    if (irq_mask == 0) return 0;
+    for (i = 0; i < 8; i++) if ((1 << i) & irq_mask) break;
+    return i;
 }
