@@ -100,15 +100,15 @@ void irq_init()
     irq_add_handler(1, keyboard_isr);
 
     // Install the mouse.
-    printf("\t"LNG_MOUSE_SETUP);
+    printf(" * "LNG_MOUSE_SETUP);
     mouse_install();
     _kprintOK();
 
     // Install the timer.
-    _kputs("\t"LNG_TIMER_SETUP);
+    printf(" * "LNG_TIMER_SETUP);
     timer_install();
     _kprintOK();
-    __asm__("sti");
+    __asm__("sti;");
 }
 
 void irq_setup()

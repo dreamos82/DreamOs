@@ -46,8 +46,6 @@ void vfs_init()
     j = 0;
     cur_fd = 0;
 
-    printf(LNG_VFS);
-
     while (i < MAX_MOUNTPOINT)
     {
         strcpy(mountpoint_list[i].mountpoint, "");
@@ -111,7 +109,6 @@ void vfs_init()
         fd_list[j].offset = 0;
         j++;
     }
-    _kprintOK();
 }
 
 int get_mountpoint_id(char * path)

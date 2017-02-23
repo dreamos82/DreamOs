@@ -92,7 +92,6 @@ void kernel_init_vm()
 
     // Paging is now active. Tell the physical memory manager.
     kernel_paging_active = 1;
-
 }
 
 void kernel_switch_page_directory(page_directory_t * pd)

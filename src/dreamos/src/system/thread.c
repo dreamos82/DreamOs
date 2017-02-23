@@ -20,9 +20,9 @@
 // Based on JamesM's kernel developement tutorials.
 //
 
-#include "thread.h"
-#include "kheap.h"
-#include "scheduler.h"
+#include <thread.h>
+#include <kheap.h>
+#include <scheduler.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -77,7 +77,6 @@ thread_t * kernel_create_thread(int (* fn)(void *),
     thread->eflags = EFLAG_IF;
     // Set the exit status to 0.
     thread->exit = 0;
-    thread->exitFunction = &thread_exit;
     // Activate the thread.
     kernel_activate_thread(thread);
     return thread;
