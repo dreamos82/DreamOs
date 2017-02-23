@@ -1,0 +1,10 @@
+sudo      : required
+dist      : precise
+language  : c
+compiler  :
+  - clang
+  - gcc
+script    :
+  - mkdir build
+  - cd build
+  - cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && make
