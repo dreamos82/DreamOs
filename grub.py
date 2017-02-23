@@ -6,7 +6,7 @@ import os
 import commands
 #trunk = commands.getoutput("cat .svn/entries | head -n 4 | tail -n 1")
 trunk = "-svn"
-patchlevel = commands.getoutput("cat include/version.h | grep PATCHLEVEL | cut -b 21-23")
+patchlevel = commands.getoutput("cat inc/version.h | grep PATCHLEVEL | cut -b 21-23")
 
 if os.getuid() != 0:
 	print "[-] You need to run this install script as root!"

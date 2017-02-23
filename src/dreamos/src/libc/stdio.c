@@ -28,7 +28,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <keyboard.h>
-//#include <debug.h>
+//#inc <debug.h>
 
 #define LEFT 1
 #define RIGHT 0

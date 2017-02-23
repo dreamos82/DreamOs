@@ -3,8 +3,8 @@ bochsout.txt
 kernel.bin
 boot/os/
 generated/
-src/os/
-src/utils/
+src/dreamos/src/os/
+src/dreamos/src/utils/
 utils/initfscp
 cmake-build-release
 cmake-build-debug

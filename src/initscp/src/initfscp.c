@@ -20,7 +20,6 @@
 #include <string.h>
 #include <initfscp.h>
 
-
 int main(int argc, char* argv[]){
 	unsigned int offset;
 	if(argc <= 1) {

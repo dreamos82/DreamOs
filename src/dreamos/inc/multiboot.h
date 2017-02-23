@@ -15,7 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
- /* Do not include here in boot.S. */
+ /* Do not inc here in boot.S. */
 
 #ifndef _MULTIBOOT_H
 #define _MULTIBOOT_H     

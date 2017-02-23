@@ -91,7 +91,7 @@ void kernel_map_memory(struct multiboot_info* info)
     }
 
     // The multiboot specification is strange in this respect
-    // - the size member does not include "size" itself in its calculations,
+    // - the size member does not inc "size" itself in its calculations,
     // so we must add sizeof (uint32_t).
     i += me->size + sizeof (uint32_t);
   }
