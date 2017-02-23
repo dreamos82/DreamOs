@@ -32,6 +32,7 @@
 // 
 
 #include <string.h>
+#include <ctype.h>
 
 #define KERNEL 1
 
@@ -42,7 +43,6 @@
 char * strncpy(char * dest, const char * source, size_t n)
 {
     char * start = dest;
-
     while (n && (*dest++ = *source++)) n--;
     if (n) while (--n) *dest++ = '\0';
     return start;
@@ -63,17 +63,8 @@ int strncmp(const char * s1, const char * s2, size_t n)
 
 int stricmp(const char * s1, const char * s2)
 {
-    char f, l;
-
-    do
-    {
-        f = ((*s1 <= 'Z') && (*s1 >= 'A')) ? *s1 + 'a' - 'A' : *s1;
-        l = ((*s2 <= 'Z') && (*s2 >= 'A')) ? *s2 + 'a' - 'A' : *s2;
-        s1++;
-        s2++;
-    } while ((f) && (f == l));
-
-    return (int) (f - l);
+    while (*s2 != 0 && toupper(*s1) == toupper(*s2)) s1++, s2++;
+    return (toupper(*s1) - toupper(*s2));
 }
 
 int strnicmp(const char * s1, const char * s2, size_t n)
