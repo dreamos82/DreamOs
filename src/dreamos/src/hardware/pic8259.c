@@ -127,7 +127,7 @@ void irq_setup(){
 int irq_enable (IRQ_t irq){
     byte cur_mask;
     byte new_mask;
-    if(irq>=0 && irq<15) {
+    if(irq<15) {
         if(irq<8){
             new_mask = ~(1<<irq);
             cur_mask = inportb(MASTER_PORT_1);

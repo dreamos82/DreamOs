@@ -332,14 +332,9 @@ void _kntos(char *buffer, unsigned int num, int base)
   if (base==16)
      _kntohex (buffer, num);
   else {
-    if (num == 0)
-      *p++ = '0';
-	else if(num<0) {		
-		num=(~num)+1;
-		*p++='-';
-		pbase++;
-	}
-    while(num > 0)
+    if (num == 0) *p++ = '0';
+
+    while(num != 0)
     {
       mod = num % base;
       *p++ = mod + '0';
@@ -353,7 +348,7 @@ void _kntos(char *buffer, unsigned int num, int base)
       tmp = *p;
       *p = *pbase;
       *pbase = tmp;
-    
+
       p--; pbase++;
     }
   }

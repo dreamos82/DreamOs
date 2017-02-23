@@ -89,7 +89,7 @@ void options(char * com)
         argc++;
         i = 0;
     }
-    argv[argc] = '\0';
+    argv[argc] = "\0";
 }
 
 /* corpo della shell */

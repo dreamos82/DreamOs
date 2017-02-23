@@ -6,7 +6,6 @@ generated/
 src/dreamos/src/os/
 src/dreamos/src/utils/
 utils/initfscp
-cmake-build-release
-cmake-build-debug
+cmake-build-*
 build
 .idea
