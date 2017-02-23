@@ -53,7 +53,7 @@ void get_cpuid(struct cpuinfo_generic *sh_info)
 /* Actual CPUID call */
 void call_cpuid (struct registri *regs)
 {
-  asm ("cpuid\n\t"
+  __asm__ ("cpuid\n\t"
        : "=a" (regs->eax), "=b" (regs->ebx), "=c" (regs->ecx), "=d" (regs->edx)
        : "a" (regs->eax));
 }

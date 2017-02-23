@@ -49,7 +49,7 @@ void _kputc(char c)
   if(c=='\n')
       _knewline();
     else if(c=='\033') {
-      asm("nop");
+      __asm__("nop");
     } else if (c=='\t')
       _ktab();
     else if(c=='\b')
@@ -190,7 +190,7 @@ void _kminline()
  */
 void _ksetcursor(unsigned int x, unsigned int y)
 {
-   asm(
+   __asm__(
        "movl  %0, %%eax   \n"
        "movl  %1, %%ebx   \n"
        "movl  $0x50, %%ecx   \n"

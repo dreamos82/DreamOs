@@ -43,7 +43,7 @@ ssize_t write(int fildes, const void *buf, size_t nbyte){
 		printf("allright, let's go\n");
 		printf("placeholder for write, coming soon,\n stay tuned\n");
 		printf("Oh i received something: %s\n", buf);
-		if((ssize_t*)mountpoint_list[fd_list[fildes].mountpoint_id].operations.write!=NULL)
+		if(mountpoint_list[fd_list[fildes].mountpoint_id].operations.write!=NULL)
 			mountpoint_list[fd_list[fildes].mountpoint_id].operations.write(fs_fd,(void *) buf, nbyte);
 		//else printf("Give Me a pen and i'll write you the world\n");
 		else {

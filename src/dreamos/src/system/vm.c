@@ -79,9 +79,9 @@ void kernel_init_vm ()
   kernel_switch_page_directory(pd);
 
   // Enable paging.
-  asm volatile ("mov %%cr0, %0" : "=r" (cr0));
+  __asm__ __volatile__ ("mov %%cr0, %0" : "=r" (cr0));
   cr0 |= 0x80000000;
-  asm volatile ("mov %0, %%cr0" : : "r" (cr0));
+  __asm__ __volatile__ ("mov %0, %%cr0" : : "r" (cr0));
 
   // We need to map the page table where the physical memory manager keeps its page stack
   // else it will panic on the first "kernel_free_page".
@@ -98,7 +98,7 @@ void kernel_init_vm ()
 void kernel_switch_page_directory (page_directory_t *pd)
 {
   current_directory = pd;
-  asm volatile ("mov %0, %%cr3" : : "r" (pd));
+  __asm__ __volatile__ ("mov %0, %%cr3" : : "r" (pd));
 }
 
 void map (uint32_t va, uint32_t pa, uint32_t flags)
@@ -123,7 +123,7 @@ void unmap (uint32_t va)
 
   page_tables[virtual_page] = 0;
   // Inform the CPU that we have invalidated a page mapping.
-  asm volatile ("invlpg (%0)" : : "a" (va));
+  __asm__ __volatile__ ("invlpg (%0)" : : "a" (va));
 }
 
 char get_mapping (uint32_t va, uint32_t *pa)
@@ -154,7 +154,7 @@ void page_fault_handler (int ecode)
 	return;
 
   uint32_t cr2;
-  asm volatile ("mov %%cr2, %0" : "=r" (cr2));
+  __asm__ __volatile__ ("mov %%cr2, %0" : "=r" (cr2));
 
   char message[128];
 

@@ -60,7 +60,7 @@ IRQ(48);
   */
 void irq_init(){
     int i;
-    asm("cli");
+    __asm__("cli");
 // Inizializzo i 2 processori pic con ICw1 ICW2 ICW3 e ICW4
     outportb(MASTER_PORT,ICW_1);
     outportb(SLAVE_PORT, ICW_1);
@@ -95,7 +95,7 @@ void irq_init(){
     irq_add_handler(1, keyboard_isr);
     // Install the timer.
     timer_install();
-    asm("sti");
+    __asm__("sti");
 }
 
 void irq_setup(){

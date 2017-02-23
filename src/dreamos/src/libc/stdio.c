@@ -62,7 +62,7 @@ int puts(char * s)
 
 void putchar(char ch)
 {
-    /*asm (
+    /*__asm__ (
         "movl $0x0, %%eax\n"
         "movl %0, %%ecx\n"
         "int $80\n\t"

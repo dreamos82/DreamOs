@@ -82,7 +82,7 @@ void poweroff()
 {
   printf ("Poweroff...\n");
 
-  asm("cli");
+  __asm__("cli");
   printf("Now you can shut down the PC.\n");
   while(1);
 }
@@ -627,13 +627,13 @@ void ps()
 
 void date()
 {
-    asm("cli");
+    __asm__("cli");
     printf("%s %x:%x:%x %s %s %02x %s %02x\n",
            LNG_TIMESTAMP,
            get_hour(), get_minute(), get_second(),
            LNG_TIMESTAMP3,
            get_day_lng(), get_day_m(), get_month_lng(), 0x2000 + get_year());
-    asm("sti");
+    __asm__("sti");
 }
 
 void clear()

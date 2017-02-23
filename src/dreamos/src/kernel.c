@@ -91,7 +91,7 @@ int main_loop(struct multiboot_info *boot_info)
     outportb(0xFF, SLAVE_PORT_1);
     _kputs(LNG_IDT);
     init_idt();
-	asm volatile("int $0x3");
+	__asm__ __volatile__("int $0x3");
     _kprintOK();
 	kernel_init_paging(boot_info->mem_upper);
 	_kprintOK();
@@ -117,7 +117,7 @@ int main_loop(struct multiboot_info *boot_info)
 	// Get the kernel image from the boot info
 	kernel_elf = elf_from_multiboot(boot_info);
 
-	asm volatile ("sti");
+	__asm__ __volatile__ ("sti");
 	thread_t* scheduler_thread = kernel_init_threading();
     kernel_init_scheduler(scheduler_thread);
     _kprintOK();

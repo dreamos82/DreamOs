@@ -44,7 +44,7 @@ void print_stack_trace()
   uint32_t *ebp, *eip;
   uint32_t count = 0;
 
-  asm volatile ("mov %%ebp, %0" : "=r" (ebp));
+  __asm__ __volatile__ ("mov %%ebp, %0" : "=r" (ebp));
 
   while (ebp) {
     if (count > 15)

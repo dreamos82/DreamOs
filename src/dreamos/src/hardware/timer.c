@@ -22,9 +22,9 @@
 #include <io.h>
 
 /// This will keep track of how many ticks the system has been running for.
-volatile uint32_t timer_ticks = 0;
+__volatile__ uint32_t timer_ticks = 0;
 /// This will keep track of how many seconds the system has been running for.
-volatile uint32_t timer_seconds = 0;
+__volatile__ uint32_t timer_seconds = 0;
 /// The number of ticks for a second.
 uint32_t ticks_seconds = 100;
 
@@ -58,6 +58,6 @@ void timer_install()
 void sleep(const unsigned int seconds)
 {
     uint32_t future_time = timer_seconds + seconds;
-    while (timer_seconds <= future_time);
+    while (timer_seconds < future_time);
 }
 

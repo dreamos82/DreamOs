@@ -69,7 +69,7 @@ struct cmd shell_cmd[MAX_NUM_COM] = {
  */
 
 int free_slots = HST_LEN, pos = HST_LEN - 1, c = 0, limit = 1;
-char * lastcmd[HST_LEN] = {};
+char * lastcmd[HST_LEN];
 //Index of history array, where we save the command
 int write_index = HST_LEN - 1;
 
@@ -231,7 +231,7 @@ void history(char * cmd_pass)
         --free_slots;
 
     #ifdef DEBUG
-    _debug_history_stack();
+//    _debug_history_stack();
     #endif
 }
 

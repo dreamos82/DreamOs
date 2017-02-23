@@ -69,7 +69,7 @@ typedef struct thread
     /// The id of the thread.
     uint32_t id;
     /// The exit flag. When set to 1, the scheduler will deactivate the thread.
-    volatile uint32_t exit;
+    __volatile__ uint32_t exit;
     ExitFunction exitFunction;
 } thread_t;
 

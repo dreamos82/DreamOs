@@ -188,7 +188,7 @@ void try_syscall()
     printf("Trying sysputch:\n");
     for (i = 'A'; i <= 'Z'; i++)
     {
-        asm(
+        __asm__(
         "movl %0, %%ecx\n"
             "movl $0x0, %%eax\n"
             "int $80\n"
@@ -266,12 +266,12 @@ int task_test_2(void * args)
 void try_thread()
 {
     printf("Testing task creation functions...\n");
-    asm("cli;"); // Clear Interrupt Flag
+    __asm__("cli;"); // Clear Interrupt Flag
     thread_t * thread1 = kernel_create_thread(task_test_1, "task_test_1", 0);
     printf("Task 1, pid: %d\n", thread1->id);
     thread_t * thread2 = kernel_create_thread(task_test_2, "task_test_2", 0);
     printf("Task 2, pid: %d\n", thread2->id);
-    asm("sti;"); // Set Interrupt Flag
+    __asm__("sti;"); // Set Interrupt Flag
 }
 
 int sleeping_thread(void * args)
@@ -283,11 +283,11 @@ int sleeping_thread(void * args)
 void try_thread_sleep()
 {
     printf("Testing sleeping thread...\n");
-    asm("cli;");
+    __asm__("cli;");
     int i = 0;
     for (; i < 5; ++i)
     {
         kernel_create_thread(sleeping_thread, "sleeping_thread", 0);
     }
-    asm("sti;");
+    __asm__("sti;");
 }
