@@ -1,4 +1,4 @@
-DreamOS
+DreamOS [![Build Status](https://travis-ci.org/Galfurian/DreamOs.svg?branch=master)](https://travis-ci.org/Galfurian/DreamOs)
 ========
 
 1  What is DreamOS
