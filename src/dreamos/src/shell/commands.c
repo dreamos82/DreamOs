@@ -1,7 +1,7 @@
 #include <commands.h>
 #include <stddef.h>
 #include <video.h>
-#include <8253.h>
+#include <timer.h>
 #include <cpuid.h>
 #include <stdio.h>
 #include <string.h>

@@ -12,7 +12,7 @@
 #include <user_shell.h>
 #include <thread.h>
 #include <vm.h>
-#include <8253.h>
+#include <timer.h>
 #include <scheduler.h>
 
 char * module_start;

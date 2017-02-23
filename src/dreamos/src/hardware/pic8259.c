@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <keyboard.h>
-#include <8253.h>
+#include <timer.h>
 #include <bitops.h>
 #include <paging.h>
 
@@ -93,8 +93,9 @@ void irq_init(){
         i++;
     }
     irq_add_handler(1, keyboard_isr);
-    irq_add_handler(0, timer_pit_handler);
-    asm("sti");                  
+    // Install the timer.
+    timer_install();
+    asm("sti");
 }
 
 void irq_setup(){

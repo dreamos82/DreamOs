@@ -75,7 +75,7 @@ set(SOURCE_FILES
         src/fs/initrd.c
         src/fs/unistd.c
         src/fs/vfs.c
-        src/hardware/8253.c
+        src/hardware/timer.c
         src/hardware/cpuid.c
         src/hardware/pic8259.c
         src/io/io.c

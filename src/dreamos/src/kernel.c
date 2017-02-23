@@ -28,7 +28,7 @@
 #include <stddef.h>
 #include <video.h>
 #include <pic8259.h>
-#include <8253.h>
+#include <timer.h>
 #include <gdt.h>
 #include <idt.h>
 #include <cpuid.h>
@@ -131,7 +131,6 @@ int main_loop(struct multiboot_info *boot_info)
 #ifdef BOCHS_DEBUG
 	dbg_bochs_print("DreamOS Debug String for Bochs\n");
 #endif
-	timer_init ();
     //We disable floppy driver motor
     fdc_disable_motor();
 
