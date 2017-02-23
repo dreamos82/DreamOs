@@ -437,15 +437,9 @@ char *strtok(char *string, const char *control)
 
 void * memset(void * ptr, int value, size_t num)
 {
-    if (num)
-    {
-        char * pb = ptr;
-        do
-        {
-            *(pb++) = (char) value;
-        } while (--num);
-    }
-    return ptr;
+    char * dst = (char *) ptr;
+    while (num--) *(dst++) = (char) value;
+    return dst;
 }
 
 int memcmp(const void * dst, const void * src, size_t n)

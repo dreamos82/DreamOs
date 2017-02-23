@@ -27,27 +27,37 @@
 #define HST_LEN 10
 
 
-struct cmd {
-	char cmdname[CMD_LEN];
-	void (*h_func)(void);
-	char cmddesc[DESC_LEN];
+struct cmd
+{
+    char cmdname[CMD_LEN];
+
+    void (* h_func)(void);
+
+    char cmddesc[DESC_LEN];
 };
 
-struct user_env {
-	char username[USER_LEN];
-	char cur_path[CURPATH_LEN];
-	unsigned int uid;
-	unsigned int gid;
+struct user_env
+{
+    char username[USER_LEN];
+    char cur_path[CURPATH_LEN];
+    unsigned int uid;
+    unsigned int gid;
 };
 
-//extern char cur_path[256];
 extern struct cmd shell_cmd[MAX_NUM_COM];
 typedef struct user_env userenv_t;
 extern userenv_t current_user;
+
 void shell_init();
+
 int shell(void *);
-void history (char *);
+
+void history_init(void);
+
+void history_push(char * command);
+
 void history_start(const int key);
-void print_history(void);
+
+void history_print(void);
 
 #endif

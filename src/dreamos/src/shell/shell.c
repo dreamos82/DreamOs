@@ -35,10 +35,22 @@ void get_command();
 
 void get_options(char * command);
 
+/// The current user.
 userenv_t current_user;
+/// The flag of the history.
 int hst_flag;
-char cmd[CMD_LEN]; //history stack
-//#define PWD_CHECK 1
+/// The input command.
+char cmd[CMD_LEN];
+/// The command history.
+char * cmd_history[HST_LEN];
+/// The number of free slots on the history.
+int free_slots = HST_LEN;
+/// The position inside the history.
+int pos = HST_LEN - 1;
+int limit = 1;
+/// Index of history array, where we save the command
+int write_index = HST_LEN - 1;
+
 struct cmd shell_cmd[MAX_NUM_COM] = {
     {"aalogo",   aalogo,        "Show an ascii art logo"},
     {"clear",    _kclear,       "Clear the screen"},
@@ -62,19 +74,8 @@ struct cmd shell_cmd[MAX_NUM_COM] = {
     {"ps",       ps,            "Show task list"},
     {"clear",    clear,         "Clears the screen"},
     {"showpid",  showpid,       "Shows the PID of the shell"},
-    {"history",  print_history, "Shows the shell history"}
+    {"history",  history_print, "Shows the shell history"}
 };
-/*
- * Inserisce gli argomenti di un comando in un array di stringhe
- * argc = numero degli argomenti
- * argv[0] = nome del comando
- * argv[n] = opzioni successive
- */
-
-int free_slots = HST_LEN, pos = HST_LEN - 1, c = 0, limit = 1;
-char * lastcmd[HST_LEN];
-//Index of history array, where we save the command
-int write_index = HST_LEN - 1;
 
 /* corpo della shell */
 int shell(void * args)
@@ -139,14 +140,8 @@ int shell(void * args)
     strcpy(current_user.cur_path, "/");
     current_user.uid = 1;
     current_user.gid = 0;
-    //Command history set allocation
-    for (c = 0; c < HST_LEN; c++)
-    {
-        lastcmd[c] = (char *) kmalloc(sizeof(char) * 30);
-        //Initializing new allocated strings
-        memset(lastcmd[c], 0, 30);
-    }
-
+    // Initialize the history.
+    history_init();
     for (;;)
     {
         // Debug on bochs prompt.
@@ -162,7 +157,7 @@ int shell(void * args)
 
         if (strlen(cmd_ptr) > 0)
         {
-            history(cmd_ptr);
+            history_push(cmd_ptr);
         }
         else
         {
@@ -191,65 +186,6 @@ int shell(void * args)
     }
 
     return 0;
-}
-
-// Saves cmd_pass string to history buffer (lastcmd)
-void history(char * cmd_pass)
-{
-    int prev_index = write_index + 1;
-
-    if (prev_index > HST_LEN - 1)
-        prev_index = free_slots;
-
-    //We should always clean before copying data inside
-    memset(lastcmd[write_index], 0, 30);
-    strcpy(lastcmd[write_index], cmd_pass);
-    pos = write_index;
-
-    --write_index;
-    if (write_index < 0)
-        RESET_MAX(write_index);
-
-    if (free_slots > 0)
-        --free_slots;
-
-    #ifdef DEBUG
-//    _debug_history_stack();
-    #endif
-}
-
-//downarrow and uparrow keys handler to get commands from history buffer
-void history_start(const int key)
-{
-    int delete = 0, max_limit = strlen(cmd);
-    //Backspace handling
-    if (limit < max_limit)
-    {
-        limit = max_limit;
-    }
-
-    while (delete <= limit)
-    {
-        _kbackspace();
-        delete++;
-    }
-
-    //Showing picked history command
-    printf("%s", lastcmd[pos]);
-    //We copy the history command to cmd
-    memset(cmd, 0, CMD_LEN);
-    strcpy(cmd, lastcmd[pos]);
-    hst_flag = 1;
-
-    if (key == KEY_UPARROW)
-        ++pos;
-    else if (key == KEY_DOWNARROW)
-        --pos;
-
-    if (pos < free_slots)
-        RESET_MAX(pos);
-    else if (pos > HST_LEN - 1)
-        RESET_MIN(pos);
 }
 
 void print_prompt(char * prompt)
@@ -329,7 +265,78 @@ void get_options(char * command)
     argv[argc] = "\0";
 }
 
-void print_history(void)
+void history_init(void)
+{
+    int it;
+    for (it = 0; it < HST_LEN; it++)
+    {
+        cmd_history[it] = (char *) kmalloc(sizeof(char) * CMD_LEN);
+        // Initializing new allocated strings.
+        memset(cmd_history[it], 0, CMD_LEN);
+    }
+}
+
+// Saves cmd_pass string to history buffer (lastcmd)
+void history_push(char * command)
+{
+    int prev_index = write_index + 1;
+    if (prev_index > HST_LEN - 1)
+    {
+        prev_index = free_slots;
+    }
+    // Clean the history slot.
+    memset(cmd_history[write_index], 0, CMD_LEN);
+    // Copy the command inside the slot.
+    strcpy(cmd_history[write_index], command);
+    // Increment the history position.
+    pos = write_index;
+    // Decrement the index.
+    --write_index;
+    if (write_index < 0)
+    {
+        RESET_MAX(write_index);
+    }
+    if (free_slots > 0)
+    {
+        --free_slots;
+    }
+}
+
+//downarrow and uparrow keys handler to get commands from history buffer
+void history_start(const int key)
+{
+    int delete = 0, max_limit = strlen(cmd);
+    //Backspace handling
+    if (limit < max_limit)
+    {
+        limit = max_limit;
+    }
+
+    while (delete <= limit)
+    {
+        _kbackspace();
+        delete++;
+    }
+
+    //Showing picked history command
+    printf("%s", cmd_history[pos]);
+    //We copy the history command to cmd
+    memset(cmd, 0, CMD_LEN);
+    strcpy(cmd, cmd_history[pos]);
+    hst_flag = 1;
+
+    if (key == KEY_UPARROW)
+        ++pos;
+    else if (key == KEY_DOWNARROW)
+        --pos;
+
+    if (pos < free_slots)
+        RESET_MAX(pos);
+    else if (pos > HST_LEN - 1)
+        RESET_MIN(pos);
+}
+
+void history_print(void)
 {
     //Prints the history stack with current indexes values
     int i;
@@ -342,7 +349,7 @@ void print_history(void)
         if (i == write_index) printf("w "); //write_index value is here
         else if (i == pos) printf("->");    //pos value is here
         else printf("  ");
-        printf("\tHistory[%d]: %s\n", i, lastcmd[i]);
+        printf("\tHistory[%d]: %s\n", i, cmd_history[i]);
     }
     printf("#free slots: %d\n", free_slots);
 }
