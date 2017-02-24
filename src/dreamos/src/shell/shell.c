@@ -187,13 +187,10 @@ int shell(void * args)
 
 void print_prompt()
 {
-    char prompt[CMD_LEN];
-    sprintf(prompt, "%s~:%s# ",
-            current_user.username,
-            current_user.cur_path);
     _kcolor(BRIGHT_BLUE);
-    printf(prompt);
+    printf(current_user.username);
     _kcolor(WHITE);
+    printf("~:%s# ", current_user.cur_path);
     // Update the lower-bounds for the video.
     lower_bound_x = _kgetcolumn();
     lower_bound_y = _kgetline();
