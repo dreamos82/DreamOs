@@ -37,12 +37,13 @@ void get_options(char * command);
 
 /// The current user.
 userenv_t current_user;
-/// The flag of the history.
-int hst_flag;
 /// The input command.
 char cmd[CMD_LEN];
 /// The index of the cursor.
 int cmd_cursor_index;
+/// Flag which determines if the current command has been retrieved from the
+/// history.
+bool_t cmd_from_history = false;
 /// The command history.
 char * cmd_history[HST_LEN];
 /// The number of free slots on the history.
@@ -111,7 +112,6 @@ int shell(void * args)
 
     int i = 0;
     int ret_val;
-    hst_flag = 0;
     _kcolor(BRIGHT_BLUE);
     printf(LNG_WELCOME);
     _kcolor(WHITE);
@@ -230,9 +230,9 @@ void get_command()
             // Break the while loop.
             break;
         }
-        if (hst_flag)
+        if (cmd_from_history)
         {
-            hst_flag = 0;
+            cmd_from_history = false;
             //We have to write new chars at the end of string imported from history
             cmd_cursor_index = strlen(cmd);
         }
@@ -249,8 +249,8 @@ void get_command()
             continue;
         }
         cmd[cmd_cursor_index++] = (char) c;
+        cmd[cmd_cursor_index] = 0;
     }
-    cmd[cmd_cursor_index] = 0;
 }
 
 void get_options(char * command)
@@ -329,7 +329,8 @@ void history_start(const int key)
     //We copy the history command to cmd
     memset(cmd, 0, CMD_LEN);
     strcpy(cmd, cmd_history[pos]);
-    hst_flag = 1;
+    // Set that we have just retrieved a command from the history.
+    cmd_from_history = true;
 
     if (key == KEY_UPARROW)
         ++pos;
