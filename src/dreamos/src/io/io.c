@@ -25,15 +25,14 @@
 
 #include <io.h>
 
-inline unsigned char inportb(unsigned short port)
+inline uint8_t inportb(uint16_t port)
 {
     unsigned char data = 0;
     __asm__ __volatile__ ("inb %%dx, %%al" : "=a" (data) : "d" (port));
     return data;
 }
 
-inline void outportb(const unsigned short port,
-                     const unsigned char data)
+inline void outportb(const uint16_t port, const uint8_t data)
 {
     __asm__ __volatile__ ("outb %%al, %%dx"::"a" (data), "d" (port));
 }

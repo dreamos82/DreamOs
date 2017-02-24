@@ -26,6 +26,9 @@
 #ifndef _KEYBOARD_H_
 #define _KEYBOARD_H_
 
+#include <stdbool.h>
+#include <stdint.h>
+
 /* Special keys */
 #define CODE_BREAK      0x80
 
@@ -44,11 +47,11 @@
 #define EXTENDED_2     0x2A
 
 
-#define KEY_LSHIFT     0x2a
-#define KEY_RSHIFT     0x36
-#define KEY_CTRL       0x1d
-#define KEY_ALT        0x38
-#define KEY_ALTGR      0x39
+#define KEY_LEFT_SHIFT  0x2a
+#define KEY_RIGHT_SHIFT 0x36
+#define KEY_CTRL        0x1d
+#define KEY_ALT         0x38
+#define KEY_ALTGR       0x39
 
 #define NUM_LED        0x45
 #define SCROLL_LED     0x46
@@ -56,13 +59,16 @@
 
 #define BUFSIZE        256
 
-#define ENABLED           1
-#define DISABLED       0
-
-/* Procedures */
-
-/// Determines if the ctrl key is still pressed.
-extern int ctrl_pressed;
+/// Determines if CRTL is pressed.
+extern bool_t is_ctrl_pressed;
+/// Determines if SHIFT is pressed.
+extern bool_t is_shifted;
+/// Determines if TAB is pressed.
+extern bool_t is_tab_pressed;
+/// Determines if BLOC_NUM is pressed.
+extern bool_t is_num_pressed;
+/// Determines if BLOC_SCROLL is pressed.
+extern bool_t is_scroll_pressed;
 
 void keyboard_isr(void);
 
@@ -70,11 +76,21 @@ void keyboard_enable(void);
 
 void keyboard_disable(void);
 
-void _ksetleds(int, int, int);
+void _ksetleds(const bool_t capslock,
+               const bool_t numlock,
+               const bool_t scrlock);
 
-int set_shadow(int);
+/// @brief Set Keyboard echo Shadow
+/// @author Ivan Gualandri
+/// @version 1.0
+/// @param value 1 if you want enable shadow 0 otherwise
+void set_shadow(const bool_t value);
 
-int get_shadow();
+/// @brief Get Keyboard Shadow information
+/// @author Ivan Gualandri
+/// @version 1.0
+/// @return
+bool_t get_shadow();
 
 int _kgetch(void);
 

@@ -26,15 +26,16 @@
 #ifndef _IO_H
 #define _IO_H
 
+#include <stdint.h>
+
 /// @brief Used for reading from the I/O ports.
 /// @param port The input port.
 /// @return The read value.
-unsigned char inportb(const unsigned short port);
+uint8_t inportb(const uint16_t port);
 
 /// @brief Use this to write to I/O ports to send bytes to devices.
 /// @param port The output port.
 /// @param data The data to write.
-void outportb(const unsigned short port,
-              const unsigned char data);
+void outportb(const uint16_t port, const uint8_t data);
 
 #endif

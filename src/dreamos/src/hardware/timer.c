@@ -17,7 +17,7 @@
  */
 
 #include <timer.h>
-#include <support_defs.h>
+#include <stdint.h>
 #include <pic8259.h>
 #include <io.h>
 #include <video.h>

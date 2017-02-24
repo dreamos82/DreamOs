@@ -29,7 +29,7 @@
 #define RESET_MAX(A)   A = HST_LEN - 1
 #define RESET_MIN(A)   A = free_slots
 
-void print_prompt(char * prompt);
+void print_prompt();
 
 void get_command();
 
@@ -41,6 +41,8 @@ userenv_t current_user;
 int hst_flag;
 /// The input command.
 char cmd[CMD_LEN];
+/// The index of the cursor.
+int cmd_cursor_index;
 /// The command history.
 char * cmd_history[HST_LEN];
 /// The number of free slots on the history.
@@ -147,7 +149,7 @@ int shell(void * args)
         // Debug on bochs prompt.
         dbg_bochs_print("shell loop\n");
         // First print the prompt.
-        print_prompt("~:%s# ");
+        print_prompt();
         // Get the input command.
         get_command();
         // Cleans all blanks at the beginning of the command.
@@ -184,66 +186,71 @@ int shell(void * args)
         if (i < 0)
             printf(LNG_UNKNOWN_CMD " %s\n", argv[0]);
     }
-
     return 0;
 }
 
-void print_prompt(char * prompt)
+void print_prompt()
 {
-    // First print the username.
-    _ksetcolor(BRIGHT_BLUE, 0);
-    printf("%s", current_user.username);
-    _ksetcolor(WHITE, 0);
-    // Input command.
-    printf(prompt, current_user.cur_path);
+    char prompt[CMD_LEN];
+    sprintf(prompt, "%s~:%s# ",
+            current_user.username,
+            current_user.cur_path);
+    _kcolor(BRIGHT_BLUE);
+    printf(prompt);
+    _kcolor(WHITE);
+    // Update the lower-bounds for the video.
+    lower_bound_x = _kgetcolumn();
+    lower_bound_y = _kgetline();
 }
 
 //Input shell command (a private hacked version of gets)
 void get_command()
 {
-    // Initialize the character index.
-    int i = 0;
+    // Re-Initialize the cursor index.
+    cmd_cursor_index = 0;
     // Initialize the read character.
     int c = 0;
     //Initializing the current command line buffer
     memset(cmd, 0, CMD_LEN);
-    //Important to update these values otherwise backspace will not work!!
-    shell_mess_col = _kgetcolumn();
-    shell_mess_line = _kgetline();
     // Tap the command.
     cmd[0] = '\0';
-    while ((i < CMD_LEN) && ((c = getchar()) != '\n'))
+    while ((cmd_cursor_index < CMD_LEN) && ((c = getchar()) != '\n'))
     {
         // If CTRL is pressed and the current character is c, stop reading
         // the command.
-        if ((ctrl_pressed == 1) && (c == 'c'))
+        if ((is_ctrl_pressed == 1) && (c == 'c'))
         {
             // However, the ISR of the keyboard has already put the char.
             // Thus, delete it by using backspace.
             _kbackspace();
+            // Re-set the index to the beginning.
+            cmd_cursor_index = 0;
             // Go to the new line.
             printf("\n");
-            // Completely reset the command.
-            cmd[0] = '\0';
-            return;
+            // Break the while loop.
+            break;
         }
         if (hst_flag)
         {
             hst_flag = 0;
             //We have to write new chars at the end of string imported from history
-            i = strlen(cmd);
+            cmd_cursor_index = strlen(cmd);
         }
         if (c == '\b')
         {
-            if (i > 0)
-                cmd[--i] = '\0';
-            else if (i == 0)
-                cmd[i] = '\0';
+            if (cmd_cursor_index > 0)
+            {
+                cmd[--cmd_cursor_index] = 0;
+            }
+            else if (cmd_cursor_index == 0)
+            {
+                cmd[cmd_cursor_index] = 0;
+            }
             continue;
         }
-        cmd[i++] = c;
-        cmd[i] = '\0';
+        cmd[cmd_cursor_index++] = (char) c;
     }
+    cmd[cmd_cursor_index] = 0;
 }
 
 void get_options(char * command)
@@ -351,4 +358,20 @@ void history_print(void)
         printf("\tHistory[%d]: %s\n", i, cmd_history[i]);
     }
     printf("#free slots: %d\n", free_slots);
+}
+
+void move_cursor_left(void)
+{
+    if (cmd_cursor_index > lower_bound_x)
+    {
+        --cmd_cursor_index;
+    }
+}
+
+void move_cursor_right(void)
+{
+    if (cmd_cursor_index < shell_lowe_bound_x)
+    {
+        ++cmd_cursor_index;
+    }
 }

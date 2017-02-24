@@ -25,7 +25,7 @@
 #define _CPUID_H
 
 #include <stddef.h>
-#include <support_defs.h>
+#include <stdint.h>
 
 #define ECX_FLAGS_SIZE 24
 #define EDX_FLAGS_SIZE 32

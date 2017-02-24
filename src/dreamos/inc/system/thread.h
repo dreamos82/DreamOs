@@ -23,7 +23,7 @@
 #ifndef THREAD_H
 #define THREAD_H
 
-#include "support_defs.h"
+#include <stdint.h>
 
 struct thread_list;
 

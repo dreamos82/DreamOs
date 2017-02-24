@@ -37,12 +37,18 @@ char downbuffer[_SCR_H][_SCR_W * 2];
 int is_scrolled = 0;
 int is_shifted_once = 0;
 unsigned int last_tab = 0;
-int last_x = 0, last_y = 0;
+int last_x = 0;
+int last_y = 0;
 
 void _kputc(char c)
 {
-    /* Print a character on the screen*/
-    if (last_x && last_y) _kscrolldown();
+    // If we are at the end of the line and at the end of the column, scroll
+    // down the page.
+    if (last_x && last_y)
+    {
+        _kscrolldown();
+    }
+    // If the character is '\n' go the new line.
     if (c == '\n')
     {
         _knewline();
@@ -65,8 +71,8 @@ void _kputc(char c)
     }
     else
     {
-        *VIDEO_PTR++ = c;
-        *VIDEO_PTR++ = VIDEO_CLR;
+        *(VIDEO_PTR++) = c;
+        *(VIDEO_PTR++) = VIDEO_CLR;
     }
     _kshiftAll();
     _ksetcursauto();
@@ -151,7 +157,7 @@ void _kbackspace()
         }
         last_tab--;
     }
-    else if (shell_mess_line != _kgetline() || shell_mess_col < _kgetcolumn())
+    else if (lower_bound_y != _kgetline() || lower_bound_x < _kgetcolumn())
     {
         VIDEO_PTR -= 2;
         *VIDEO_PTR = 0x20; // delete the character

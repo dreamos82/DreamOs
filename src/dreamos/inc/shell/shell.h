@@ -70,4 +70,8 @@ void history_start(const int key);
 /// @brief Prints the history.
 void history_print(void);
 
+void move_cursor_left(void);
+
+void move_cursor_right(void);
+
 #endif

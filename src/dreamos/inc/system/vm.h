@@ -23,7 +23,7 @@
 #ifndef VM_H
 #define VM_H
 
-#include "support_defs.h"
+#include <stdint.h>
 
 #define PAGE_DIR_VIRTUAL_ADDR   0xFFBFF000
 #define PAGE_TABLE_VIRTUAL_ADDR 0xFFC00000

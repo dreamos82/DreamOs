@@ -24,8 +24,7 @@
 #define PAGING_H
 
 #include <multiboot.h>
-
-#include "support_defs.h"
+#include <stdint.h>
 
 #define PAGING_STACK_ADDR 0xFF000000
 

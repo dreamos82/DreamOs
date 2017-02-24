@@ -21,11 +21,9 @@
 //
 
 #include <panic.h>
-
 #include <elf.h>
 #include <stdio.h>
-
-#include "support_defs.h"
+#include <stdint.h>
 
 static void print_stack_trace();
 

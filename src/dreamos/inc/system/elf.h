@@ -24,8 +24,7 @@
 #define ELF_H
 
 #include <multiboot.h>
-
-#include "support_defs.h"
+#include <stdint.h>
 
 #define ELF32_ST_TYPE(i) ((i)&0xf)
 

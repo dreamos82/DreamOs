@@ -68,20 +68,21 @@ static int shifted_it_map[] =
 static int circlebuf[BUFSIZE];
 static int buf_r = 0, buf_w = 0;
 
-static int sc;
 static int * curmap = key_it_map;
-static unsigned short ledstate = 0;
 
-/* Variables to track states */
-int ctrl_pressed;
-static int is_shifted;
-static int is_tab_pressed;
-static int is_num_pressed;
-static int is_scroll_pressed;
+/// Tracks the state of the leds.
+static uint8_t ledstate = 0;
+
+// Variables use to track keyboard states.
+bool_t is_ctrl_pressed;
+bool_t is_shifted;
+bool_t is_tab_pressed;
+bool_t is_num_pressed;
+bool_t is_scroll_pressed;
+
+static bool_t shadow = false;
 
 extern unsigned int last_tab;
-
-static int shadow = 0;
 
 /*
  * The keyboard handler
@@ -89,39 +90,47 @@ static int shadow = 0;
 void keyboard_isr(void)
 {
     // Take scancode from the port.
-    sc = inportb(0x60);
-    /* error handling */
-    if (sc == 0x00 || sc == 0xFF)
+    int scan_code = inportb(0x60);
+    // Error handling.
+    if (scan_code == 0x00 || scan_code == 0xFF)
     {
         _kputs("Keyboard error\n");
         goto end;
     }
 
-    /* The right map is selected */
-    if (is_shifted == 0 && is_tab_pressed == 0)
-        curmap = key_it_map;
-    else if (is_shifted == 0 && is_tab_pressed)
-        curmap = shifted_it_map;
-    else if (is_shifted == 1 && is_tab_pressed == 0)
-        curmap = shifted_it_map;
-    else if (is_shifted == 1 && is_tab_pressed)
-        curmap = key_it_map;
-
-    /* In case of useless break codes, switch controls...*/
-    if ((sc > CODE_BREAK) &&
-        (sc != (KEY_LSHIFT | CODE_BREAK)) &&
-        (sc != (KEY_RSHIFT | CODE_BREAK)) &&
-        (sc != (KEY_CTRL | CODE_BREAK)))
+    // The right map is selected.
+    if ((is_shifted && is_tab_pressed) || (!is_shifted && !is_tab_pressed))
     {
-        if (sc == KEY_ENTER + 128)
+        curmap = key_it_map;
+    }
+    else
+    {
+        curmap = shifted_it_map;
+    }
+
+    // In case of useless break codes, switch controls.
+    if ((scan_code > CODE_BREAK) &&
+        (scan_code != (KEY_LEFT_SHIFT | CODE_BREAK)) &&
+        (scan_code != (KEY_RIGHT_SHIFT | CODE_BREAK)) &&
+        (scan_code != (KEY_CTRL | CODE_BREAK)))
+    {
+        if (scan_code == KEY_ENTER + 128)
+        {
             outportb(MASTER_PORT, EOI);
+        }
         goto end;
     }
 
-    switch (sc)
+    // Parse the key.
+    switch (scan_code)
     {
-        case KEY_LSHIFT:
-            is_shifted = 1;
+        case KEY_LEFT_SHIFT:
+        case KEY_RIGHT_SHIFT:
+            is_shifted = true;
+            break;
+        case KEY_LEFT_SHIFT | CODE_BREAK:
+        case KEY_RIGHT_SHIFT | CODE_BREAK:
+            is_shifted = false;
             break;
         case KEY_PGDOWN:
             _kscrolldown();
@@ -129,54 +138,31 @@ void keyboard_isr(void)
         case KEY_PGUP:
             _kscrollup();
             break;
-        case KEY_RSHIFT:
-            is_shifted = 1;
-            break;
-        case KEY_LSHIFT | CODE_BREAK:
-        case KEY_RSHIFT | CODE_BREAK:
-            is_shifted = 0;
-            break;
         case CAPS_LED:
-            if (is_tab_pressed == 0)
-            {
-                _ksetleds(1, -1, -1);
-                is_tab_pressed = 1;
-            }
-            else
-            {
-                is_tab_pressed = 0;
-                _ksetleds(0, -1, -1);
-            }
+            // Switch the state of the tab pressed.
+            is_tab_pressed = (is_tab_pressed) ? false : true;
+            // Activate the led.
+            _ksetleds(is_tab_pressed, false, false);
             break;
         case NUM_LED:
-            if (is_num_pressed == 0)
-            {
-                _ksetleds(-1, 1, -1);
-                is_num_pressed = 1;
-            }
-            else
-            {
-                _ksetleds(-1, 0, -1);
-                is_num_pressed = 0;
-            }
+            // Switch the state of the num pressed.
+            is_num_pressed = (is_num_pressed) ? false : true;
+            // Activate the led.
+            _ksetleds(false, is_num_pressed, false);
             break;
         case SCROLL_LED:
-            if (is_scroll_pressed == 0)
-            {
-                _ksetleds(-1, -1, 1);
-                is_scroll_pressed = 1;
-            }
-            else
-            {
-                _ksetleds(-1, -1, 0);
-                is_scroll_pressed = 0;
-            }
+            // Switch the state of the scroll pressed.
+            is_scroll_pressed = (is_scroll_pressed) ? false : true;
+            // Activate the led.
+            _ksetleds(false, false, is_scroll_pressed);
             break;
         case KEY_ESCAPE:
             break;
         case KEY_BACKSPACE:
             if (STEP(buf_w) == buf_r)
+            {
                 buf_r = STEP(buf_r);
+            }
             circlebuf[buf_w] = '\b';
             buf_w = STEP(buf_w);
             _kbackspace();
@@ -184,7 +170,9 @@ void keyboard_isr(void)
             break;
         case KEY_ENTER:
             if (STEP(buf_w) == buf_r)
+            {
                 buf_r = STEP(buf_r);
+            }
             circlebuf[buf_w] = '\n';
             buf_w = STEP(buf_w);
             _knewline();
@@ -194,7 +182,9 @@ void keyboard_isr(void)
             break;
         case KEY_TAB:
             if (STEP(buf_w) == buf_r)
+            {
                 buf_r = STEP(buf_r);
+            }
             circlebuf[buf_w] = '\t';
             buf_w = STEP(buf_w);
             _ktab();
@@ -202,44 +192,50 @@ void keyboard_isr(void)
             last_tab++;
             break;
         case KEY_UPARROW:
-            history_start(sc);
+            history_start(scan_code);
             _ksetcursauto();
             break;
         case KEY_DOWNARROW:
-            history_start(sc);
+            history_start(scan_code);
             _ksetcursauto();
             break;
         case KEY_LEFTARROW:
-            //_ksetcursor((_kgetline()), (_kgetcolumn() - 1));
+//            _kgoto((_kgetcolumn() - 1), (_kgetline()));
+//            move_cursor_left();
             break;
         case KEY_RIGHTARROW:
-            //_ksetcursor((_kgetline()), (_kgetcolumn() + 1));
+//            _kgoto((_kgetcolumn() + 1), (_kgetline()));
+//            move_cursor_right();
             break;
+        case KEY_ALT:
             // Presente un bug qui che non permette il fix dei relativi tasti
             // se si decommenta, il sistema all'avvio va in panic e si riavvia
-        case KEY_ALT:
             //_kputs("Alt key pressed, nothing to be done\n");
             break;
             /*case KEY_ALTGR:
             break;*/
         case KEY_CTRL:
-            ctrl_pressed = 1;
+            is_ctrl_pressed = true;
             break;
         case KEY_CTRL | CODE_BREAK:
-            ctrl_pressed = 0;
+            is_ctrl_pressed = false;
             break;
         default:
-            if (isdigit(key_it_map[sc]) && is_tab_pressed == 1)
+            // Print numbers if the tab is pressed.
+            if (isdigit(key_it_map[scan_code]) && is_tab_pressed)
+            {
                 curmap = key_it_map;
-
-            //printf ("%d", sc);
-            if (shadow == 0)
-                putchar(curmap[sc]);
-
-            /* Update buffer */
+            }
+            if (!shadow)
+            {
+                putchar(curmap[scan_code]);
+            }
+            // Update buffer.
             if (STEP(buf_w) == buf_r)
+            {
                 buf_r = STEP(buf_r);
-            circlebuf[buf_w] = curmap[sc];
+            }
+            circlebuf[buf_w] = curmap[scan_code];
             buf_w = STEP(buf_w);
     }
 
@@ -256,36 +252,17 @@ void keyboard_isr(void)
  * 0=Set the led off
  * -1=Leave it unchanged
  */
-void _ksetleds(int capslock, int numlock, int scrlock)
+void _ksetleds(const bool_t capslock,
+               const bool_t numlock,
+               const bool_t scrlock)
 {
-    if (numlock == 1)
-    {
-        numlock = 2;
-        ledstate |= numlock;
-    }
-    if (capslock == 1)
-    {
-        capslock = 4;
-        ledstate |= capslock;
-    }
-    if (scrlock == 1)
-        ledstate |= scrlock;
-
-    if (numlock == 0)
-    {
-        numlock = 2;
-        ledstate ^= numlock;
-    }
-    if (capslock == 0)
-    {
-        capslock = 4;
-        ledstate ^= capslock;
-    }
-    if (scrlock == 0)
-    {
-        scrlock = 1;
-        ledstate ^= scrlock;
-    }
+    // Handle scroll_loc.
+    (scrlock) ? (ledstate |= 1) : (ledstate ^= 1);
+    // Handle num_loc.
+    (numlock) ? (ledstate |= 2) : (ledstate ^= 2);
+    // Handle caps_loc.
+    (capslock) ? (ledstate |= 4) : (ledstate ^= 4);
+    // Write on the port.
     outportb(0x60, 0xED);
     outportb(0x60, ledstate);
 }
@@ -316,28 +293,12 @@ int _kgetch(void)
     return c;
 }
 
-/**
-  * Set Keyboard echo Shadow 
-  * @author Ivan Gualandri
-  * @version 1.0
-  * @param 1 if you want enable shadow 0 otherwise
-  * @return 1 if keyboard echo shadow enable 0 if not.
-  */
-int set_shadow(int value)
+void set_shadow(const bool_t value)
 {
-    if (value > 1 || value < 0) return -1;
-    else shadow = value;
-    return shadow;
+    shadow = value;
 }
 
-/**
-  * Get Keyboard Shadow informations 
-  * @author Ivan Gualandri
-  * @version 1.0
-  * @return 1 if keyboard echo shadow enable 0 if not.
-  */
-
-int get_shadow()
+bool_t get_shadow()
 {
     return shadow;
 }

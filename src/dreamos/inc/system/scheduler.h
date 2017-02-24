@@ -24,8 +24,7 @@
 #define SCHEDULER_H
 
 #include <thread.h>
-
-#include "support_defs.h"
+#include <stdint.h>
 
 typedef struct thread_list
 {

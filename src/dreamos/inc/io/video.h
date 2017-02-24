@@ -25,6 +25,8 @@
 #ifndef _VIDEO_H
 #define _VIDEO_H
 
+#include <stdint.h>
+
 #define _SCR_W 80
 #define _SCR_H 25
 
@@ -93,6 +95,14 @@ void _kntohex(char *, unsigned int);
 
 void _knntos(char *, int, int);
 
-unsigned short shell_mess_col, shell_mess_line;
+/// Determines the lower-bound on the x axis for the video.
+int32_t lower_bound_x;
+/// Determines the lower-bound on the y axis for the video.
+int32_t lower_bound_y;
+
+int32_t shell_current_x;
+int32_t shell_current_y;
+int32_t shell_lowe_bound_x;
+int32_t shell_lowe_bound_y;
 
 #endif /* _VIDEO_H */

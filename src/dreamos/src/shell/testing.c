@@ -227,9 +227,9 @@ void try_shadow()
 {
     char stringa[30];
     memset(stringa, '\0', 30);
-    set_shadow(ENABLED);
+    set_shadow(true);
     scanf("%s", stringa);
-    set_shadow(DISABLED);
+    set_shadow(false);
     printf("%s\n", stringa);
 }
 
