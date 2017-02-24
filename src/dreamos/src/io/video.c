@@ -40,7 +40,7 @@ unsigned int last_tab = 0;
 int last_x = 0;
 int last_y = 0;
 
-void _kputc(char c)
+void _kputc(int c)
 {
     // If we are at the end of the line and at the end of the column, scroll
     // down the page.
@@ -71,7 +71,7 @@ void _kputc(char c)
     }
     else
     {
-        *(VIDEO_PTR++) = c;
+        *(VIDEO_PTR++) = (char) c;
         *(VIDEO_PTR++) = VIDEO_CLR;
     }
     _kshiftAll();
@@ -131,15 +131,6 @@ void _kputs(char * s)
 void _kcolor(char color)
 {
     VIDEO_CLR = color;
-}
-
-/* Sets the forecolor and backcolor that we will use */
-void _ksetcolor(const unsigned char foreground,
-                const unsigned char background)
-{
-    /* Top 4 bytes are the background, bottom 4 bytes
-    *  are the foreground color */
-    VIDEO_CLR = (background << 4) | (foreground & 0x0F);
 }
 
 /*

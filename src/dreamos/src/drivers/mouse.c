@@ -123,7 +123,7 @@ void mouse_isr(void)
 {
     static unsigned char cycle = 0;
     static char mouse_bytes[3];
-    mouse_bytes[cycle++] = inportb(0x60);
+    mouse_bytes[cycle++] = (char) inportb(0x60);
     // dichiariamo le due variabili che conterranno le coordinate
     // e inizializziamole a 0
     signed long int MousePositionX = 0, MousePositionY = 0;

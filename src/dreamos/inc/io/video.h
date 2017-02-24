@@ -52,12 +52,9 @@
 
 void _kntos(char *, unsigned int, int);
 
-void _kputc(char);
+void _kputc(int);
 
 void _kcolor(char);
-
-void _ksetcolor(const unsigned char foreground,
-                const unsigned char background);
 
 void _kputs(char *);
 

@@ -34,11 +34,11 @@ struct cpuinfo_generic
 {
     char * cpu_vendor;
     char * cpu_type;
-    int cpu_family;
-    int cpu_model;
-    int apic_id;
-    int cpuid_ecx_flags[ECX_FLAGS_SIZE];
-    int cpuid_edx_flags[EDX_FLAGS_SIZE];
+    uint32_t cpu_family;
+    uint32_t cpu_model;
+    uint32_t apic_id;
+    uint32_t cpuid_ecx_flags[ECX_FLAGS_SIZE];
+    uint32_t cpuid_edx_flags[EDX_FLAGS_SIZE];
     int is_brand_string;
     char * brand_string;
 };
@@ -60,11 +60,13 @@ void cpuid_write_vendor(struct cpuinfo_generic *, struct registers *);
 
 void cpuid_write_proctype(struct cpuinfo_generic *, struct registers *);
 
-void cpuid_feature_ecx(struct cpuinfo_generic *, int);
+void cpuid_feature_ecx(struct cpuinfo_generic *, uint32_t);
 
-void cpuid_feature_edx(struct cpuinfo_generic *, int);
+void cpuid_feature_edx(struct cpuinfo_generic *, uint32_t);
 
-int cpuid_get_byte(int, int, int);
+uint32_t cpuid_get_byte(const uint32_t reg,
+                        const uint32_t position,
+                        const uint32_t value);
 
 char * cpuid_brand_index(struct registers *);
 

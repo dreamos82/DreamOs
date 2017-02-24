@@ -39,7 +39,7 @@ char VIDEO_CLRZ = 0x7;
 int last_Xz = 0;
 int last_Yz = 0;
 
-void putchar(char character)
+void putchar(int character)
 {
     _kputc(character);
 }
@@ -147,7 +147,7 @@ int printf(const char * format, ...)
 
 int scanf(const char * format, ...)
 {
-    int count = 0;
+    size_t count = 0;
     va_list scan;
     va_start (scan, format);
     for (; *format; format++)

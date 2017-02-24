@@ -35,7 +35,7 @@
 #endif
 
 /// @brief Writes the given character to the standard output (stdout).
-void putchar(char character);
+void putchar(int character);
 
 /// @brief Returns the next character from the standard input (stdin).
 int getchar(void);

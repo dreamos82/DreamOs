@@ -91,14 +91,9 @@ void cpuid_write_vendor(struct cpuinfo_generic * s, struct registers * regs)
  */
 void cpuid_write_proctype(struct cpuinfo_generic * s, struct registers * regs)
 {
-    int type;
-    int familyID;
-    int model;
-    int ext_model;
-
     call_cpuid(regs);
 
-    type = cpuid_get_byte(regs->eax, 0xB, 0x3);
+    uint32_t type = cpuid_get_byte(regs->eax, 0xB, 0x3);
 
     switch (type)
     {
@@ -119,18 +114,18 @@ void cpuid_write_proctype(struct cpuinfo_generic * s, struct registers * regs)
             break;
     }
 
-    familyID = cpuid_get_byte(regs->eax, 0x7, 0xE);
+    uint32_t familyID = cpuid_get_byte(regs->eax, 0x7, 0xE);
     s->cpu_family = familyID;
     if (familyID == 0x0F)
     {
         s->cpu_family += cpuid_get_byte(regs->eax, 0x13, 0xFF);
     }
 
-    model = cpuid_get_byte(regs->eax, 0x3, 0xE);
+    uint32_t model = cpuid_get_byte(regs->eax, 0x3, 0xE);
     s->cpu_model = model;
     if (familyID == 0x06 || familyID == 0x0F)
     {
-        ext_model = cpuid_get_byte(regs->eax, 0xF, 0xE);
+        uint32_t ext_model = cpuid_get_byte(regs->eax, 0xF, 0xE);
         s->cpu_model += (ext_model << 4);
     }
     s->apic_id = cpuid_get_byte(regs->ebx, 0x17, 0xFF);
@@ -208,11 +203,11 @@ char * cpuid_brand_string(struct registers * r)
  * EAX=1
  * ECX contains a list of supported features
  */
-void cpuid_feature_ecx(struct cpuinfo_generic * s, int ecx)
+void cpuid_feature_ecx(struct cpuinfo_generic * s, uint32_t ecx)
 {
-    int temp = ecx;
-    int i;
-    for (i = 0; i < ECX_FLAGS_SIZE; i++)
+    uint32_t temp = ecx;
+    uint32_t i;
+    for (i = 0; i < ECX_FLAGS_SIZE; ++i)
     {
         temp = cpuid_get_byte(temp, i, 1);
         s->cpuid_ecx_flags[i] = temp;
@@ -223,11 +218,11 @@ void cpuid_feature_ecx(struct cpuinfo_generic * s, int ecx)
 /*
  * Same as above
  */
-void cpuid_feature_edx(struct cpuinfo_generic * s, int edx)
+void cpuid_feature_edx(struct cpuinfo_generic * s, uint32_t edx)
 {
-    int temp = edx;
-    int i;
-    for (i = 0; i < EDX_FLAGS_SIZE; i++)
+    uint32_t temp = edx;
+    uint32_t i;
+    for (i = 0; i < EDX_FLAGS_SIZE; ++i)
     {
         temp = cpuid_get_byte(temp, i, 1);
         s->cpuid_edx_flags[i] = temp;
@@ -238,7 +233,9 @@ void cpuid_feature_edx(struct cpuinfo_generic * s, int edx)
 /*
  * Extract single byte from a register
  */
-int cpuid_get_byte(int reg, int position, int value)
+inline uint32_t cpuid_get_byte(const uint32_t reg,
+                               const uint32_t position,
+                               const uint32_t value)
 {
     return ((reg >> position) & value);
 }
