@@ -41,16 +41,12 @@ userenv_t current_user;
 char cmd[CMD_LEN];
 /// The index of the cursor.
 int cmd_cursor_index;
-/// Flag which determines if the current command has been retrieved from the
-/// history.
-bool_t cmd_from_history = false;
 /// The command history.
 char * cmd_history[HST_LEN];
 /// The number of free slots on the history.
 int free_slots = HST_LEN;
 /// The position inside the history.
 int pos = HST_LEN - 1;
-int limit = 1;
 /// Index of history array, where we save the command
 int write_index = HST_LEN - 1;
 
@@ -230,12 +226,6 @@ void get_command()
             // Break the while loop.
             break;
         }
-        if (cmd_from_history)
-        {
-            cmd_from_history = false;
-            //We have to write new chars at the end of string imported from history
-            cmd_cursor_index = strlen(cmd);
-        }
         if (c == '\b')
         {
             if (cmd_cursor_index > 0)
@@ -311,36 +301,39 @@ void history_push(char * command)
 
 void history_start(const int key)
 {
-    int delete = 0, max_limit = strlen(cmd);
-    //Backspace handling
-    if (limit < max_limit)
-    {
-        limit = max_limit;
-    }
-
-    while (delete <= limit)
+    // If the history is empty do nothing.
+    if (free_slots == HST_LEN) return;
+    // Completely delete the current command.
+    while (cmd_cursor_index > 0)
     {
         _kbackspace();
-        delete++;
+        cmd_cursor_index--;
     }
-
-    //Showing picked history command
+    // Print the command at the given position of the history.
     printf("%s", cmd_history[pos]);
-    //We copy the history command to cmd
+    // Completely clear the variable which holds the command.
     memset(cmd, 0, CMD_LEN);
+    // Set the variable to the retrieved command.
     strcpy(cmd, cmd_history[pos]);
-    // Set that we have just retrieved a command from the history.
-    cmd_from_history = true;
-
+    // Update the position inside the history.
     if (key == KEY_UPARROW)
+    {
         ++pos;
+    }
     else if (key == KEY_DOWNARROW)
+    {
         --pos;
-
+    }
     if (pos < free_slots)
+    {
         RESET_MAX(pos);
+    }
     else if (pos > HST_LEN - 1)
+    {
         RESET_MIN(pos);
+    }
+    // Set the cursor index to the end of the current command.
+    cmd_cursor_index = strlen(cmd);
 }
 
 void history_print(void)
