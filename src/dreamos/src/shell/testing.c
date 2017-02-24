@@ -268,7 +268,7 @@ int task_test_2(void * args)
 void try_thread()
 {
     printf("Testing task creation functions...\n");
-    __asm__("cli;"); // Clear Interrupt Flag
+    __asm__ __volatile__("cli;");
     thread_t * thread1 = kernel_create_thread(task_test_1,
                                               "task_test_1",
                                               0);
@@ -277,7 +277,7 @@ void try_thread()
                                               "task_test_2",
                                               0);
     printf("Task 2, pid: %d\n", thread2->id);
-    __asm__("sti;"); // Set Interrupt Flag
+    __asm__ __volatile__("sti;");
 }
 
 int sleeping_thread(void * args)
@@ -290,11 +290,11 @@ int sleeping_thread(void * args)
 void try_thread_sleep()
 {
     printf("Testing sleeping thread...\n");
-    __asm__("cli;");
+    __asm__ __volatile__("cli;");
     int i = 0;
     for (; i < 5; ++i)
     {
         kernel_create_thread(sleeping_thread, "sleeping_thread", 0);
     }
-    __asm__("sti;");
+    __asm__ __volatile__("sti;");
 }

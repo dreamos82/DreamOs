@@ -142,7 +142,7 @@ int main_loop(struct multiboot_info * boot_info)
     // Get the kernel image from the boot info
     kernel_elf = elf_from_multiboot(boot_info);
 
-    __asm__ __volatile__ ("sti");
+    __asm__ __volatile__("sti;");
 
     // -------------------------------------------------------------------------
     // Initialize the scheduler.

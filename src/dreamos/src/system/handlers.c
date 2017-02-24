@@ -172,7 +172,7 @@ void _globalException(int n, int error)
 void _irqinterrupt(unsigned int esp)
 {
     (void) esp;
-    __asm__("cli;");
+    __asm__ __volatile__("cli;");
     int irqn;
     irqn = irq_get_current();
     IRQ_s * tmpHandler;
@@ -206,7 +206,7 @@ void _irqinterrupt(unsigned int esp)
     }
 
     schedule();
-    __asm__("sti;");
+    __asm__ __volatile__("sti;");
     return;
 }
 

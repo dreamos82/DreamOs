@@ -26,11 +26,15 @@
 #ifndef _IO_H
 #define _IO_H
 
-#define sti() __asm__ __volatile__ ("sti");
-#define cli() __asm__ __volatile__ ("cli");
+/// @brief Used for reading from the I/O ports.
+/// @param port The input port.
+/// @return The read value.
+unsigned char inportb(const unsigned short port);
 
-extern unsigned char inportb(int);
-
-extern void outportb(int, int);
+/// @brief Use this to write to I/O ports to send bytes to devices.
+/// @param port The output port.
+/// @param data The data to write.
+void outportb(const unsigned short port,
+              const unsigned char data);
 
 #endif

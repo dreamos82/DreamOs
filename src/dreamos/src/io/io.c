@@ -25,14 +25,15 @@
 
 #include <io.h>
 
-extern inline unsigned char inportb(int portnum)
+inline unsigned char inportb(unsigned short port)
 {
     unsigned char data = 0;
-    __asm__ __volatile__ ("inb %%dx, %%al" : "=a" (data) : "d" (portnum));
+    __asm__ __volatile__ ("inb %%dx, %%al" : "=a" (data) : "d" (port));
     return data;
 }
 
-extern inline void outportb(int portnum, int data)
+inline void outportb(const unsigned short port,
+                     const unsigned char data)
 {
-    __asm__ __volatile__ ("outb %%al, %%dx"::"a" (data), "d" (portnum));
+    __asm__ __volatile__ ("outb %%al, %%dx"::"a" (data), "d" (port));
 }

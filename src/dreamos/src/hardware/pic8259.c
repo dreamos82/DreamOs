@@ -63,7 +63,7 @@ IRQ(48);
 void irq_init()
 {
     int i;
-    __asm__("cli");
+    __asm__ __volatile__("cli;");
     // Inizializzo i 2 processori pic con ICw1 ICW2 ICW3 e ICW4
     outportb(MASTER_PORT, ICW_1);
     outportb(SLAVE_PORT, ICW_1);
@@ -108,7 +108,7 @@ void irq_init()
     printf(" * "LNG_TIMER_SETUP);
     timer_install();
     _kprintOK();
-    __asm__("sti;");
+    __asm__ __volatile__("sti;");
 }
 
 void irq_setup()

@@ -62,7 +62,7 @@ void syscall_handler()
     int ebx = 0, ecx = 0, edx = 0;
     int arguments[3] = {0, 0, 0};
 
-    __asm__ ("cli");
+    __asm__ __volatile__("cli;");
     __asm__ ("movl %%eax, %0\n\t"
         "movl %%ecx, %1\n\t"
         "movl %%ebx, %2\n\t"
@@ -74,6 +74,6 @@ void syscall_handler()
     arguments[2] = edx;
 
     (*syscall_table[eax])(arguments);
-    __asm__ ("sti");
+    __asm__ __volatile__("sti;");
 }
 
