@@ -12,15 +12,6 @@ matrix:
           packages:
             - gcc-5
       env: COMPILER=gcc-5
-    - compiler: clang
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.7
-          packages:
-            - clang-3.7
-      env: COMPILER=clang-3.7
 
 before_install:
   - sudo apt-get update -qq
