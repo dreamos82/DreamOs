@@ -44,7 +44,7 @@
 #define IRQ_NUM 16
 
 
-typedef enum irq_types
+typedef enum __attribute__ ((__packed__)) IRQ_t
 {
     TIMER,
     KEYBOARD,
@@ -74,8 +74,8 @@ typedef struct IRQ_struct
     struct IRQ_struct * next;/**< Prossimo handler per questo IRQ*/
 } IRQ_s;
 
-extern byte master_cur_mask;
-extern byte slave_cur_mask;
+extern byte_t master_cur_mask;
+extern byte_t slave_cur_mask;
 
 void irq_init();
 

@@ -34,8 +34,8 @@
 //IRQ_s *shareHandler[IRQ_NUM];
 // IRQ_s shareHandler[16];
 // IRQ_s *tmpHandler;
-byte master_cur_mask;
-byte slave_cur_mask;
+byte_t master_cur_mask;
+byte_t slave_cur_mask;
 
 IRQ(32);
 IRQ(33);
@@ -140,8 +140,8 @@ void irq_setup()
   */
 int irq_enable(IRQ_t irq)
 {
-    byte cur_mask;
-    byte new_mask;
+    byte_t cur_mask;
+    byte_t new_mask;
     if (irq < 15)
     {
         if (irq < 8)
@@ -173,7 +173,7 @@ int irq_enable(IRQ_t irq)
   */
 int irq_disable(IRQ_t irq)
 {
-    byte cur_mask;
+    byte_t cur_mask;
     if (irq < 15)
     {
         if (irq < 8)
