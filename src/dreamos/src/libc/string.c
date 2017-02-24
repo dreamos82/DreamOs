@@ -604,17 +604,21 @@ char * strtok(char * s, const char * delim)
 /*
  * Compare n characters of s2 and s1
  */
-int _kstrncmp(const char * s1, const char * s2, int n)
+int _kstrncmp(const char * s1, const char * s2, size_t num)
 {
-    int sn = 0;
-
-    while (*s1 == *s2 && sn < n - 1)
+    // If the number of characters that has to be checked is equal to zero,
+    // just return 0.
+    if (num == 0)
     {
-        s1++;
-        s2++;
-        sn++;
+        return 0;
     }
-
+    size_t sn = 0;
+    while ((*s1 == *s2) && (sn < (num - 1)))
+    {
+        ++s1;
+        ++s2;
+        ++sn;
+    }
     if (*s1 > *s2) return 1;
     if (*s1 < *s2) return -1;
     return 0;

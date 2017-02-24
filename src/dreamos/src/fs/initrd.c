@@ -90,10 +90,8 @@ DIR * initfs_opendir(const char * path)
 struct dirent * initrd_readdir(DIR * dirp)
 {
     initrd_file_t * fs_type;
-    int nfiles;
-    nfiles = fs_specs->nfiles;
 //    printf("%d nfiles\n", nfiles);
-    if (dirp->cur_entry < nfiles)
+    if (dirp->cur_entry < fs_specs->nfiles)
     {
         fs_type = (initrd_file_t *) (module_start + sizeof(initrd_t));
         dirp->entry.d_ino = dirp->cur_entry;
@@ -114,7 +112,6 @@ struct dirent * initrd_readdir(DIR * dirp)
 int initfs_open(const char * path, int flags, ...)
 {
     initrd_file_t * module_var;
-    int j = 0;
     module_var = fs_headers;
     //printf("J vale: %d fs_spec: %d cur_idfd: %d\n", j, fs_specs->nfiles, cur_irdfd);
     if (cur_irdfd >= MAX_INITRD_DESCRIPTORS)
@@ -127,26 +124,27 @@ int initfs_open(const char * path, int flags, ...)
         cur_irdfd = i;
         //printf("i: %d\n", i);
     }
-    while (j < fs_specs->nfiles)
+    uint32_t it = 0;
+    while (it < fs_specs->nfiles)
     {
         //printf(".");
-        if (!strcmp(path, module_var[j].fileName))
+        if (!strcmp(path, module_var[it].fileName))
         {
-            if (module_var[j].file_type == FS_DIRECTORY ||
-                module_var[j].file_type == FS_MOUNTPOINT)
+            if (module_var[it].file_type == FS_DIRECTORY ||
+                module_var[it].file_type == FS_MOUNTPOINT)
                 //Erroneus file type
                 return -1;
-            ird_descriptors[cur_irdfd].file_descriptor = j;
+            ird_descriptors[cur_irdfd].file_descriptor = it;
             ird_descriptors[cur_irdfd].cur_pos = 0;
             if (flags & O_APPEND)
             {
                 printf("Appendiamoci\n");
-                ird_descriptors[cur_irdfd].cur_pos = module_var[j].length;
+                ird_descriptors[cur_irdfd].cur_pos = module_var[it].length;
             }
             //else printf("Pero' non ci appendiamo\n");
             return cur_irdfd++;
         }
-        j++;
+        ++it;
     }
     //printf("\n");
     if (flags & O_CREAT)

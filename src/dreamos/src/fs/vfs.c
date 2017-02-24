@@ -117,7 +117,8 @@ int get_mountpoint_id(char * path)
     int last = -1;
     while (i < MAX_MOUNTPOINT)
     {
-        if (!_kstrncmp(path, mountpoint_list[i].mountpoint,
+        if (!_kstrncmp(path,
+                       mountpoint_list[i].mountpoint,
                        strlen(mountpoint_list[i].mountpoint)))
         {
             if (strlen(mountpoint_list[i].mountpoint) >

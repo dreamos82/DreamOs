@@ -36,6 +36,6 @@ uint8_t inportb(const uint16_t port);
 /// @brief Use this to write to I/O ports to send bytes to devices.
 /// @param port The output port.
 /// @param data The data to write.
-void outportb(const uint16_t port, const uint8_t data);
+void outportb(const uint16_t port, const uint32_t data);
 
 #endif

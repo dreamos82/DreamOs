@@ -13,7 +13,6 @@
 #include <thread.h>
 #include <vm.h>
 #include <timer.h>
-#include <scheduler.h>
 
 char * module_start;
 file_descriptor_t fd_list[_SC_OPEN_MAX];
@@ -119,14 +118,13 @@ void try_module()
 {
     initrd_t * fs_head;
     initrd_file_t * headers;
-    int i;
-    i = 0;
     fs_head = (initrd_t *) module_start;
     headers = (initrd_file_t *) (module_start + sizeof(initrd_t));
-    while (i < fs_head->nfiles)
+    uint32_t it = 0;
+    while (it < fs_head->nfiles)
     {
-        printf("%s\t%d\n", headers[i].fileName, headers[i].length);
-        i++;
+        printf("%s\t%d\n", headers[it].fileName, headers[it].length);
+        ++it;
     }
     printf("Total Files: %d\n", fs_head->nfiles);
     _kputs("\n");

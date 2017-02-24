@@ -32,7 +32,7 @@ inline uint8_t inportb(uint16_t port)
     return data;
 }
 
-inline void outportb(const uint16_t port, const uint8_t data)
+inline void outportb(const uint16_t port, const uint32_t data)
 {
     __asm__ __volatile__ ("outb %%al, %%dx"::"a" (data), "d" (port));
 }

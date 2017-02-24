@@ -126,6 +126,6 @@ size_t strnlen(const char * s, size_t count);
 
 char * strtok(char *, const char *);
 
-int _kstrncmp(const char *, const char *, int);
+int _kstrncmp(const char * s1, const char * s2, size_t num);
 
 #endif

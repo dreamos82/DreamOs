@@ -22,6 +22,7 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <stdint.h>
 
 #define FILENAME_LENGTH 64
 #define MAX_FILES 32
@@ -32,7 +33,7 @@
  */
 struct initrd_t
 {
-    int nfiles; /*!< Numero Files letti*/
+    uint32_t nfiles; /*!< Numero Files letti*/
 };
 
 /*! \struct initrd_file_t 

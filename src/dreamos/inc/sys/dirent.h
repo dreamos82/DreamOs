@@ -41,7 +41,7 @@ struct dirent
 typedef struct
 {
     int handle; /**< Filesystem directory handle*/
-    int cur_entry;
+    ino_t cur_entry;
     char path[NAME_MAX + 1]; /**< dir path*/
     struct dirent entry; /**< Next directory item*/
 } DIR;

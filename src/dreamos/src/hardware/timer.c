@@ -20,8 +20,6 @@
 #include <stdint.h>
 #include <pic8259.h>
 #include <io.h>
-#include <video.h>
-#include <language.h>
 
 /// This will keep track of how many ticks the system has been running for.
 __volatile__ uint32_t timer_ticks = 0;
@@ -30,9 +28,9 @@ __volatile__ uint32_t timer_seconds = 0;
 /// The number of ticks for a second.
 uint32_t ticks_seconds = 100;
 
-void timer_phase(const int hz)
+void timer_phase(const uint32_t hz)
 {
-    int divisor = 1193180 / hz;       // Calculate our divisor.
+    uint32_t divisor = 1193180 / hz;       // Calculate our divisor.
     outportb(0x43, 0x36);             // Set our command byte 0x36.
     outportb(0x40, divisor & 0xFF);   // Set low byte of divisor.
     outportb(0x40, divisor >> 8);     // Set high byte of divisor.
