@@ -33,6 +33,7 @@
 
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 #define KERNEL 1
 
@@ -461,12 +462,13 @@ void * memcpy(void * _dst, const void * _src, size_t num)
     const char * src = _src;
     // There is nothing to do.
     if ((num == 0) || (src == dst)) return dst;
-    while (num--)
+    num = min(num, min(sizeof(dst), sizeof(src)));
+    do
     {
-        *(char *) dst = *(char *) src;
-        dst = (char *) dst + 1;
-        src = (char *) src + 1;
-    }
+        (*dst) = *(char *) src;
+        ++dst;
+        ++src;
+    } while (num--);
     return dst;
 }
 

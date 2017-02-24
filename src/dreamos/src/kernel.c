@@ -164,9 +164,12 @@ int main_loop(struct multiboot_info * boot_info)
     // We disable floppy driver motor
     fdc_disable_motor();
 
+    // -------------------------------------------------------------------------
+    // Initialize the shell.
     printf(LNG_SHELL);
     _kprintOK();
-    kernel_create_thread(shell, "shell", 0);
+    thread_t * shell_thread = kernel_create_thread(shell, "shell", 0);
+    kernel_activate_thread(shell_thread);
     return 0;
 }
 

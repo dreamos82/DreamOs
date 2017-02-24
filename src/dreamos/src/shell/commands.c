@@ -686,7 +686,8 @@ void newfile()
 void ps()
 {
     // Print the header.
-    printf("%8s\n", "PID");
+    printf("%-6s", "PID");
+    printf("\n");
     // Iterate through the ready queue to the end.
     thread_list_t * iterator = ready_queue;
     while (iterator->next)
@@ -695,9 +696,11 @@ void ps()
         // Check that the thread is not NULL.
         if (iterator->thread != NULL)
         {
-            printf("%-8d\n", iterator->thread->id);
+            printf("%-6d", iterator->thread->id);
+            printf("\n");
         }
     }
+    printf("\n");
 }
 
 void date()

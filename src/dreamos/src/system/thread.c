@@ -61,9 +61,6 @@ thread_t * kernel_create_thread(int (* fn)(void *),
     // Create the thread.
     thread_t * thread = kmalloc(sizeof(thread_t));
     memset(thread, 0, sizeof(thread_t));
-    thread->id = thread_get_id();
-
-    printf("Running thread with id %d\n", thread->id);
 
     *(--stack) = (uint32_t) arg;
     *(--stack) = (uint32_t) &thread_exit;
@@ -77,6 +74,11 @@ thread_t * kernel_create_thread(int (* fn)(void *),
     thread->eflags = EFLAG_IF;
     // Set the exit status to 0.
     thread->exit = 0;
+    // Set the id of the thread.
+    thread->id = thread_get_id();
+
+    printf("Running thread with id %d\n", thread->id);
+
     // Activate the thread.
     kernel_activate_thread(thread);
     return thread;

@@ -269,9 +269,13 @@ void try_thread()
 {
     printf("Testing task creation functions...\n");
     __asm__("cli;"); // Clear Interrupt Flag
-    thread_t * thread1 = kernel_create_thread(task_test_1, "task_test_1", 0);
+    thread_t * thread1 = kernel_create_thread(task_test_1,
+                                              "task_test_1",
+                                              0);
     printf("Task 1, pid: %d\n", thread1->id);
-    thread_t * thread2 = kernel_create_thread(task_test_2, "task_test_2", 0);
+    thread_t * thread2 = kernel_create_thread(task_test_2,
+                                              "task_test_2",
+                                              0);
     printf("Task 2, pid: %d\n", thread2->id);
     __asm__("sti;"); // Set Interrupt Flag
 }
