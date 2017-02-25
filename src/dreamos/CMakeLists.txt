@@ -133,6 +133,7 @@ set(SOURCE_FILES
         src/libc/stdio.c
         src/libc/string.c
         src/libc/vsprintf.c
+        src/libc/queue.c
         src/misc/bitops.c
         src/misc/clock.c
         src/misc/debug.c

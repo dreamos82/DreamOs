@@ -26,7 +26,7 @@
 #include <shell.h>
 #include <kheap.h>
 
-#define MAX_TEST 16
+#define MAX_TEST 14
 
 extern int argc;
 extern char ** argv;
@@ -87,9 +87,8 @@ void showpid();
 
 struct devel
 {
-    const char cmd_testname[CMD_LEN];
-    const char cmd_description[DESC_LEN];
-
+    char cmd_testname[CMD_LEN];
+    char cmd_description[DESC_LEN];
     void (* func)(void);
 };
 

@@ -49,4 +49,6 @@ void try_thread();
 
 void try_thread_sleep();
 
+void try_queue();
+
 #endif

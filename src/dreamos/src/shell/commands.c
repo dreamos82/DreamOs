@@ -599,7 +599,7 @@ void tester()
         {"try_mapaddress",   "Test map address function",                    try_mapaddress},
         {"try_thread",       "Test multiple threads creation",               try_thread},
         {"try_thread_sleep", "Creates a thread which sleeps for 10 seconds", try_thread_sleep},
-        //{ "try_tasklist", "Test new task list", test_tasklist},
+        {"try_queue",        "Tries the queue",                              try_queue},
     };
     if (argc != 2)
     {

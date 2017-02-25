@@ -13,6 +13,7 @@
 #include <thread.h>
 #include <vm.h>
 #include <timer.h>
+#include <queue.h>
 
 char * module_start;
 file_descriptor_t fd_list[_SC_OPEN_MAX];
@@ -295,4 +296,36 @@ void try_thread_sleep()
         kernel_create_thread(sleeping_thread, "sleeping_thread", 0);
     }
     __asm__ __volatile__("sti;");
+}
+
+void try_queue()
+{
+    queue_t queue = queue_create(sizeof(int), 10);
+    if (queue == NULL)
+    {
+        printf("Error while creating the queue.\n");
+        return;
+    }
+    printf("Enqueue : ");
+    int it;
+    for (it = 0; it < 10; ++it)
+    {
+        queue_enqueue(queue, &it);
+        printf("%d ", it);
+    }
+    printf("\n");
+    printf("Dequeue : ");
+    while (!queue_is_empty(queue))
+    {
+        int value;
+        if (queue_front(queue, &value))
+        {
+            if (queue_dequeue(queue))
+            {
+                printf("%d ", value);
+            }
+        }
+    }
+    printf("\n");
+    queue_destroy(queue);
 }
