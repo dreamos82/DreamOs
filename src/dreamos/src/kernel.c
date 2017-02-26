@@ -136,7 +136,7 @@ int main_loop(struct multiboot_info * boot_info)
 
     if (boot_info->mods_count > 0)
     {
-        printf("Found n. %d Modules\n", boot_info->mods_count);
+        printf("Found n. %lu Modules\n", boot_info->mods_count);
     }
 
     // Get the kernel image from the boot info
