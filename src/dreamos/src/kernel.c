@@ -147,8 +147,7 @@ int main_loop(struct multiboot_info * boot_info)
     // -------------------------------------------------------------------------
     // Initialize the scheduler.
     printf(LNG_SCHEDULER);
-    thread_t * scheduler_thread = kernel_init_threading();
-    kernel_init_scheduler(scheduler_thread);
+    kernel_initialize_scheduler();
     _kprintOK();
 
     //printf(LNG_PIT8253);

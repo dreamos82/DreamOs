@@ -72,8 +72,6 @@ typedef struct thread
     __volatile__ uint32_t exit;
 } thread_t;
 
-thread_t * kernel_init_threading();
-
 // If stack is 0 a default one is created
 thread_t * kernel_create_thread(int (* fn)(void *),
                                 char * name,

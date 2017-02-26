@@ -34,7 +34,7 @@ typedef struct thread_list
 
 extern thread_list_t * ready_queue;
 
-void kernel_init_scheduler(thread_t * initial_thread);
+void kernel_initialize_scheduler();
 
 void kernel_activate_thread(thread_t * thread);
 

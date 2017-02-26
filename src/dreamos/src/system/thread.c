@@ -25,6 +25,7 @@
 #include <scheduler.h>
 #include <stdio.h>
 #include <string.h>
+#include <debug.h>
 
 #define DEFAULT_STACK_SIZE 0x100000
 
@@ -39,14 +40,6 @@ uint32_t thread_get_id(void)
 void thread_exit();
 
 extern void _create_thread(int (*)(void *), void *, uint32_t *, thread_t *);
-
-thread_t * kernel_init_threading()
-{
-    thread_t * thread = kmalloc(sizeof(thread_t));
-    thread->id = thread_get_id();
-    strcpy(thread->name, "Scheduler");
-    return thread;
-}
 
 thread_t * kernel_create_thread(int (* fn)(void *),
                                 char * name,
@@ -81,9 +74,7 @@ thread_t * kernel_create_thread(int (* fn)(void *),
     // Set the name of the thread.
     memset(thread->name, '\0', 50);
     strcpy(thread->name, name);
-
-    printf("Running thread with id %d\n", thread->id);
-
+    printf("\nRunning thread %s with id %d\n", thread->name, thread->id);
     // Activate the thread.
     kernel_activate_thread(thread);
     return thread;
@@ -93,15 +84,10 @@ void thread_exit()
 {
     // Get the exit value of the thread.
     uint32_t exit_value = 0;
-
     __asm__("movl %%eax, %0" : "=r" (exit_value));
-
     thread_t * current = kernel_get_current_thread();
-
-    printf("\nThread %d exited with value %d\n", current->id, exit_value);
-
+    dbg_print("\nThread %d exited with value %d\n", current->id, exit_value);
     current->exit = 1;
-
     while (TRUE);
 }
 

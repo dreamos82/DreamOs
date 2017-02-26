@@ -21,25 +21,31 @@
 //
 
 #include <scheduler.h>
+#include <thread.h>
+#include <string.h>
 #include <kheap.h>
 #include <debug.h>
 
-thread_list_t * ready_queue = 0;
-thread_list_t * current_thread = 0;
+thread_list_t * ready_queue = NULL;
+thread_list_t * current_thread = NULL;
 
-void kernel_init_scheduler(thread_t * initial_thread)
+void kernel_initialize_scheduler()
 {
+    // Create the scheduler thread.
+    thread_t * scheduler = kmalloc(sizeof(thread_t));
+    scheduler->id = 0;
+    strcpy(scheduler->name, "Scheduler");
+    // Initialize the current scheduled thread.
     current_thread = (thread_list_t *) kmalloc(sizeof(thread_list_t));
-    current_thread->thread = initial_thread;
-    current_thread->next = 0;
-    ready_queue = 0;
+    current_thread->thread = scheduler;
+    current_thread->next = NULL;
 }
 
-void kernel_activate_thread(thread_t * t)
+void kernel_activate_thread(thread_t * thread)
 {
     // Create a new list item for the new thread.
     thread_list_t * item = (thread_list_t *) kmalloc(sizeof(thread_list_t));
-    item->thread = t;
+    item->thread = thread;
     item->next = 0;
 
     if (!ready_queue)
