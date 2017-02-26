@@ -21,6 +21,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#include <debug.h>
 
 #ifdef LEGACY
 
@@ -53,10 +54,10 @@ int open(const char * path, int oflags, ...)
     ret_fd = 0;
     int opt_param_test;
     opt_param_test = va_arg(ap, int);
-    printf("---------------------------------------\n");
-    printf("Opening %s with flags %d and params %d \n",
+    dbg_print("---------------------------------------\n");
+    dbg_print("Opening %s with flags %d and params %d \n",
            path, oflags, opt_param_test);
-    printf("---------------------------------------\n");
+    dbg_print("---------------------------------------\n");
     newpath = kmalloc(CURPATH_LEN * sizeof(char));
     memset(newpath, '\0', CURPATH_LEN);
     cur_fd = 0;
@@ -65,25 +66,25 @@ int open(const char * path, int oflags, ...)
 
     while (fd_list[cur_fd].mountpoint_id != -1 && cur_fd < _SC_OPEN_MAX)
     {
-        //printf("%d %d\n", cur_fd, fd_list[cur_fd].mountpoint_id);
+        //dbg_print("%d %d\n", cur_fd, fd_list[cur_fd].mountpoint_id);
         cur_fd++;
     }
     if (cur_fd == _SC_OPEN_MAX)
     {
-        printf("No more file descriptors available\n");
+        dbg_print("No more file descriptors available\n");
         return -1;
     }
     strcpy(newpath, path);
     #ifdef DEBUG
     int error = 0;
     error = get_abs_path((char *) newpath);
-    printf("Absolute path: %s %s\nReturn error code: %d",
+    dbg_print("Absolute path: %s %s\nReturn error code: %d",
            newpath, current_user.cur_path, error);
     #else
     get_abs_path((char*) newpath);
     #endif
     mpid = get_mountpoint_id((char *) newpath);
-    //printf("Cur_fd: %d\n",cur_fd);
+    //dbg_print("Cur_fd: %d\n",cur_fd);
     if (mpid > -1)
     {
         fd_list[cur_fd].mountpoint_id = mpid;
@@ -91,7 +92,7 @@ int open(const char * path, int oflags, ...)
     }
     else
     {
-        printf("That path doesn't exist\n");
+        dbg_print("That path doesn't exist\n");
         va_end(ap);
         return -1;
     }
@@ -102,14 +103,14 @@ int open(const char * path, int oflags, ...)
             newpath, oflags);
         if (fd_list[cur_fd].fs_spec_id == -1)
         {
-            printf("No file's Found\n");
+            dbg_print("No file's Found\n");
             va_end(ap);
             return -1;
         }
     }
     else
     {
-        if (mpid > -1) printf("No OPEN services found here\n");
+        if (mpid > -1) dbg_print("No OPEN services found here\n");
         //va_end(ap);
         return -1;
     }
