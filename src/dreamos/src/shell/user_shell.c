@@ -49,6 +49,7 @@ bool_t check_credentials(credentials_t * credentials)
     credentials_t existing;
     init_credentials(&existing);
     // Open the file which contains the credentials.
+    // TODO: BUG: The first time the open is called, it fails.
     int fd = open("/passwd", O_RDONLY, 0);
     // Check the file descriptor.
     if (fd > 0)
