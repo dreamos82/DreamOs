@@ -4,6 +4,7 @@
 #include <kheap.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 queue_t queue_create(size_t data_size, size_t capacity)
 {
@@ -16,7 +17,7 @@ queue_t queue_create(size_t data_size, size_t capacity)
     }
     queue->data_size = data_size;
     queue->capacity = capacity;
-    queue->data = kmalloc(data_size * capacity);
+    queue->data = calloc(capacity, data_size);
     if (queue->data == NULL)
     {
         printf("Cannot initialize the queue data.\n");
