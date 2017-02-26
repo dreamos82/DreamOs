@@ -135,11 +135,21 @@ void try_module()
 
 void try_check()
 {
-    char test_name[50];
-    memset(test_name, '\0', 50);
+    credentials_t credentials;
+    init_credentials(&credentials);
     printf("Please insert a username: ");
-    scanf("%s", test_name);
-    user_chk(test_name, test_name);
+    scanf("%50s", credentials.username);
+    printf("Please insert a password: ");
+    scanf("%50s", credentials.password);
+    if (check_credentials(&credentials))
+    {
+        printf("[Correct]\n");
+    }
+    else
+    {
+        printf("[Wrong]\n");
+    }
+    printf("\n");
 }
 
 void try_open()

@@ -113,6 +113,8 @@ int shell(void * args)
 
     shell_login();
 
+    memset(current_user.cur_path, '\0', CURPATH_LEN);
+
     _kclear();
     aalogo();
     printf("\n\n\n\n");
@@ -243,15 +245,11 @@ void get_options(char * command)
 
 void shell_login()
 {
-    char password[30];
     do
     {
-        // Initialize the variables.
-        memset(cmd, '\0', CMD_LEN);
-        memset(current_user.username, '\0', USER_LEN);
-        memset(password, '\0', 30);
-        memset(current_user.cur_path, '\0', CURPATH_LEN);
-
+        // Initialize the credentials.
+        credentials_t credentials;
+        init_credentials(&credentials);
         // ----------------------------
         // Ask the username.
         dbg_print("Asking the username.\n");
@@ -260,7 +258,7 @@ void shell_login()
         lower_bound_x = _kgetcolumn();
         lower_bound_y = _kgetline();
         // Get the username.
-        scanf("%23s", current_user.username);
+        scanf("%50s", credentials.username);
         // ----------------------------
         // Ask the password.
         dbg_print("Asking the password.\n");
@@ -271,13 +269,14 @@ void shell_login()
         // Set the shadow option.
         set_shadow(true);
         // Get the password.
-        scanf("%23s", password);
+        scanf("%50s", credentials.password);
         // Disable the shadow option.
         set_shadow(false);
         // ----------------------------
         // Check if the data are correct.
-        if (user_chk(current_user.username, password))
+        if (check_credentials(&credentials))
         {
+            strcpy(current_user.username, credentials.username);
             break;
         }
         printf(LNG_WRONG_CRED);

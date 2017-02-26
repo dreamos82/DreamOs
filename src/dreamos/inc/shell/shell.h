@@ -18,7 +18,8 @@
 #ifndef _SHELL_H
 #define _SHELL_H
 
-#define USER_LEN 22
+#include <user_shell.h>
+
 #define CMD_LEN 256
 #define DESC_LEN 256
 #define CURPATH_LEN 256
@@ -44,7 +45,7 @@ typedef struct command_t
 typedef struct userenv_t
 {
     /// The username.
-    char username[USER_LEN];
+    char username[CREDENTIALS_LENGTH];
     /// The current path.
     char cur_path[CURPATH_LEN];
     /// The user identifier.

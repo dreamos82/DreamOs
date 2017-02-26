@@ -24,15 +24,6 @@
 #include <debug.h>
 #include <language.h>
 
-/// @brief Contains the credentials retrieved from the file.
-typedef struct credentials_t
-{
-    /// The username.
-    char username[50];
-    /// The password.
-    char password[50];
-} credentials_t;
-
 /// @brief Get the
 /// @param fd           The FD of the file which contains the credentials.
 /// @param credentials  The structure which has to be filled with the
@@ -40,25 +31,33 @@ typedef struct credentials_t
 /// @return If the credentials has been retrieved.
 bool_t user_get(int fd, struct credentials_t * credentials);
 
-bool_t user_chk(char * username, char * password)
+void init_credentials(credentials_t * credentials)
+{
+    if (credentials != NULL)
+    {
+        memset(credentials->username, '\0', CREDENTIALS_LENGTH);
+        memset(credentials->password, '\0', CREDENTIALS_LENGTH);
+    }
+}
+
+bool_t check_credentials(credentials_t * credentials)
 {
     // Initialize a variable for the return value.
     bool_t status = false;
     // Initialize the structure which will contain the username and the
     // password.
-    credentials_t credentials;
-    memset(credentials.username, '\0', 50);
-    memset(credentials.password, '\0', 50);
+    credentials_t existing;
+    init_credentials(&existing);
     // Open the file which contains the credentials.
     int fd = open("/passwd", O_RDONLY, 0);
     // Check the file descriptor.
     if (fd > 0)
     {
         // Get the next row inside the file containing the credentials.
-        while (user_get(fd, &credentials) == true)
+        while (user_get(fd, &existing) == true)
         {
-            if (!strcmp(username, credentials.username) &&
-                !strcmp(password, credentials.password))
+            if (!strcmp(credentials->username, existing.username) &&
+                !strcmp(credentials->password, existing.password))
             {
                 status = true;
                 break;
@@ -66,6 +65,10 @@ bool_t user_chk(char * username, char * password)
         }
         // Close the file descriptor.
         close(fd);
+    }
+    else
+    {
+        dbg_print("Can't open passwd file\n");
     }
     return status;
 }
@@ -78,7 +81,6 @@ bool_t user_get(int fd, struct credentials_t * credentials)
     // Create a variable which will contain the error value for the read
     // functions.
     int error = 1;
-
     // --------------------------------
     // Get the username.
     int i = 0;
