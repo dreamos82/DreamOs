@@ -37,14 +37,14 @@
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 file_descriptor_t fd_list[_SC_OPEN_MAX];
 char * module_start;
-int cur_fd;
+int current_fd;
 
 void vfs_init()
 {
     int i, j;
     i = 0;
     j = 0;
-    cur_fd = 0;
+    current_fd = 0;
 
     while (i < MAX_MOUNTPOINT)
     {

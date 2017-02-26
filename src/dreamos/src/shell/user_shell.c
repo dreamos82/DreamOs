@@ -52,7 +52,7 @@ bool_t check_credentials(credentials_t * credentials)
     // TODO: BUG: The first time the open is called, it fails.
     int fd = open("/passwd", O_RDONLY, 0);
     // Check the file descriptor.
-    if (fd > 0)
+    if (fd >= 0)
     {
         // Get the next row inside the file containing the credentials.
         while (user_get(fd, &existing) == true)

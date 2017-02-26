@@ -661,14 +661,14 @@ void newfile()
         else
         {
             int fd;
-            fd = open(argv[1], O_RDONLY);
+            fd = open(argv[1], O_RDONLY, 0);
             if (fd >= 0) printf("-ERROR: %s File already exist\n", argv[1]);
             else
             {
                 char text[256];
                 printf("Filename: %s\n", argv[1]);
                 close(fd);
-                fd = open(argv[1], O_RDWR | O_CREAT | O_APPEND);
+                fd = open(argv[1], O_RDWR | O_CREAT | O_APPEND, 0);
                 if (fd >= 0)
                 {
                     printf(

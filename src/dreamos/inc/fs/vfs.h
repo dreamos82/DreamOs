@@ -89,7 +89,7 @@ struct file_descriptor
 //extern struct inode *root;
 typedef struct file_descriptor file_descriptor_t;
 
-extern int cur_fd;
+extern int current_fd;
 extern file_descriptor_t fd_list[_SC_OPEN_MAX];
 extern struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 

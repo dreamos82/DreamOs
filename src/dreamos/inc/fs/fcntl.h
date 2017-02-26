@@ -33,6 +33,6 @@ int creat(const char *, mode_t);
 
 int fcntl(int, int, ...);
 
-int open(const char *, int, ...);
+int open(const char * path, int oflags, mode_t mode);
 
 #endif

@@ -34,8 +34,6 @@
 
 #include <shell.h>
 
-int cur_fd;
-
 /**
   * @author Ivan Gualandri
   * @param char* path percorso del file da aprire
@@ -44,82 +42,79 @@ int cur_fd;
   * Dato un path viene aperto se presente, e si torna il numero di descrittore che lo contiene
   * @todo Inserire gestione flags
   */
-int open(const char * path, int oflags, ...)
+int open(const char * path, int oflags, mode_t mode)
 {
-    int mpid;
-    int ret_fd;
-    char * newpath;
-    va_list ap;
-    va_start(ap, oflags);
-    ret_fd = 0;
-    int opt_param_test;
-    opt_param_test = va_arg(ap, int);
     dbg_print("---------------------------------------\n");
-    dbg_print("Opening %s with flags %d and params %d \n",
-           path, oflags, opt_param_test);
+    dbg_print("Opening %s with flags %d and mode %d.\n", path, oflags, mode);
     dbg_print("---------------------------------------\n");
-    newpath = kmalloc(CURPATH_LEN * sizeof(char));
-    memset(newpath, '\0', CURPATH_LEN);
-    cur_fd = 0;
-    if (cur_fd == _SC_OPEN_MAX)
-        cur_fd = 0;
-
-    while (fd_list[cur_fd].mountpoint_id != -1 && cur_fd < _SC_OPEN_MAX)
+    // Allocate a variable for the path.
+    char * new_path = kmalloc(CURPATH_LEN * sizeof(char));
+    // Initialize the path variable.
+    memset(new_path, '\0', CURPATH_LEN);
+    // Copy the path to the working variable.
+    strcpy(new_path, path);
+    // If the first character is not the '/' then get the absolute path.
+    if (new_path[0] != '/')
     {
-        //dbg_print("%d %d\n", cur_fd, fd_list[cur_fd].mountpoint_id);
-        cur_fd++;
+        if (!get_abs_path(new_path))
+        {
+            dbg_print("Cannot get the absolute path.\n");
+            return -1;
+        }
     }
-    if (cur_fd == _SC_OPEN_MAX)
+    dbg_print("Opening path: %s\n", new_path);
+    // Reset the current file descriptor variable.
+    current_fd = 0;
+    while ((fd_list[current_fd].mountpoint_id != -1) &&
+           (current_fd < _SC_OPEN_MAX))
+    {
+        ++current_fd;
+    }
+    if (current_fd == _SC_OPEN_MAX)
     {
         dbg_print("No more file descriptors available\n");
         return -1;
     }
-    strcpy(newpath, path);
-    #ifdef DEBUG
-    int error = 0;
-    error = get_abs_path((char *) newpath);
-    dbg_print("Absolute path: %s %s\nReturn error code: %d",
-           newpath, current_user.cur_path, error);
-    #else
-    get_abs_path((char*) newpath);
-    #endif
-    mpid = get_mountpoint_id((char *) newpath);
-    //dbg_print("Cur_fd: %d\n",cur_fd);
+    int mpid = get_mountpoint_id(new_path);
+    dbg_print("File Descriptor: %d\n", current_fd);
+    dbg_print("Mount Point ID : %d\n", mpid);
     if (mpid > -1)
     {
-        fd_list[cur_fd].mountpoint_id = mpid;
-        newpath = get_rel_path(mpid, (char *) newpath);
+        fd_list[current_fd].mountpoint_id = mpid;
+        new_path = get_rel_path(mpid, new_path);
     }
     else
     {
         dbg_print("That path doesn't exist\n");
-        va_end(ap);
         return -1;
     }
-    if (mpid > -1 &&
-        mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open != NULL)
+    if (mountpoint_list[mpid].operations.open != NULL)
     {
-        fd_list[cur_fd].fs_spec_id = (int) mountpoint_list[fd_list[cur_fd].mountpoint_id].operations.open(
-            newpath, oflags);
-        if (fd_list[cur_fd].fs_spec_id == -1)
+        fd_list[current_fd].fs_spec_id =
+            mountpoint_list[mpid].operations.open(
+                new_path, oflags);
+        if (fd_list[current_fd].fs_spec_id == -1)
         {
             dbg_print("No file's Found\n");
-            va_end(ap);
             return -1;
         }
     }
     else
     {
-        if (mpid > -1) dbg_print("No OPEN services found here\n");
-        //va_end(ap);
+        dbg_print("No OPEN function found here.\n");
         return -1;
     }
-    //va_end(ap)
-    fd_list[cur_fd].offset = 0;
-    fd_list[cur_fd].flags_mask = oflags;
-    ret_fd = cur_fd;
-    cur_fd++;
-    free(newpath);
+    // Reset the offset.
+    fd_list[current_fd].offset = 0;
+    // Set the flags.
+    fd_list[current_fd].flags_mask = oflags;
+    // Save the file descriptor.
+    int ret_fd = current_fd;
+    // Increment the current file descriptor.
+    current_fd++;
+    // Fre the path variable.
+    free(new_path);
+    // Return the file descriptor.
     return ret_fd;
 }
 
