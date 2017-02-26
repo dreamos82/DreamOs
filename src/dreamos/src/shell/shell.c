@@ -35,6 +35,8 @@ void get_command();
 
 void get_options(char * command);
 
+void shell_login();
+
 /// The current user.
 userenv_t current_user;
 /// The input command.
@@ -82,7 +84,6 @@ int shell(void * args)
     (void) args;
     dbg_print("\nNewShell\n");
     char * cmd_ptr;
-    char password[30];
     /*static struct cmd shell_cmd[NUM_COM] = {
       { "aalogo",   aalogo      },
       { "clear",    _kclear     },
@@ -105,31 +106,12 @@ int shell(void * args)
       { "newfile", newfile}
     };*/
 
-
     int i = 0;
-    int ret_val;
     _kcolor(BRIGHT_BLUE);
     printf(LNG_WELCOME);
     _kcolor(WHITE);
 
-    do
-    {
-        memset(cmd, '\0', CMD_LEN);
-        memset(current_user.username, '\0', USER_LEN);
-        memset(password, '\0', 30);
-        memset(current_user.cur_path, '\0', CURPATH_LEN);
-        printf(LNG_USER);
-        scanf("%23s", current_user.username);
-        printf(LNG_USER_R);
-        #ifdef PWD_CHECK
-        printf(LNG_PWD);
-        set_shadow(1);
-        scanf ("%23s",password);
-        set_shadow(0);
-        #endif
-        dbg_print("Asking username");
-        ret_val = user_chk(current_user.username, password);
-    } while ((!strlen(current_user.username) || ret_val != 1));
+    shell_login();
 
     _kclear();
     aalogo();
@@ -257,6 +239,49 @@ void get_options(char * command)
         i = 0;
     }
     argv[argc] = "\0";
+}
+
+void shell_login()
+{
+    char password[30];
+    do
+    {
+        // Initialize the variables.
+        memset(cmd, '\0', CMD_LEN);
+        memset(current_user.username, '\0', USER_LEN);
+        memset(password, '\0', 30);
+        memset(current_user.cur_path, '\0', CURPATH_LEN);
+
+        // ----------------------------
+        // Ask the username.
+        dbg_print("Asking the username.\n");
+        printf(LNG_USER);
+        // Update the lower-bounds for the video.
+        lower_bound_x = _kgetcolumn();
+        lower_bound_y = _kgetline();
+        // Get the username.
+        scanf("%23s", current_user.username);
+        // ----------------------------
+        // Ask the password.
+        dbg_print("Asking the password.\n");
+        printf(LNG_PWD);
+        // Update the lower-bounds for the video.
+        lower_bound_x = _kgetcolumn();
+        lower_bound_y = _kgetline();
+        // Set the shadow option.
+        set_shadow(true);
+        // Get the password.
+        scanf("%23s", password);
+        // Disable the shadow option.
+        set_shadow(false);
+        // ----------------------------
+        // Check if the data are correct.
+        if (user_chk(current_user.username, password))
+        {
+            break;
+        }
+        printf(LNG_WRONG_CRED);
+    } while (true);
 }
 
 void history_init(void)
