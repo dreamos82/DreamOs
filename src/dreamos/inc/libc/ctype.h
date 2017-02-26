@@ -48,4 +48,7 @@ int tolower(int c);
 /// @brief Transforms the given value into an upper case letter.
 int toupper(int c);
 
+/// @brief Check if the given value is a whitespace.
+int isspace(int c);
+
 #endif

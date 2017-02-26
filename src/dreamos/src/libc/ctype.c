@@ -69,3 +69,8 @@ int toupper(int c)
     if (isalpha(c) == 0 || isupper(c)) return c;
     return c - OFFSET;
 }
+
+int isspace(int c)
+{
+    return (c == ' ');
+}

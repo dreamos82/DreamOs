@@ -29,11 +29,11 @@
 #define RESET_MAX(A)   A = HST_LEN - 1
 #define RESET_MIN(A)   A = free_slots
 
-void print_prompt();
+void shell_print_prompt();
 
-void get_command();
+void shell_get_command();
 
-void get_options(char * command);
+void shell_get_options(char * command);
 
 void shell_login();
 
@@ -83,29 +83,6 @@ int shell(void * args)
 {
     (void) args;
     dbg_print("\nNewShell\n");
-    char * cmd_ptr;
-    /*static struct cmd shell_cmd[NUM_COM] = {
-      { "aalogo",   aalogo      },
-      { "clear",    _kclear     },
-      { "poweroff", poweroff    },
-      { "uname",    uname_cmd   },
-      { "credits",  credits     },
-      { "sleep",    sleep_cmd   },
-      { "cpuid",    cpuid 	  },
-      { "date",     date 	  },
-      { "echo",     echo 	  },
-      { "help",     help	  },
-      { "answer",   answer  },
-      { "drv_load", drv_load},
-      { "ls",       ls},
-      { "cd",       cd},
-      { "whoami",   whoami},
-      { "tester", tester},
-      { "pwd", pwd},
-      { "more", more},
-      { "newfile", newfile}
-    };*/
-
     int i = 0;
     _kcolor(BRIGHT_BLUE);
     printf(LNG_WELCOME);
@@ -126,31 +103,26 @@ int shell(void * args)
     history_init();
     for (;;)
     {
-        // Debug on bochs prompt.
-        dbg_print("shell loop\n");
         // First print the prompt.
-        print_prompt();
+        shell_print_prompt();
         // Get the input command.
-        get_command();
+        shell_get_command();
         // Cleans all blanks at the beginning of the command.
-        for (i = 0, cmd_ptr = cmd; cmd[i] == ' '; i++, cmd_ptr++);
+        trim(cmd);
         // Retrieve the options from the command.
-        get_options(cmd_ptr);
-
-        if (strlen(cmd_ptr) > 0)
+        shell_get_options(cmd);
+        // Check if the command is empty.
+        if (strlen(cmd) == 0)
         {
-            history_push(cmd_ptr);
-        }
-        else
-        {
-            memset(cmd_ptr, 0, CMD_LEN);
+            memset(cmd, 0, CMD_LEN);
             for (--argc; argc >= 0; argc--)
             {
                 free(argv[argc]);
             }
             continue;
         }
-
+        // Add the command to the history.
+        history_push(cmd);
         // Matching and executing the command.
         for (i = MAX_NUM_COM; i >= 0; --i)
         {
@@ -169,7 +141,7 @@ int shell(void * args)
     return 0;
 }
 
-void print_prompt()
+void shell_print_prompt()
 {
     _kcolor(BRIGHT_BLUE);
     printf(current_user.username);
@@ -181,7 +153,7 @@ void print_prompt()
 }
 
 //Input shell command (a private hacked version of gets)
-void get_command()
+void shell_get_command()
 {
     // Re-Initialize the cursor index.
     cmd_cursor_index = 0;
@@ -224,7 +196,7 @@ void get_command()
     }
 }
 
-void get_options(char * command)
+void shell_get_options(char * command)
 {
     int i = 0;
     argc = 0;

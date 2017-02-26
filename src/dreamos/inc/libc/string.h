@@ -128,4 +128,6 @@ char * strtok(char *, const char *);
 
 int _kstrncmp(const char * s1, const char * s2, size_t num);
 
+char * trim(char * str);
+
 #endif
