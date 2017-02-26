@@ -439,8 +439,8 @@ char *strtok(char *string, const char *control)
 void * memset(void * ptr, int value, size_t num)
 {
     char * dst = (char *) ptr;
-    while (num--) *(dst++) = (char) value;
-    return dst;
+    while (num--) *dst++ = (char) value;
+    return ptr;
 }
 
 int memcmp(const void * dst, const void * src, size_t n)
@@ -460,16 +460,8 @@ void * memcpy(void * _dst, const void * _src, size_t num)
 {
     char * dst = _dst;
     const char * src = _src;
-    // There is nothing to do.
-    if ((num == 0) || (src == dst)) return dst;
-    num = min(num, min(sizeof(dst), sizeof(src)));
-    do
-    {
-        (*dst) = *(char *) src;
-        ++dst;
-        ++src;
-    } while (num--);
-    return dst;
+    while (num--) *dst++ = *src++;
+    return _dst;
 }
 
 void * memccpy(void * dst, const void * src, int c, size_t n)
@@ -502,15 +494,15 @@ int memicmp(const void *buf1, const void *buf2, size_t n)
 char * strcpy(char * dst, const char * src)
 {
     char * save = dst;
-    while ((*dst++ = *src++));
+    while ((*dst++ = *src++) != '\0');
     return save;
 }
 
 size_t strlen(const char * s)
 {
-    const char * eos = s;
-    while (*eos++);
-    return (int) (eos - s - 1);
+    const char * eos;
+    for (eos = s; *eos != 0; ++eos);
+    return eos - s;
 }
 
 size_t strnlen(const char * s, size_t count)
