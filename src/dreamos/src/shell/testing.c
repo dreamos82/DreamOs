@@ -293,9 +293,11 @@ void try_thread()
     __asm__ __volatile__("cli;");
     thread_t * thread1 = kernel_create_thread(task_test_1,
                                               "task_test_1",
+                                              "task_test_1",
                                               0);
     printf("Task 1, pid: %d\n", thread1->id);
     thread_t * thread2 = kernel_create_thread(task_test_2,
+                                              "task_test_2",
                                               "task_test_2",
                                               0);
     printf("Task 2, pid: %d\n", thread2->id);
@@ -318,7 +320,10 @@ void try_thread_sleep()
     int i = 0;
     for (; i < 5; ++i)
     {
-        kernel_create_thread(sleeping_thread, "sleeping_thread", 0);
+        kernel_create_thread(sleeping_thread,
+                             "sleeping_thread",
+                             "sleeping_thread",
+                             0);
     }
     __asm__ __volatile__("sti;");
 }

@@ -686,6 +686,7 @@ void ps()
 {
     // Print the header.
     printf("%-6s", "PID");
+    printf("%-50s", "NAME");
     printf("\n");
     // Iterate through the ready queue to the end.
     thread_list_t * iterator = ready_queue;
@@ -696,6 +697,7 @@ void ps()
         if (iterator->thread != NULL)
         {
             printf("%-6d", iterator->thread->id);
+            printf("%-50s", iterator->thread->name);
             printf("\n");
         }
     }

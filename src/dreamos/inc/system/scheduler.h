@@ -16,9 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
- //
- // Based on JamesM's kernel developement tutorials.
- //
+//
+// Based on JamesM's kernel developement tutorials.
+//
 
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
@@ -34,13 +34,13 @@ typedef struct thread_list
 
 extern thread_list_t * ready_queue;
 
-void kernel_init_scheduler(thread_t* initial_thread);
+void kernel_init_scheduler(thread_t * initial_thread);
 
-void kernel_activate_thread(thread_t* thread);
+void kernel_activate_thread(thread_t * thread);
 
-void kernel_deactivate_thread(thread_t* thread);
+void kernel_deactivate_thread(thread_t * thread);
 
-thread_t* kernel_get_current_thread();
+thread_t * kernel_get_current_thread();
 
 void schedule();
 

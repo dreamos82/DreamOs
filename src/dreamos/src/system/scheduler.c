@@ -20,9 +20,9 @@
 // Based on JamesM's kernel developement tutorials.
 //
 
-#include "scheduler.h"
-#include "kheap.h"
-#include <stdio.h>
+#include <scheduler.h>
+#include <kheap.h>
+#include <debug.h>
 
 thread_list_t * ready_queue = 0;
 thread_list_t * current_thread = 0;
@@ -119,7 +119,6 @@ void schedule()
     // Remove the moved thread from the start.
     thread_list_t * new_thread = ready_queue;
     ready_queue = ready_queue->next;
-    //switch_thread_v2(new_thread);
     // Switch to the new thread.
     switch_thread(new_thread);
 }

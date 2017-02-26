@@ -44,10 +44,12 @@ thread_t * kernel_init_threading()
 {
     thread_t * thread = kmalloc(sizeof(thread_t));
     thread->id = thread_get_id();
+    strcpy(thread->name, "Scheduler");
     return thread;
 }
 
 thread_t * kernel_create_thread(int (* fn)(void *),
+                                char * name,
                                 void * arg,
                                 uint32_t * stack)
 {
@@ -76,6 +78,9 @@ thread_t * kernel_create_thread(int (* fn)(void *),
     thread->exit = 0;
     // Set the id of the thread.
     thread->id = thread_get_id();
+    // Set the name of the thread.
+    memset(thread->name, '\0', 50);
+    strcpy(thread->name, name);
 
     printf("Running thread with id %d\n", thread->id);
 

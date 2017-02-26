@@ -66,6 +66,8 @@ typedef struct thread
     uint32_t eflags;
     /// The id of the thread.
     uint32_t id;
+    /// The command executed by the thread.
+    char name[50];
     /// The exit flag. When set to 1, the scheduler will deactivate the thread.
     __volatile__ uint32_t exit;
 } thread_t;
@@ -74,6 +76,7 @@ thread_t * kernel_init_threading();
 
 // If stack is 0 a default one is created
 thread_t * kernel_create_thread(int (* fn)(void *),
+                                char * name,
                                 void * arg,
                                 uint32_t * stack);
 
