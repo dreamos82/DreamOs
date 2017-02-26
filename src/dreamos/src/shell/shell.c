@@ -80,7 +80,7 @@ command_t shell_cmd[MAX_NUM_COM] = {
 int shell(void * args)
 {
     (void) args;
-    dbg_bochs_print("\nNewShell\n");
+    dbg_print("\nNewShell\n");
     char * cmd_ptr;
     char password[30];
     /*static struct cmd shell_cmd[NUM_COM] = {
@@ -127,7 +127,7 @@ int shell(void * args)
         scanf ("%23s",password);
         set_shadow(0);
         #endif
-        dbg_bochs_print("Asking username");
+        dbg_print("Asking username");
         ret_val = user_chk(current_user.username, password);
     } while ((!strlen(current_user.username) || ret_val != 1));
 
@@ -143,7 +143,7 @@ int shell(void * args)
     for (;;)
     {
         // Debug on bochs prompt.
-        dbg_bochs_print("shell loop\n");
+        dbg_print("shell loop\n");
         // First print the prompt.
         print_prompt();
         // Get the input command.

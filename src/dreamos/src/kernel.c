@@ -158,7 +158,7 @@ int main_loop(struct multiboot_info * boot_info)
     //printf("\n");
 
 #ifdef BOCHS_DEBUG
-    dbg_bochs_print("DreamOS Debug String for Bochs\n");
+    dbg_print("DreamOS Debug String for Bochs\n");
 #endif
 
     // We disable floppy driver motor

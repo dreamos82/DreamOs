@@ -8,7 +8,8 @@ set(PROJECT_NAME DreamOs)
 
 # ------------------------------------------------------------------------------
 # Add the BOCHS debug option.
-option(ENABLE_BOCHS_DEBUG "Enable the bosh debug" ON)
+option(ENABLE_BOCHS_DEBUG   "Enable the bosh debug" OFF)
+option(ENABLE_QEMU_DEBUG    "Enable the qemu debug" OFF)
 
 # ------------------------------------------------------------------------------
 # Add the memory option.
@@ -31,6 +32,9 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D${MEMORY}")
 if (ENABLE_BOCHS_DEBUG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DBOCHS_DEBUG")
 endif (ENABLE_BOCHS_DEBUG)
+if (ENABLE_QEMU_DEBUG)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DQEMU_DEBUG")
+endif (ENABLE_QEMU_DEBUG)
 
 # ------------------------------------------------------------------------------
 # Set the compiler options (extra).

@@ -24,69 +24,34 @@
 
 
 #include <debug.h>
-#include <io.h>
-#include <video.h>
 #include <stdio.h>
-#include <stddef.h>
 
-#define SERIAL_COM1 (0x03f8)
+#define SERIAL_BOCHS    (0x00E9)
+#define SERIAL_COM1     (0x03F8)
 
-/******************************
- *		Debug Func
- ******************************/
-
-/**
- *  Print msg in the bochs prompt 
- */
-void dbg_bochs_print(const char * msg)
+void dbg_print(const char * msg, ...)
 {
-#if defined(BOCHS_DEBUG)
-    register unsigned int i;
-    for (i = 0; msg[i] != '\0'; i++)
-        outportb(0xE9, msg[i]);
-#else
-    printf(msg);
-#endif
-    return;
-}
-
-/**
- *  Print an integer
- */
-void dbg_bochs_print_digit(unsigned int number)
-{
-    char buffer[10];
-    _kntos(buffer, number, 10);
-    dbg_bochs_print(buffer);
-    dbg_bochs_print("\n");
-}
-
-/**
- *  Send cmd to bochs port
- */
-void dbg_bochs_send_cmd(const int port, const int cmd)
-{
-#if defined(BOCHS_DEBUG)
-    outportb(port, cmd);
-#endif
-    return;
-}
-
-void dbg_qemu_print(const char * msg, ...)
-{
-    va_list ap;
+    // Define a buffer for the formatted string.
+    char formatted[1024];
+    // --------------------------------
+    // Stage 1: FORMAT
     // Start variabile argument's list.
+    va_list ap;
     va_start (ap, msg);
-    // Define a buffer for the arguments.
-    char buffer[1024];
     // Format the message.
-    vsprintf(buffer, msg, ap);
-    // Print on COM1 the message.
-    register int it;
-    for (it = 0; buffer[it] != 0; ++it)
-    {
-        outportb(SERIAL_COM1, buffer[it]);
-    }
+    vsprintf(formatted, msg, ap);
     // End the list of arguments.
     va_end (ap);
+    // --------------------------------
+    // Stage 2: SEND
+    register int it;
+    for (it = 0; formatted[it] != 0; ++it)
+    {
+#if     defined(BOCHS_DEBUG)
+        outportb(SERIAL_BOCHS, formatted[it]);
+#elif   defined(QEMU_DEBUG)
+        outportb(SERIAL_COM1, formatted[it]);
+#endif
+    }
+    // --------------------------------
 }

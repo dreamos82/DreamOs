@@ -56,7 +56,7 @@ void * kmalloc(size_t size)
         // length is greater than the required size.
         if ((cur_header->allocated == 0) && (cur_header->length >= size))
         {
-            dbg_qemu_print("I've found a suitable header(%d).\n", size);
+            dbg_print("I've found a suitable header(%d).\n", size);
             split_chunk(cur_header, size);
             cur_header->allocated = 1;
             return (void *) ((uint32_t) cur_header + sizeof(header_t));
@@ -66,7 +66,7 @@ void * kmalloc(size_t size)
         // Move to the next element.
         cur_header = cur_header->next;
     }
-    dbg_qemu_print("Create a new header(%d).\n", size);
+    dbg_print("Create a new header(%d).\n", size);
     // If I've not found a suitable header, create a new one.
     uint32_t chunk_start;
     if (prev_header)
