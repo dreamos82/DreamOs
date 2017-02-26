@@ -21,9 +21,10 @@
 //
 
 #include <kheap.h>
-
+#include <stdio.h>
 #include <paging.h>
 #include <vm.h>
+#include <debug.h>
 
 static void alloc_chunk(uint32_t start, uint32_t len);
 
@@ -40,38 +41,50 @@ void kernel_init_heap()
 {
 }
 
-void * kmalloc(uint32_t l)
+void * kmalloc(size_t size)
 {
-    l += sizeof(header_t);
-
-    header_t * cur_header = heap_first, * prev_header = 0;
+    // Add to the size the header.
+    size += sizeof(header_t);
+    // Initialize a pointer which will point to the current header to the
+    // begin of the heap.
+    header_t * cur_header = heap_first;
+    header_t * prev_header = 0;
+    // Iterate through the headers.
     while (cur_header)
     {
-        if (cur_header->allocated == 0 && cur_header->length >= l)
+        // Check if the current element of the heap has not been used, and its
+        // length is greater than the required size.
+        if ((cur_header->allocated == 0) && (cur_header->length >= size))
         {
-            split_chunk(cur_header, l);
+            dbg_qemu_print("I've found a suitable header(%d).\n", size);
+            split_chunk(cur_header, size);
             cur_header->allocated = 1;
             return (void *) ((uint32_t) cur_header + sizeof(header_t));
         }
+        // Set the previous element.
         prev_header = cur_header;
+        // Move to the next element.
         cur_header = cur_header->next;
     }
-
+    dbg_qemu_print("Create a new header(%d).\n", size);
+    // If I've not found a suitable header, create a new one.
     uint32_t chunk_start;
     if (prev_header)
+    {
         chunk_start = (uint32_t) prev_header + prev_header->length;
+    }
     else
     {
         chunk_start = HEAP_START;
         heap_first = (header_t *) chunk_start;
     }
-
-    alloc_chunk(chunk_start, l);
+    // Allocate the memory for a new chunk.
+    alloc_chunk(chunk_start, size);
     cur_header = (header_t *) chunk_start;
     cur_header->prev = prev_header;
     cur_header->next = 0;
     cur_header->allocated = 1;
-    cur_header->length = l;
+    cur_header->length = size;
 
     prev_header->next = cur_header;
 

@@ -75,4 +75,6 @@ void dbg_bochs_print_digit(unsigned int);
 
 void dbg_bochs_send_cmd(const int, const int);
 
+void dbg_qemu_print(const char * msg, ...);
+
 #endif /* ! _DEBUG_H */

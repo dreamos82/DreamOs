@@ -26,6 +26,11 @@
 #include <debug.h>
 #include <io.h>
 #include <video.h>
+#include <stdio.h>
+#include <stddef.h>
+
+#define SERIAL_COM1 (0x03f8)
+
 /******************************
  *		Debug Func
  ******************************/
@@ -65,4 +70,23 @@ void dbg_bochs_send_cmd(const int port, const int cmd)
     outportb(port, cmd);
 #endif
     return;
+}
+
+void dbg_qemu_print(const char * msg, ...)
+{
+    va_list ap;
+    // Start variabile argument's list.
+    va_start (ap, msg);
+    // Define a buffer for the arguments.
+    char buffer[1024];
+    // Format the message.
+    vsprintf(buffer, msg, ap);
+    // Print on COM1 the message.
+    register int it;
+    for (it = 0; buffer[it] != 0; ++it)
+    {
+        outportb(SERIAL_COM1, buffer[it]);
+    }
+    // End the list of arguments.
+    va_end (ap);
 }

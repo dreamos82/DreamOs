@@ -95,5 +95,8 @@ add_custom_target(qemu
         COMMAND make img
         COMMAND make init_filesystem
         COMMAND make filesystem
-        COMMAND qemu-system-i386 -vga std -fda ${CMAKE_BINARY_DIR}/grub.img
+        COMMAND qemu-system-i386
+                -vga std
+                -serial stdio
+                -fda ${CMAKE_BINARY_DIR}/grub.img
         )

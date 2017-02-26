@@ -24,13 +24,15 @@
 #define HEAP_H
 
 #include <stdint.h>
+#include <stddef.h>
 
 #define HEAP_START 0xD0000000
 #define HEAP_END   0xFFBFF000
 
-typedef struct header
+typedef struct header_t
 {
-    struct header * prev, * next;
+    struct header_t * prev;
+    struct header_t * next;
     uint32_t allocated : 1;
     uint32_t length : 31;
 } header_t;
@@ -38,7 +40,7 @@ typedef struct header
 void kernel_init_heap();
 
 // Returns a pointer to a chunk of memory, minimum size 'l' bytes.
-void * kmalloc(uint32_t l);
+void * kmalloc(size_t size);
 
 // Takes a chunk of memory allocated with kmalloc, and returns it to the pool of usable memory.
 void free(void * p);
