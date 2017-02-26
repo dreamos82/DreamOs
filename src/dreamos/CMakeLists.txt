@@ -160,6 +160,7 @@ set(SOURCE_FILES
         src/system/syscall.c
         src/system/thread.c
         src/system/vm.c
+        src/system/mutex.c
         src/kernel.c
         src/system/thread_asm.s)
 

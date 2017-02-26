@@ -14,6 +14,8 @@
 #include <vm.h>
 #include <timer.h>
 #include <queue.h>
+#include <mutex.h>
+#include <scheduler.h>
 
 char * module_start;
 file_descriptor_t fd_list[_SC_OPEN_MAX];
@@ -249,24 +251,35 @@ void try_mapaddress()
     //free (tmp);
 }
 
+mutex_t mutex;
 
 int task_test_1(void * args)
 {
     (void) args;
-    printf("I'm the task 1.\n");
+    printf("Task 1: I'm waiting for the mutex...\n");
+    thread_t * current_thread = kernel_get_current_thread();
+    mutex_lock(&mutex, current_thread->id);
+    printf("Task 1: I'm in control...\n");
+    mutex_unlock(&mutex);
     return 0;
 }
 
 int task_test_2(void * args)
 {
     (void) args;
-    printf("I'm the task 2.\n");
+    printf("Task 2: I'm waiting for the mutex...\n");
+    thread_t * current_thread = kernel_get_current_thread();
+    mutex_lock(&mutex, current_thread->id);
+    printf("Task 2: I'm in control...\n");
+    mutex_unlock(&mutex);
     return 0;
 }
 
 void try_thread()
 {
     printf("Testing task creation functions...\n");
+    thread_t * current_thread = kernel_get_current_thread();
+    mutex_lock(&mutex, current_thread->id);
     __asm__ __volatile__("cli;");
     thread_t * thread1 = kernel_create_thread(task_test_1,
                                               "task_test_1",
@@ -277,6 +290,8 @@ void try_thread()
                                               0);
     printf("Task 2, pid: %d\n", thread2->id);
     __asm__ __volatile__("sti;");
+    sleep(5);
+    mutex_unlock(&mutex);
 }
 
 int sleeping_thread(void * args)
