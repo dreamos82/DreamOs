@@ -85,9 +85,10 @@ void * kmalloc(size_t size)
     cur_header->next = 0;
     cur_header->allocated = 1;
     cur_header->length = size;
-
-    prev_header->next = cur_header;
-
+    if (prev_header)
+    {
+        prev_header->next = cur_header;
+    }
     return (void *) (chunk_start + sizeof(header_t));
 }
 
