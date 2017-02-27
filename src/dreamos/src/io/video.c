@@ -26,6 +26,7 @@
  */
 
 #include <video.h>
+#include <debug.h>
 
 char * VIDEO_MEM = (char *) 0xb8000;
 char * VIDEO_PTR = (char *) 0xb8000;
@@ -256,8 +257,19 @@ void _ksetcursor(unsigned int x, unsigned int y)
  */
 void _ksetcursauto()
 {
-    _ksetcursor(((VIDEO_PTR - VIDEO_MEM) / 2) / _SCR_W,
-                ((VIDEO_PTR - VIDEO_MEM) / 2) % _SCR_W);
+    long x = ((VIDEO_PTR - VIDEO_MEM) / 2) / _SCR_W;
+    long y = ((VIDEO_PTR - VIDEO_MEM) / 2) % _SCR_W;
+    if (x < 0)
+    {
+        dbg_print("Negative x while setting auto-cursor.\n");
+        x = 0;
+    }
+    if (y < 0)
+    {
+        dbg_print("Negative x while setting auto-cursor.\n");
+        y = 0;
+    }
+    _ksetcursor((uint32_t) x, (uint32_t) y);
 }
 
 /*
