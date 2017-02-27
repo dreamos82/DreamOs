@@ -313,7 +313,6 @@ int _kgetline()
 
 void _knntos(char * buffer, int num, int base)
 {
-    int mod;
     //int numval;
     char * p, * pbase;
 
@@ -327,8 +326,7 @@ void _knntos(char * buffer, int num, int base)
     }
     while (num > 0)
     {
-        mod = num % base;
-        *p++ = mod + '0';
+        *p++ = (char) ('0' + (num % base));
         num = num / base;
     }
 
@@ -353,9 +351,8 @@ void _knntos(char * buffer, int num, int base)
   *
   * Move the number "num" into a string
   */
-void _kntos(char * buffer, unsigned int num, int base)
+void _kntos(char * buffer, unsigned int num, unsigned int base)
 {
-    int mod;
     //int numval;
     char * p, * pbase;
 
@@ -373,8 +370,7 @@ void _kntos(char * buffer, unsigned int num, int base)
         }
         while (num != 0)
         {
-            mod = num % base;
-            *p++ = mod + '0';
+            *p++ = (char) ('0' + (num % base));
             num = num / base;
         }
         *p-- = 0;

@@ -50,7 +50,7 @@
 
 #define OK_POS 70
 
-void _kntos(char *, unsigned int, int);
+void _kntos(char * buffer, unsigned int num, unsigned int base);
 
 void _kputc(int);
 
