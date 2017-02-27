@@ -440,7 +440,6 @@ static char *flt(char *str, double num, int size, int precision, char fmt, int f
 int vsprintf(char * str, const char * fmt, va_list args)
 {
     int len;
-    unsigned long num;
     int i, base;
     char * tmp;
     char * s;
@@ -615,21 +614,40 @@ int vsprintf(char * str, const char * fmt, va_list args)
                 continue;
         }
 
-        if (qualifier == 'l')
-            num = va_arg(args, unsigned long);
-        else if (qualifier == 'h')
+        if (flags & SIGN)
         {
-            if (flags & SIGN)
+            long num;
+            if (qualifier == 'l')
+            {
+                num = va_arg(args, long);
+            }
+            else if (qualifier == 'h')
+            {
                 num = va_arg(args, short);
+            }
             else
-                num = va_arg(args, unsigned short);
+            {
+                num = va_arg(args, int);
+            }
+            tmp = number(tmp, num, base, field_width, precision, flags);
         }
-        else if (flags & SIGN)
-            num = va_arg(args, int);
         else
-            num = va_arg(args, unsigned int);
-
-        tmp = number(tmp, num, base, field_width, precision, flags);
+        {
+            unsigned long num;
+            if (qualifier == 'l')
+            {
+                num = va_arg(args, unsigned long);
+            }
+            else if (qualifier == 'h')
+            {
+                num = va_arg(args, unsigned short);
+            }
+            else
+            {
+                num = va_arg(args, unsigned int);
+            }
+            tmp = number(tmp, num, base, field_width, precision, flags);
+        }
     }
 
     *tmp = '\0';
