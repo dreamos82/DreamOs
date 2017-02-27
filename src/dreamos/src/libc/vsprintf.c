@@ -67,12 +67,11 @@ static char * number(char * str,
                      long num,
                      int base,
                      int size,
-                     int precision,
+                     int32_t precision,
                      int type)
 {
     char c, tmp[66];
     char * dig = digits;
-    int i;
 
     if (type & LARGE) dig = upper_digits;
     if (type & LEFT) type &= ~ZEROPAD;
@@ -116,7 +115,7 @@ static char * number(char * str,
         }
     }
 
-    i = 0;
+    int32_t i = 0;
     if (uns_num == 0)
     {
         tmp[i++] = '0';
@@ -130,10 +129,19 @@ static char * number(char * str,
         }
     }
 
-    if (i > precision) precision = i;
+    if (i > precision)
+    {
+        precision = i;
+    }
     size -= precision;
-    if (!(type & (ZEROPAD | LEFT))) while (size-- > 0) *str++ = ' ';
-    if (sign) *str++ = sign;
+    if (!(type & (ZEROPAD | LEFT)))
+    {
+        while (size-- > 0) *str++ = ' ';
+    }
+    if (sign)
+    {
+        *str++ = sign;
+    }
 
     if (type & SPECIAL)
     {
@@ -146,11 +154,22 @@ static char * number(char * str,
         }
     }
 
-    if (!(type & LEFT)) while (size-- > 0) *str++ = c;
-    while (i < precision--) *str++ = '0';
-    while (i-- > 0) *str++ = tmp[i];
-    while (size-- > 0) *str++ = ' ';
-
+    if (!(type & LEFT))
+    {
+        while (size-- > 0) *str++ = c;
+    }
+    while (i < precision--)
+    {
+        *str++ = '0';
+    }
+    while (i-- > 0)
+    {
+        *str++ = tmp[i];
+    }
+    while (size-- > 0)
+    {
+        *str++ = ' ';
+    }
     return str;
 }
 
@@ -500,25 +519,24 @@ int vsprintf(char * str, const char * fmt, va_list args)
         // --------------------------------------------------------------------
         // Get the precision, thus the minimum number of digits for
         // integers; max number of chars for from string.
-        int32_t _precision = -1;
+        int32_t precision = -1;
         if (*fmt == '.')
         {
             ++fmt;
             if (isdigit(*fmt))
             {
-                _precision = skip_atoi(&fmt);
+                precision = skip_atoi(&fmt);
             }
             else if (*fmt == '*')
             {
                 ++fmt;
-                _precision = va_arg(args, int);
+                precision = va_arg(args, int);
             }
-            if (_precision < 0)
+            if (precision < 0)
             {
-                _precision = 0;
+                precision = 0;
             }
         }
-        uint32_t precision = (uint32_t) _precision;
 
         // Get the conversion qualifier
         qualifier = -1;
@@ -545,7 +563,7 @@ int vsprintf(char * str, const char * fmt, va_list args)
                 {
                     s = "<NULL>";
                 }
-                int32_t len = (int32_t) strnlen(s, precision);
+                int32_t len = (int32_t) strnlen(s, (uint32_t) precision);
                 if (!(flags & LEFT))
                 {
                     while (len < field_width--)
@@ -658,7 +676,12 @@ int vsprintf(char * str, const char * fmt, va_list args)
             {
                 num = va_arg(args, int);
             }
-            tmp = number(tmp, num, base, field_width, precision, flags);
+            tmp = number(tmp,
+                         num,
+                         base,
+                         field_width,
+                         precision,
+                         flags);
         }
         else
         {
@@ -675,7 +698,12 @@ int vsprintf(char * str, const char * fmt, va_list args)
             {
                 num = va_arg(args, unsigned int);
             }
-            tmp = number(tmp, num, base, field_width, precision, flags);
+            tmp = number(tmp,
+                         num,
+                         base,
+                         field_width,
+                         precision,
+                         flags);
         }
     }
 
