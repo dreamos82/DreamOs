@@ -439,14 +439,12 @@ static char *flt(char *str, double num, int size, int precision, char fmt, int f
 
 int vsprintf(char * str, const char * fmt, va_list args)
 {
-    int len;
-    int i, base;
+    int base;
     char * tmp;
     char * s;
 
     int flags;            // Flags to number()
 
-    int field_width;      // Width of output field
     int qualifier;        // 'h', 'l', or 'L' for integer fields
 
     for (tmp = str; *fmt; fmt++)
@@ -480,14 +478,18 @@ int vsprintf(char * str, const char * fmt, va_list args)
                 goto repeat;
         }
 
-        // Get field width
+        // --------------------------------------------------------------------
+        // Get the width of the output field.
+        int32_t field_width;
         field_width = -1;
         if (isdigit(*fmt))
+        {
             field_width = skip_atoi(&fmt);
+        }
         else if (*fmt == '*')
         {
             fmt++;
-            field_width = va_arg(args, int);
+            field_width = va_arg(args, int32_t);
             if (field_width < 0)
             {
                 field_width = -field_width;
@@ -533,17 +535,33 @@ int vsprintf(char * str, const char * fmt, va_list args)
         {
             case 'c':
                 if (!(flags & LEFT)) while (--field_width > 0) *tmp++ = ' ';
-                *tmp++ = (unsigned char) va_arg(args, int);
+                *tmp++ = va_arg(args, char);
                 while (--field_width > 0) *tmp++ = ' ';
                 continue;
 
             case 's':
                 s = va_arg(args, char *);
-                if (!s) s = "<NULL>";
-                len = strnlen(s, precision);
-                if (!(flags & LEFT)) while (len < field_width--) *tmp++ = ' ';
-                for (i = 0; i < len; ++i) *tmp++ = *s++;
-                while (len < field_width--) *tmp++ = ' ';
+                if (!s)
+                {
+                    s = "<NULL>";
+                }
+                int32_t len = (int32_t) strnlen(s, precision);
+                if (!(flags & LEFT))
+                {
+                    while (len < field_width--)
+                    {
+                        *tmp++ = ' ';
+                    }
+                }
+                int32_t it;
+                for (it = 0; it < len; ++it)
+                {
+                    *tmp++ = *s++;
+                }
+                while (len < field_width--)
+                {
+                    *tmp++ = ' ';
+                }
                 continue;
 
             case 'p':
@@ -552,8 +570,12 @@ int vsprintf(char * str, const char * fmt, va_list args)
                     field_width = 2 * sizeof(void *);
                     flags |= ZEROPAD;
                 }
-                tmp = number(tmp, (unsigned long) va_arg(args, void *), 16,
-                             field_width, precision, flags);
+                tmp = number(tmp,
+                             (unsigned long) va_arg(args, void *),
+                             16,
+                             field_width,
+                             precision,
+                             flags);
                 continue;
 
             case 'n':
