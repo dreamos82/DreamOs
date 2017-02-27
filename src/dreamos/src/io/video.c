@@ -27,6 +27,7 @@
 
 #include <video.h>
 #include <debug.h>
+#include <stdio.h>
 
 char * VIDEO_MEM = (char *) 0xb8000;
 char * VIDEO_PTR = (char *) 0xb8000;
@@ -310,35 +311,6 @@ int _kgetline()
     return line;
 }
 
-/*
- * Convert a number into an hexadecimal string
- */
-void _kntohex(char * buffer, unsigned int decnum)
-{
-    int shift = 0;
-    unsigned int tempnum = decnum;
-
-    while (tempnum >= 16)
-    {
-        tempnum >>= 4;
-        shift++;
-    }
-
-    for (; shift >= 0; shift--)
-    {
-        tempnum = decnum;
-        tempnum >>= (4 * shift);
-        tempnum &= 0xF;
-
-        if (tempnum < 10)
-            *buffer++ = '0' + tempnum;
-        else
-            *buffer++ = 'A' + tempnum - 10;
-    }
-    *buffer = '\0';
-}
-
-
 void _knntos(char * buffer, int num, int base)
 {
     int mod;
@@ -391,7 +363,7 @@ void _kntos(char * buffer, unsigned int num, int base)
 
     if (base == 16)
     {
-        _kntohex(buffer, num);
+        sprintf(buffer, "%0x", num);
     }
     else
     {

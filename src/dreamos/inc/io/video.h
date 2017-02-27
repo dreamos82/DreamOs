@@ -88,8 +88,6 @@ void _kscrollup();
 
 void _kscrolldown();
 
-void _kntohex(char *, unsigned int);
-
 void _knntos(char *, int, int);
 
 /// Determines the lower-bound on the x axis for the video.
