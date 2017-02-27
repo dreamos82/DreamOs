@@ -447,7 +447,6 @@ int vsprintf(char * str, const char * fmt, va_list args)
     int flags;            // Flags to number()
 
     int field_width;      // Width of output field
-    int precision;        // Min. # of digits for integers; max number of chars for from string
     int qualifier;        // 'h', 'l', or 'L' for integer fields
 
     for (tmp = str; *fmt; fmt++)
@@ -496,20 +495,28 @@ int vsprintf(char * str, const char * fmt, va_list args)
             }
         }
 
-        // Get the precision
-        precision = -1;
+        // --------------------------------------------------------------------
+        // Get the precision, thus the minimum number of digits for
+        // integers; max number of chars for from string.
+        int32_t _precision = -1;
         if (*fmt == '.')
         {
             ++fmt;
             if (isdigit(*fmt))
-                precision = skip_atoi(&fmt);
+            {
+                _precision = skip_atoi(&fmt);
+            }
             else if (*fmt == '*')
             {
                 ++fmt;
-                precision = va_arg(args, int);
+                _precision = va_arg(args, int);
             }
-            if (precision < 0) precision = 0;
+            if (_precision < 0)
+            {
+                _precision = 0;
+            }
         }
+        uint32_t precision = (uint32_t) _precision;
 
         // Get the conversion qualifier
         qualifier = -1;
