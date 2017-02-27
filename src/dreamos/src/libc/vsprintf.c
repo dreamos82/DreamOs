@@ -34,6 +34,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdint.h>
 
 #define KERNEL 1
 
@@ -69,7 +70,7 @@ static char * number(char * str,
                      int precision,
                      int type)
 {
-    char c, sign, tmp[66];
+    char c, tmp[66];
     char * dig = digits;
     int i;
 
@@ -78,7 +79,9 @@ static char * number(char * str,
     if (base < 2 || base > 36) return 0;
 
     c = (type & ZEROPAD) ? '0' : ' ';
-    sign = 0;
+    // --------------------------------
+    // Set the sign.
+    char sign = 0;
     if (type & SIGN)
     {
         if (num < 0)
@@ -98,25 +101,32 @@ static char * number(char * str,
             size--;
         }
     }
+    // Sice I've removed the sign (if negative), i can transform it to unsigned.
+    uint32_t uns_num = (uint32_t) num;
 
     if (type & SPECIAL)
     {
         if (base == 16)
+        {
             size -= 2;
+        }
         else if (base == 8)
+        {
             size--;
+        }
     }
 
     i = 0;
-
-    if (num == 0)
+    if (uns_num == 0)
+    {
         tmp[i++] = '0';
+    }
     else
     {
-        while (num != 0)
+        while (uns_num != 0)
         {
-            tmp[i++] = dig[((unsigned long) num) % (unsigned) base];
-            num = ((unsigned long) num) / (unsigned) base;
+            tmp[i++] = dig[((unsigned long) uns_num) % (unsigned) base];
+            uns_num = ((unsigned long) uns_num) / (unsigned) base;
         }
     }
 
