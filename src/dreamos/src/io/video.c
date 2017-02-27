@@ -287,10 +287,13 @@ void _kprintOK()
  */
 int _kgetcolumn()
 {
-    unsigned int column;
-    column = VIDEO_PTR - VIDEO_MEM;
-    column = (column % (_SCR_W * 2));
-    return column / 2;
+    long column = ((VIDEO_PTR - VIDEO_MEM) % (_SCR_W * 2)) / 2;
+    if (column < 0)
+    {
+        dbg_print("Get negative value while getting video column.\n");
+        column = 0;
+    }
+    return column;
 }
 
 /*
@@ -298,9 +301,12 @@ int _kgetcolumn()
  */
 int _kgetline()
 {
-    unsigned int line;
-    line = VIDEO_PTR - VIDEO_MEM;
-    line = (line / (_SCR_W * 2));
+    long line = ((VIDEO_PTR - VIDEO_MEM) / (_SCR_W * 2));
+    if (line < 0)
+    {
+        dbg_print("Get negative value while getting video line.\n");
+        line = 0;
+    }
     return line;
 }
 
