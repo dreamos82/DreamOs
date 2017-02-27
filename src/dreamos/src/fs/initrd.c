@@ -45,7 +45,7 @@ void dummy()
     printf("Qui solo per una prova\n");
 }
 
-int initfs_init()
+uint32_t initfs_init()
 {
     int i = 0;
     fs_end = 0;

@@ -68,7 +68,7 @@ extern unsigned int fs_end;
 
 void dummy();
 
-int initfs_init();
+uint32_t initfs_init();
 
 DIR * initfs_opendir(const char *);
 
