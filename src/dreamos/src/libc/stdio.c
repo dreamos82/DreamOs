@@ -145,7 +145,7 @@ int printf(const char * format, ...)
     return len;
 }
 
-int scanf(const char * format, ...)
+size_t scanf(const char * format, ...)
 {
     size_t count = 0;
     va_list scan;

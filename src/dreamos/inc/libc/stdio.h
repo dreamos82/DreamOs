@@ -27,6 +27,7 @@
 #define _STDIO_H
 
 #include <stdarg.h>
+#include <stddef.h>
 
 #define MAX_DIGITS_IN_INTEGER 11
 
@@ -56,7 +57,7 @@ int atoi(const char * str);
 int printf(const char *, ...);
 
 /// @brief Read formatted input from stdin.
-int scanf(const char *, ...);
+size_t scanf(const char *, ...);
 
 /// @brief Write formatted output to the string str from argument list ARG.
 int vsprintf(char * str, const char * fmt, va_list args);
