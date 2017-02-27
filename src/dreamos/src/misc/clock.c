@@ -26,58 +26,58 @@
 #include <stddef.h>
 #include <limits.h>
 
-int get_second()
+time_t get_second()
 {
     outportb(0x70, SECOND_RTC);
-    int c = inportb(0x71);
+    time_t c = inportb(0x71);
     return c;
 }
 
-int get_minute()
+time_t get_minute()
 {
     outportb(0x70, MINUTE_RTC);
-    int c = inportb(0x71);
+    time_t c = inportb(0x71);
     return c;
 }
 
-int get_hour()
+time_t get_hour()
 {
     outportb(0x70, HOUR_RTC);
-    int c = inportb(0x71);
+    time_t c = inportb(0x71);
     return c;
 }
 
-int get_day_w()
+time_t get_day_w()
 {
     outportb(0x70, DAY_W_RTC);
-    int c = inportb(0x71);
+    time_t c = inportb(0x71);
     return c;
 }
 
-int get_day_m()
+time_t get_day_m()
 {
     outportb(0x70, DAY_M_RTC);
-    int c = inportb(0x71);
+    time_t c = inportb(0x71);
     return c;
 }
 
-int get_month()
+time_t get_month()
 {
     outportb(0x70, MONTH_RTC);
-    int c = inportb(0x71);
+    time_t c = inportb(0x71);
     return c;
 }
 
-int get_year()
+time_t get_year()
 {
     outportb(0x70, YEAR_RTC);
-    int c = inportb(0x71);
+    time_t c = inportb(0x71);
     return c;
 }
 
 char * get_month_lng()
 {
-    int c;
+    time_t c;
     c = get_month();
     switch (c)
     {
@@ -117,14 +117,15 @@ char * get_month_lng()
         case 12:
             return LNG_DATE_DEC;
             break;
+        default:
+            break;
     }
     return "";
 }
 
 char * get_day_lng()
 {
-    int c;
-    c = get_day_w();
+    time_t c = get_day_w();
     switch (c)
     {
         case 1:
@@ -147,6 +148,8 @@ char * get_day_lng()
             break;
         case 7:
             return LNG_DAY_SAT;
+            break;
+        default:
             break;
     }
     return "";

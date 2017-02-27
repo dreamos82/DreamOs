@@ -50,21 +50,21 @@ typedef struct tm_t
 #define MONTH_RTC 0x08
 #define YEAR_RTC 0x09
 
-int get_second();
+time_t get_second();
 
-int get_hour();
+time_t get_hour();
 
-int get_minute();
+time_t get_minute();
 
-int get_second();
+time_t get_second();
 
-int get_day_m();
+time_t get_day_m();
 
-int get_month();
+time_t get_month();
 
-int get_year();
+time_t get_year();
 
-int get_day_w();
+time_t get_day_w();
 
 char * get_month_lng();
 
