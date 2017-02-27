@@ -33,7 +33,6 @@
 
 #include <string.h>
 #include <ctype.h>
-#include <stdlib.h>
 
 #define KERNEL 1
 
@@ -137,7 +136,7 @@ size_t strspn(const char * string, const char * control)
     const char * ctrl = control;
 
     char map[32];
-    int n;
+    size_t n;
 
     // Clear out bit map
     for (n = 0; n < 32; n++) map[n] = 0;
@@ -145,7 +144,7 @@ size_t strspn(const char * string, const char * control)
     // Set bits in control map
     while (*ctrl)
     {
-        map[*ctrl >> 3] |= (1 << (*ctrl & 7));
+        map[*ctrl >> 3] |= (char) (1 << (*ctrl & 7));
         ctrl++;
     }
 
@@ -171,7 +170,7 @@ size_t strcspn(const char * string, const char * control)
     const char * ctrl = control;
 
     char map[32];
-    int n;
+    size_t n;
 
     // Clear out bit map
     for (n = 0; n < 32; n++) map[n] = 0;
@@ -179,7 +178,7 @@ size_t strcspn(const char * string, const char * control)
     // Set bits in control map
     while (*ctrl)
     {
-        map[*ctrl >> 3] |= (1 << (*ctrl & 7));
+        map[*ctrl >> 3] |= (char) (1 << (*ctrl & 7));
         ctrl++;
     }
 
@@ -208,7 +207,7 @@ char * strpbrk(const char * string, const char * control)
     // Set bits in control map
     while (*ctrl)
     {
-        map[*ctrl >> 3] |= (1 << (*ctrl & 7));
+        map[*ctrl >> 3] |= (char) (1 << (*ctrl & 7));
         ctrl++;
     }
 
@@ -372,7 +371,7 @@ char * strtok_r(char * string, const char * control, char ** lasts)
 
     // Set bits in delimiter table
     do
-    { map[*ctrl >> 3] |= (1 << (*ctrl & 7)); }
+    { map[*ctrl >> 3] |= (char) (1 << (*ctrl & 7)); }
     while (*ctrl++);
 
     // Initialize str. If string is NULL, set str to the saved
@@ -505,14 +504,16 @@ size_t strlen(const char * s)
 {
     const char * eos;
     for (eos = s; *eos != 0; ++eos);
-    return eos - s;
+    long len = eos - s;
+    return (len < 0) ? 0 : (size_t) len;
 }
 
 size_t strnlen(const char * s, size_t count)
 {
     const char * sc;
     for (sc = s; *sc != '\0' && count--; ++sc);
-    return sc - s;
+    long len = sc - s;
+    return (len < 0) ? 0 : (size_t) len;
 }
 
 int strcmp(const char * s1, const char * s2)
