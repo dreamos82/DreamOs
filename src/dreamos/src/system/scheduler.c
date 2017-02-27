@@ -75,7 +75,7 @@ void kernel_deactivate_thread(thread_t * t)
     if (iterator->thread == t)
     {
         ready_queue = iterator->next;
-        free(iterator);
+        kfree(iterator);
         return;
     }
 
@@ -85,7 +85,7 @@ void kernel_deactivate_thread(thread_t * t)
         {
             thread_list_t * tmp = iterator->next;
             iterator->next = tmp->next;
-            free(tmp);
+            kfree(tmp);
         }
         iterator = iterator->next;
     }

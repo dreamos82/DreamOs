@@ -117,7 +117,7 @@ int shell(void * args)
             memset(cmd, 0, CMD_LEN);
             for (--argc; argc >= 0; argc--)
             {
-                free(argv[argc]);
+                kfree(argv[argc]);
             }
             continue;
         }

@@ -43,6 +43,6 @@ void kernel_init_heap();
 void * kmalloc(size_t size);
 
 // Takes a chunk of memory allocated with kmalloc, and returns it to the pool of usable memory.
-void free(void * p);
+void kfree(void * p);
 
 #endif

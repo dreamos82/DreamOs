@@ -107,7 +107,7 @@ struct dirent * readdir(DIR * dirp)
 int closedir(DIR * dirp)
 {
     //printf("Closing directory\n");
-    free(dirp);
+    kfree(dirp);
     return 0;
 }
 

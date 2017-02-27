@@ -108,7 +108,7 @@ void uname_cmd()
     else
         printf("%s. For more info about this tool, please do 'uname --help'\n",
                infos->sysname);
-    free(infos);
+    kfree(infos);
 }
 
 void uname_help()

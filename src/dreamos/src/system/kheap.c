@@ -92,11 +92,11 @@ void * kmalloc(size_t size)
     return (void *) (chunk_start + sizeof(header_t));
 }
 
-void free(void * p)
+void kfree(void * p)
 {
     header_t * header = (header_t *) ((uint32_t) p - sizeof(header_t));
+    dbg_print("Freeing memory at  : %p [%ld]\n", header, header);
     header->allocated = 0;
-
     glue_chunk(header);
 }
 
@@ -112,6 +112,7 @@ void alloc_chunk(uint32_t start, uint32_t len)
 
 void free_chunk(header_t * chunk)
 {
+    dbg_print("Freeing chunk at : %p\n", chunk);
     chunk->prev->next = 0;
 
     if (chunk->prev == 0)
@@ -147,21 +148,35 @@ void split_chunk(header_t * chunk, uint32_t len)
 
 void glue_chunk(header_t * chunk)
 {
-    if (chunk->next && chunk->next->allocated == 0)
+    dbg_print("Starting glue...\n");
+    if (chunk->next)
     {
-        chunk->length = chunk->length + chunk->next->length;
-        chunk->next->next->prev = chunk;
-        chunk->next = chunk->next->next;
+        if (chunk->next->allocated == 0)
+        {
+            dbg_print("Glue next\n");
+            dbg_print("Update length\n");
+            chunk->length = chunk->length + chunk->next->length;
+            dbg_print("Update chunk->next->next->prev\n");
+            chunk->next->next->prev = chunk;
+            dbg_print("Update chunk->next\n");
+            chunk->next = chunk->next->next;
+            dbg_print("Done next...\n");
+        }
     }
-
-    if (chunk->prev && chunk->prev->allocated == 0)
+    if (chunk->prev)
     {
-        chunk->prev->length = chunk->prev->length + chunk->length;
-        chunk->prev->next = chunk->next;
-        chunk->next->prev = chunk->prev;
-        chunk = chunk->prev;
+        if (chunk->prev->allocated == 0)
+        {
+            dbg_print("Glue prev\n");
+            chunk->prev->length = chunk->prev->length + chunk->length;
+            chunk->prev->next = chunk->next;
+            chunk->next->prev = chunk->prev;
+            chunk = chunk->prev;
+            dbg_print("Done prev...\n");
+        }
     }
-
-    if (chunk->next == 0)
+    if (chunk->next == NULL)
+    {
         free_chunk(chunk);
+    }
 }

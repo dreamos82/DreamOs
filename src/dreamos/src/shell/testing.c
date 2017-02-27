@@ -68,9 +68,9 @@ void try_kmalloc()
     // TODO: Rework tests
     //printf("Navigating used list...\n");
     //print_heap_list (kheap->used_list);
-    free(b);
-    free(c);
-    free(d);
+    kfree(b);
+    kfree(c);
+    kfree(d);
 }
 
 void do_fault()
@@ -231,7 +231,7 @@ void test_stat()
     printf("Device_id: %d\n", stats->st_dev);
     printf("Size: %d\n", stats->st_size);
     printf("Uid: %d\n", stats->st_uid);
-    free(stats);
+    kfree(stats);
 }
 
 void try_shadow()

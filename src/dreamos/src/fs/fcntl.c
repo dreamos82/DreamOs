@@ -113,7 +113,7 @@ int open(const char * path, int oflags, mode_t mode)
     // Increment the current file descriptor.
     current_fd++;
     // Fre the path variable.
-    free(new_path);
+    kfree(new_path);
     // Return the file descriptor.
     return ret_fd;
 }

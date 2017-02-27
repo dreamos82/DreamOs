@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <debug.h>
 
 queue_t queue_create(size_t data_size, size_t capacity)
 {
@@ -23,6 +24,7 @@ queue_t queue_create(size_t data_size, size_t capacity)
         printf("Cannot initialize the queue data.\n");
         return NULL;
     }
+    dbg_print("Queue starts at    : %p [%ld]\n", queue->data, queue->data);
     queue->head = 1;
     queue->tail = 0;
     queue->size = 0;
@@ -37,8 +39,8 @@ bool_t queue_destroy(queue_t queue)
         return false;
     }
     queue_clear(queue);
-    free(queue->data);
-    free(queue);
+    kfree(queue->data);
+    kfree(queue);
     return true;
 }
 
@@ -86,6 +88,12 @@ bool_t queue_enqueue(queue_t queue, const void * data)
     queue->tail = queue_next(queue, queue->tail);
     void * element = ((char *) queue->data) +
                      queue->tail * queue->data_size;
+    if (element == NULL)
+    {
+        printf("Failed to get a valid position inside the queue.\n");
+        return false;
+    }
+    dbg_print("Enqueue element at : %p [%ld]\n", element, element);
     memcpy(element, data, queue->data_size);
     queue->size++;
     return true;
@@ -100,7 +108,13 @@ bool_t queue_dequeue(queue_t queue)
     }
     void * element = (char *) queue->data +
                      queue->head * queue->data_size;
-    free(element);
+    if (element == NULL)
+    {
+        printf("Failed to get a valid position inside the queue.\n");
+        return false;
+    }
+    dbg_print("Dequeue element at : %p [%ld]\n", element, element);
+    kfree(element);
     queue->head = queue_next(queue, queue->head);
     queue->size--;
     return true;
@@ -114,6 +128,11 @@ bool_t queue_front(queue_t queue, void * data)
         return false;
     }
     void * element = (char *) queue->data + queue->head * queue->data_size;
+    if (element == NULL)
+    {
+        printf("Failed to get a valid position inside the queue.\n");
+        return false;
+    }
     memcpy(data, element, queue->data_size);
     return true;
 }
@@ -133,7 +152,12 @@ bool_t queue_clear(queue_t queue)
     for (; it < queue->size; ++it)
     {
         void * element = (char *) queue->data + it * queue->data_size;
-        free(element);
+        if (element == NULL)
+        {
+            printf("Failed to get a valid position inside the queue.\n");
+            return false;
+        }
+        kfree(element);
     }
     queue->size = 0;
     queue->head = 1;

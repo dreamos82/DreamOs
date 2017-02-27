@@ -8,12 +8,15 @@
 
 void * calloc(size_t element_number, size_t element_size)
 {
-    register char * p;
+    register char * ptr;
     register size_t * q;
     size_t size = ALIGN(element_number * element_size);
-    p = kmalloc(size);
-    if (p == NULL) return NULL;
-    q = (size_t *) (p + size);
-    while ((char *) q > p) *--q = 0;
-    return p;
+    ptr = kmalloc(size);
+    if (ptr == NULL)
+    {
+        return NULL;
+    }
+    q = (size_t *) (ptr + size);
+    while ((char *) q > ptr) *--q = 0;
+    return ptr;
 }
