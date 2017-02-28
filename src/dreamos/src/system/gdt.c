@@ -24,36 +24,45 @@
 
 #include <gdt.h>
 
-GDT_Descriptor Gdt_Table[GDT_SIZE];
-int current_pos;
+// -----------------------------------------------------------------------------
+// DEFINES
 
-void kernel_init_gdt()
+/// @brief Struttura dati che rappresenta un descrittore della GDT.
+/// @details
+/// We use the attribute "packed" to tell GCC not to change
+/// any of the alignment in the structure.
+typedef struct __attribute__ ((__packed__)) gdt_descriptor_t
 {
-    int i;
-    current_pos = 0;
-    i = 0;
-    /*Pulisco il vettore della gdt*/
-    while (i < GDT_SIZE)
-    {
-        Gdt_Table[i].segment_limit_low = 0;
-        Gdt_Table[i].segment_base_low = 0;
-        Gdt_Table[i].base_mid = 0;
-        Gdt_Table[i].options_1 = 0;
-        Gdt_Table[i].options_2 = 0;
-        Gdt_Table[i].base_high = 0;
-        i++;
-    }
-    /*Le condizione minime per il funzionamento sono 3 descrittori: il primo nullo
-     *il secondo per l'area codice e il terzo per l'area dati.
-     *il descrittore nullo deve stare nella posizione 0
-     */
-    kernel_add_gdt_seg(0, 0, 0, 0, 0);
-    kernel_add_gdt_seg(1, 0x00000000, 0x000FFFFF,
-                       PRESENT | KERNEL | CODE | 0x0A, GRANULARITY | SZBITS);
-    kernel_add_gdt_seg(2, 0x00000000, 0x000FFFFF,
-                       PRESENT | KERNEL | DATA | 0x02, GRANULARITY | SZBITS);
-    kernel_set_gdtr(Gdt_Table, 0xFFFF, 1, 2);
-}
+    /// Primi 16 bit del limite (20 bit in totale)
+    uint16_t limit_low;
+    /// The lower 16 bits of the base.
+    uint16_t base_low;
+    /// The next 8 bits of the base.
+    uint8_t base_middle;
+    /// Type (4bit) - S (1) bit -DPL (2 bit) - P(1 bit).
+    uint8_t options_1;
+    /// SegLimit_hi(4 bit) AVL(1 bit) L(1 bit) D/B(1 bit) G(1bit)
+    uint8_t options_2;
+    /// The last 8 bits of the base.
+    uint8_t base_high;
+} gdt_descriptor_t;
+
+/// @brief Struttura dati che serve a caricare la GDT nel GDTR.
+typedef struct __attribute__ ((__packed__)) gdt_pointer_t
+{
+    /// La dimensione della GDT (in numero di entry).
+    uint16_t limit;
+    /// L'indirizzo iniziale della GDT;
+    uint32_t base;
+} gdt_pointer_t;
+
+/// The maximum dimension of the GDT.
+#define GDT_SIZE 10
+
+// -----------------------------------------------------------------------------
+// FUNCTIONS
+
+void kernel_set_gdtr(int code, int data);
 
 /**
   * @author Ivan Gualandri
@@ -64,37 +73,92 @@ void kernel_init_gdt()
   * @param opt1 in ordine: Type (4bit) - S (1) bit -DPL (2 bit) - P(1 bit)
   * @param opt2 in ordine: SegLimit_hi(4 bit) AVL(1 bit) L(1 bit) D/B(1 bit) G(1bit)
 */
-void kernel_add_gdt_seg(int pos,
-                        unsigned int base,
-                        unsigned int limit,
-                        unsigned char opt1,
-                        unsigned char opt2)
+void add_gdt_seg(int32_t position,
+                 uint32_t base,
+                 uint32_t limit,
+                 uint8_t option_1,
+                 uint8_t option_2);
+
+// -----------------------------------------------------------------------------
+// DECLARATIONS
+
+// The GDT itself.
+gdt_descriptor_t gdt_descriptors[GDT_SIZE];
+// Pointer structure to give to the CPU.
+gdt_pointer_t gdt_pointer;
+
+// -----------------------------------------------------------------------------
+// IMPLEMENTATIONS
+
+void kernel_init_gdt()
 {
-    unsigned int tmpbase, tmplimit;
-    tmpbase = base;
-    tmplimit = limit;
-    //First 32bit part
-    Gdt_Table[pos].segment_limit_low = limit & 0xFFFF;
-    Gdt_Table[pos].segment_base_low = base & 0xFFFF;
-    //Last 32bit part
-    tmpbase = base >> 16;
-    Gdt_Table[pos].base_mid = tmpbase & 0xFF;
-    Gdt_Table[pos].options_1 = opt1;
-    tmplimit = limit >> 16;
-    tmplimit &= 0xf;
-    Gdt_Table[pos].options_2 = opt2 | tmplimit;
-    tmpbase = base >> 24;
-    Gdt_Table[pos].base_high = tmpbase & 0xFF;
+    // Prepare GDT vector.
+    for (uint32_t it = 0; it < GDT_SIZE; ++it)
+    {
+        gdt_descriptors[it].limit_low = 0;
+        gdt_descriptors[it].base_low = 0;
+        gdt_descriptors[it].base_middle = 0;
+        gdt_descriptors[it].options_1 = 0;
+        gdt_descriptors[it].options_2 = 0;
+        gdt_descriptors[it].base_high = 0;
+    }
+
+    // We have six entries in the GDT:
+    //  - Two for kernel mode.
+    //  - Two for user mode.
+    //  - The NULL descriptor.
+    //  - And one for the TSS (task state segment).
+    // The limit is the last valid byte from the start of the GDT.
+    // i.e. the size of the GDT - 1.
+    gdt_pointer.limit = sizeof(gdt_descriptor_t) * 6 - 1;
+    gdt_pointer.base = (uint32_t) &gdt_descriptors;
+
+    // --------------------------------
+    // Null segment.
+    add_gdt_seg(0, 0, 0, 0, 0);
+    // --------------------------------
+    // Code segment.
+    add_gdt_seg(1, 0, 0xFFFFFFFF,
+                PRESENT | KERNEL | CODE | 0x0A,
+                GRANULARITY | SZBITS | 0x0F);
+    // --------------------------------
+    // Data segment.
+    add_gdt_seg(2, 0, 0xFFFFFFFF,
+                PRESENT | KERNEL | DATA | 0x02,
+                GRANULARITY | SZBITS | 0x0F);
+    // --------------------------------
+    // User mode code segment.
+    add_gdt_seg(3, 0, 0xFFFFFFFF,
+                0xFA,
+                GRANULARITY | SZBITS | 0x0F);
+    // --------------------------------
+    // User mode data segment.
+    add_gdt_seg(4, 0, 0xFFFFFFFF,
+                0xF2,
+                GRANULARITY | SZBITS | 0x0F);
+
+    // Inform the CPU about our GDT.
+    kernel_set_gdtr(1, 2);
 }
 
-void __attribute__ ((noinline)) kernel_set_gdtr(GDT_Descriptor * addr,
-                                                unsigned short int limit,
-                                                int code,
+void add_gdt_seg(int32_t position,
+                 uint32_t base,
+                 uint32_t limit,
+                 uint8_t option_1,
+                 uint8_t option_2)
+{
+    gdt_descriptors[position].base_low = (base & 0xFFFF);
+    gdt_descriptors[position].base_middle = (base >> 16) & 0xFF;
+    gdt_descriptors[position].base_high = (base >> 24) & 0xFF;
+    gdt_descriptors[position].limit_low = (limit & 0xFFFF);
+    gdt_descriptors[position].options_1 = option_1;
+    gdt_descriptors[position].options_2 = (limit >> 16) & 0x0F;
+    gdt_descriptors[position].options_2 |= option_2 & 0xF0;
+}
+
+void __attribute__ ((noinline)) kernel_set_gdtr(int code,
                                                 int data)
 {
-    GDT_Register gdtreg;
-    gdtreg.gdt_limit = limit;
-    gdtreg.gdt_base = (unsigned long) addr;
     code = code << 3;
     data = data << 3;
     __asm__ __volatile__ ("lgdt %0\n"
@@ -107,5 +171,5 @@ void __attribute__ ((noinline)) kernel_set_gdtr(GDT_Descriptor * addr,
         "mov %%ax,%%es\n"
         "mov %%ax,%%fs\n"
         "mov %%ax,%%gs\n"
-        "mov %%ax,%%ss\n" : : "g"  (gdtreg), "r" (code), "r" (data));
+        "mov %%ax,%%ss\n" : : "g"  (gdt_pointer), "r" (code), "r" (data));
 }
