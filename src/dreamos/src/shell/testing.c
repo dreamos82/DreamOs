@@ -1,6 +1,5 @@
 #include <commands.h>
 #include <kernel.h>
-#include <stddef.h>
 #include <video.h>
 #include <stdio.h>
 #include <string.h>
@@ -9,7 +8,6 @@
 #include <testing.h>
 #include <fcntl.h>
 #include <initrd.h>
-#include <user_shell.h>
 #include <thread.h>
 #include <vm.h>
 #include <timer.h>
@@ -330,30 +328,27 @@ void try_thread_sleep()
 
 void try_queue()
 {
-    queue_t queue = queue_create(sizeof(int), 10);
+    queue_t queue = queue_create(sizeof(int));
     if (queue == NULL)
     {
         printf("Error while creating the queue.\n");
         return;
     }
-    printf("Enqueue : ");
-    int it;
-    for (it = 0; it < 10; ++it)
-    {
-        queue_enqueue(queue, &it);
-        printf("%d ", it);
-    }
-    printf("\n");
+    printf("Enqueuing...");
+    int a = 1;
+    int b = 2;
+    int c = 3;
+    queue_enqueue(queue, &a);
+    queue_enqueue(queue, &b);
+    queue_enqueue(queue, &c);
+
     printf("Dequeue : ");
     while (!queue_is_empty(queue))
     {
         int value;
-        if (queue_front(queue, &value))
+        if (queue_front_and_dequeue(queue, &value))
         {
-            if (queue_dequeue(queue))
-            {
-                printf("%d ", value);
-            }
+            printf("%d ", value);
         }
     }
     printf("\n");

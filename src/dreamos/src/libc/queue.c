@@ -4,30 +4,18 @@
 #include <kheap.h>
 #include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <debug.h>
 
-queue_t queue_create(size_t data_size, size_t capacity)
+queue_t queue_create(size_t data_size)
 {
-    queue_t queue;
-    queue = kmalloc(sizeof(struct queue_t));
+    queue_t queue = kmalloc(sizeof(struct queue_t));
     if (queue == NULL)
     {
         printf("Cannot create the queue.\n");
         return NULL;
     }
     queue->data_size = data_size;
-    queue->capacity = capacity;
-    queue->data = calloc(capacity, data_size);
-    if (queue->data == NULL)
-    {
-        printf("Cannot initialize the queue data.\n");
-        return NULL;
-    }
-    dbg_print("Queue starts at    : %p [%ld]\n", queue->data, queue->data);
-    queue->head = 1;
-    queue->tail = 0;
-    queue->size = 0;
+    queue->front = NULL;
+    queue->back = NULL;
     return queue;
 }
 
@@ -39,18 +27,8 @@ bool_t queue_destroy(queue_t queue)
         return false;
     }
     queue_clear(queue);
-    kfree(queue->data);
     kfree(queue);
     return true;
-}
-
-size_t queue_next(queue_t queue, size_t index)
-{
-    if (++index == queue->capacity)
-    {
-        return 0;
-    }
-    return index;
 }
 
 bool_t queue_is_empty(queue_t queue)
@@ -60,63 +38,61 @@ bool_t queue_is_empty(queue_t queue)
         printf("Queue is NULL.\n");
         return false;
     }
-    return (bool_t) (queue->size == 0);
+    return (bool_t) (queue->front == NULL);
 }
 
-bool_t queue_is_full(queue_t queue)
+bool_t queue_enqueue(queue_t queue, void * data)
 {
     if (queue == NULL)
     {
         printf("Queue is NULL.\n");
         return false;
     }
-    return (bool_t) (queue->size == queue->capacity);
-}
-
-bool_t queue_enqueue(queue_t queue, const void * data)
-{
-    if (queue == NULL)
+    if (data == NULL)
     {
-        printf("Queue is NULL.\n");
+        printf("Data is NULL.\n");
         return false;
     }
-    if (queue_is_full(queue))
+    queue_node_t * node = kmalloc(sizeof(struct queue_node_t));
+    if (node == NULL)
     {
-        printf("The queue is full.\n");
+        printf("New node of the queue is NULL.\n");
         return false;
     }
-    queue->tail = queue_next(queue, queue->tail);
-    void * element = ((char *) queue->data) +
-                     queue->tail * queue->data_size;
-    if (element == NULL)
+    // Initialize the new node.
+    node->data = data;
+    // Since the new node is the tail, nobody is behind it.
+    node->next = NULL;
+    // If the queue is empty, the data is placed also on the front.
+    if (queue->front == NULL)
     {
-        printf("Failed to get a valid position inside the queue.\n");
-        return false;
+        queue->front = node;
     }
-    dbg_print("Enqueue element at : %p [%ld]\n", element, element);
-    memcpy(element, data, queue->data_size);
-    queue->size++;
+    else
+    {
+        queue->back->next = node;
+    }
+    queue->back = node;
     return true;
 }
 
 bool_t queue_dequeue(queue_t queue)
 {
-    if (queue_is_empty(queue))
+    struct queue_node_t * front_node = queue->front;
+    if (front_node == NULL)
     {
-        printf("The queue is empty.\n");
+        printf("Queue is Empty\n");
         return false;
     }
-    void * element = (char *) queue->data +
-                     queue->head * queue->data_size;
-    if (element == NULL)
+    if (queue->front == queue->back)
     {
-        printf("Failed to get a valid position inside the queue.\n");
-        return false;
+        queue->front = queue->back = NULL;
     }
-    dbg_print("Dequeue element at : %p [%ld]\n", element, element);
-    kfree(element);
-    queue->head = queue_next(queue, queue->head);
-    queue->size--;
+    else
+    {
+        queue->front = queue->front->next;
+    }
+    kfree(front_node);
     return true;
 }
 
@@ -127,13 +103,41 @@ bool_t queue_front(queue_t queue, void * data)
         printf("Queue is NULL.\n");
         return false;
     }
-    void * element = (char *) queue->data + queue->head * queue->data_size;
-    if (element == NULL)
+    if (queue->front == NULL)
     {
-        printf("Failed to get a valid position inside the queue.\n");
+        printf("Queue is empty\n");
         return false;
     }
-    memcpy(data, element, queue->data_size);
+    memcpy(data, queue->front->data, queue->data_size);
+    return true;
+}
+
+bool_t queue_back(queue_t queue, void * data)
+{
+    if (queue == NULL)
+    {
+        printf("Queue is NULL.\n");
+        return false;
+    }
+    if (queue->back == NULL)
+    {
+        printf("Queue is empty\n");
+        return false;
+    }
+    memcpy(data, queue->back->data, queue->data_size);
+    return true;
+}
+
+bool_t queue_front_and_dequeue(queue_t queue, void * data)
+{
+    if (!queue_front(queue, data))
+    {
+        return false;
+    }
+    if (!queue_dequeue(queue))
+    {
+        return false;
+    }
     return true;
 }
 
@@ -144,23 +148,13 @@ bool_t queue_clear(queue_t queue)
         printf("Queue is NULL.\n");
         return false;
     }
-    if (queue->size == 0)
+    if (queue->front == NULL)
     {
         return true;
     }
-    size_t it = 0;
-    for (; it < queue->size; ++it)
+    while (queue->front)
     {
-        void * element = (char *) queue->data + it * queue->data_size;
-        if (element == NULL)
-        {
-            printf("Failed to get a valid position inside the queue.\n");
-            return false;
-        }
-        kfree(element);
+        queue_dequeue(queue);
     }
-    queue->size = 0;
-    queue->head = 1;
-    queue->tail = 0;
     return true;
 }
