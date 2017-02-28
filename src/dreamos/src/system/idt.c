@@ -51,8 +51,6 @@ EXCEPTION(18);
 EXCEPTION(19);
 SYSCALL(80);
 
-void (* IntTable[IDT_SIZE])();
-
 // -----------------------------------------------------------------------------
 // DEFINES
 
@@ -81,22 +79,6 @@ typedef struct __attribute__ ((__packed__)) idt_pointer_t
     unsigned int base;
 } idt_pointer_t;
 
-/// @brief Structure containing register values when the CPU was interrupted.
-typedef struct
-{
-    // Data segment selector.
-    uint32_t ds;
-    // Pushed by pusha.
-    uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
-    // Interrupt number and error code (if applicable).
-    uint32_t int_no, err_code;
-    // Pushed by the processor automatically.
-    uint32_t eip, cs, eflags, useresp, ss;
-} registers_t;
-
-// An interrupt handler. It is a pointer to a function which takes a pointer
-// to a structure containing register values.
-typedef void (* interrupt_handler_t)(registers_t *);
 
 // -----------------------------------------------------------------------------
 // FUNCTIONS
@@ -111,22 +93,18 @@ idt_descriptor_t idt_descriptors[IDT_SIZE];
 // Pointer structure to give to the CPU.
 idt_pointer_t idt_pointer;
 // Array of interrupt handler functions.
-interrupt_handler_t interrupt_handlers[IDT_SIZE];
+interrupt_handler_t IntTable[IDT_SIZE];
 
 void init_idt()
 {
-    short int i;
-    i = 0;
-    while (i < IDT_SIZE)
+    for (uint32_t it = 0; it < IDT_SIZE; ++it)
     {
-        idt_descriptors[i].offset_low = 0;
-        idt_descriptors[i].seg_selector = 0;
-        idt_descriptors[i].null_par = 0;
-        idt_descriptors[i].options = 0;
-        idt_descriptors[i].offset_high = 0;
-        i++;
+        idt_descriptors[it].offset_low = 0;
+        idt_descriptors[it].seg_selector = 0;
+        idt_descriptors[it].null_par = 0;
+        idt_descriptors[it].options = 0;
+        idt_descriptors[it].offset_high = 0;
     }
-    i = 0;
     kernel_init_interrupt_function_table();
     kernel_add_idt_seg(0, (uint32_t) INT_0, PRESENT | KERNEL, 0x8);
     kernel_add_idt_seg(1, (uint32_t) INT_1, PRESENT | KERNEL, 0x8);

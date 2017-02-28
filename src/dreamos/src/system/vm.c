@@ -50,7 +50,7 @@ void kernel_init_vm()
     uint32_t cr0;
 
     // Register the page fault handler.
-    kernel_add_interrupt_function_table(14, &page_fault_handler);
+    kernel_add_interrupt_function_table(14, page_fault_handler);
     // Create a page directory.
     page_directory_t * pd = (page_directory_t *) kernel_alloc_page();
 

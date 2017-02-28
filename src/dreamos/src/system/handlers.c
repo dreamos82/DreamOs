@@ -34,9 +34,6 @@
 
 #include "vm.h"
 
-// #define DEBUG 1
-void (* IntTable[IDT_SIZE])();
-
 IRQ_s * shareHandler[IRQ_NUM];
 
 /** @author Ivan Gualandri
@@ -46,15 +43,20 @@ IRQ_s * shareHandler[IRQ_NUM];
  */
 void kernel_init_interrupt_function_table()
 {
-    int i;
-    i = 0;
-    while (i < IDT_SIZE)
+    for (uint32_t it = 0; it < IDT_SIZE; ++it)
     {
-        if (i > 19 && i < 32) IntTable[i] = _int_rsv;
-        else if (i > 31 && i < 48)
-            kernel_add_interrupt_function_table(i, _irqinterrupt);
-        else IntTable[i] = _globalException;
-        i++;
+        if (it > 19 && it < 32)
+        {
+            kernel_add_interrupt_function_table(it, _int_rsv);
+        }
+        else if (it > 31 && it < 48)
+        {
+            kernel_add_interrupt_function_table(it, _irqinterrupt);
+        }
+        else
+        {
+            kernel_add_interrupt_function_table(it, _globalException);
+        }
     }
 }
 
@@ -66,9 +68,10 @@ void kernel_init_interrupt_function_table()
   *
   * Questa funzione aggiunge un handler di interruzione alla tabella per che contiene le funzioni di gestione chiamate dalle eccezioni/interruzioni della IDT
   */
-void kernel_add_interrupt_function_table(int i, void (* func)())
+void kernel_add_interrupt_function_table(int i,
+                                         interrupt_handler_t handler)
 {
-    IntTable[i] = func;
+    IntTable[i] = handler;
 }
 
 /**
@@ -189,7 +192,8 @@ void _irqinterrupt(unsigned int esp)
             {
                 tmpHandler = tmpHandler->next;
                 #ifdef DEBUG
-                printf("1 - IRQ_func (_prova): %d, %d\n", tmpHandler->IRQ_func,
+                printf("1 - IRQ_func (_prova): %d, %d\n",
+                       tmpHandler->IRQ_func,
                        tmpHandler);
                 #endif
                 if (tmpHandler != 0) tmpHandler->IRQ_func();

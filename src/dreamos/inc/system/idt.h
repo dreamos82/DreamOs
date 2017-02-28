@@ -36,6 +36,13 @@
 #define INT32_GATE    0xE
 #define TRAP32_GATE   0xF
 
+// An interrupt handler. It is a pointer to a function which takes a pointer
+// to a structure containing register values.
+typedef void (* interrupt_handler_t)();
+
+// Array of interrupt handler functions.
+extern interrupt_handler_t IntTable[IDT_SIZE];
+
 /// @brief IDT initialisation function.
 void init_idt();
 

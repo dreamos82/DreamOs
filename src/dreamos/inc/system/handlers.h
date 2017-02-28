@@ -114,11 +114,10 @@
 
 extern IRQ_s * shareHandler[IRQ_NUM];
 
-extern void (* IntTable[IDT_SIZE])();
-
 void kernel_init_interrupt_function_table();
 
-void kernel_add_interrupt_function_table(int i, void (* func)());
+void kernel_add_interrupt_function_table(int i,
+                                         interrupt_handler_t handler);
 
 void _globalException(int n, int error);
 
