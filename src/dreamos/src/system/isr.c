@@ -142,9 +142,8 @@ void _globalException(int n, int error)
     }
 }
 
-void _irqinterrupt(unsigned int esp)
+void _irqinterrupt()
 {
-    (void) esp;
     __asm__ __volatile__("cli;");
     int irqn;
     irqn = irq_get_current();
@@ -172,7 +171,10 @@ void _irqinterrupt(unsigned int esp)
         else printf("irqn: %d\n", irqn);
     }
     else printf("IRQ N: %d E' arrivato qualcosa che non so gestire ", irqn);
-    if (irqn <= 8 && irqn != 2) outportb(MASTER_PORT, EOI);
+    if (irqn <= 8 && irqn != 2)
+    {
+        outportb(MASTER_PORT, EOI);
+    }
     else if (irqn <= 16 || irqn == 2)
     {
         outportb(SLAVE_PORT, EOI);

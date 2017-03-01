@@ -51,66 +51,16 @@
 #define MACHINE_CHECK 18
 #define SIMD_FP_EXC 19
 
-#define SWITCH_KERNEL\
-    "movl $0x10, %edx;\
-	 movw %dx, %ds;\
-	 movw %dx, %es;\
-	 movw %dx, %fs;"
-
-#define SAVE_CONTEXT\
-    "pusha;"\
-
-#define SAVE_CONTEXT_EC\
-        "nop;\
-         xchgl %eax, (%esp);\
-         pushl %ecx;\
-         pushl %edx;"\
-         SWITCH_KERNEL\
-         "pushl %eax;"
-
-#define EXCEPTION(n)\
-    __asm__("INT_"#n":"\
-         SAVE_CONTEXT\
-             "pushl $"#n";\
-             call *(IntTable+(4*"#n"));\
-             add $4, %esp;"\
-             RESTORE\
-             "iret;")
-
-#define EXCEPTION_EC(n)\
-    __asm__("INT_"#n":"\
-             SAVE_CONTEXT_EC\
-             "pushl $"#n";\
-             call *(IntTable+(4*"#n"));\
-             add $8, %esp;"\
-             RESTORE_EC\
-             "iret;")
-
 #define IRQ(n)\
     __asm__("INT_"#n":"\
-            SAVE_CONTEXT\
+            "pusha;"\
             "movl %esp, %eax;"\
-        "pushl %eax;"\
+            "pushl %eax;"\
             "call _irqinterrupt;"\
             "popl %eax;"\
             "movl %eax, %esp;"\
-            RESTORE\
+            "popa;"\
             "iret;")
-
-#define SYSCALL(n)\
-    __asm__("INT_"#n":"\
-            SAVE_CONTEXT\
-            "call syscall_handler;"\
-            RESTORE\
-            "iret;")
-
-#define RESTORE \
-        "popa;"
-
-#define RESTORE_EC \
-        "popl %edx;\
-         popl %ecx;\
-         popl %eax;"
 
 extern IRQ_s * shareHandler[IRQ_NUM];
 
@@ -123,7 +73,7 @@ void init_isr();
 /// @author Ivan Gualandri
 void _globalException(int n, int error);
 
-void _irqinterrupt(unsigned int esp);
+extern void _irqinterrupt();
 
 void _int_rsv();
 

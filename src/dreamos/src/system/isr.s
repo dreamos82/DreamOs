@@ -1,15 +1,9 @@
 [EXTERN IntTable]
-
-[GLOBAL add_exception]
-
-%macro restore_ec 0
-    popl edx;
-    popl ecx;
-    popl eax;
-%endmacro
+[EXTERN _irqinterrupt]
+[EXTERN syscall_handler]
 
 %macro EXCEPTION 1
-    global INT_%1
+    [GLOBAL INT_%1]
     INT_%1:
         cli                         ; Disable interrupts firstly.
         push byte 0                 ; Push a dummy error code.
@@ -30,35 +24,69 @@
 ; This macro creates a stub for an ISR which passes it's own
 ; error code.
 %macro EXCEPTION_EC 1
-    global INT_%1
+    [GLOBAL INT_%1]
     INT_%1:
         cli                         ; Disable interrupts firstly.
         push byte 0                 ; Push a dummy error code.
         push %1                     ; Push the interrupt number.
 
-        nop;
-        xchgl eax, esp
+        nop
+        xchg eax, esp
         push ecx
         push edx
 
         mov edx,    0x10;
-        mov dx,    ds;
-        mov dx,    es;
-        mov dx,    fs;
+        mov dx,     ds;
+        mov dx,     es;
+        mov dx,     fs;
 
         push eax
 
+        call [IntTable + (4 * %1)]  ; Call the interrupt
+
+        add esp, 8                  ; Cleans up the pushed error code and pushed
+                                    ;  ISR number.
+
+        pop edx;
+        pop ecx;
+        pop eax;
+
+        sti                         ; Enable interrupts.
+        iret                        ; pops 5 things at once:
+                                    ;   CS, EIP, EFLAGS, SS, and ESP
+
 %endmacro
 
-; This macro creates a stub for an IRQ - the first parameter is
-; the IRQ number, the second is the ISR number it is remapped to.
-%macro IRQ 2
-  global irq%1
-  irq%1:
-    cli
-    push byte 0
-    push byte %2
-    jmp irq_common_stub
+%macro IRQ 1
+    [GLOBAL INT_%1]
+    INT_%1:
+        cli                         ; Disable interrupts firstly.
+        push byte 0                 ; Push a dummy error code.
+        push %1                     ; Push the interrupt number.
+        pusha                       ; Pushes edi,esi,ebp,esp,ebx,edx,ecx,eax
+
+        ;mov     esp, eax;
+        ;push    eax;
+        call    _irqinterrupt       ; Call the interrupt
+        ;pop     eax;
+        ;mov     eax, esp;
+
+        popa                        ; Pops edi,esi,ebp...
+        add esp, 8                  ; Cleans up the pushed error code and pushed
+                                    ;  ISR number.
+        sti                         ; Enable interrupts.
+        iret                        ; pops 5 things at once:
+                                    ;   CS, EIP, EFLAGS, SS, and ESP
+%endmacro
+
+%macro SYSCALL 1
+    [GLOBAL INT_%1]
+    INT_%1:
+        pusha                       ; Pushes edi,esi,ebp,esp,ebx,edx,ecx,eax
+        call syscall_handler        ; Call the interrupt
+        popa                        ; Pops edi,esi,ebp...
+        iret                        ; pops 5 things at once:
+                                    ;   CS, EIP, EFLAGS, SS, and ESP
 %endmacro
 
 EXCEPTION 0
@@ -70,10 +98,40 @@ EXCEPTION 5
 EXCEPTION 6
 EXCEPTION 7
 
+EXCEPTION_EC 8
+
 EXCEPTION 9
+
+EXCEPTION_EC 10
+EXCEPTION_EC 11
+EXCEPTION_EC 12
+EXCEPTION_EC 13
+EXCEPTION_EC 14
 
 EXCEPTION 15
 EXCEPTION 16
 
+EXCEPTION_EC 17
+
 EXCEPTION 18
 EXCEPTION 19
+
+IRQ 32
+IRQ 33
+IRQ 34
+IRQ 35
+IRQ 36
+IRQ 37
+IRQ 38
+IRQ 39
+IRQ 40
+IRQ 41
+IRQ 42
+IRQ 43
+IRQ 44
+IRQ 45
+IRQ 46
+IRQ 47
+IRQ 48
+
+SYSCALL 80
