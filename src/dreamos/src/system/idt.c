@@ -25,7 +25,6 @@
 #include <idt.h>
 #include <gdt.h>
 #include <handlers.h>
-#include <video.h>
 
 //Da perfezionare
 EXCEPTION(0);
@@ -83,7 +82,11 @@ typedef struct __attribute__ ((__packed__)) idt_pointer_t
 // -----------------------------------------------------------------------------
 // FUNCTIONS
 
-void set_idtr();
+/// @brief Questa funzione configura il registro IDTR per caricare la IDT in
+/// memoria.
+/// @author Ivan Gualandri
+/// @param idt_pointer l'indirizzo base della IDT.
+extern void idt_flush(uint32_t idt_pointer);
 
 // -----------------------------------------------------------------------------
 // DECLARATIONS
@@ -97,6 +100,7 @@ interrupt_handler_t IntTable[IDT_SIZE];
 
 void init_idt()
 {
+    // Prepare IDT vector.
     for (uint32_t it = 0; it < IDT_SIZE; ++it)
     {
         idt_descriptors[it].offset_low = 0;
@@ -105,6 +109,12 @@ void init_idt()
         idt_descriptors[it].options = 0;
         idt_descriptors[it].offset_high = 0;
     }
+
+    // Just like the GDT, the IDT has a "limit" field that is set to the last
+    // valid byte in the IDT, after adding in the start position (i.e. size-1).
+    idt_pointer.limit = sizeof(idt_descriptor_t) * IDT_SIZE - 1;
+    idt_pointer.base = (uint32_t) &idt_descriptors;
+
     kernel_init_interrupt_function_table();
     kernel_add_idt_seg(0, (uint32_t) INT_0, PRESENT | KERNEL, 0x8);
     kernel_add_idt_seg(1, (uint32_t) INT_1, PRESENT | KERNEL, 0x8);
@@ -133,7 +143,7 @@ void init_idt()
     kernel_add_idt_seg(80, (uint32_t) INT_80, PRESENT | USER, 0x8);
 
     // Tell the CPU about our new IDT.
-    set_idtr();
+    idt_flush((uint32_t) &idt_pointer);
 }
 
 /**
@@ -154,20 +164,4 @@ void kernel_add_idt_seg(short int i,
     idt_descriptors[i].null_par = 0x00;
     idt_descriptors[i].seg_selector = seg_sel;
     idt_descriptors[i].options = options | INT32_GATE;
-}
-
-/**
-  * @author Ivan Gualandri
-  * @param IDT_Descriptor* addr l'indirizzo base della IDT
-  * @param unsigned short int limit il limite della IDT.
-  *
-  * Questa funzione configura il registro IDTR per caricare la IDT in memoria.
-  */
-void __attribute__ ((noinline)) set_idtr()
-{
-    // Just like the GDT, the IDT has a "limit" field that is set to the last
-    // valid byte in the IDT, after adding in the start position (i.e. size-1).
-    idt_pointer.limit = sizeof(idt_descriptor_t) * IDT_SIZE - 1;
-    idt_pointer.base = (uint32_t) &idt_descriptors;
-    __asm__ __volatile__("lidt %0": :"g" (idt_pointer));
 }

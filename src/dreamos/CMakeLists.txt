@@ -151,8 +151,10 @@ set(SOURCE_FILES
         src/sys/utsname.c
         src/system/elf.c
         src/system/gdt.c
+        src/system/gdt.s
         src/system/handlers.c
         src/system/idt.c
+        src/system/idt.s
         src/system/kheap.c
         src/system/paging.c
         src/system/panic.c

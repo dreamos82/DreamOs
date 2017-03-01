@@ -62,8 +62,6 @@ typedef struct __attribute__ ((__packed__)) gdt_pointer_t
 // -----------------------------------------------------------------------------
 // FUNCTIONS
 
-void kernel_set_gdtr(int code, int data);
-
 /**
   * @author Ivan Gualandri
   * @version 1.0
@@ -78,6 +76,8 @@ void add_gdt_seg(int32_t position,
                  uint32_t limit,
                  uint8_t option_1,
                  uint8_t option_2);
+
+extern void gdt_flush(uint32_t);
 
 // -----------------------------------------------------------------------------
 // DECLARATIONS
@@ -138,7 +138,7 @@ void kernel_init_gdt()
                 GRANULARITY | SZBITS | 0x0F);
 
     // Inform the CPU about our GDT.
-    kernel_set_gdtr(1, 2);
+    gdt_flush((uint32_t) &gdt_pointer);
 }
 
 void add_gdt_seg(int32_t position,
@@ -154,22 +154,4 @@ void add_gdt_seg(int32_t position,
     gdt_descriptors[position].options_1 = option_1;
     gdt_descriptors[position].options_2 = (limit >> 16) & 0x0F;
     gdt_descriptors[position].options_2 |= option_2 & 0xF0;
-}
-
-void __attribute__ ((noinline)) kernel_set_gdtr(int code,
-                                                int data)
-{
-    code = code << 3;
-    data = data << 3;
-    __asm__ __volatile__ ("lgdt %0\n"
-        "pushl %1\n"
-        "pushl $CSpoint\n"
-        "lret\n"
-        "CSpoint:\n"
-        "mov %2,%%eax\n"
-        "mov %%ax,%%ds\n"
-        "mov %%ax,%%es\n"
-        "mov %%ax,%%fs\n"
-        "mov %%ax,%%gs\n"
-        "mov %%ax,%%ss\n" : : "g"  (gdt_pointer), "r" (code), "r" (data));
 }
