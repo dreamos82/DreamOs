@@ -149,10 +149,11 @@ set(SOURCE_FILES
         src/sys/dirent.c
         src/sys/stat.c
         src/sys/utsname.c
+        src/system/descriptor_tables.c
         src/system/elf.c
         src/system/gdt.c
         src/system/gdt.s
-        src/system/handlers.c
+        src/system/isr.c
         src/system/idt.c
         src/system/idt.s
         src/system/kheap.c

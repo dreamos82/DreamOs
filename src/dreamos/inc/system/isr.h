@@ -114,14 +114,16 @@
 
 extern IRQ_s * shareHandler[IRQ_NUM];
 
-void kernel_init_interrupt_function_table();
+/// @brief Questa funzione si occupa di inizializzare la tabella di funzioni
+/// che gestiscono le interruzioni ed eccezioni.
+/// @author Ivan Gualandri
+void init_isr();
 
-void kernel_add_interrupt_function_table(int i,
-                                         interrupt_handler_t handler);
-
+/// @brief Questa funzione gestira a livello centralizzato le varie eccezioni.
+/// @author Ivan Gualandri
 void _globalException(int n, int error);
 
-void _irqinterrupt();
+void _irqinterrupt(unsigned int esp);
 
 void _int_rsv();
 

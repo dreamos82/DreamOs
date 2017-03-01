@@ -21,27 +21,17 @@
  * Prima versione: 19/05/2007
  */
 
-#include <handlers.h>
-#include <idt.h>
-#include <pic8259.h>
+#include <isr.h>
 #include <video.h>
 #include <io.h>
 #include <stdio.h>
-#include <keyboard.h>
-#include <video.h>
-#include <paging.h>
 #include <scheduler.h>
-
-#include "vm.h"
+#include <descriptor_tables.h>
+#include <vm.h>
 
 IRQ_s * shareHandler[IRQ_NUM];
 
-/** @author Ivan Gualandri
- *  @return none
- * Questa funzione si occupa di inizializzare la tabella di funzioni che gestiscono le
- * interruzioni ed eccezioni.
- */
-void kernel_init_interrupt_function_table()
+void init_isr()
 {
     for (uint32_t it = 0; it < IDT_SIZE; ++it)
     {
@@ -60,26 +50,6 @@ void kernel_init_interrupt_function_table()
     }
 }
 
-/**
-  * @author Ivan Gualandri
-  * @return None
-  * @param i posizione all'interno del vettore
-  * @param func funzione da aggiungere
-  *
-  * Questa funzione aggiunge un handler di interruzione alla tabella per che contiene le funzioni di gestione chiamate dalle eccezioni/interruzioni della IDT
-  */
-void kernel_add_interrupt_function_table(int i,
-                                         interrupt_handler_t handler)
-{
-    IntTable[i] = handler;
-}
-
-/**
-  * @author Ivan Gualandri
-  * @version 1.0
-  *
-  * Questa funzione gestira a livello centralizzato le varie eccezione
-  */
 void _globalException(int n, int error)
 {
     switch (n)

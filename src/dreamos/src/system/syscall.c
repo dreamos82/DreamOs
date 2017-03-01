@@ -22,7 +22,7 @@
  */
 
 #include <idt.h>
-#include <handlers.h>
+#include <isr.h>
 #include <syscall.h>
 #include <stdio.h>
 #include <video.h>

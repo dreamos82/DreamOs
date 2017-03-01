@@ -42,6 +42,7 @@
 #include <thread.h>
 #include <scheduler.h>
 #include <vm.h>
+#include <descriptor_tables.h>
 
 #ifdef BOCHS_DEBUG
 
@@ -87,17 +88,11 @@ int main_loop(struct multiboot_info * boot_info)
     // -------------------------------------------------------------------------
     // Set the GDT.
     _kputs(LNG_GDT);
-    kernel_init_gdt();
+    init_descriptor_tables();
     _kprintOK();
 
     outportb(0xFF, MASTER_PORT_1);
     outportb(0xFF, SLAVE_PORT_1);
-
-    // -------------------------------------------------------------------------
-    // Set the IDT.
-    _kputs(LNG_IDT);
-    init_idt();
-    _kprintOK();
 
     // -------------------------------------------------------------------------
     // Breakpoint.

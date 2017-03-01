@@ -18,18 +18,17 @@
 
 #include <pic8259.h>
 #include <idt.h>
-#include <gdt.h>
-#include <handlers.h>
+#include <isr.h>
 #include <video.h>
 #include <io.h>
 #include <stdio.h>
-#include <stddef.h>
 #include <keyboard.h>
 #include <timer.h>
 #include <bitops.h>
 #include <paging.h>
 #include <mouse.h>
 #include <language.h>
+#include <descriptor_tables.h>
 
 //IRQ_s *shareHandler[IRQ_NUM];
 // IRQ_s shareHandler[16];
@@ -113,22 +112,22 @@ void irq_init()
 
 void irq_setup()
 {
-    kernel_add_idt_seg(32, (uint32_t) INT_32, PRESENT | KERNEL, 0x8);
-    kernel_add_idt_seg(33, (uint32_t) INT_33, PRESENT | KERNEL, 0x8);
-    kernel_add_idt_seg(34, (uint32_t) INT_34, PRESENT | KERNEL, 0x8);
-    kernel_add_idt_seg(35, (uint32_t) INT_35, PRESENT | KERNEL, 0x8);
-    kernel_add_idt_seg(36, (uint32_t) INT_37, PRESENT | KERNEL, 0x8);
-    kernel_add_idt_seg(38, (uint32_t) INT_38, PRESENT | KERNEL, 0x8);
-    kernel_add_idt_seg(39, (uint32_t) INT_39, PRESENT | KERNEL, 0x8);
-    kernel_add_idt_seg(40, (uint32_t) INT_40, PRESENT | KERNEL, 0x8);
-    kernel_add_idt_seg(41, (uint32_t) INT_41, PRESENT | KERNEL, 0x8);
-    kernel_add_idt_seg(42, (uint32_t) INT_42, PRESENT | KERNEL, 0x8);
-    kernel_add_idt_seg(43, (uint32_t) INT_43, PRESENT | KERNEL, 0x8);
-    kernel_add_idt_seg(44, (uint32_t) INT_44, PRESENT | KERNEL, 0x8);
-    kernel_add_idt_seg(45, (uint32_t) INT_45, PRESENT | KERNEL, 0x8);
-    kernel_add_idt_seg(46, (uint32_t) INT_46, PRESENT | KERNEL, 0x8);
-    kernel_add_idt_seg(47, (uint32_t) INT_47, PRESENT | KERNEL, 0x8);
-    kernel_add_idt_seg(48, (uint32_t) INT_48, PRESENT | KERNEL, 0x8);
+    idt_set_gate(32, INT_32, PRESENT | KERNEL, 0x8);
+    idt_set_gate(33, INT_33, PRESENT | KERNEL, 0x8);
+    idt_set_gate(34, INT_34, PRESENT | KERNEL, 0x8);
+    idt_set_gate(35, INT_35, PRESENT | KERNEL, 0x8);
+    idt_set_gate(36, INT_37, PRESENT | KERNEL, 0x8);
+    idt_set_gate(38, INT_38, PRESENT | KERNEL, 0x8);
+    idt_set_gate(39, INT_39, PRESENT | KERNEL, 0x8);
+    idt_set_gate(40, INT_40, PRESENT | KERNEL, 0x8);
+    idt_set_gate(41, INT_41, PRESENT | KERNEL, 0x8);
+    idt_set_gate(42, INT_42, PRESENT | KERNEL, 0x8);
+    idt_set_gate(43, INT_43, PRESENT | KERNEL, 0x8);
+    idt_set_gate(44, INT_44, PRESENT | KERNEL, 0x8);
+    idt_set_gate(45, INT_45, PRESENT | KERNEL, 0x8);
+    idt_set_gate(46, INT_46, PRESENT | KERNEL, 0x8);
+    idt_set_gate(47, INT_47, PRESENT | KERNEL, 0x8);
+    idt_set_gate(48, INT_48, PRESENT | KERNEL, 0x8);
 }
 
 /** This function, enable irqs on the pic.

@@ -23,10 +23,11 @@
 #include "vm.h"
 #include "paging.h"
 #include "idt.h"
-#include "handlers.h"
+#include "isr.h"
 #include "panic.h"
 #include <string.h>
 #include <stdio.h>
+#include <descriptor_tables.h>
 
 uint32_t * page_directory = (uint32_t *) PAGE_DIR_VIRTUAL_ADDR;
 uint32_t * page_tables = (uint32_t *) PAGE_TABLE_VIRTUAL_ADDR;

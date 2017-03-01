@@ -21,12 +21,12 @@
  * Prima versione: 27/10/2003
  * Contiene le definizioni di alcuni tipi di dato :D
  */
-#ifndef _IDT_H
-#define _IDT_H
+
+#pragma once
 
 #include <stdint.h>
 
-/// IDT dimension.
+/// The maximum dimension of the IDT.
 #define IDT_SIZE 256
 
 //IDT Gate Types (in options)
@@ -40,78 +40,41 @@
 // to a structure containing register values.
 typedef void (* interrupt_handler_t)();
 
-// Array of interrupt handler functions.
-extern interrupt_handler_t IntTable[IDT_SIZE];
+/// @brief This structure describes one interrupt gate.
+typedef struct __attribute__ ((__packed__)) idt_descriptor_t
+{
+    /// Il puntatore all'istruzione.
+    unsigned short int offset_low;
+    /// Seleziona il segmento codice dalla GDT (nel nostro caso primo quindi
+    /// 0x8, si specifica l'offset).
+    unsigned short int seg_selector;
+    /// E' un campo che deve essere sempre impostato a 0.
+    unsigned char null_par;
+    /// Le opzioni del selettore dela IDT.
+    unsigned char options;
+    /// Il puntatore all'istruzione.
+    unsigned short int offset_high;
+} idt_descriptor_t;
 
-/// @brief IDT initialisation function.
+/// @brief A pointer structure used for informing the CPU about our IDT.
+typedef struct __attribute__ ((__packed__)) idt_pointer_t
+{
+    /// La dimensione della IDT (in numero di entry).
+    unsigned short int limit;
+    /// L'indirizzo iniziale della IDT.
+    unsigned int base;
+} idt_pointer_t;
+
+/// @brief Initialise the interrupt descriptor table.
 void init_idt();
 
-/// @brief Add a new segment.
-/// @param i
-/// @param base
-/// @param options
-/// @param seg_sel
-void kernel_add_idt_seg(short int i,
-                        uint32_t base,
-                        unsigned char options,
-                        unsigned int seg_sel);
-
-
-void INT_0(); /**< Eccezione numero 0 - #DE Divide Error*/
-void INT_1(); /**< Eccezione numero 1 - #DB Debug*/
-void INT_2(); /**< Eccezione numero 2 - Non Mascable Interrupt*/
-void INT_3(); /**< Eccezione numero 3 - #BP Breakpoint*/
-void INT_4(); /**< Eccezione numero 4 - #OF Overflow*/
-void INT_5(); /**< Eccezione numero 5 - #BR Bound Range Exception*/
-void INT_6(); /**< Eccezione numero 6 - #UD Invalid OpCode Exception*/
-void INT_7(); /**< Eccezione numero 7 - #NM Device Not Available*/
-void INT_8(); /**< Eccezione numero 8 - #DF Double Fault*/
-void INT_9(); /**< Eccezione numero 9 - Coprocessor Segment Overrun*/
-void INT_10(); /**< Eccezione numero 10 - #TS Invalid TSS*/
-void INT_11(); /**< Eccezione numero 11 - #NP Segment Not Present*/
-void INT_12(); /**< Eccezione numero 12 - #SS Stack Segment Fault*/
-void INT_13(); /**< Eccezione numero 13 - #GP General Protection*/
-void INT_14(); /**< Eccezione numero 14 - #PF Page Fault*/
-void INT_15(); /**< Eccezione numero 15 - #XX Reserverd*/
-void INT_16(); /**< Eccezione numero 16 - #MF Floating Point */
-void INT_17(); /**< Eccezione numero 17 - #AC Alignment Check*/
-void INT_18(); /**< Eccezione numero 18 - #MC Machine Check*/
-void INT_19(); /**< Eccezione numero 19 - #XF Streaming SIMD Exception*/
-
-void INT_32();
-
-void INT_33();
-
-void INT_34();
-
-void INT_35();
-
-void INT_36();
-
-void INT_37();
-
-void INT_38();
-
-void INT_39();
-
-void INT_40();
-
-void INT_41();
-
-void INT_42();
-
-void INT_43();
-
-void INT_44();
-
-void INT_45();
-
-void INT_46();
-
-void INT_47();
-
-void INT_48();
-
-void INT_80();
-
-#endif
+/// @brief Questa funzione si occupa di aggiungere un nuovo segmento alla IDT.
+/// @author Ivan Gualandri
+/// @param index    Indice della IDT.
+/// @param base     Puntatore alla funzione che gestira' l'interrupt/Eccezione
+/// @param options  Le opzioni del descrittore (PRESENT,NOTPRESENT,KERNEL,USER)
+/// @param seg_sel  Il selettore del segmento della GDT.
+void idt_set_gate(uint8_t index,
+                  interrupt_handler_t handler,
+                  uint16_t options,
+                  uint8_t seg_sel);
