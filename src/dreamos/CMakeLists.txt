@@ -154,6 +154,7 @@ set(SOURCE_FILES
         src/system/gdt.c
         src/system/gdt.s
         src/system/isr.c
+        src/system/isr.s
         src/system/idt.c
         src/system/idt.s
         src/system/kheap.c
