@@ -96,6 +96,7 @@ void idt_set_gate(uint8_t index,
     idt_descriptors[index].options = options | INT32_GATE;
 }
 
+#if 0
 EXCEPTION(0);
 EXCEPTION(1);
 EXCEPTION(2);
@@ -117,3 +118,4 @@ EXCEPTION_EC(17);
 EXCEPTION(18);
 EXCEPTION(19);
 SYSCALL(80);
+#endif

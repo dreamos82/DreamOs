@@ -51,6 +51,7 @@
 #define MACHINE_CHECK 18
 #define SIMD_FP_EXC 19
 
+#if 0
 #define EXCEPTION(n)\
 __asm__("   INT_"#n": \
                 pusha; \
@@ -96,6 +97,7 @@ __asm__("   INT_"#n": \
                 movl %eax, %esp; \
                 popa; \
                 iret;")
+#endif
 
 extern IRQ_s * shareHandler[IRQ_NUM];
 
