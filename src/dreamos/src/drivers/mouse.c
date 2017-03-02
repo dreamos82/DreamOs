@@ -27,55 +27,67 @@
 #include <video.h>
 #include <io.h>
 #include <isr.h>
-#include <stdio.h>
+#include <debug.h>
 #include <language.h>
+
+static uint8_t mouse_cycle = 0;
+static int8_t mouse_bytes[3];
+static int32_t mouse_x = (800 / 2);
+static int32_t mouse_y = (600 / 2);
 
 void mouse_install()
 {
+    // Enable the auxiliary mouse device.
     mouse_waitcmd(1);
     outportb(0x64, 0xA8);
+
+    // Enable the interrupts.
     mouse_waitcmd(1);
     outportb(0x64, 0x20);
-    unsigned char status_byte;
     mouse_waitcmd(0);
-    status_byte = (inportb(0x60) | 2);
+    uint8_t status_byte = (inportb(0x60) | 2);
     mouse_waitcmd(1);
     outportb(0x64, 0x60);
     mouse_waitcmd(1);
     outportb(0x60, status_byte);
-    mouse_write(0xF6);
+
+    // Tell the mouse to use default settings
+    mouse_write(MOUSE_USE_DEFAULT_SETTINGS);
+    // Acknowledge.
     mouse_read();
-    mouse_write(0xF4);
-    mouse_read();
-    irq_add_handler(12, mouse_isr);
-    irq_enable(12);
+
+    // Setup the mouse handler.
+    irq_install_handler(12, mouse_isr);
+
+    mouse_enable();
 }
 
-/**
-  * Disable the mouse driver
-  * @author Ivan Gualandri, Diego Stamigni, DT
-  * @version 1.0
-  */
-void mouse_dead()
+void mouse_enable()
 {
-    printf(LNG_MOUSE_REMOVE);
-    irq_disable(MOUSE);
-    mouse_write(0xF5);
+    // Enable the mouse interrupts.
+    irq_enable(MOUSE);
+    // Disable the mouse.
+    mouse_write(MOUSE_ENABLE_PACKET);
+    // Acknowledge.
     mouse_read();
-    _kprintOK();
 }
 
-/**
- * Mouse wait for a command
- * @param type: 1 for sending - 0 for receive
- * @return none
- **/
+void mouse_disable()
+{
+    // Disable the mouse interrupts.
+    irq_disable(MOUSE);
+    // Disable the mouse.
+    mouse_write(MOUSE_DISABLE_PACKET);
+    // Acknowledge.
+    mouse_read();
+}
+
 void mouse_waitcmd(unsigned char type)
 {
     register unsigned int _time_out = 100000;
     if (type == 0)
     {
-        while (_time_out--) // dati
+        while (_time_out--) // DATA
         {
             if ((inportb(0x64) & 1) == 1)
             {
@@ -86,7 +98,7 @@ void mouse_waitcmd(unsigned char type)
     }
     else
     {
-        while (_time_out--) // e segnali
+        while (_time_out--) // SIGNALS
         {
             if ((inportb(0x64) & 2) == 0)
             {
@@ -97,124 +109,113 @@ void mouse_waitcmd(unsigned char type)
     }
 }
 
-/**
- * Send data to mouse
- * @param data data to send
- **/
-void mouse_write(unsigned char a_write)
+void mouse_write(unsigned char data)
 {
     mouse_waitcmd(1);
     outportb(0x64, 0xD4);
     mouse_waitcmd(1);
-    outportb(0x60, a_write);
+    outportb(0x60, data);
 }
 
-/**
- * Read data from mouse
- * @return data received from mouse
- **/
 unsigned char mouse_read()
 {
     mouse_waitcmd(0);
     return inportb(0x60);
 }
 
-void mouse_isr(void)
+void mouse_isr()
 {
-    static unsigned char cycle = 0;
-    static char mouse_bytes[3];
-    mouse_bytes[cycle++] = (char) inportb(0x60);
-    // dichiariamo le due variabili che conterranno le coordinate
-    // e inizializziamole a 0
-    signed long int MousePositionX = 0, MousePositionY = 0;
-
-    // e alliniamolo al centro!
-    // non va bene _SCR_H e _SCR_W
-    //MousePositionX=(_SCR_H/2)-(_SCR_W/2);
-    //MousePositionY=(_SCR_H/2)-(_SCR_W/2);
-    MousePositionX = (800 / 2) - (800 / 2);
-    MousePositionY = (800 / 2) - (600 / 2);
-
-    if (cycle == 3)
+    // Get the input bytes.
+    mouse_bytes[mouse_cycle++] = (char) inportb(0x60);
+    if (mouse_cycle == 3)
     {
-        cycle = 0;
-
-        //if ((mouse_bytes[0] & 0x80) || (mouse_bytes[0] & 0x40))
-        //  return;
-
-        // coordinate x stanno in mouse_bytes[1] e
-        // le coordinate y stanno in mouse_bytes[2]
-        // direzione (0=destra, 1=sinitra)
-
-        //if((mouse_bytes[0] & 0x07)==0) // 0x07 forse non � un valore corretto
+        // Reset the mouse cycle.
+        mouse_cycle = 0;
+        // ----------------------------
+        // Get the X coordinates.
+        // ----------------------------
         if ((mouse_bytes[0] & 0x40) == 0)
         {
-            //if((mouse_bytes[0] & 0x05)==0) // 0x05 forse non � un valore corretto
+            // Bit number 4 of the first byte (value 0x10) indicates that
+            // delta X (the 2nd byte) is a negative number, if it is set.
             if ((mouse_bytes[0] & 0x10) == 0)
             {
-                MousePositionX += mouse_bytes[1];
+                mouse_x -= mouse_bytes[1];
             }
             else
             {
-                MousePositionX -= mouse_bytes[1];
+                mouse_x += mouse_bytes[1];
             }
         }
-        else //overflow
-            MousePositionX += mouse_bytes[1] / 2;
-
-        // direzioni (0=su, 1=sotto)
-        //if((mouse_bytes[0] & 0x08)==0) // 0x08 forse non � un valore corretto
+        else
+        {
+            // Overflow.
+            mouse_x += mouse_bytes[1] / 2;
+        }
+        // ----------------------------
+        // Get the Y coordinates.
+        // ----------------------------
         if ((mouse_bytes[0] & 0x80) == 0)
         {
-            //if((mouse_bytes[0] & 0x06)==0) // 0x06 forse non � un valore corretto
+            // Bit number 5 of the first byte (value 0x20) indicates that
+            // delta Y (the 3rd byte) is a negative number, if it is set.
             if ((mouse_bytes[0] & 0x20) == 0)
             {
-                MousePositionY -= mouse_bytes[2];
+                mouse_y -= mouse_bytes[2];
             }
             else
             {
-                MousePositionY += mouse_bytes[2];
+                mouse_y += mouse_bytes[2];
             }
         }
-        else  // overflow
-            MousePositionY -= mouse_bytes[2] / 2;
+        else
+        {
+            // Overflow.
+            mouse_y -= mouse_bytes[2] / 2;
+        }
+        // ----------------------------
+        // Apply cursor constraint (800x600).
+        // ----------------------------
+        if (mouse_x <= 0)
+        {
+            mouse_x = 0;
+        }
+        else if (mouse_x >= (800 - 16))
+        {
+            mouse_x = 800 - 16;
+        }
+        if (mouse_y <= 0)
+        {
+            mouse_y = 0;
+        }
+        else if (mouse_y >= (600 - 24))
+        {
+            mouse_y = 600 - 24;
+        }
+        // Print the position.
+//        dbg_print("\rX: %d | Y: %d\n", mouse_x, mouse_y);
 
-        // manteniamo il cursore entro i limiti
-        // per uno schermo 800x600
-        // per MousePositionX
-        if (MousePositionX >= 800 - 16)
-            MousePositionX = 800 - 16;
+        // Move the cursor.
+//        _ksetcursor(mouse_x, mouse_y);
 
-        if (MousePositionX <= 0)
-            MousePositionX = 0;
-
-        // e per MousePositionY
-        if (MousePositionY >= 600 - 24)
-            MousePositionY = 600 - 24;
-
-        if (MousePositionY <= 0)
-            MousePositionY = 0;
-
-        // stampa la posizione
-//	printf("\rx: %d | y: %d", MousePositionX, MousePositionY);
-
-        // e muove il cursore
-        //_ksetcursor(MousePositionX, MousePositionY); // Not now
-
-        // Qui � si rilevato un problema, se il mouse si muove
+        // Qui si rilevato un problema, se il mouse si muove
         // vengono rilevati tasti premuti..
-/*
-	// Rilevo i tasti premuti..
-	if (mouse_bytes[0] & 0x4) 
-	    printf(LNG_MOUSE_MID);  // Centrale premuto
-
-	if (mouse_bytes[0] & 0x2) 
-	    printf(LNG_MOUSE_RIGHT);  // Destro premuto
-
-	if (mouse_bytes[0] & 0x1) 
-	    printf(LNG_MOUSE_LEFT);  // Sinistro premuto
-*/
+        // Rilevo i tasti premuti..
+        // Centrale premuto.
+        if ((mouse_bytes[0] & 0x04) == 0)
+        {
+//            dbg_print(LNG_MOUSE_MID);
+        }
+        // Destro premuto.
+        if ((mouse_bytes[0] & 0x02) == 0)
+        {
+//            dbg_print(LNG_MOUSE_RIGHT);
+        }
+        // Sinistro premuto
+        if ((mouse_bytes[0] & 0x01) == 0)
+        {
+//            dbg_print(LNG_MOUSE_LEFT);
+        }
     }
-
 } //End
 

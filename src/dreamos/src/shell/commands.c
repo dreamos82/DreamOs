@@ -1,5 +1,4 @@
 #include <commands.h>
-#include <stddef.h>
 #include <video.h>
 #include <timer.h>
 #include <cpuid.h>
@@ -14,7 +13,6 @@
 #include <fcntl.h>
 #include <clock.h>
 #include <scheduler.h>
-#include <shell.h>
 #include <debug.h>
 
 int argc;
@@ -358,7 +356,7 @@ void drv_load(void)
                 if (_kstrncmp(argv[2], "mouse", 5) == 0)
                 {
                     printf("Disattivamento %s in corso..\n", argv[2]);
-                    mouse_dead();
+                    mouse_disable();
                 }
                 else
                     printf("FATAL: Driver %s not found.\n", argv[2]);

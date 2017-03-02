@@ -52,7 +52,7 @@ void timer_install()
     // Set the timer phase.
     timer_phase(100);
     // Installs 'timer_handler' to IRQ0.
-    irq_add_handler(0, timer_handler);
+    irq_install_handler(0, timer_handler);
 }
 
 void sleep(const unsigned int seconds)

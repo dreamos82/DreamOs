@@ -117,6 +117,6 @@ int irq_get_current();
 /// @version 1.0
 /// @param irq_number   Number of IRQ to serve (from 0 to 16).
 /// @param handler      Function to add.
-void irq_add_handler(uint32_t irq_number, interrupt_handler_t handler);
+void irq_install_handler(uint32_t irq_number, interrupt_handler_t handler);
 
 #endif

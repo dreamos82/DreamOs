@@ -60,7 +60,7 @@ void _kputs(char *);
 
 void _kbackspace();
 
-void _kesetcursor(unsigned int, unsigned int);
+void _ksetcursor(unsigned int x, unsigned int y);
 
 void _kgoto(int, int);
 

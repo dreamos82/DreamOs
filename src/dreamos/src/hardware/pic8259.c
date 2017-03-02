@@ -70,7 +70,7 @@ void irq_init()
         shared_irq_handlers[i] = NULL;
         i++;
     }
-    irq_add_handler(1, keyboard_isr);
+    irq_install_handler(1, keyboard_isr);
 
     // Install the mouse.
     printf(" * "LNG_MOUSE_SETUP);
@@ -166,7 +166,7 @@ int irq_get_current()
     return find_first_bit(cur_irq);
 }
 
-void irq_add_handler(uint32_t irq_number, interrupt_handler_t handler)
+void irq_install_handler(uint32_t irq_number, interrupt_handler_t handler)
 {
     if (irq_number >= IRQ_NUM)
     {
