@@ -31,15 +31,12 @@
 #include <pic8259.h>
 #include <shell.h>
 
-#define LSHIFT_BREAK 0x10E
-#define RSHIFT_BREAK 0x11A
-
-/* A macro from Ivan to update buffer indexes */
+/// A macro from Ivan to update buffer indexes.
 #define STEP(x) ((x) == BUFSIZE-1 ? 0 : x+1)
 
-/* Keyboard maps */
+/// ITALIAN ASCII TABLE
 static int key_it_map[] =
-    { //ITALIAN ASCII TABLE - by sgurtz
+    {
         -1, 27, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48,         //11
         39, 141, 8, 9, 113, 119, 101, 114, 116, 121, 117, 105,  //23
         111, 112, 138, 43, 13, -1, 97, 115, 100, 102, 103, 104, //35
@@ -50,8 +47,9 @@ static int key_it_map[] =
         -1, -1, 60, -1, -1                                      //88
     };
 
+/// ITALIAN ALTERNATIVE ASCII TABLE
 static int shifted_it_map[] =
-    { //ITALIAN ALTERNATIVE ASCII TABLE - by sgurtz
+    {
         -1, -1, 33, 34, 156, 36, 37, 38, 47, 40, 41, 61,    //11
         63, 94, -1, -1, 81, 87, 69, 82, 84, 89, 85, 73,     //23
         79, 80, 130, 42, -1, -1, 65, 83, 68, 70, 71, 72,    //35
@@ -62,32 +60,32 @@ static int shifted_it_map[] =
         -1, -1, 62, -1, -1                                  //88
     };
 
-/* UNUSED static unsigned char pad_map[] = { '7', '8', '9', '0', '4', '5', '6', '0', '1', '2', '3', '0', '0' };*/
-
-/* The buffer where keys are stored */
-static int circlebuf[BUFSIZE];
-static int buf_r = 0, buf_w = 0;
-
-static int * curmap = key_it_map;
-
+/// Circular Buffer where the pressed keys are stored.
+static int circular_buffer[BUFSIZE];
+///
+static int buf_r = 0;
+///
+static int buf_w = 0;
+/// The keyboard map currently used.
+static int * current_map = key_it_map;
 /// Tracks the state of the leds.
 static uint8_t ledstate = 0;
-
-// Variables use to track keyboard states.
-bool_t is_ctrl_pressed;
-bool_t is_shifted;
-bool_t is_tab_pressed;
-bool_t is_num_pressed;
-bool_t is_scroll_pressed;
-
+/// Determines if CRTL is pressed.
+static bool_t is_ctrl_pressed;
+/// Determines if SHIFT is pressed.
+static bool_t is_shifted;
+/// Determines if TAB is pressed.
+static bool_t is_tab_pressed;
+/// Determines if BLOC_NUM is pressed.
+static bool_t is_num_pressed;
+/// Determines if BLOC_SCROLL is pressed.
+static bool_t is_scroll_pressed;
+/// The shadow option is active.
 static bool_t shadow = false;
 
 extern unsigned int last_tab;
 
-/*
- * The keyboard handler
- */
-void keyboard_isr(void)
+void keyboard_isr()
 {
     // Take scancode from the port.
     int scan_code = inportb(0x60);
@@ -101,11 +99,11 @@ void keyboard_isr(void)
     // The right map is selected.
     if ((is_shifted && is_tab_pressed) || (!is_shifted && !is_tab_pressed))
     {
-        curmap = key_it_map;
+        current_map = key_it_map;
     }
     else
     {
-        curmap = shifted_it_map;
+        current_map = shifted_it_map;
     }
 
     // In case of useless break codes, switch controls.
@@ -141,20 +139,20 @@ void keyboard_isr(void)
         case CAPS_LED:
             // Switch the state of the tab pressed.
             is_tab_pressed = (is_tab_pressed) ? false : true;
-            // Activate the led.
-            _ksetleds(is_tab_pressed, false, false);
+            // Update the led state.
+            keyboard_update_leds();
             break;
         case NUM_LED:
             // Switch the state of the num pressed.
             is_num_pressed = (is_num_pressed) ? false : true;
-            // Activate the led.
-            _ksetleds(false, is_num_pressed, false);
+            // Update the led state.
+            keyboard_update_leds();
             break;
         case SCROLL_LED:
             // Switch the state of the scroll pressed.
             is_scroll_pressed = (is_scroll_pressed) ? false : true;
-            // Activate the led.
-            _ksetleds(false, false, is_scroll_pressed);
+            // Update the led state.
+            keyboard_update_leds();
             break;
         case KEY_ESCAPE:
             break;
@@ -163,7 +161,7 @@ void keyboard_isr(void)
             {
                 buf_r = STEP(buf_r);
             }
-            circlebuf[buf_w] = '\b';
+            circular_buffer[buf_w] = '\b';
             buf_w = STEP(buf_w);
             _kbackspace();
             _ksetcursauto();
@@ -173,7 +171,7 @@ void keyboard_isr(void)
             {
                 buf_r = STEP(buf_r);
             }
-            circlebuf[buf_w] = '\n';
+            circular_buffer[buf_w] = '\n';
             buf_w = STEP(buf_w);
             _knewline();
             _ksetcursauto();
@@ -185,7 +183,7 @@ void keyboard_isr(void)
             {
                 buf_r = STEP(buf_r);
             }
-            circlebuf[buf_w] = '\t';
+            circular_buffer[buf_w] = '\t';
             buf_w = STEP(buf_w);
             _ktab();
             _ksetcursauto();
@@ -224,18 +222,18 @@ void keyboard_isr(void)
             // Print numbers if the tab is pressed.
             if (isdigit(key_it_map[scan_code]) && is_tab_pressed)
             {
-                curmap = key_it_map;
+                current_map = key_it_map;
             }
             if (!shadow)
             {
-                putchar(curmap[scan_code]);
+                putchar(current_map[scan_code]);
             }
             // Update buffer.
             if (STEP(buf_w) == buf_r)
             {
                 buf_r = STEP(buf_r);
             }
-            circlebuf[buf_w] = curmap[scan_code];
+            circular_buffer[buf_w] = current_map[scan_code];
             buf_w = STEP(buf_w);
     }
 
@@ -246,59 +244,69 @@ void keyboard_isr(void)
     return;
 }
 
-/*
- * Leds handler
- * 1=Set the led on
- * 0=Set the led off
- * -1=Leave it unchanged
- */
-void _ksetleds(const bool_t capslock,
-               const bool_t numlock,
-               const bool_t scrlock)
+void keyboard_update_leds()
 {
-    // Handle scroll_loc.
-    (scrlock) ? (ledstate |= 1) : (ledstate ^= 1);
-    // Handle num_loc.
-    (numlock) ? (ledstate |= 2) : (ledstate ^= 2);
-    // Handle caps_loc.
-    (capslock) ? (ledstate |= 4) : (ledstate ^= 4);
+    // Handle scroll_loc & num_loc & caps_loc.
+    (is_scroll_pressed) ? (ledstate |= 1) : (ledstate ^= 1);
+    (is_num_pressed) ? (ledstate |= 2) : (ledstate ^= 2);
+    (is_tab_pressed) ? (ledstate |= 4) : (ledstate ^= 4);
     // Write on the port.
     outportb(0x60, 0xED);
     outportb(0x60, ledstate);
 }
 
-/* Need explanations? */
-void keyboard_enable(void)
+void keyboard_enable()
 {
     outportb(0x60, 0xF4);
 }
 
-void keyboard_disable(void)
+void keyboard_disable()
 {
     outportb(0x60, 0xF5);
 }
 
-/*
- * Get a char from the buffer
- * looping until there is something new to read
- */
-int _kgetch(void)
+int keyboard_getc(void)
 {
     int c = -1;
     if (buf_r != buf_w)
     {
-        c = circlebuf[buf_r];
+        c = circular_buffer[buf_r];
         buf_r = STEP(buf_r);
     }
     return c;
 }
 
-void set_shadow(const bool_t value)
+void keyboard_set_shadow(const bool_t value)
 {
     shadow = value;
 }
 
-bool_t get_shadow()
+bool_t keyboard_get_shadow()
 {
     return shadow;
+}
+
+bool_t keyboard_is_ctrl_pressed()
+{
+    return is_ctrl_pressed;
+}
+
+bool_t keyboard_is_shifted()
+{
+    return is_shifted;
+}
+
+bool_t keyboard_is_tab_pressed()
+{
+    return is_tab_pressed;
+}
+
+bool_t keyboard_is_num_pressed()
+{
+    return is_num_pressed;
+}
+
+bool_t keyboard_is_scroll_pressed()
+{
+    return is_scroll_pressed;
 }

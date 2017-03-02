@@ -234,12 +234,13 @@ void test_stat()
 
 void try_shadow()
 {
-    char stringa[30];
-    memset(stringa, '\0', 30);
-    set_shadow(true);
-    scanf("%s", stringa);
-    set_shadow(false);
-    printf("%s\n", stringa);
+    printf("Now try to write something:");
+    char str[30];
+    memset(str, '\0', 30);
+    keyboard_set_shadow(true);
+    scanf("%s", str);
+    keyboard_set_shadow(false);
+    printf("You have written: %s\n", str);
 }
 
 void try_mapaddress()

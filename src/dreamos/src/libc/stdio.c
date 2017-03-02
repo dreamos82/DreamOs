@@ -47,10 +47,9 @@ void putchar(int character)
 int getchar(void)
 {
     int tmpchar;
-    while ((tmpchar = _kgetch()) == -1);
+    while ((tmpchar = keyboard_getc()) == -1);
     return tmpchar;
 }
-
 
 int puts(char * str)
 {

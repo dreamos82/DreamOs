@@ -167,7 +167,7 @@ void shell_get_command()
     {
         // If CTRL is pressed and the current character is c, stop reading
         // the command.
-        if ((is_ctrl_pressed == 1) && (c == 'c'))
+        if ((keyboard_is_ctrl_pressed() == 1) && (c == 'c'))
         {
             // However, the ISR of the keyboard has already put the char.
             // Thus, delete it by using backspace.
@@ -239,11 +239,11 @@ void shell_login()
         lower_bound_x = _kgetcolumn();
         lower_bound_y = _kgetline();
         // Set the shadow option.
-        set_shadow(true);
+        keyboard_set_shadow(true);
         // Get the password.
         scanf("%50s", credentials.password);
         // Disable the shadow option.
-        set_shadow(false);
+        keyboard_set_shadow(false);
         // ----------------------------
         // Check if the data are correct.
         if (check_credentials(&credentials))
