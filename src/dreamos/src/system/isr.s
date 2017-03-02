@@ -19,21 +19,21 @@
 %macro EXCEPTION_EC 1
     [GLOBAL INT_%1]
     INT_%1:
-        nop;
-        xchg eax, [esp];
-        push ecx
-        push edx
-        mov edx,    0x10;
-        mov dx,     ds;
-        mov dx,     es;
-        mov dx,     fs;
-        push eax
-        push %1                     ; Push the interrupt number.
-        call [IntTable + (4 * %1)]  ; Call the interrupt
-        add esp, 8
-        pop edx;
-        pop ecx;
-        pop eax;
+        nop
+        xchg    [esp], eax
+        push    ecx
+        push    edx
+        mov     edx, 0x10
+        mov     ds, dx
+        mov     es, dx
+        mov     fs, dx
+        push    eax
+        push    %1                     ; Push the interrupt number.
+        call    [IntTable + (4 * %1)]  ; Call the interrupt
+        add     esp, 8
+        pop     edx
+        pop     ecx
+        pop     eax
         iret                        ; pops 5 things at once:
                                     ;   CS, EIP, EFLAGS, SS, and ESP
 %endmacro
