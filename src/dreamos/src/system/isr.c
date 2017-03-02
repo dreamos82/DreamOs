@@ -24,12 +24,12 @@
 #include <isr.h>
 #include <video.h>
 #include <io.h>
-#include <stdio.h>
 #include <scheduler.h>
 #include <descriptor_tables.h>
 #include <vm.h>
+#include <debug.h>
 
-IRQ_s * shareHandler[IRQ_NUM];
+irq_struct_t * shared_irq_handlers[IRQ_NUM];
 
 void init_isr()
 {
@@ -37,157 +37,133 @@ void init_isr()
     {
         if (it > 19 && it < 32)
         {
-            kernel_add_interrupt_function_table(it, _int_rsv);
+            kernel_add_interrupt_function_table(it, reserved_exception);
         }
         else if (it > 31 && it < 48)
         {
-            kernel_add_interrupt_function_table(it, _irqinterrupt);
+            kernel_add_interrupt_function_table(it, interrupt_handler);
         }
         else
         {
-            kernel_add_interrupt_function_table(it, _globalException);
+            kernel_add_interrupt_function_table(it, global_exception);
         }
     }
 }
 
-void _globalException(int n, int error)
+void global_exception(int n, int error)
 {
     switch (n)
     {
-
         case DIVIDE_ERROR:
             _kputs("Divide Error\n");
             break;
-
         case DEBUG_EXC:
             _kputs("Debug Exception\n");
             break;
-
         case NMI_INTERRUPT:
             _kputs("NMI Exception\n");
             break;
-
         case OVERFLOW:
             _kputs("OverFlow Exception\n");
             break;
-
         case BOUND_RANGE_EXCEED:
             _kputs("Bound Exception\n");
             break;
-
         case DEV_NOT_AVL:
             _kputs("Device Not Available Exception\n");
             break;
-
         case COPROC_SEG_OVERRUN:
             _kputs("CoProcessor Segment Overrun\n");
             break;
-
         case BREAKPOINT:
             _kputs("BreakPoint\n");
             break;
-
         case INVALID_TSS:
             _kputs("Invalid TSS\n");
             break;
-
         case SEGMENT_NOT_PRESENT:
             _kputs("Segment Not Present\n");
             break;
-
         case STACK_SEGMENT_FAULT:
             _kputs("Stack Segment Fault Exception\n");
             break;
-
         case GENERAL_PROTECTION:
             _kputs("General Protection Exception\n");
             break;
-
         case INVALID_OPCODE:
             _kputs("Invalid Opcode Exception\n");
             break;
-
         case PAGE_FAULT:
             page_fault_handler(error);
             break;
-
         case INT_RSV:
             _kputs("Intel Reserved\n");
             break;
-
         case FLOATING_POINT_ERR:
             _kputs("Floating Point Exception\n");
             break;
-
         case ALIGNMENT_CHECK:
             _kputs("Alignment Check Exception\n");
             break;
-
         case MACHINE_CHECK:
             _kputs("Machine Check Exception\n");
             break;
-
         case DOUBLE_FAULT:
             _kputs("Double Fault Exception\n");
             break;
-
         case SIMD_FP_EXC:
             _kputs("Simd Floating Point Exception\n");
             break;
-
         default:
             _kputs("Unknown exception\n");
             break;
-
     }
 }
 
-void _irqinterrupt()
+void interrupt_handler()
 {
     __asm__ __volatile__("cli;");
-    int irqn;
-    irqn = irq_get_current();
-    IRQ_s * tmpHandler;
-    if (irqn >= 0)
+    // Get the current interrupt request number.
+    int irq_num = irq_get_current();
+    if (irq_num >= 0)
     {
-        tmpHandler = shareHandler[irqn];
-        if (tmpHandler != 0)
+        irq_struct_t * irq_struct = shared_irq_handlers[irq_num];
+        if (irq_struct != NULL)
         {
-            tmpHandler->IRQ_func();
-//	    	#ifdef DEBUG
-//	    		printf("2 - IRQ_func: %d, %d\n", tmpHandler->IRQ_func, tmpHandler);
-//	    	#endif
-            while (tmpHandler->next != NULL)
+            do
             {
-                tmpHandler = tmpHandler->next;
-                #ifdef DEBUG
-                printf("1 - IRQ_func (_prova): %d, %d\n",
-                       tmpHandler->IRQ_func,
-                       tmpHandler);
-                #endif
-                if (tmpHandler != 0) tmpHandler->IRQ_func();
-            }
+                // Call the interrupt function.
+                irq_struct->handler();
+                // Move to the next interrupt function.
+                irq_struct = irq_struct->next;
+            } while (irq_struct != NULL);
         }
-        else printf("irqn: %d\n", irqn);
+        else
+        {
+            dbg_print("Can't find irq_num: %d\n", irq_num);
+        }
     }
-    else printf("IRQ N: %d E' arrivato qualcosa che non so gestire ", irqn);
-    if (irqn <= 8 && irqn != 2)
+    else
+    {
+        dbg_print("Can't handle irq_num: %d\n", irq_num);
+    }
+    if (irq_num <= 8 && irq_num != 2)
     {
         outportb(MASTER_PORT, EOI);
     }
-    else if (irqn <= 16 || irqn == 2)
+    else if (irq_num <= 16 || irq_num == 2)
     {
         outportb(SLAVE_PORT, EOI);
         outportb(MASTER_PORT, EOI);
     }
-
+    // Call the scheduler.
     schedule();
     __asm__ __volatile__("sti;");
     return;
 }
 
-void _int_rsv()
+void reserved_exception()
 {
-    _kputs("Eccezione Riservata - PANIC\n");
+    _kputs("Reserved Exception - PANIC\n");
     while (1);
 }

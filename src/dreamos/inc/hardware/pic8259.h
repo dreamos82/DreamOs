@@ -20,31 +20,36 @@
 #define _PIC8259_H
 
 #include <stddef.h>
+#include <idt.h>
 
-#define MASTER_PORT 0x20
-#define SLAVE_PORT 0xA0
+#define MASTER_PORT     0x20
+#define SLAVE_PORT      0xA0
 
-#define MASTER_PORT_1 0x21
-#define SLAVE_PORT_1 0xA1
+#define MASTER_PORT_1   0x21
+#define SLAVE_PORT_1    0xA1
 
-#define ICW_1 0x11
+#define ICW_1           0x11
 
-#define ICW_2_M 0x20
-#define ICW_2_S 0x28
+#define ICW_2_M         0x20
+#define ICW_2_S         0x28
 
-#define ICW_3_M 0x04
-#define ICW_3_S 0x02
+#define ICW_3_M         0x04
+#define ICW_3_S         0x02
 
-#define ICW_4 0x01
+#define ICW_4           0x01
 
-#define GET_IRR_STATUS 0x0b
+#define GET_IRR_STATUS  0x0b
 
-#define EOI 0x20
+#define EOI             0x20
 
-#define IRQ_NUM 16
+#define IRQ_NUM         16
 
+extern byte_t master_cur_mask;
 
-typedef enum __attribute__ ((__packed__)) IRQ_t
+extern byte_t slave_cur_mask;
+
+/// @brief Types of irq.
+typedef enum __attribute__ ((__packed__)) irq_type_t
 {
     TIMER,
     KEYBOARD,
@@ -62,31 +67,56 @@ typedef enum __attribute__ ((__packed__)) IRQ_t
     MATH_CPU,
     FIRST_HD,
     SECOND_HD
-} IRQ_t;
+} irq_type_t;
 
-/*!
-    \struct IRQ_s
-    \brief Struttura dati per gestire gli IRQ  condivisi
-*/
-typedef struct IRQ_struct
+/// @brief Struttura dati per gestire gli IRQ  condivisi
+typedef struct irq_struct_t
 {
-    void (* IRQ_func)();/**< Puntatore alla funzione handler di un IRQ*/
-    struct IRQ_struct * next;/**< Prossimo handler per questo IRQ*/
-} IRQ_s;
+    /// Puntatore alla funzione handler di un IRQ.
+    interrupt_handler_t handler;
+    /// Prossimo handler per questo IRQ
+    struct irq_struct_t * next;
+} irq_struct_t;
 
-extern byte_t master_cur_mask;
-extern byte_t slave_cur_mask;
-
+/// @brief Funzione che inizializza il processore pic 8259 che gestira' le
+/// interruzioni.
+/// @author Ivan Gualandri
+/// @version 1.1
 void irq_init();
 
+/// @brief Registers the interrupt functions inside the IDT.
 void irq_setup();
 
-int irq_enable(IRQ_t);
+/// @brief This function, enable irqs on the pic.
+/// @details This function provide a tool for enabling irq from the pic
+/// processor.
+/// @author Ivan Gualandri
+/// @version 1.0
+/// @param irq number of irq to enable.
+/// @return 0 if all OK, -1 on errors
+int irq_enable(irq_type_t);
 
-int irq_disable(IRQ_t);
+/// @brief This function, disable irqs on the pic.
+/// @details This function provide a tool for enabling irq from the pic
+/// processor.
+/// @author Ivan Gualandri
+/// @version 1.0
+/// @param irq number of irq to enable.
+/// @return 0 if all OK, -1 on errors
+int irq_disable(irq_type_t irq);
 
+/// @brief This Function return the number of current IRQ Request.
+/// @author Ivan Gualandri
+/// @version 1.0
+/// @return Number of IRQ + 1 currently serving. If 0 there are no IRQ
 int irq_get_current();
 
-void irq_add_handler(int, void (* func)());
+
+/// @brief This Function add an IRQ Handler to the givent irq number.
+/// @author Ivan Gualandri
+/// @version 1.0
+/// @param irq_number   Number of IRQ to serve (from 0 to 16).
+/// @param handler      Function to add.
+void irq_add_handler(uint32_t irq_number, interrupt_handler_t handler);
 
 #endif

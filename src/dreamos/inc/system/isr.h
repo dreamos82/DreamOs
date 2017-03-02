@@ -25,31 +25,28 @@
 #ifndef _HANDLERS_H
 #define _HANDLERS_H
 
-#include <idt.h>
 #include <pic8259.h>
 
-//  #define DEBUG 1
-
-#define DIVIDE_ERROR 0
-#define DEBUG_EXC 1
-#define NMI_INTERRUPT 2
-#define BREAKPOINT 3
-#define OVERFLOW 4
-#define BOUND_RANGE_EXCEED 5
-#define INVALID_OPCODE 6
-#define DEV_NOT_AVL 7
-#define DOUBLE_FAULT 8
-#define COPROC_SEG_OVERRUN 9
-#define INVALID_TSS 10
-#define SEGMENT_NOT_PRESENT 11
-#define STACK_SEGMENT_FAULT 12
-#define GENERAL_PROTECTION 13
-#define PAGE_FAULT 14
-#define INT_RSV 15
-#define FLOATING_POINT_ERR 16
-#define ALIGNMENT_CHECK 17
-#define MACHINE_CHECK 18
-#define SIMD_FP_EXC 19
+#define DIVIDE_ERROR            0
+#define DEBUG_EXC               1
+#define NMI_INTERRUPT           2
+#define BREAKPOINT              3
+#define OVERFLOW                4
+#define BOUND_RANGE_EXCEED      5
+#define INVALID_OPCODE          6
+#define DEV_NOT_AVL             7
+#define DOUBLE_FAULT            8
+#define COPROC_SEG_OVERRUN      9
+#define INVALID_TSS             10
+#define SEGMENT_NOT_PRESENT     11
+#define STACK_SEGMENT_FAULT     12
+#define GENERAL_PROTECTION      13
+#define PAGE_FAULT              14
+#define INT_RSV                 15
+#define FLOATING_POINT_ERR      16
+#define ALIGNMENT_CHECK         17
+#define MACHINE_CHECK           18
+#define SIMD_FP_EXC             19
 
 #if 0
 #define EXCEPTION(n)\
@@ -99,7 +96,8 @@ __asm__("   INT_"#n": \
                 iret;")
 #endif
 
-extern IRQ_s * shareHandler[IRQ_NUM];
+/// List of shared IRQs.
+extern irq_struct_t * shared_irq_handlers[IRQ_NUM];
 
 /// @brief Questa funzione si occupa di inizializzare la tabella di funzioni
 /// che gestiscono le interruzioni ed eccezioni.
@@ -108,10 +106,10 @@ void init_isr();
 
 /// @brief Questa funzione gestira a livello centralizzato le varie eccezioni.
 /// @author Ivan Gualandri
-void _globalException(int n, int error);
+extern void global_exception(int n, int error);
 
-extern void _irqinterrupt();
+extern void interrupt_handler();
 
-void _int_rsv();
+extern void reserved_exception();
 
 #endif

@@ -17,7 +17,6 @@
  */
 
 #include <pic8259.h>
-#include <idt.h>
 #include <isr.h>
 #include <video.h>
 #include <io.h>
@@ -30,17 +29,10 @@
 #include <language.h>
 #include <descriptor_tables.h>
 
-//IRQ_s *shareHandler[IRQ_NUM];
-// IRQ_s shareHandler[16];
-// IRQ_s *tmpHandler;
 byte_t master_cur_mask;
+
 byte_t slave_cur_mask;
 
-/**
-  * Funzione che inizializza il processore pic 8259 che gestira' le interruzioni
-  * @author Ivan Gualandri
-  * @version 1.1
-  */
 void irq_init()
 {
     int i;
@@ -75,7 +67,7 @@ void irq_init()
     i = 0;
     while (i < IRQ_NUM)
     {
-        shareHandler[i] = NULL;
+        shared_irq_handlers[i] = NULL;
         i++;
     }
     irq_add_handler(1, keyboard_isr);
@@ -112,14 +104,7 @@ void irq_setup()
     idt_set_gate(48, INT_48, PRESENT | KERNEL, 0x8);
 }
 
-/** This function, enable irqs on the pic.
-  * @author Ivan Gualandri
-  * @version 1.0
-  * @param irq number of irq to enable.
-  * @return 0 if all OK, -1 on errors
-  * This function provide a tool for enabling irq from the pic processor. 
-  */
-int irq_enable(IRQ_t irq)
+int irq_enable(irq_type_t irq)
 {
     byte_t cur_mask;
     byte_t new_mask;
@@ -145,14 +130,7 @@ int irq_enable(IRQ_t irq)
     return -1;
 }
 
-/** This function, disable irqs on the pic.
-  * @author Ivan Gualandri
-  * @version 1.0
-  * @param irq number of irq to enable.
-  * @return 0 if all OK, -1 on errors
-  * This function provide a tool for enabling irq from the pic processor. 
-  */
-int irq_disable(IRQ_t irq)
+int irq_disable(irq_type_t irq)
 {
     byte_t cur_mask;
     if (irq < 15)
@@ -175,74 +153,63 @@ int irq_disable(IRQ_t irq)
     return -1;
 }
 
-/** This Function return the number of current IRQ Request.
-  * @author Ivan Gualandri
-  * @version 1.0
-  * @return  Number of IRQ + 1 currently serving. If 0 there are no IRQ
-  **/
 int irq_get_current()
 {
-    int cur_irq;
     outportb(MASTER_PORT, GET_IRR_STATUS);
-    cur_irq = inportb(MASTER_PORT);
+    int cur_irq = inportb(MASTER_PORT);
     if (cur_irq == 4)
     {
         outportb(SLAVE_PORT, GET_IRR_STATUS);
         cur_irq = inportb(SLAVE_PORT);
-        //printf("Slave irq number: %d\n", cur_irq);
         return 8 + find_first_bit(cur_irq);
     }
     return find_first_bit(cur_irq);
 }
 
-/** This Function add an IRQ Handler to the givent irq number
-  * @author Ivan Gualandri
-  * @version 1.0
-  * @param irq_number number of IRQ to serve (from 0 to 16)
-  * @param func function to add
-  * @return  None
-  **/
-void irq_add_handler(int irq_number, void (* func)())
+void irq_add_handler(uint32_t irq_number, interrupt_handler_t handler)
 {
-    if (irq_number < 16)
+    if (irq_number >= IRQ_NUM)
     {
-        IRQ_s * tmpHandler;
-        tmpHandler = shareHandler[irq_number];
-        if (shareHandler[irq_number] == NULL)
-        {
-            shareHandler[irq_number] = (IRQ_s *) kernel_alloc_page();
-            shareHandler[irq_number]->next = NULL;
-            shareHandler[irq_number]->IRQ_func = func;
-        }
-        else
-        {
-            while (tmpHandler->next != NULL)
-            {
-                tmpHandler = tmpHandler->next;
-            }
-            tmpHandler->next = (IRQ_s *) kernel_alloc_page();
-            tmpHandler = tmpHandler->next;
-            tmpHandler->next = NULL;
-            tmpHandler->IRQ_func = func;
-        }
+        return;
     }
-    else return;
+
+    irq_struct_t * tmpHandler;
+    tmpHandler = shared_irq_handlers[irq_number];
+    if (shared_irq_handlers[irq_number] == NULL)
+    {
+        shared_irq_handlers[irq_number] = (irq_struct_t *) kernel_alloc_page();
+        shared_irq_handlers[irq_number]->next = NULL;
+        shared_irq_handlers[irq_number]->handler = handler;
+    }
+    else
+    {
+        while (tmpHandler->next != NULL)
+        {
+            tmpHandler = tmpHandler->next;
+        }
+        tmpHandler->next = (irq_struct_t *) kernel_alloc_page();
+        tmpHandler = tmpHandler->next;
+        tmpHandler->next = NULL;
+        tmpHandler->handler = handler;
+    }
 }
 
-//IRQ(32);
-//IRQ(33);
-//IRQ(34);
-//IRQ(35);
-//IRQ(36);
-//IRQ(37);
-//IRQ(38);
-//IRQ(39);
-//IRQ(40);
-//IRQ(41);
-//IRQ(42);
-//IRQ(43);
-//IRQ(44);
-//IRQ(45);
-//IRQ(46);
-//IRQ(47);
-//IRQ(48);
+#if 0
+IRQ(32);
+IRQ(33);
+IRQ(34);
+IRQ(35);
+IRQ(36);
+IRQ(37);
+IRQ(38);
+IRQ(39);
+IRQ(40);
+IRQ(41);
+IRQ(42);
+IRQ(43);
+IRQ(44);
+IRQ(45);
+IRQ(46);
+IRQ(47);
+IRQ(48);
+#endif

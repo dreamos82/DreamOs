@@ -1,5 +1,5 @@
 [EXTERN IntTable]
-[EXTERN _irqinterrupt]
+[EXTERN interrupt_handler]
 [EXTERN syscall_handler]
 
 %macro EXCEPTION 1
@@ -44,7 +44,7 @@
         pusha                       ; Pushes edi,esi,ebp,esp,ebx,edx,ecx,eax
         mov     eax, esp;
         push    eax;
-        call    _irqinterrupt       ; Call the interrupt
+        call    interrupt_handler   ; Call the interrupt handler.
         pop     eax;
         mov     esp, eax;
         popa                        ; Pops edi,esi,ebp...
