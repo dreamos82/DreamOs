@@ -51,16 +51,51 @@
 #define MACHINE_CHECK 18
 #define SIMD_FP_EXC 19
 
+#define EXCEPTION(n)\
+__asm__("   INT_"#n": \
+                pusha; \
+                pushl $"#n"; \
+                call *(IntTable+(4*"#n")); \
+                add $4, %esp; \
+                popa; \
+                iret;")
+
+#define EXCEPTION_EC(n)\
+__asm__("   INT_"#n": \
+                nop; \
+                xchgl %eax, (%esp); \
+                pushl %ecx; \
+                pushl %edx; \
+                movl $0x10, %edx; \
+                movw %dx, %ds; \
+                movw %dx, %es; \
+                movw %dx, %fs; \
+                pushl %eax; \
+                pushl $"#n"; \
+                call *(IntTable+(4*"#n")); \
+                add $8, %esp; \
+                popl %edx; \
+                popl %ecx; \
+                popl %eax; \
+                iret;")
+
+#define SYSCALL(n)\
+__asm__("   INT_"#n": \
+                pusha; \
+                call syscall_handler; \
+                popa; \
+                iret;")
+
 #define IRQ(n)\
-    __asm__("INT_"#n":"\
-            "pusha;"\
-            "movl %esp, %eax;"\
-            "pushl %eax;"\
-            "call _irqinterrupt;"\
-            "popl %eax;"\
-            "movl %eax, %esp;"\
-            "popa;"\
-            "iret;")
+__asm__("   INT_"#n": \
+                pusha; \
+                movl %esp, %eax; \
+                pushl %eax; \
+                call _irqinterrupt; \
+                popl %eax; \
+                movl %eax, %esp; \
+                popa; \
+                iret;")
 
 extern IRQ_s * shareHandler[IRQ_NUM];
 

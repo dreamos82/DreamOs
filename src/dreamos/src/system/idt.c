@@ -95,3 +95,25 @@ void idt_set_gate(uint8_t index,
     idt_descriptors[index].seg_selector = seg_sel;
     idt_descriptors[index].options = options | INT32_GATE;
 }
+
+EXCEPTION(0);
+EXCEPTION(1);
+EXCEPTION(2);
+EXCEPTION(3);
+EXCEPTION(4);
+EXCEPTION(5);
+EXCEPTION(6);
+EXCEPTION(7);
+EXCEPTION_EC(8);
+EXCEPTION(9);
+EXCEPTION_EC(10);
+EXCEPTION_EC(11);
+EXCEPTION_EC(12);
+EXCEPTION_EC(13);
+EXCEPTION_EC(14);
+EXCEPTION(15);
+EXCEPTION(16);
+EXCEPTION_EC(17);
+EXCEPTION(18);
+EXCEPTION(19);
+SYSCALL(80);

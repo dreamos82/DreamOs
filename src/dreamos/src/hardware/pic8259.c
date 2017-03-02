@@ -36,24 +36,6 @@
 byte_t master_cur_mask;
 byte_t slave_cur_mask;
 
-//IRQ(32);
-//IRQ(33);
-//IRQ(34);
-//IRQ(35);
-//IRQ(36);
-//IRQ(37);
-//IRQ(38);
-//IRQ(39);
-//IRQ(40);
-//IRQ(41);
-//IRQ(42);
-//IRQ(43);
-//IRQ(44);
-//IRQ(45);
-//IRQ(46);
-//IRQ(47);
-//IRQ(48);
-
 /**
   * Funzione che inizializza il processore pic 8259 che gestira' le interruzioni
   * @author Ivan Gualandri
@@ -247,3 +229,20 @@ void irq_add_handler(int irq_number, void (* func)())
     else return;
 }
 
+IRQ(32);
+IRQ(33);
+IRQ(34);
+IRQ(35);
+IRQ(36);
+IRQ(37);
+IRQ(38);
+IRQ(39);
+IRQ(40);
+IRQ(41);
+IRQ(42);
+IRQ(43);
+IRQ(44);
+IRQ(45);
+IRQ(46);
+IRQ(47);
+IRQ(48);
