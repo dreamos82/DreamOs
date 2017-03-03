@@ -124,5 +124,5 @@ void schedule()
     thread_list_t * new_thread = ready_queue;
     ready_queue = ready_queue->next;
     // Switch to the new thread.
-    switch_thread(current_thread, new_thread);
+    switch_thread(&current_thread, new_thread);
 }

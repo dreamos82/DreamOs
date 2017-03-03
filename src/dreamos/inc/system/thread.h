@@ -78,7 +78,4 @@ thread_t * kernel_create_thread(int (* fn)(void *),
                                 void * arg,
                                 uint32_t * stack);
 
-void switch_thread(struct thread_list * current,
-                   struct thread_list * next);
-
 #endif

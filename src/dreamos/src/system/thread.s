@@ -1,10 +1,10 @@
     [global switch_thread]
-    [extern current_thread]
 
 switch_thread:
     ; --------------------------------------------------------------------------
     ; Take the first argument.
-    mov eax, [esp +  4]         ; (struct thread_list * current)
+    mov eax, [esp +  4]         ; (struct thread_list ** current)
+    mov eax, [eax     ]         ; (struct thread_list *  current)
     mov eax, [eax     ]         ; (struct thread_list   current)
 
     ; --------------------------------------------------------------------------
@@ -23,8 +23,12 @@ switch_thread:
 
     ; --------------------------------------------------------------------------
     ; Take the second argument.
-    mov eax, [esp +  8]         ; (struct thread_list * next)
-    mov [current_thread], eax   ; Change the pointer of current_thread to next.
+    mov eax, [esp +  8]         ; EAX = (struct thread_list * next)
+    ; Change the pointer of current_thread to next.
+    mov edx, [esp +  4]         ; EDX = (struct thread_list ** current)
+    ; Now copy the pointer to the next thread inside the pointer to the current.
+    mov [edx], eax              ; C equivalent: (*current) = next;
+    ; Deference again so that we have inside EAX the structu of the next thread.
     mov eax, [eax     ]         ; (struct thread_list next)
 
     ; --------------------------------------------------------------------------

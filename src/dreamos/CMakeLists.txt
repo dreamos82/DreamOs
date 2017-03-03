@@ -163,10 +163,10 @@ set(SOURCE_FILES
         src/system/scheduler.c
         src/system/syscall.c
         src/system/thread.c
+        src/system/thread.s
         src/system/vm.c
         src/system/mutex.c
-        src/kernel.c
-        src/system/thread_asm.s)
+        src/kernel.c)
 
 # ------------------------------------------------------------------------------
 # Add the executable.
