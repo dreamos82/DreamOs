@@ -308,7 +308,7 @@ void try_thread()
 int sleeping_thread(void * args)
 {
     (void) args;
-    sleep(10);
+    sleep(4);
     return 0;
 }
 

@@ -21,10 +21,8 @@
 //
 
 #include <scheduler.h>
-#include <thread.h>
 #include <string.h>
 #include <kheap.h>
-#include <debug.h>
 
 thread_list_t * ready_queue = NULL;
 thread_list_t * current_thread = NULL;
@@ -127,4 +125,5 @@ void schedule()
     ready_queue = ready_queue->next;
     // Switch to the new thread.
     switch_thread(new_thread);
+    switch_thread_2(current_thread, new_thread);
 }

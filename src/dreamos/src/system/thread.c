@@ -23,7 +23,6 @@
 #include <thread.h>
 #include <kheap.h>
 #include <scheduler.h>
-#include <stdio.h>
 #include <string.h>
 #include <debug.h>
 
@@ -74,7 +73,10 @@ thread_t * kernel_create_thread(int (* fn)(void *),
     // Set the name of the thread.
     memset(thread->name, '\0', 50);
     strcpy(thread->name, name);
-    printf("\nRunning thread %s with id %d\n", thread->name, thread->id);
+    dbg_print("\nRunning thread %s with id %d and flags %d\n",
+              thread->name,
+              thread->id,
+              thread->eflags);
     // Activate the thread.
     kernel_activate_thread(thread);
     return thread;
@@ -86,32 +88,10 @@ void thread_exit()
     uint32_t exit_value = 0;
     __asm__("movl %%eax, %0" : "=r" (exit_value));
     thread_t * current = kernel_get_current_thread();
-    dbg_print("\nThread %d exited with value %d\n", current->id, exit_value);
+    dbg_print("\nThread %d exited with value %d, flags %d\n",
+              current->id,
+              exit_value,
+              current->eflags);
     current->exit = 1;
     while (TRUE);
-}
-
-void switch_thread_v2(struct thread_list * next)
-{
-    thread_t * current_thread = kernel_get_current_thread();
-
-    __asm__("mov %0, %%esp" : "=r" (current_thread->esp));
-    __asm__("mov %0, %%ebp" : "=r" (current_thread->ebp));
-    __asm__("mov %0, %%ebx" : "=r" (current_thread->ebx));
-    __asm__("mov %0, %%esi" : "=r" (current_thread->esi));
-    __asm__("mov %0, %%edi" : "=r" (current_thread->edi));
-    __asm__("pushf");
-    __asm__("pop %0" : "=r" (current_thread->eflags));
-
-    // Handle the next function?
-    __asm__("mov %%eax, %0" : "=r" (next));
-    __asm__("mov %%esp, %0" : "=r" (next->thread->esp));
-    __asm__("mov %%ebp, %0" : "=r" (next->thread->ebp));
-    __asm__("mov %%ebx, %0" : "=r" (next->thread->ebx));
-    __asm__("mov %%esi, %0" : "=r" (next->thread->esi));
-    __asm__("mov %%edi, %0" : "=r" (next->thread->edi));
-    __asm__("push %0" : "=r" (next->thread->eflags));
-    __asm__("popf");
-
-    __asm__("ret");
 }

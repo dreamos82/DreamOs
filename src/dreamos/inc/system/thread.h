@@ -80,6 +80,7 @@ thread_t * kernel_create_thread(int (* fn)(void *),
 
 void switch_thread(struct thread_list * next);
 
-void switch_thread_v2(struct thread_list * next);
+void switch_thread_2(struct thread_list * current,
+                     struct thread_list * next);
 
 #endif
