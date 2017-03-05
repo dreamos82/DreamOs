@@ -14,6 +14,7 @@
 #include <queue.h>
 #include <mutex.h>
 #include <scheduler.h>
+#include <spinlock.h>
 
 char * module_start;
 file_descriptor_t fd_list[_SC_OPEN_MAX];
@@ -260,35 +261,33 @@ void try_mapaddress()
     //free (tmp);
 }
 
-mutex_t mutex;
+spinlock_t spinlock;
 
 int task_test_1(void * args)
 {
     (void) args;
-    printf("Task 1: I'm waiting for the mutex...\n");
-    thread_t * current_thread = kernel_get_current_thread();
-    mutex_lock(&mutex, current_thread->id);
-    printf("Task 1: I'm in control...\n");
-    mutex_unlock(&mutex);
+    printf("Task 1: I'm waiting for the spinlock...\n");
+    spinlock_lock(&spinlock);
+    printf("Task 1: I'm in control of the spinlock...\n");
+    spinlock_unlock(&spinlock);
     return 0;
 }
 
 int task_test_2(void * args)
 {
     (void) args;
-    printf("Task 2: I'm waiting for the mutex...\n");
-    thread_t * current_thread = kernel_get_current_thread();
-    mutex_lock(&mutex, current_thread->id);
-    printf("Task 2: I'm in control...\n");
-    mutex_unlock(&mutex);
+    printf("Task 2: I'm waiting for the spinlock...\n");
+    spinlock_lock(&spinlock);
+    printf("Task 2: I'm in control of the spinlock...\n");
+    spinlock_unlock(&spinlock);
     return 0;
 }
 
 void try_thread()
 {
     printf("Testing task creation functions...\n");
-    thread_t * current_thread = kernel_get_current_thread();
-    mutex_lock(&mutex, current_thread->id);
+    spinlock_init(&spinlock);
+    spinlock_lock(&spinlock);
     __asm__ __volatile__("cli;");
     thread_t * thread1 = kernel_create_thread(task_test_1,
                                               "task_test_1",
@@ -302,7 +301,7 @@ void try_thread()
     printf("Task 2, pid: %d\n", thread2->id);
     __asm__ __volatile__("sti;");
     sleep(5);
-    mutex_unlock(&mutex);
+    spinlock_unlock(&spinlock);
 }
 
 int sleeping_thread(void * args)

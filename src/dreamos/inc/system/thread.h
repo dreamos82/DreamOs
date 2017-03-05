@@ -24,6 +24,7 @@
 #define THREAD_H
 
 #include <stdint.h>
+#include <stddef.h>
 
 struct thread_list;
 
@@ -65,7 +66,7 @@ typedef struct thread
     /// Register which hold the state of the processor.
     uint32_t eflags;
     /// The id of the thread.
-    uint32_t id;
+    pid_t id;
     /// The command executed by the thread.
     char name[50];
     /// The exit flag. When set to 1, the scheduler will deactivate the thread.

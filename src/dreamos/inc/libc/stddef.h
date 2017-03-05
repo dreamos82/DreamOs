@@ -49,5 +49,6 @@ typedef unsigned int size_t;
 typedef unsigned long long qword;
 typedef unsigned short int ushort;
 typedef unsigned char byte_t;
+typedef int pid_t;
 
 #endif

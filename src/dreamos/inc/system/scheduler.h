@@ -26,6 +26,8 @@
 #include <thread.h>
 #include <stdint.h>
 
+#define MAX_THREADS 256
+
 typedef struct thread_list
 {
     thread_t * thread;
