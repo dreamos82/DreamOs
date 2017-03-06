@@ -21,10 +21,10 @@
 //
 
 #include <kheap.h>
-#include <stdio.h>
 #include <paging.h>
 #include <vm.h>
 #include <debug.h>
+#include <string.h>
 
 static void alloc_chunk(uint32_t start, uint32_t len);
 
@@ -90,6 +90,13 @@ void * kmalloc(size_t size)
         prev_header->next = cur_header;
     }
     return (void *) (chunk_start + sizeof(header_t));
+}
+
+void * kcalloc(uint32_t num, uint32_t size)
+{
+    void * ptr = kmalloc(num * size);
+    memset(ptr, 0, num * size);
+    return ptr;
 }
 
 void kfree(void * p)

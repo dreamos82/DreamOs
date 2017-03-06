@@ -140,6 +140,8 @@ set(SOURCE_FILES
         src/libc/queue.c
         src/libc/stdlib.c
         src/libc/spinlock.c
+        src/libc/list.c
+        src/libc/generic_tree.c
         src/misc/bitops.c
         src/misc/clock.c
         src/misc/debug.c
