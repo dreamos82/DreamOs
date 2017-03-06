@@ -9,7 +9,7 @@ list_t * list_create()
     return list;
 }
 
-uint32_t list_size(list_t * list)
+size_t list_size(list_t * list)
 {
     if (!list) return 0;
     return list->size;
@@ -141,7 +141,7 @@ int list_contain(list_t * list, void * val)
 
 listnode_t * list_get_node_by_index(list_t * list, size_t index)
 {
-    if (index < 0 || index >= list_size(list))
+    if (index >= list_size(list))
     {
         return NULL;
     }
