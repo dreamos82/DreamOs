@@ -32,26 +32,17 @@
 uint32_t * page_directory = (uint32_t *) PAGE_DIR_VIRTUAL_ADDR;
 uint32_t * page_tables = (uint32_t *) PAGE_TABLE_VIRTUAL_ADDR;
 
-page_directory_t * current_directory;
-
-extern char kernel_paging_active;
-
-#define TABLE_SIZE 0x1000
+page_directory_t * current_page_dir;
 
 uint32_t fault = 0;
 
-
 void init_area(void * area)
 {
-    memset(area, 0, TABLE_SIZE);
+    memset(area, 0, PAGE_SIZE);
 }
 
 void kernel_init_vm()
 {
-    uint32_t cr0;
-
-    // Register the page fault handler.
-    kernel_add_interrupt_function_table(14, page_fault_handler);
     // Create a page directory.
     page_directory_t * pd = (page_directory_t *) kernel_alloc_page();
 
@@ -63,7 +54,7 @@ void kernel_init_vm()
 
     uint32_t * pt = (uint32_t *) (pd[0] & PAGE_MASK);
     for (int i = 0; i < 1024; i++)
-        pt[i] = i * TABLE_SIZE | PAGE_PRESENT | PAGE_WRITE;
+        pt[i] = i * PAGE_SIZE | PAGE_PRESENT | PAGE_WRITE;
 
     // Assign the second-last table and zero it.
     pd[1022] = kernel_alloc_page() | PAGE_PRESENT | PAGE_WRITE;
@@ -80,9 +71,10 @@ void kernel_init_vm()
     kernel_switch_page_directory(pd);
 
     // Enable paging.
-    __asm__ __volatile__ ("mov %%cr0, %0" : "=r" (cr0));
-    cr0 |= 0x80000000;
-    __asm__ __volatile__ ("mov %0, %%cr0" : : "r" (cr0));
+    kernel_enable_paging();
+
+    // Register the page fault handler.
+    kernel_add_interrupt_function_table(14, page_fault_handler);
 
     // We need to map the page table where the physical memory manager keeps its page stack
     // else it will panic on the first "kernel_free_page".
@@ -91,19 +83,18 @@ void kernel_init_vm()
 
     init_area(&page_tables[pt_idx * 1024]);
 
-    // Paging is now active. Tell the physical memory manager.
-    kernel_paging_active = 1;
+    paging_enabled = true;
 }
 
-void kernel_switch_page_directory(page_directory_t * pd)
+void kernel_switch_page_directory(page_directory_t * page_dir)
 {
-    current_directory = pd;
-    __asm__ __volatile__ ("mov %0, %%cr3" : : "r" (pd));
+    current_page_dir = page_dir;
+    __asm__ __volatile__ ("mov %0, %%cr3" : : "r" (page_dir));
 }
 
 void map(uint32_t va, uint32_t pa, uint32_t flags)
 {
-    uint32_t virtual_page = va / TABLE_SIZE;
+    uint32_t virtual_page = va / PAGE_SIZE;
     uint32_t pt_idx = PAGE_DIR_IDX(virtual_page);
 
     // Find the appropriate page table for 'va'.
@@ -121,7 +112,7 @@ void map(uint32_t va, uint32_t pa, uint32_t flags)
 
 void unmap(uint32_t va)
 {
-    uint32_t virtual_page = va / TABLE_SIZE;
+    uint32_t virtual_page = va / PAGE_SIZE;
 
     page_tables[virtual_page] = 0;
     // Inform the CPU that we have invalidated a page mapping.
@@ -130,7 +121,7 @@ void unmap(uint32_t va)
 
 char get_mapping(uint32_t va, uint32_t * pa)
 {
-    uint32_t virtual_page = va / TABLE_SIZE;
+    uint32_t virtual_page = va / PAGE_SIZE;
     uint32_t pt_idx = PAGE_DIR_IDX(virtual_page);
 
     // Find the appropriate page table for 'va'.
@@ -168,4 +159,17 @@ void page_fault_handler(int ecode)
 
     kernel_panic(message);
     for (;;);
+}
+
+void kernel_enable_paging()
+{
+    uint32_t cr4;
+    __asm__ __volatile__("mov %%cr4, %0" : "=r"(cr4));
+    CLEAR_PSEBIT(cr4);
+    __asm__ __volatile__("mov %0, %%cr4"::"r"(cr4));
+
+    uint32_t cr0;
+    __asm__ __volatile__("mov %%cr0, %0" : "=r"(cr0));
+    SET_PGBIT(cr0);
+    __asm__ __volatile__("mov %0, %%cr0"::"r"(cr0));
 }

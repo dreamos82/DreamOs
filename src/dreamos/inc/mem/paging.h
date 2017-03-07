@@ -25,10 +25,13 @@
 
 #include <multiboot.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #define PAGING_STACK_ADDR 0xFF000000
 
 #define SUPERVISOR 0
+
+extern bool_t paging_enabled;
 
 void kernel_init_paging(uint32_t start);
 

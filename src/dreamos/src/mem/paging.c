@@ -22,13 +22,12 @@
 
 #include <paging.h>
 #include <vm.h>
-#include <stddef.h>
 #include <panic.h>
 
 uint32_t stack_loc = PAGING_STACK_ADDR;
 uint32_t stack_max = PAGING_STACK_ADDR;
 uint32_t location;
-char kernel_paging_active = 0;
+bool_t paging_enabled = false;
 
 void kernel_init_paging(uint32_t start)
 {
@@ -38,8 +37,10 @@ void kernel_init_paging(uint32_t start)
 
 uint32_t kernel_alloc_page()
 {
-    if (!kernel_paging_active)
+    if (!paging_enabled)
+    {
         return location += 0x1000;
+    }
 
     // Quick sanity check.
     if (stack_loc == PAGING_STACK_ADDR)

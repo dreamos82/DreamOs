@@ -25,6 +25,8 @@
 
 #include <stdint.h>
 
+#define PAGE_SIZE 0x1000
+
 #define PAGE_DIR_VIRTUAL_ADDR   0xFFBFF000
 #define PAGE_TABLE_VIRTUAL_ADDR 0xFFC00000
 #define PAGE_DIR_IDX(x) ((uint32_t)x/1024)
@@ -34,6 +36,10 @@
 #define PAGE_WRITE     0x2
 #define PAGE_USER      0x4
 #define PAGE_MASK      0xFFFFF000
+
+// Paging register manipulation macro
+#define SET_PGBIT(cr0)      (cr0 = cr0 | 0x80000000)
+#define CLEAR_PSEBIT(cr4)   (cr4 = cr4 & 0xffffffef)
 
 typedef uint32_t page_directory_t;
 
@@ -55,5 +61,9 @@ void unmap(uint32_t va);
 char get_mapping(uint32_t va, uint32_t * pa);
 
 void page_fault_handler(int);
+
+/// @brief Enable paging, turn off PSE bit first as it was turned on by the
+/// assembly header when kernel was loading. Then enable PG Bit in cr0.
+void kernel_enable_paging();
 
 #endif

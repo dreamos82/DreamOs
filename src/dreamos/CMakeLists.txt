@@ -147,6 +147,7 @@ set(SOURCE_FILES
         src/libc/generic_tree.c
         src/mem/kheap.c
         src/mem/paging.c
+        src/mem/vm.c
         src/misc/bitops.c
         src/misc/clock.c
         src/misc/debug.c
@@ -170,7 +171,6 @@ set(SOURCE_FILES
         src/system/syscall.c
         src/system/thread.c
         src/system/thread.s
-        src/system/vm.c
         src/system/mutex.c
         src/kernel.c)
 
