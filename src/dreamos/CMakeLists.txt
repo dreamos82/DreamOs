@@ -145,6 +145,8 @@ set(SOURCE_FILES
         src/libc/spinlock.c
         src/libc/list.c
         src/libc/generic_tree.c
+        src/mem/kheap.c
+        src/mem/paging.c
         src/misc/bitops.c
         src/misc/clock.c
         src/misc/debug.c
@@ -163,8 +165,6 @@ set(SOURCE_FILES
         src/descriptor_tables/isr.s
         src/descriptor_tables/idt.c
         src/descriptor_tables/idt.s
-        src/system/kheap.c
-        src/system/paging.c
         src/system/panic.c
         src/system/scheduler.c
         src/system/syscall.c
