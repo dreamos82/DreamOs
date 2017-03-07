@@ -19,7 +19,7 @@
 #include <timer.h>
 #include <stdint.h>
 #include <pic8259.h>
-#include <io.h>
+#include <port_io.h>
 
 /// This will keep track of how many ticks the system has been running for.
 __volatile__ uint32_t timer_ticks = 0;

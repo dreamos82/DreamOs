@@ -25,7 +25,7 @@
 
 #include <mouse.h>
 #include <video.h>
-#include <io.h>
+#include <port_io.h>
 #include <isr.h>
 #include <debug.h>
 #include <language.h>

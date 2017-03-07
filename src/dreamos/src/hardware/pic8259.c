@@ -19,7 +19,7 @@
 #include <pic8259.h>
 #include <isr.h>
 #include <video.h>
-#include <io.h>
+#include <port_io.h>
 #include <stdio.h>
 #include <keyboard.h>
 #include <timer.h>

@@ -33,9 +33,29 @@
 /// @return The read value.
 uint8_t inportb(const uint16_t port);
 
+/// @brief Used for reading 2 bytes from the I/O ports.
+/// @param port The input port.
+/// @return The read value.
+uint16_t inports(const uint16_t _port);
+
+/// @brief Used for reading 4 bytes from the I/O ports.
+/// @param port The input port.
+/// @return The read value.
+uint32_t inportl(const uint16_t _port);
+
 /// @brief Use this to write to I/O ports to send bytes to devices.
 /// @param port The output port.
 /// @param data The data to write.
-void outportb(const uint16_t port, const uint32_t data);
+void outportb(const uint16_t port, const uint8_t data);
+
+/// @brief Use this to write to I/O ports to send 2 bytes to devices.
+/// @param port The output port.
+/// @param data The data to write.
+void outports(const uint16_t _port, const uint16_t _data);
+
+/// @brief Use this to write to I/O ports to send 4 bytes to devices.
+/// @param port The output port.
+/// @param data The data to write.
+void outportl(const uint16_t _port, const uint32_t _data);
 
 #endif

@@ -23,16 +23,40 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <io.h>
+#include <port_io.h>
 
-inline uint8_t inportb(uint16_t port)
+inline uint8_t inportb(const uint16_t port)
 {
     unsigned char data = 0;
-    __asm__ __volatile__ ("inb %%dx, %%al" : "=a" (data) : "d" (port));
+    __asm__ __volatile__("inb %%dx, %%al" : "=a" (data) : "d" (port));
     return data;
 }
 
-inline void outportb(const uint16_t port, const uint32_t data)
+inline uint16_t inports(const uint16_t _port)
 {
-    __asm__ __volatile__ ("outb %%al, %%dx"::"a" (data), "d" (port));
+    uint16_t rv;
+    __asm__ __volatile__("inw %1, %0" : "=a" (rv) : "dN" (_port));
+    return rv;
+}
+
+inline uint32_t inportl(const uint16_t _port)
+{
+    uint32_t rv;
+    __asm__ __volatile__("inl %%dx, %%eax" : "=a" (rv) : "dN" (_port));
+    return rv;
+}
+
+inline void outportb(const uint16_t port, const uint8_t data)
+{
+    __asm__ __volatile__("outb %%al, %%dx"::"a" (data), "d" (port));
+}
+
+inline void outports(const uint16_t _port, const uint16_t _data)
+{
+    __asm__ __volatile__("outw %1, %0" : : "dN" (_port), "a" (_data));
+}
+
+inline void outportl(const uint16_t _port, const uint32_t _data)
+{
+    __asm__ __volatile__("outl %%eax, %%dx" : : "dN" (_port), "a" (_data));
 }

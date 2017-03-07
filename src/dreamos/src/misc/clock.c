@@ -21,7 +21,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 #include <clock.h>
-#include <io.h>
+#include <port_io.h>
 #include <language.h>
 #include <stddef.h>
 #include <limits.h>

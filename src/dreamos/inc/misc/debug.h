@@ -1,7 +1,7 @@
 #ifndef _DEBUG_H
 #define _DEBUG_H
 
-#include <io.h>
+#include <port_io.h>
 
 /******************************
  *		Debug Macros

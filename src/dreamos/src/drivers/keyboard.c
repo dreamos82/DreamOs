@@ -27,7 +27,7 @@
 #include <video.h>
 #include <stdio.h>
 #include <ctype.h>
-#include <io.h>
+#include <port_io.h>
 #include <pic8259.h>
 #include <shell.h>
 

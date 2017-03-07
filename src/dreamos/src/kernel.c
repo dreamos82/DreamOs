@@ -30,7 +30,7 @@
 #include <idt.h>
 #include <cpuid.h>
 #include <stdio.h>
-#include <io.h>
+#include <port_io.h>
 #include <paging.h>
 #include <language.h>
 #include <shell.h>

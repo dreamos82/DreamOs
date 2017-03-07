@@ -112,6 +112,7 @@ include_directories(
         inc/io
         inc/libc
         inc/lng
+        inc/mem
         inc/misc
         inc/shell
         inc/sys
@@ -131,7 +132,8 @@ set(SOURCE_FILES
         src/hardware/timer.c
         src/hardware/cpuid.c
         src/hardware/pic8259.c
-        src/io/io.c
+        src/io/port_io.c
+        src/io/mm_io.c
         src/io/video.c
         src/libc/ctype.c
         src/libc/stdio.c

@@ -23,7 +23,7 @@
 
 #include <isr.h>
 #include <video.h>
-#include <io.h>
+#include <port_io.h>
 #include <scheduler.h>
 #include <descriptor_tables.h>
 #include <vm.h>
