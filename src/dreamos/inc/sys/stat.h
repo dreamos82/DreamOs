@@ -19,7 +19,7 @@
 #ifndef _STAT_H
 #define _STAT_H
 
-#include <sys/types.h>
+#include <stddef.h>
 
 /*!  \struct struct stat
      \brief Struttura dati che contine le informazioni su di un file

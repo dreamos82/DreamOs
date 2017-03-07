@@ -2,7 +2,7 @@
 
 #include <compiler.h>
 #include <stdint.h>
-#include "stdbool.h"
+#include <stdbool.h>
 
 /// @brief Standard structure for atomic operations.
 typedef struct atomic_t

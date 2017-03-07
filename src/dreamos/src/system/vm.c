@@ -20,11 +20,11 @@
 // Based on JamesM's kernel developement tutorials.
 //
 
-#include "vm.h"
-#include "paging.h"
-#include "idt.h"
-#include "isr.h"
-#include "panic.h"
+#include <vm.h>
+#include <paging.h>
+#include <idt.h>
+#include <isr.h>
+#include <panic.h>
 #include <string.h>
 #include <stdio.h>
 #include <descriptor_tables.h>

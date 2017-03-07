@@ -45,10 +45,19 @@
 #define FALSE 0
 #endif
 
-typedef unsigned int size_t;
-typedef unsigned long long qword;
-typedef unsigned short int ushort;
 typedef unsigned char byte_t;
+
+typedef unsigned int size_t;
+typedef int ssize_t;
+
+typedef unsigned int ino_t;
+typedef unsigned int dev_t;
+typedef unsigned int uid_t;
+typedef unsigned int gid_t;
+typedef unsigned int off_t;
+
+typedef unsigned int mode_t;
+
 typedef int pid_t;
 
 #endif

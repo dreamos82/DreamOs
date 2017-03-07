@@ -106,6 +106,7 @@ set(CMAKE_ASM_COMPILE_OBJECT
 include_directories(
         ..
         inc
+        inc/descriptor_tables
         inc/drivers
         inc/fs
         inc/hardware
@@ -154,14 +155,14 @@ set(SOURCE_FILES
         src/sys/dirent.c
         src/sys/stat.c
         src/sys/utsname.c
-        src/system/descriptor_tables.c
         src/system/elf.c
-        src/system/gdt.c
-        src/system/gdt.s
-        src/system/isr.c
-        src/system/isr.s
-        src/system/idt.c
-        src/system/idt.s
+        src/descriptor_tables/descriptor_tables.c
+        src/descriptor_tables/gdt.c
+        src/descriptor_tables/gdt.s
+        src/descriptor_tables/isr.c
+        src/descriptor_tables/isr.s
+        src/descriptor_tables/idt.c
+        src/descriptor_tables/idt.s
         src/system/kheap.c
         src/system/paging.c
         src/system/panic.c

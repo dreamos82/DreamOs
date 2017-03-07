@@ -19,7 +19,6 @@
 #ifndef __UNISTD_H
 #define __UNISTD_H
 
-#include <types.h>
 #include <stddef.h>
 
 #define _SC_OPEN_MAX 4

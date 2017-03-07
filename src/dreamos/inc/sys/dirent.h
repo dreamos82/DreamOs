@@ -19,7 +19,7 @@
 #ifndef _DIRENT_H
 #define _DIRENT_H
 
-#include <types.h>
+#include <stddef.h>
 
 #define NAME_MAX 30
 

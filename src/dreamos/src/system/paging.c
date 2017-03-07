@@ -21,11 +21,9 @@
 //
 
 #include <paging.h>
-
 #include <vm.h>
-
 #include <stddef.h>
-#include "panic.h"
+#include <panic.h>
 
 uint32_t stack_loc = PAGING_STACK_ADDR;
 uint32_t stack_max = PAGING_STACK_ADDR;

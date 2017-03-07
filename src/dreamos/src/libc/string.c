@@ -33,6 +33,7 @@
 
 #include <string.h>
 #include <ctype.h>
+#include <kheap.h>
 
 #define KERNEL 1
 
@@ -671,4 +672,91 @@ char * trim(char * str)
         *endp = '\0';
     }
     return str;
+}
+
+
+char * strdup(const char * src)
+{
+    int len = strlen(src) + 1;
+    char * dst = kmalloc(len);
+    memcpy(dst, src, len);
+    return dst;
+}
+
+char * strsep(char ** stringp, const char * delim)
+{
+    char * s;
+    const char * spanp;
+    int c, sc;
+    char * tok;
+    if ((s = *stringp) == NULL)
+        return (NULL);
+    for (tok = s;;)
+    {
+        c = *s++;
+        spanp = delim;
+        do
+        {
+            if ((sc = *spanp++) == c)
+            {
+                if (c == 0)
+                    s = NULL;
+                else
+                    s[-1] = 0;
+                *stringp = s;
+                return (tok);
+            }
+        } while (sc != 0);
+    }
+}
+
+/*
+   Split a string into list of strings
+   */
+list_t * str_split(const char * str,
+                   const char * delim,
+                   unsigned int * numtokens)
+{
+    list_t * ret_list = list_create();
+    char * s = strdup(str);
+    char * token, * rest = s;
+    while ((token = strsep(&rest, delim)) != NULL)
+    {
+        if (!strcmp(token, ".")) continue;
+        if (!strcmp(token, ".."))
+        {
+            if (list_size(ret_list) > 0) list_pop(ret_list);
+            continue;
+        }
+        list_push(ret_list, strdup(token));
+        if (numtokens) (*numtokens)++;
+    }
+    kfree(s);
+    return ret_list;
+}
+
+/*
+ * Reconstruct the string with tokens and delimiters
+ * */
+char * list2str(list_t * list, const char * delim)
+{
+    char * ret = kmalloc(256);
+    memset(ret, 0, 256);
+    size_t len = 0;
+    size_t ret_len = 256;
+    while (list_size(list) > 0)
+    {
+        char * temp = list_pop(list)->val;
+        size_t len_temp = strlen(temp);
+        if (len + len_temp + 1 + 1 > ret_len)
+        {
+            ret_len = ret_len * 2;
+            kfree(ret);
+            ret = kmalloc(ret_len);
+            len = len + len_temp + 1;
+        }
+        strcat(ret, delim);
+        strcat(ret, temp);
+    }
+    return ret;
 }

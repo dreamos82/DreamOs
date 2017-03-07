@@ -35,7 +35,7 @@
 #define STRING_H
 
 #include <stddef.h>
-#include <sys/types.h>
+#include <list.h>
 
 char * strncpy(char * dest, const char * source, size_t n);
 
@@ -129,5 +129,13 @@ char * strtok(char *, const char *);
 int _kstrncmp(const char * s1, const char * s2, size_t num);
 
 char * trim(char * str);
+
+char * strdup(const char * src);
+
+char * strsep(char ** stringp, const char * delim);
+
+list_t * str_split(const char * str, const char * delim, unsigned int * numtokens);
+
+char * list2str(list_t * list, const char * delim);
 
 #endif
