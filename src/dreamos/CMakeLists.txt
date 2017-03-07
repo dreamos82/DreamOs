@@ -145,6 +145,7 @@ set(SOURCE_FILES
         src/libc/spinlock.c
         src/libc/list.c
         src/libc/generic_tree.c
+        src/libc/ordered_array.c
         src/mem/kheap.c
         src/mem/paging.c
         src/mem/vm.c
