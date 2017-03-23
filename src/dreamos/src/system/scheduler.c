@@ -27,13 +27,17 @@
 thread_list_t * ready_queue = NULL;
 thread_list_t * current_thread = NULL;
 
+list_t * thread_list;
+
 void kernel_initialize_scheduler()
 {
+    // Initialize the list of threads.
+    thread_list = list_create();
     // Create the scheduler thread.
     thread_t * scheduler = kmalloc(sizeof(thread_t));
     scheduler->id = 0;
     strcpy(scheduler->name, "Scheduler");
-    // Initialize the current scheduled thread.
+    // Create a new list item for the new thread.
     current_thread = (thread_list_t *) kmalloc(sizeof(thread_list_t));
     current_thread->thread = scheduler;
     current_thread->next = NULL;
@@ -44,8 +48,7 @@ void kernel_activate_thread(thread_t * thread)
     // Create a new list item for the new thread.
     thread_list_t * item = (thread_list_t *) kmalloc(sizeof(thread_list_t));
     item->thread = thread;
-    item->next = 0;
-
+    item->next = NULL;
     if (!ready_queue)
     {
         // Special case if the ready queue is empty.
@@ -62,15 +65,17 @@ void kernel_activate_thread(thread_t * thread)
         // Add the item.
         iterator->next = item;
     }
+    // Add the thread to the list of threads.
+    thread->self = list_insert_front(thread_list, thread);
 }
 
-void kernel_deactivate_thread(thread_t * t)
+void kernel_deactivate_thread(thread_t * thread)
 {
     // Attempt to find the thread in the ready queue.
     thread_list_t * iterator = ready_queue;
 
     // Special case if the thread is first in the queue.
-    if (iterator->thread == t)
+    if (iterator->thread == thread)
     {
         ready_queue = iterator->next;
         kfree(iterator);
@@ -79,7 +84,7 @@ void kernel_deactivate_thread(thread_t * t)
 
     while (iterator->next)
     {
-        if (iterator->next->thread == t)
+        if (iterator->next->thread == thread)
         {
             thread_list_t * tmp = iterator->next;
             iterator->next = tmp->next;
@@ -87,6 +92,8 @@ void kernel_deactivate_thread(thread_t * t)
         }
         iterator = iterator->next;
     }
+    // Remove the thread from the list of threads.
+    list_remove_node(thread_list, thread->self);
 }
 
 thread_t * kernel_get_current_thread()

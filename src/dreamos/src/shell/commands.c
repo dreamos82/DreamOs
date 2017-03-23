@@ -686,17 +686,19 @@ void ps()
     printf("%-6s", "PID");
     printf("%-50s", "NAME");
     printf("\n");
-    // Iterate through the ready queue to the end.
-    thread_list_t * iterator = ready_queue;
-    while (iterator->next)
+    size_t nprocs = list_size(thread_list);
+    for (size_t i = 0; i < nprocs; ++i)
     {
-        iterator = iterator->next;
-        // Check that the thread is not NULL.
-        if (iterator->thread != NULL)
+        listnode_t * node = list_get_node_by_index(thread_list, i);
+        if (node)
         {
-            printf("%-6d", iterator->thread->id);
-            printf("%-50s", iterator->thread->name);
-            printf("\n");
+            thread_t * thread = node->val;
+            if (thread)
+            {
+                printf("%-6d", thread->id);
+                printf("%-50s", thread->name);
+                printf("\n");
+            }
         }
     }
     printf("\n");

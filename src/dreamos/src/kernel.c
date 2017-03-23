@@ -162,7 +162,7 @@ int main_loop(struct multiboot_info * boot_info)
     // Initialize the shell.
     printf(LNG_SHELL);
     _kprintOK();
-    kernel_create_thread(shell, "shell", "shell", 0);
+    kernel_create_thread(shell, "Shell", "Shell", 0);
     return 0;
 }
 

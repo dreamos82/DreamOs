@@ -25,6 +25,7 @@
 
 #include <thread.h>
 #include <stdint.h>
+#include <list.h>
 
 #define MAX_THREADS 256
 
@@ -34,7 +35,8 @@ typedef struct thread_list
     struct thread_list * next;
 } thread_list_t;
 
-extern thread_list_t * ready_queue;
+/// Contains all the running threads.
+extern list_t * thread_list;
 
 void kernel_initialize_scheduler();
 
