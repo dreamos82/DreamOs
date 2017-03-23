@@ -169,9 +169,9 @@ set(SOURCE_FILES
         src/descriptor_tables/idt.s
         src/system/panic.c
         src/system/scheduler.c
+        src/system/scheduler.s
         src/system/syscall.c
         src/system/thread.c
-        src/system/thread.s
         src/system/mutex.c
         src/kernel.c)
 
