@@ -50,8 +50,9 @@ enum eflags_list
 };
 // 12-13  IOPL    I/O Priviledge level
 
-/// @brief Holds information about a thread.
-typedef struct thread
+/// @brief The register set of CPU where process need to be stored for
+/// execution for running state.
+typedef struct context_t
 {
     /// Holds the top address of the stack. (Stack pointer register)
     uint32_t esp;
@@ -66,6 +67,13 @@ typedef struct thread
     uint32_t edi;
     /// Register which hold the state of the processor.
     uint32_t eflags;
+} context_t;
+
+/// @brief Holds information about a thread.
+typedef struct thread
+{
+    /// The registers of the thread.
+    context_t regs;
     /// The id of the thread.
     pid_t id;
     /// The command executed by the thread.

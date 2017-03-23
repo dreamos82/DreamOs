@@ -31,7 +31,7 @@ listnode_t * list_insert_front(list_t * list, void * val)
     return t;
 }
 
-void list_insert_back(list_t * list, void * val)
+listnode_t * list_insert_back(list_t * list, void * val)
 {
     listnode_t * t = kcalloc(sizeof(listnode_t), 1);
     t->prev = list->tail;
@@ -44,6 +44,7 @@ void list_insert_back(list_t * list, void * val)
 
     list->tail = t;
     list->size++;
+    return t;
 }
 
 void * list_remove_node(list_t * list, listnode_t * node)

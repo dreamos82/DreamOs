@@ -23,6 +23,7 @@
 #include <scheduler.h>
 #include <string.h>
 #include <kheap.h>
+#include <debug.h>
 
 thread_list_t * ready_queue = NULL;
 thread_list_t * current_thread = NULL;

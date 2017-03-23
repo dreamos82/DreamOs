@@ -61,11 +61,11 @@ thread_t * kernel_create_thread(int (* fn)(void *),
     *(--stack) = (uint32_t) fn;
 
     // Set the top address of the stack.
-    thread->esp = (uint32_t) stack;
+    thread->regs.esp = (uint32_t) stack;
     // Set the base address of the stack.
-    thread->ebp = 0;
+    thread->regs.ebp = 0;
     // Enable the interrupts.
-    thread->eflags = EFLAG_IF;
+    thread->regs.eflags = EFLAG_IF;
     // Set the exit status to 0.
     thread->exit = 0;
     // Set the id of the thread.
@@ -76,7 +76,7 @@ thread_t * kernel_create_thread(int (* fn)(void *),
     dbg_print("\nRunning thread %s with id %d and flags %d\n",
               thread->name,
               thread->id,
-              thread->eflags);
+              thread->regs.eflags);
     // Activate the thread.
     kernel_activate_thread(thread);
     return thread;
@@ -91,7 +91,7 @@ void thread_exit()
     dbg_print("\nThread %d exited with value %d, flags %d\n",
               current->id,
               exit_value,
-              current->eflags);
+              current->regs.eflags);
     current->exit = 1;
     while (TRUE);
 }

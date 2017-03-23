@@ -33,7 +33,7 @@ size_t list_size(list_t * list);
 listnode_t * list_insert_front(list_t * list, void * val);
 
 /// @brief Insert a value at the back of list.
-void list_insert_back(list_t * list, void * val);
+listnode_t * list_insert_back(list_t * list, void * val);
 
 /// @brief Given a listnode, remove it from lis.
 void * list_remove_node(list_t * list, listnode_t * node);
