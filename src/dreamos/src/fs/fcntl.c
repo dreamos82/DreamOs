@@ -91,8 +91,7 @@ int open(const char * path, int oflags, mode_t mode)
     if (mountpoint_list[mpid].operations.open != NULL)
     {
         fd_list[current_fd].fs_spec_id =
-            mountpoint_list[mpid].operations.open(
-                new_path, oflags);
+            mountpoint_list[mpid].operations.open(new_path, oflags);
         if (fd_list[current_fd].fs_spec_id == -1)
         {
             dbg_print("No file's Found\n");

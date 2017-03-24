@@ -87,7 +87,7 @@ void do_fault()
 
 void try_printmem(void)
 {
-    //print_heap_list(kheap->used_list);
+    print_heap_list(kheap->used_list);
 }
 
 #ifdef LATEST
@@ -185,10 +185,15 @@ void try_open()
 void try_ocreat()
 {
     int fd = 0;
-    //printf("Number of files present: %d\n", initfs_init());
     fd = open("pippo", O_RDWR | O_CREAT | O_APPEND, 0);
-    if (fd >= 0) write(fd, "buffo buffer", strlen("buffo buffer"));
-    else printf("Error?\n");
+    if (fd >= 0)
+    {
+        write(fd, "buffo buffer", strlen("buffo buffer"));
+    }
+    else
+    {
+        printf("Error?\n");
+    }
     close(fd);
 }
 
@@ -247,10 +252,10 @@ void try_shadow()
 
 void try_mapaddress()
 {
-    unsigned int *tmp = kmalloc(sizeof(int));
+    unsigned int * tmp = kmalloc(sizeof(int));
     printf("Testing map_address\n");
-    map_address(0x0010000, (unsigned int)tmp);
-    printf("GetPhysAddress: %x\n", get_phys_address((unsigned int)tmp));
+    map_address(0x0010000, (unsigned int) tmp);
+    printf("GetPhysAddress: %x\n", get_phys_address((unsigned int) tmp));
     return;
 }
 

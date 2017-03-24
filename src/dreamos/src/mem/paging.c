@@ -28,6 +28,7 @@
 #include <video.h>
 #include <stddef.h>
 #include <kheap.h>
+#include <debug.h>
 
 #define BITMASK(len) ((1<<((len) + 1)) - 1)
 #define BITRANGE(n, from, to) (((n) >> (from)) & BITMASK(to-from))
@@ -47,7 +48,7 @@ void init_paging()
     second_pagetable = create_pageTable();
     //third_pagetable = create_pageTable();      
     #ifdef DEBUG
-    printf("Pd baseAddress: %d\n", (unsigned int) current_page_dir);
+    dbg_print("Pd baseAddress: %d\n", (unsigned int) current_page_dir);
     #endif
     i = 0;
     while (i < PD_LIMIT)
@@ -84,7 +85,7 @@ void init_paging()
     {
         set_pagetable_entry(i, i * 0x1000, SUPERVISOR | PD_PRESENT | WRITE, 0);
         #ifdef DEBUG
-        if (i < 10) printf("cpt: %d\n", current_page_table[i]);
+        if (i < 10) dbg_print("cpt: %d\n", current_page_table[i]);
         #endif
         i++;
     }
@@ -139,7 +140,7 @@ void set_pagedir_entry(int pos,
 {
     current_page_dir[pos] = (base & 0xFFFFF000) | opt1 | opt2;
     #ifdef DEBUG
-    printf("base: %d, basepde: %d\n", base, current_page_dir[pos]);
+    dbg_print("base: %d, basepde: %d\n", base, current_page_dir[pos]);
     #endif
 }
 
@@ -161,7 +162,7 @@ void set_pagedir_entry_ric(int pd_entry,
     unsigned int * mod_address = (unsigned int *) (0xFFFFF000 + (pd_entry * 4));
     *mod_address = (base & 0xFFFFF000) | opt1 | opt2;
     #ifdef DEBUG
-    printf("value for entry n.: %d is: %d\n", pd_entry, *mod_address);
+    dbg_print("value for entry n.: %d is: %d\n", pd_entry, *mod_address);
     #endif
 }
 
@@ -183,7 +184,7 @@ void set_pagetable_entry(int pos,
     current_page_table[pos] = (base & 0xFFFFF000) | opt1 | opt2;
     #ifdef DEBUG
     if (pos < 10)
-        printf("pos: %d, base: %d, basepte: %d\n",
+        dbg_print("pos: %d, base: %d, basepte: %d\n",
                pos,
                base,
                current_page_table[pos]);
@@ -212,7 +213,7 @@ void set_pagetable_entry_ric(int pd_entry,
         << 12)) + (pt_entry * 4));
     *mod_address = (base & 0xFFFFF000) | opt1 | opt2;
     #ifdef DEBUG
-    printf("value for entry n.: %d is: %x\n", pt_entry, mod_address);
+    dbg_print("value for entry n.: %d is: %x\n", pt_entry, mod_address);
     #endif
 }
 
@@ -241,7 +242,7 @@ unsigned int get_pagetable_entry(int dir_num, int tab_num)
 {
     unsigned int * mod_address = (unsigned int *) ((0xFFC00000 | (dir_num
         << 12)) + (tab_num * 4));
-    //printf("value for entry n.: %d is: %u\n", tab_num,mod_address);
+    //dbg_print("value for entry n.: %d is: %u\n", tab_num,mod_address);
     return (unsigned int) (*mod_address);
 }
 
@@ -281,15 +282,15 @@ void page_fault_handler(int ecode)
     void * new_p;
     /* Ricava l'indirizzo che ha causato l'eccezione */
     asm ("movl %%cr2, %0":"=r" (fault_addr));
-    //if(fault_addr > 0) printf("Ok ");
-    //printf("Fault addr: %u\n", fault_addr);
+    //if(fault_addr > 0) dbg_print("Ok ");
+    //dbg_print("Fault addr: %u\n", fault_addr);
     //while(1);
     if ((ecode & PF_MASK) == 2 || (ecode & PF_MASK) == 0)
     {
         pdir = BITRANGE (fault_addr, 22, 31);
         ptable = BITRANGE (fault_addr, 12, 21);
         #ifdef DEBUG
-        printf("PD entry num: %d, PT entry num: %d, Indirizzo: %d\n",
+        dbg_print("PD entry num: %d, PT entry num: %d, Indirizzo: %d\n",
                pdir,
                ptable,
                fault_addr);
@@ -297,13 +298,13 @@ void page_fault_handler(int ecode)
         /* Mappatura della pagedir se non presente */
         pd_entry = get_pagedir_entry(pdir);
         #ifdef DEBUG
-        printf("Entry corrente della pagedir: %d\n", pd_entry);
+        dbg_print("Entry corrente della pagedir: %d\n", pd_entry);
         #endif
         if (pd_entry == 0)
         {
             int i = 0;
             new_pt = create_pageTable();
-            //if(new_pt == (unsigned int *) 4468736) printf("Eccolo qua lo stronzo\n");
+            //if(new_pt == (unsigned int *) 4468736) dbg_print("Eccolo qua lo stronzo\n");
             while (i < PT_LIMIT)
             {
                 new_pt[i] = 0x00000000;
@@ -314,7 +315,7 @@ void page_fault_handler(int ecode)
                                   PD_PRESENT | SUPERVISOR | WRITE,
                                   0);
             #ifdef DEBUG
-            printf("Nuova entry dopo la mappatura: %d\n",
+            dbg_print("Nuova entry dopo la mappatura: %d\n",
                    get_pagedir_entry(pdir));
             #endif
         }
@@ -322,7 +323,7 @@ void page_fault_handler(int ecode)
         /* Mappatura della pagetable se non presente */
         pt_entry = get_pagetable_entry(pdir, ptable);
         #ifdef DEBUG
-        printf("Entry corrente della pagetable: %d\n", pt_entry);
+        dbg_print("Entry corrente della pagetable: %d\n", pt_entry);
         #endif
         if (pt_entry == 0)
         {
@@ -334,7 +335,7 @@ void page_fault_handler(int ecode)
                                     PD_PRESENT | SUPERVISOR | WRITE,
                                     0);
             #ifdef DEBUG
-            printf("Nuova entry dopo la mappatura: %d\n",
+            dbg_print("Nuova entry dopo la mappatura: %d\n",
                    get_pagetable_entry(pdir, ptable));
             #endif
         }
@@ -356,15 +357,15 @@ void map_address(unsigned int fis_address, unsigned int logic_address)
     //set_pagedir_entry_ric(1023, fis_address, PD_PRESENT|SUPERVISOR, 0);
     unsigned int pdir, ptable;
     #ifdef DEBUG
-    printf("Logic Address: 0x%x\n", logic_address);
+    dbg_print("Logic Address: 0x%x\n", logic_address);
     #endif
     pdir = 0;
     ptable = 0;
     pdir = BITRANGE (logic_address, 22, 31);
     ptable = BITRANGE (logic_address, 12, 21);
     #ifdef DEBUG
-    printf("Pdir value: %d, PtableValue: %d\n", pdir, ptable);
-    printf("Pdir entry value: %d\n", get_pagedir_entry(pdir));
+    dbg_print("Pdir value: %d, PtableValue: %d\n", pdir, ptable);
+    dbg_print("Pdir entry value: %d\n", get_pagedir_entry(pdir));
     #endif
     //if(get_pagedir_entry(pdir)==NULL){
     //Comparing with NULL produces a warning, get_pagedir_entry returns unsigned int
@@ -388,7 +389,7 @@ void map_address(unsigned int fis_address, unsigned int logic_address)
     else
     {
         #ifdef DEBUG
-        printf("Else %u %u\n", fis_address, get_pagedir_entry(pdir));
+        dbg_print("Else %u %u\n", fis_address, get_pagedir_entry(pdir));
         #endif
         set_pagetable_entry_ric(pdir,
                                 ptable,
@@ -412,8 +413,8 @@ unsigned int get_phys_address(unsigned int address)
     unsigned int ptable = 0;
     pdir = BITRANGE (address, 22, 31);
     ptable = BITRANGE (address, 12, 21);
-    //printf("GetPhys - Pdir: %d, PTable: %d\n", pdir,ptable);
-    //suif(ptable!=0) printf("PhysAddress: %x\n", get_pagetable_entry(pdir, ptable));
+    //dbg_print("GetPhys - Pdir: %d, PTable: %d\n", pdir,ptable);
+    //suif(ptable!=0) dbg_print("PhysAddress: %x\n", get_pagetable_entry(pdir, ptable));
     return get_pagetable_entry(pdir, ptable);
 }
 

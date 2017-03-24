@@ -27,6 +27,7 @@
 #include <kheap.h>
 #include <stdio.h>
 #include <stddef.h>
+#include <debug.h>
 
 extern unsigned int end;
 extern unsigned int address_cur;
@@ -36,7 +37,7 @@ buddy_t * new_buddy()
 {
     buddy_t * temp;
     temp = (buddy_t *) kmalloc(sizeof(buddy_t));
-    printf("end: %x | address_cur: %x\n", &end, address_cur);
+    dbg_print("end: %x | address_cur: %x\n", &end, address_cur);
     temp->start_address = address_cur;
     temp->size = 65536; //da cambiare
     temp->status = BUDDY_BUSY;
@@ -56,7 +57,7 @@ unsigned int alloc_buddy(int size, buddy_t * tmp_buddy)
         if (tmp_buddy->left == NULL && tmp_buddy->right == NULL)
         {
             new_size = tmp_buddy->size / 2;
-            printf("Ok\n");
+            dbg_print("Ok\n");
             tmp_buddy->left = create_buddy(new_size);
             if (new_size / 2 >= size) alloc_buddy(size, cur_buddy->left);
             else tmp_buddy->status = BUDDY_BUSY;
@@ -71,12 +72,12 @@ unsigned int alloc_buddy(int size, buddy_t * tmp_buddy)
         }
         else
         {
-            printf(
+            dbg_print(
                 "Se sono nell'else allora devo proseguire nella navigazione\n");
             alloc_buddy(size / 2, tmp_buddy);
         }
     }
-//     else printf("Otherwise ok\n");
+//     else dbg_print("Otherwise ok\n");
     return 0;
 }
 
@@ -88,7 +89,7 @@ buddy_t * create_buddy(int size)
     new_buddy->left = NULL;
     new_buddy->right = NULL;
     new_buddy->size = size;
-    printf("Creating buddy at address: 0x%x with buddy size: %d\n",
+    dbg_print("Creating buddy at address: 0x%x with buddy size: %d\n",
            new_buddy,
            new_buddy->size);
     return new_buddy;

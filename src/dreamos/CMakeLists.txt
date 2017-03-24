@@ -186,7 +186,7 @@ add_custom_command(
         TARGET DreamOs
         POST_BUILD
         COMMAND nasm
-        -f elf ${CMAKE_CURRENT_SOURCE_DIR}/multicatcher.s
+        -f elf ${CMAKE_CURRENT_SOURCE_DIR}/src/multicatcher.s
         -o ${CMAKE_CURRENT_BINARY_DIR}/bl.img
 )
 
@@ -197,7 +197,7 @@ add_custom_command(
         -static
         --oformat elf32-i386
         --output=${CMAKE_CURRENT_BINARY_DIR}/kernel.bin
-        --script=${CMAKE_CURRENT_SOURCE_DIR}/kernel.lds
+        --script=${CMAKE_CURRENT_SOURCE_DIR}/src/kernel.lds
         ${CMAKE_CURRENT_BINARY_DIR}/bl.img
         ${CMAKE_CURRENT_BINARY_DIR}/libDreamOs.a
         -Ttext 0x100000

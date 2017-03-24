@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <pic8259.h>
+#include <debug.h>
 
 size_t tot_mem;
 size_t num_pages=0;
@@ -90,10 +91,10 @@ void* request_pages(int n_pages, int flags){
 	indirizzo = ((i*32+sh)-n_free)*4096;
     //Stampe debug - Da eliminare
     #ifdef DEBUG
-    printf ("Numero pagine che mi servono: %d\n", n_pages);
-    printf ("Sono alla posizione %d\n", sh);
-    printf ("Dell'elemento: %d\n", i);
-    printf ("Ho ottenuto l'indirizzo: %d\n", (int)indirizzo);
+    dbg_print ("Numero pagine che mi servono: %d\n", n_pages);
+    dbg_print ("Sono alla posizione %d\n", sh);
+    dbg_print ("Dell'elemento: %d\n", i);
+    dbg_print ("Ho ottenuto l'indirizzo: %d\n", (int)indirizzo);
     #endif
     i = (indirizzo/4096)/32;
     sh = (indirizzo/4096)%32;
@@ -109,14 +110,14 @@ void* request_pages(int n_pages, int flags){
     }
     /*Devo aggiungere l'elemento nella lista.*/
     #ifdef DEBUG
-    printf ("Valore: %d\n", sh);
-    printf (" Chiamo add_memarea_element\n");   
+    dbg_print ("Valore: %d\n", sh);
+    dbg_print (" Chiamo add_memarea_element\n");
     #endif
     if(flags==ADD_LIST)
      add_memarea_element(indirizzo, n_pages);
     #ifdef DEBUG
-    printf("Next_free: %d\n", mem_info.next_free);
-    printf("%u\n", indirizzo);
+    dbg_print("Next_free: %d\n", mem_info.next_free);
+    dbg_print("%u\n", indirizzo);
     #endif    
     return (void*) indirizzo;
 }
@@ -153,7 +154,7 @@ int release_pages(void *addr){
         //Dopo che ho trovato il numero di pagine occupate, lo elimino        
         i=0;        
         if(n_pagine!=0){
-            printf("Valore mem_map: %d ", mem_bitmap.mem_map[riga]); 
+            dbg_print("Valore mem_map: %d ", mem_bitmap.mem_map[riga]);
             while(i<n_pagine){           
                 mem_bitmap.mem_map[riga] = mem_bitmap.mem_map[riga]^(1<<colonna);
                 if(colonna<32 && i<n_pagine){                
@@ -165,12 +166,12 @@ int release_pages(void *addr){
                 }
                 i++;
             }
-            printf("dopo pulitura: %d ", mem_bitmap.mem_map[riga]); 
-            printf("Pagina rilasciata - Prossima pos libera: %d", tmp_list->next_free);
-            printf("Ho liberato: %d pagine\n", n_pagine); 
+            dbg_print("dopo pulitura: %d ", mem_bitmap.mem_map[riga]);
+            dbg_print("Pagina rilasciata - Prossima pos libera: %d", tmp_list->next_free);
+            dbg_print("Ho liberato: %d pagine\n", n_pagine);
         }        
     } else {
-        printf("Error, address is: %d\n", addr);            
+        dbg_print("Error, address is: %d\n", addr);
         return -1;
     }
     return 0;
@@ -182,7 +183,7 @@ int add_memarea_element(size_t start_address, int required_pages){
     posizione = mem_info.next_free;
     if(posizione>0 && posizione<510){
         #ifdef DEBUG
-        printf("Posizione <510\n");
+        dbg_print("Posizione <510\n");
         #endif
         mem_info.pages_info[posizione].inizio = (void*)start_address;
         mem_info.pages_info[posizione].num_pagine = required_pages;
@@ -195,7 +196,7 @@ int add_memarea_element(size_t start_address, int required_pages){
         if(mem_new->next!=NULL){
             mem_new = (mem_area_pointer)mem_info.next;
             #ifdef DEBUG
-            printf("Posizione >510\n");
+            dbg_print("Posizione >510\n");
             #endif
             mem_new->pages_info[0].inizio = (void*)start_address;
             mem_new->pages_info[0].num_pagine = required_pages;
@@ -257,7 +258,7 @@ void *fis_malloc(const size_t size){
 }
 
 void fis_free(void *address){
-    if(release_pages(address)!=0) printf("Error\n");
+    if(release_pages(address)!=0) dbg_print("Error\n");
 }
 
 
