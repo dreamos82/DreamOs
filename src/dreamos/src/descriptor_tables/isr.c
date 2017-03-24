@@ -26,8 +26,8 @@
 #include <port_io.h>
 #include <scheduler.h>
 #include <descriptor_tables.h>
-#include <vm.h>
 #include <debug.h>
+#include <paging.h>
 
 irq_struct_t * shared_irq_handlers[IRQ_NUM];
 

@@ -245,7 +245,7 @@ ssize_t initrd_write(int fildes, const void * buf, size_t nbyte)
     // Increment the length of the file.
     fs_headers[lfd].length = fs_headers[lfd].length + it;
     // Free the memory of the temporary file.
-    kfree(tmp);
+    free(tmp);
     // Return the number of written bytes.
     return it;
 }

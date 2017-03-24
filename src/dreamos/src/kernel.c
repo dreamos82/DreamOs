@@ -41,8 +41,9 @@
 #include <fdc.h>
 #include <thread.h>
 #include <scheduler.h>
-#include <vm.h>
 #include <descriptor_tables.h>
+#include <fismem.h>
+
 
 #ifdef BOCHS_DEBUG
 
@@ -88,29 +89,30 @@ int main_loop(struct multiboot_info * boot_info)
     // -------------------------------------------------------------------------
     // Set the GDT.
     _kputs(LNG_GDT);
-    init_descriptor_tables();
+    init_gdt();
     _kprintOK();
 
     outportb(0xFF, MASTER_PORT_1);
     outportb(0xFF, SLAVE_PORT_1);
 
     // -------------------------------------------------------------------------
-    // Breakpoint.
-    __asm__ __volatile__("int $0x3");
-
-    kernel_init_paging(boot_info->mem_upper);
-
-    // -------------------------------------------------------------------------
+    __asm__ __volatile__("cli;");
+    // Set the IDT.
+    _kputs(LNG_IDT);
+    init_idt();
+    _kprintOK();
     // Initialize the IRQ.
     printf(LNG_PIC8259"\n");
     irq_init();
-    kernel_init_vm();
-    kernel_init_heap();
-
-    // -------------------------------------------------------------------------
+    _kprintOK();
     // Initialize the memory.
     printf(LNG_INIT_MEMORY);
-    kernel_map_memory(boot_info);
+    set_memorysize((boot_info->mem_upper+boot_info->mem_lower)*1024);
+    init_mem();
+    _kprintOK();
+    __asm__ __volatile__("sti;");
+    printf("Initialize paging...");
+    init_paging();
     _kprintOK();
     printf(" * Memory (upper) : %lu Mb \n", boot_info->mem_upper / 1024);
     printf(" * Memory (lower) : %lu kb \n", boot_info->mem_lower);
@@ -129,11 +131,11 @@ int main_loop(struct multiboot_info * boot_info)
     _kprintOK();
     initfs_init();
 
+    // -------------------------------------------------------------------------
     if (boot_info->mods_count > 0)
     {
         printf("Found n. %lu Modules\n", boot_info->mods_count);
     }
-
     // Get the kernel image from the boot info
     kernel_elf = elf_from_multiboot(boot_info);
 

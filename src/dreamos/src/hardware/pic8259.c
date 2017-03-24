@@ -28,6 +28,7 @@
 #include <mouse.h>
 #include <language.h>
 #include <descriptor_tables.h>
+#include <fismem.h>
 
 byte_t master_cur_mask;
 
@@ -177,7 +178,8 @@ void irq_install_handler(uint32_t irq_number, interrupt_handler_t handler)
     tmpHandler = shared_irq_handlers[irq_number];
     if (shared_irq_handlers[irq_number] == NULL)
     {
-        shared_irq_handlers[irq_number] = (irq_struct_t *) kernel_alloc_page();
+        shared_irq_handlers[irq_number] =
+            (irq_struct_t *) request_pages(sizeof(irq_struct_t), NOT_ADD_LIST);
         shared_irq_handlers[irq_number]->next = NULL;
         shared_irq_handlers[irq_number]->handler = handler;
     }
@@ -187,7 +189,8 @@ void irq_install_handler(uint32_t irq_number, interrupt_handler_t handler)
         {
             tmpHandler = tmpHandler->next;
         }
-        tmpHandler->next = (irq_struct_t *) kernel_alloc_page();
+        tmpHandler->next =
+            (irq_struct_t *) request_pages(sizeof(irq_struct_t), NOT_ADD_LIST);
         tmpHandler = tmpHandler->next;
         tmpHandler->next = NULL;
         tmpHandler->handler = handler;

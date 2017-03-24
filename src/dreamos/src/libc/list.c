@@ -59,7 +59,7 @@ void * list_remove_node(list_t * list, listnode_t * node)
         node->next->prev = node->prev;
         node->prev->next = node->next;
         list->size--;
-        kfree(node);
+        free(node);
     }
     return val;
 }
@@ -72,7 +72,7 @@ void * list_remove_front(list_t * list)
     list->head = t->next;
     if (list->head)
         list->head->prev = NULL;
-    kfree(t);
+    free(t);
     list->size--;
     return val;
 }
@@ -85,7 +85,7 @@ void * list_remove_back(list_t * list)
     list->tail = t->prev;
     if (list->tail)
         list->tail->next = NULL;
-    kfree(t);
+    free(t);
     list->size--;
     return val;
 }
@@ -169,13 +169,13 @@ void list_destroy(list_t * list)
     {
         listnode_t * save = node;
         node = node->next;
-        kfree(save);
+        free(save);
     }
     // Free the list
-    kfree(list);
+    free(list);
 }
 
 void listnode_destroy(listnode_t * node)
 {
-    kfree(node);
+    free(node);
 }

@@ -149,9 +149,10 @@ set(SOURCE_FILES
         src/libc/generic_tree.c
         src/libc/ordered_array.c
         src/libc/mutex.c
+        src/mem/buddy.c
+        src/mem/fismem.c
         src/mem/kheap.c
         src/mem/paging.c
-        src/mem/vm.c
         src/misc/bitops.c
         src/misc/clock.c
         src/misc/debug.c
