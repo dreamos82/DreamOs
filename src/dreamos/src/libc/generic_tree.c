@@ -79,7 +79,7 @@ void tree_remove(gtree_t * tree, gtreenode_t * remove_node)
         gtreenode_t * freethis = list_remove_by_index(parent->children,
                                                       child_index);
         // Free tree node here
-        free(freethis);
+        kfree(freethis);
     }
 }
 

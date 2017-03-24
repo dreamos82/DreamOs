@@ -19,7 +19,6 @@
 #include <video.h>
 #include <vfs.h>
 #include <stdio.h>
-#include <debug.h>
 
 #ifdef LEGACY
 
@@ -129,7 +128,7 @@ int get_mountpoint_id(char * path)
         }
         i++;
     }
-    //if(last!=-1) dbg_print("Changing dir %s\n", mountpoint_list[last].mountpoint, last);
+    //if(last!=-1) printf("Changing dir %s\n", mountpoint_list[last].mountpoint, last);
     return last;
 }
 
@@ -166,10 +165,10 @@ char * get_rel_path(int mountpoint_id, const char * path)
         strcpy(tmp_path, path);
     }
     #ifdef DEBUG
-    dbg_print("\tPath     : %s\n", path);
-    dbg_print("\tRelSize  : %d\n", rel_size);
-    dbg_print("\tMP_id    : %d\n", mountpoint_id);
-    dbg_print("\tTemp Path: %s\n", tmp_path);
+    printf("\tPath     : %s\n", path);
+    printf("\tRelSize  : %d\n", rel_size);
+    printf("\tMP_id    : %d\n", mountpoint_id);
+    printf("\tTemp Path: %s\n", tmp_path);
     #endif
     return tmp_path;
 }
@@ -189,7 +188,7 @@ int get_abs_path(char * path)
         int abs_size = 0;
         abs_size = strlen(current_user.cur_path);
         memset(abspath, '\0', CURPATH_LEN);
-        dbg_print("Abs: %s\n", abspath);
+        //printf("Abs: %s\n", abspath);
         strcpy(abspath, current_user.cur_path);
         if (abspath[abs_size - 1] == '/')
         {
@@ -200,7 +199,7 @@ int get_abs_path(char * path)
             strncat(abspath, "/", strlen(path));
             strncat(abspath, path, strlen(path));
         }
-        dbg_print("abspath: %s\n", abspath);
+        //printf("abspath: %s\n", abspath);
         strcpy(path, abspath);
         return strlen(path);
     }

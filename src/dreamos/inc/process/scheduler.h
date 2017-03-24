@@ -29,11 +29,14 @@
 
 #define MAX_THREADS 256
 
-typedef struct thread_list
-{
-    thread_t * thread;
-    struct thread_list * next;
-} thread_list_t;
+//typedef struct thread_list
+//{
+//    thread_t * thread;
+//    struct thread_list * next;
+//} thread_list_t;
+
+/// Contains all the running threads.
+extern list_t * thread_list;
 
 void kernel_initialize_scheduler();
 
@@ -49,7 +52,13 @@ void schedule();
 ///// @details Is defined inside "thread.s".
 ///// @param current  The current thread.
 ///// @param next     The next thread.
-void switch_thread(struct thread_list ** current,
-                   struct thread_list * next);
+//void switch_thread(struct thread_list ** current,
+//                   struct thread_list * next);
+
+/// @brief Switch the current thread with the next thread.
+/// @details Is defined inside "thread.s".
+/// @param current  The current thread.
+/// @param next     The next thread.
+void switch_thread(thread_t ** current, thread_t * next);
 
 #endif

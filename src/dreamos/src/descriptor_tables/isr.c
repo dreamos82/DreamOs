@@ -26,8 +26,8 @@
 #include <port_io.h>
 #include <scheduler.h>
 #include <descriptor_tables.h>
+#include <vm.h>
 #include <debug.h>
-#include <paging.h>
 
 irq_struct_t * shared_irq_handlers[IRQ_NUM];
 
@@ -122,6 +122,7 @@ void global_exception(int n, int error)
 
 void interrupt_handler(unsigned int esp)
 {
+    (void) esp;
     __asm__ __volatile__("cli;");
     // Get the current interrupt request number.
     int irq_num = irq_get_current();

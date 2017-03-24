@@ -731,7 +731,7 @@ list_t * str_split(const char * str,
         list_push(ret_list, strdup(token));
         if (numtokens) (*numtokens)++;
     }
-    free(s);
+    kfree(s);
     return ret_list;
 }
 
@@ -751,7 +751,7 @@ char * list2str(list_t * list, const char * delim)
         if (len + len_temp + 1 + 1 > ret_len)
         {
             ret_len = ret_len * 2;
-            free(ret);
+            kfree(ret);
             ret = kmalloc(ret_len);
             len = len + len_temp + 1;
         }

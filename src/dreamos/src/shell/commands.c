@@ -106,7 +106,7 @@ void uname_cmd()
     else
         printf("%s. For more info about this tool, please do 'uname --help'\n",
                infos->sysname);
-    free(infos);
+    kfree(infos);
 }
 
 void uname_help()
@@ -686,21 +686,21 @@ void ps()
     printf("%-6s", "PID");
     printf("%-50s", "NAME");
     printf("\n");
-//    size_t nprocs = list_size(thread_list);
-//    for (size_t i = 0; i < nprocs; ++i)
-//    {
-//        listnode_t * node = list_get_node_by_index(thread_list, i);
-//        if (node)
-//        {
-//            thread_t * thread = node->val;
-//            if (thread)
-//            {
-//                printf("%-6d", thread->id);
-//                printf("%-50s", thread->name);
-//                printf("\n");
-//            }
-//        }
-//    }
+    size_t nprocs = list_size(thread_list);
+    for (size_t i = 0; i < nprocs; ++i)
+    {
+        listnode_t * node = list_get_node_by_index(thread_list, i);
+        if (node)
+        {
+            thread_t * thread = node->val;
+            if (thread)
+            {
+                printf("%-6d", thread->id);
+                printf("%-50s", thread->name);
+                printf("\n");
+            }
+        }
+    }
     printf("\n");
 }
 

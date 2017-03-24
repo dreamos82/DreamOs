@@ -9,13 +9,12 @@
 #include <fcntl.h>
 #include <initrd.h>
 #include <thread.h>
+#include <vm.h>
 #include <timer.h>
 #include <queue.h>
 #include <mutex.h>
 #include <scheduler.h>
 #include <spinlock.h>
-#include <fismem.h>
-#include <paging.h>
 
 char * module_start;
 file_descriptor_t fd_list[_SC_OPEN_MAX];
@@ -68,9 +67,9 @@ void try_kmalloc()
     // TODO: Rework tests
     //printf("Navigating used list...\n");
     //print_heap_list (kheap->used_list);
-    free(b);
-    free(c);
-    free(d);
+    kfree(b);
+    kfree(c);
+    kfree(d);
 }
 
 void do_fault()
@@ -87,7 +86,7 @@ void do_fault()
 
 void try_printmem(void)
 {
-    print_heap_list(kheap->used_list);
+    //print_heap_list(kheap->used_list);
 }
 
 #ifdef LATEST
@@ -185,15 +184,10 @@ void try_open()
 void try_ocreat()
 {
     int fd = 0;
+    //printf("Number of files present: %d\n", initfs_init());
     fd = open("pippo", O_RDWR | O_CREAT | O_APPEND, 0);
-    if (fd >= 0)
-    {
-        write(fd, "buffo buffer", strlen("buffo buffer"));
-    }
-    else
-    {
-        printf("Error?\n");
-    }
+    if (fd >= 0) write(fd, "buffo buffer", strlen("buffo buffer"));
+    else printf("Error?\n");
     close(fd);
 }
 
@@ -236,7 +230,7 @@ void test_stat()
     printf("Device_id: %d\n", stats->st_dev);
     printf("Size: %d\n", stats->st_size);
     printf("Uid: %d\n", stats->st_uid);
-    free(stats);
+    kfree(stats);
 }
 
 void try_shadow()
@@ -252,11 +246,19 @@ void try_shadow()
 
 void try_mapaddress()
 {
-    unsigned int * tmp = kmalloc(sizeof(int));
-    printf("Testing map_address\n");
-    map_address(0x0010000, (unsigned int) tmp);
-    printf("GetPhysAddress: %x\n", get_phys_address((unsigned int) tmp));
-    return;
+    //uint32_t *tmp = (uint32_t *)kmalloc(sizeof(int));
+    uint32_t va = 0x00c09000;
+    uint32_t pa = 0x00010000;
+    printf("\nMapping (virtual -> physical):\n(0x%x) -> (0x%x)\n\n", va, pa);
+
+    uint32_t result_addr = 0;
+    map(va, pa, 0);
+    get_mapping(va, &result_addr);
+
+    printf("Getting physical address: 0x%x\n", result_addr);
+
+    unmap(va);
+    //free (tmp);
 }
 
 spinlock_t spinlock;

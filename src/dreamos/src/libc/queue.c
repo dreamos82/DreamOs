@@ -27,7 +27,7 @@ bool_t queue_destroy(queue_t queue)
         return false;
     }
     queue_clear(queue);
-    free(queue);
+    kfree(queue);
     return true;
 }
 
@@ -92,7 +92,7 @@ bool_t queue_dequeue(queue_t queue)
     {
         queue->front = queue->front->next;
     }
-    free(front_node);
+    kfree(front_node);
     return true;
 }
 

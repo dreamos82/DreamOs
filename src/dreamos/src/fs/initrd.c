@@ -32,7 +32,6 @@
 
 #include <fcntl.h>
 #include <commands.h>
-#include <dreamos/inc/misc/debug.h>
 
 char * module_start;
 initrd_t * fs_specs;
@@ -114,39 +113,43 @@ int initfs_open(const char * path, int flags, ...)
 {
     initrd_file_t * module_var;
     module_var = fs_headers;
+    //printf("J vale: %d fs_spec: %d cur_idfd: %d\n", j, fs_specs->nfiles, cur_irdfd);
     if (cur_irdfd >= MAX_INITRD_DESCRIPTORS)
     {
-        uint32_t i = 0;
+        int i = 0;
         cur_irdfd = 0;
         while (ird_descriptors[i].file_descriptor != -1 &&
                i < MAX_INITRD_DESCRIPTORS)
-        {
             i++;
-        }
         cur_irdfd = i;
+        //printf("i: %d\n", i);
     }
     uint32_t it = 0;
     while (it < fs_specs->nfiles)
     {
+        //printf(".");
         if (!strcmp(path, module_var[it].fileName))
         {
             if (module_var[it].file_type == FS_DIRECTORY ||
                 module_var[it].file_type == FS_MOUNTPOINT)
-            {
+                //Erroneus file type
                 return -1;
-            }
             ird_descriptors[cur_irdfd].file_descriptor = it;
             ird_descriptors[cur_irdfd].cur_pos = 0;
             if (flags & O_APPEND)
             {
+                printf("Appendiamoci\n");
                 ird_descriptors[cur_irdfd].cur_pos = module_var[it].length;
             }
+            //else printf("Pero' non ci appendiamo\n");
             return cur_irdfd++;
         }
         ++it;
     }
+    //printf("\n");
     if (flags & O_CREAT)
     {
+        printf("O_CREAT Flag\n");
         if (fs_specs->nfiles < MAX_FILES)
         {
             module_var[fs_specs->nfiles].magic = 0xBF;
@@ -162,6 +165,8 @@ int initfs_open(const char * path, int flags, ...)
         }
         return -1;
     }
+
+    //printf("Qua\n");
     return -1;
 }
 
@@ -240,7 +245,7 @@ ssize_t initrd_write(int fildes, const void * buf, size_t nbyte)
     // Increment the length of the file.
     fs_headers[lfd].length = fs_headers[lfd].length + it;
     // Free the memory of the temporary file.
-    free(tmp);
+    kfree(tmp);
     // Return the number of written bytes.
     return it;
 }

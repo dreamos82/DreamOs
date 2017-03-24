@@ -1,58 +1,95 @@
-/***************************************************************************
- *            kheap.c
- *
- *  Sun 18 07 08 07:47:17 2007
- *  Copyright  2008  Ivan Gualandri
- *  Email finarfin@elenhost.org
- ****************************************************************************/
 /*
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * Copyright (c), Dario Casalinuovo
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+//
+// Based on JamesM's kernel developement tutorials.
+//
+
 #include <kheap.h>
-#include <fismem.h>
 #include <paging.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <kernel.h>
-#include <string.h>
+#include <vm.h>
 #include <debug.h>
+#include <string.h>
 
-#define KHEAP_LIST_ADDRESS 0xC0000000
+static void alloc_chunk(uint32_t start, uint32_t len);
 
-// #define DEBUG 1
-heap_t * kheap;
-heap_t * kheap_tmp;
-unsigned int address_cur = ((unsigned int) &end);
-unsigned int node_address;
+static void free_chunk(header_t * chunk);
 
-#ifdef LEGACY
+static void split_chunk(header_t * chunk, uint32_t len);
 
-void * kmalloc(unsigned int size)
+static void glue_chunk(header_t * chunk);
+
+uint32_t heap_max = HEAP_START;
+header_t * heap_first = 0;
+
+void kernel_init_heap()
 {
-    unsigned int temp;
-    if (kheap != 0)
+}
+
+void * kmalloc(size_t size)
+{
+    // Add to the size the header.
+    size += sizeof(header_t);
+    // Initialize a pointer which will point to the current header to the
+    // begin of the heap.
+    header_t * cur_header = heap_first;
+    header_t * prev_header = 0;
+    // Iterate through the headers.
+    while (cur_header)
     {
-        if (size > 0) return (void *) alloc(size, kheap);
+        // Check if the current element of the heap has not been used, and its
+        // length is greater than the required size.
+        if ((cur_header->allocated == 0) && (cur_header->length >= size))
+        {
+            dbg_print("I've found a suitable header(%d).\n", size);
+            split_chunk(cur_header, size);
+            cur_header->allocated = 1;
+            return (void *) ((uint32_t) cur_header + sizeof(header_t));
+        }
+        // Set the previous element.
+        prev_header = cur_header;
+        // Move to the next element.
+        cur_header = cur_header->next;
+    }
+    dbg_print("Create a new header(%d).\n", size);
+    // If I've not found a suitable header, create a new one.
+    uint32_t chunk_start;
+    if (prev_header)
+    {
+        chunk_start = (uint32_t) prev_header + prev_header->length;
     }
     else
     {
-        temp = address_cur;
-        address_cur += size;
+        chunk_start = HEAP_START;
+        heap_first = (header_t *) chunk_start;
     }
-    return (void *) temp;
+    // Allocate the memory for a new chunk.
+    alloc_chunk(chunk_start, size);
+    cur_header = (header_t *) chunk_start;
+    cur_header->prev = prev_header;
+    cur_header->next = 0;
+    cur_header->allocated = 1;
+    cur_header->length = size;
+    if (prev_header)
+    {
+        prev_header->next = cur_header;
+    }
+    return (void *) (chunk_start + sizeof(header_t));
 }
 
 void * kcalloc(uint32_t num, uint32_t size)
@@ -62,354 +99,91 @@ void * kcalloc(uint32_t num, uint32_t size)
     return ptr;
 }
 
-#endif
-
-/* Test procedure ("try_heap" shell command") */
-void try_alloc()
+void kfree(void * p)
 {
-    #ifdef LEGACY
-    dbg_print("try_alloc(): Used list address: %d, Value: %d\n",
-              &(kheap->used_list),
-              kheap->used_list);
-    alloc(50, kheap);
-    alloc(60, kheap);
-    alloc(50, kheap);
-    alloc(100, kheap);
-    alloc(6, kheap);
-    dbg_print("Used\n");
-    print_heap_list(kheap->used_list);
-    dbg_print("Free\n");
-    print_heap_list(kheap->free_list);
-    dbg_print("Free nodes\n");
-    print_heap_list(kheap->free_nodes);
-    #endif
+    header_t * header = (header_t *) ((uint32_t) p - sizeof(header_t));
+    dbg_print("Freeing memory at  : %p [%ld]\n", header, header);
+    header->allocated = 0;
+    glue_chunk(header);
 }
 
-/**
-  * Build a new heap
-  * @author Ivan Gualandri
-  * @version 1.0
-  * @param start Heap start address
-  * @param end Heap end address
-  * @param size Heap maximum size
-  * @return Pointer to a new heap
-  */
-heap_t * make_heap(unsigned int size)
+void alloc_chunk(uint32_t start, uint32_t len)
 {
-    heap_t * new_heap;
-    heap_node_t * first_node;
-    //heap_node_t* apic_node;
-    heap_node_t * module_node;
-
-    new_heap = (heap_t *) KHEAP_LIST_ADDRESS;
-    node_address = KHEAP_LIST_ADDRESS + sizeof(heap_t);
-    //new_heap = (heap_t*)kmalloc(sizeof(heap_t));
-    //first_node = (heap_node_t*)alloc_node();
-    first_node = (heap_node_t *) node_address;
-    node_address = node_address + sizeof(heap_node_t);
-    //first_node->start_address = (unsigned int)&end;
-    first_node->start_address = (unsigned int) address_cur;
-    first_node->size = size;
-    first_node->next = NULL;
-
-    new_heap->free_nodes = NULL;
-    //new_heap->max_size = tot_mem-(unsigned int) &end;
-    new_heap->max_size = tot_mem - (unsigned int) address_cur;
-    new_heap->free_list = first_node;
-    new_heap->used_list = NULL;
-    new_heap->free_nodes = NULL;
-    dbg_print("  First heap created...\n");
-    dbg_print("  Size: %d "
-                  "  Tot mem: %d\n", (new_heap->free_list)->size, tot_mem);
-    /*apic_node = alloc_node();
-    apic_node->start_address = 0xFEC00000;
-    apic_node->size = 4096;
-    apic_node->next = NULL;
-    insert_list (apic_node, &(new_heap->used_list));
-    apic_node = alloc_node();
-    apic_node->start_address = 0xFEE00000;
-    apic_node->size = 4096;
-    apic_node->next = NULL;
-    insert_list (apic_node, &(new_heap->used_list));*/
-    module_node = alloc_node();
-    module_node->start_address = (unsigned int) module_start;
-    module_node->size = module_end - (unsigned int) module_start;
-    insert_list(module_node, &(new_heap->used_list));
-    return (heap_t *) new_heap;
-}
-
-/**
-  * Allocation
-  * @author Ivan Gualandri
-  * @version 1.0
-  * @param size Size of the memory to be allocated
-  * @param cur_heap Current heap
-  * @return The start address of the new allocated memory (or NULL if no memory can be allocated)
-  */
-void * alloc(unsigned int size, heap_t * cur_heap)
-{
-    heap_node_t * new_node = NULL;
-    heap_node_t * free_heap_list = cur_heap->free_list;
-    heap_node_t * prev_node;
-    #ifdef DEBUG
-    dbg_print("----\n");
-    dbg_print("Required Size: %d ", size);
-    #endif
-    prev_node = free_heap_list;
-
-    /* Look for a free block of memory in the heap's free memory list */
-    while (free_heap_list)
+    while (start + len > heap_max)
     {
-        if (free_heap_list->size >= size)
+        uint32_t page = kernel_alloc_page();
+        map(heap_max, page, PAGE_PRESENT | PAGE_WRITE);
+        heap_max += 0x1000;
+    }
+}
+
+void free_chunk(header_t * chunk)
+{
+    dbg_print("Freeing chunk at : %p\n", chunk);
+    chunk->prev->next = 0;
+
+    if (chunk->prev == 0)
+        heap_first = 0;
+
+    // While the heap max can contract by a page and still be greater than the chunk address...
+    while ((heap_max - 0x1000) >= (uint32_t) chunk)
+    {
+        heap_max -= 0x1000;
+        uint32_t page;
+        get_mapping(heap_max, &page);
+        kernel_free_page(page);
+        unmap(heap_max);
+    }
+}
+
+void split_chunk(header_t * chunk, uint32_t len)
+{
+    // In order to split a chunk, once we split we need to know that there will be enough
+    // space in the new chunk to store the chunk header, otherwise it just isn't worthwhile.
+    if (chunk->length - len > sizeof(header_t))
+    {
+        header_t * newchunk = (header_t *) ((uint32_t) chunk + chunk->length);
+        newchunk->prev = chunk;
+        newchunk->next = 0;
+        newchunk->allocated = 0;
+        newchunk->length = chunk->length - len;
+
+        chunk->next = newchunk;
+        chunk->length = len;
+    }
+}
+
+void glue_chunk(header_t * chunk)
+{
+    dbg_print("Starting glue...\n");
+    if (chunk->next)
+    {
+        if (chunk->next->allocated == 0)
         {
-            #ifdef DEBUG
-            dbg_print("Available_pages: %d\n", free_heap_list->size / 4096);
-            #endif
-            /*Se lo spazio disponibile e' maggiore di quello richiesto*/
-            if (free_heap_list->size > size)
-            {
-                #ifdef DEBUG
-                dbg_print("Node should be splitted\n");
-                #endif
-                new_node = (heap_node_t *) alloc_node();
-                new_node->start_address = free_heap_list->start_address;
-                new_node->next = NULL;
-                new_node->size = size;
-                insert_list(new_node, &(cur_heap->used_list));
-                free_heap_list->size = (free_heap_list->size) - (size);
-                free_heap_list->start_address = free_heap_list->start_address + (size);
-                #ifdef DEBUG
-                dbg_print("New_node -> Size: %d, start_address: %d\n",
-                          new_node->size,
-                          new_node->start_address);
-                #endif
-            }
-                /*Se lo spazio richiesto e' uguale a quello disponibile*/
-            else if (free_heap_list->size == size)
-            {
-                if (prev_node == free_heap_list)
-                {
-                    kheap->free_list = (heap_node_t *) free_heap_list->next;
-                }
-                else prev_node->next = free_heap_list->next;
-                insert_list(free_heap_list, &(cur_heap->used_list));
-                return (void *) free_heap_list->start_address;
-            }
-            #ifdef DEBUG
-            dbg_print("free_heap_list -> Actual size: %d, start_address: %d\n",
-                      free_heap_list->size,
-                      free_heap_list->start_address);
-            dbg_print("----\n");
-            #endif
-            break;
+            dbg_print("Glue next\n");
+            dbg_print("Update length\n");
+            chunk->length = chunk->length + chunk->next->length;
+            dbg_print("Update chunk->next->next->prev\n");
+            chunk->next->next->prev = chunk;
+            dbg_print("Update chunk->next\n");
+            chunk->next = chunk->next->next;
+            dbg_print("Done next...\n");
         }
-        else
+    }
+    if (chunk->prev)
+    {
+        if (chunk->prev->allocated == 0)
         {
-            prev_node = free_heap_list;
-            free_heap_list = (heap_node_t *) free_heap_list->next;
+            dbg_print("Glue prev\n");
+            chunk->prev->length = chunk->prev->length + chunk->length;
+            chunk->prev->next = chunk->next;
+            chunk->next->prev = chunk->prev;
+            chunk = chunk->prev;
+            dbg_print("Done prev...\n");
         }
     }
-    #ifdef DEBUG
-    dbg_print("Prev_node: %d \n", prev_node->start_address);
-    dbg_print("New Address: %d ", new_node->start_address);
-    #endif
-    return (void *) new_node->start_address;
-}
-
-/**
-  * Allocation of a new node for kheap
-  * @author Ivan Gualandri
-  * @version 1.0
-  * @return The start address of the new allocated node
-  */
-heap_node_t * alloc_node()
-{
-    unsigned int temp;
-    heap_node_t * new_address;
-    if (kheap->free_nodes != NULL)
+    if (chunk->next == NULL)
     {
-        new_address = kheap->free_nodes;
-        kheap->free_nodes = new_address->next;
-        #ifdef DEBUG
-        dbg_print("riciclo un nodo\n");
-        #endif
-        return new_address;
-    }
-    else
-    {
-        temp = node_address;
-        node_address = node_address + sizeof(heap_node_t);
-        return (heap_node_t *) temp;
+        free_chunk(chunk);
     }
 }
-
-/**
-  * Free a block of memory
-  * @author shainer
-  * @version 1.0
-  * @param Start_address of the block
-  * @return none
-  */
-#ifdef LEGACY
-
-void free(void * location)
-{
-    heap_node_t * busy = kheap->used_list;
-    heap_node_t * prev = busy;
-//   heap_node_t *free = kheap->free_list;
-    heap_node_t * n2;
-
-    //if ((unsigned int)location % 4 != 0) return -1;
-    //     dbg_print ("Indirizzo non allineato a 4kb\n");
-
-    while (busy)
-    {
-        if (busy->start_address == (unsigned int) location)
-        {
-            if (prev == busy)
-            { /* node is the first */
-                kheap->used_list = (heap_node_t *) busy->next;
-            }
-            else
-                prev->next = busy->next;
-
-            insert_list(busy,
-                        &(kheap->free_list)); // insert node in the free_list
-
-            /*
-             * Deallocation finished, starting merge...
-             * I need "busy", the next (n2) and the previous (prev) node
-             */
-            n2 = kheap->free_list;
-            prev = kheap->free_list;
-            while (n2 != busy)
-            {
-                prev = n2;
-                n2 = (heap_node_t *) n2->next;
-            }
-            n2 = (heap_node_t *) busy->next;
-            #ifdef DEBUG
-            dbg_print("--Pre merge--\n");
-            dbg_print("Prev address: %d, size: %d\n",
-                      prev->start_address,
-                      prev->size);
-            dbg_print("Busy address: %d, size: %d\n",
-                      busy->start_address,
-                      busy->size);
-            if (n2)
-                dbg_print("N2 address: %d, size %d\n\n",
-                          n2->start_address,
-                          n2->size);
-            #endif
-            /* Merge busy into prev */
-            if (prev != busy && (prev->start_address + prev->size) == busy->start_address)
-            {
-                #ifdef DEBUG
-                dbg_print("Backward merge\n");
-                #endif
-                prev->size += busy->size;
-                prev->next = n2;
-                free_node(busy);
-// 	insert_list (busy, &(kheap->free_nodes));
-            }
-            /* Merge n2 into busy */
-            if (n2 && (busy->start_address + busy->size) == n2->start_address)
-            {
-                #ifdef DEBUG
-                dbg_print("Forward merge\n");
-                #endif
-                busy->size += n2->size;
-                busy->next = n2->next;
-// 	insert_list (n2, &(kheap->free_nodes));
-
-                free_node(n2);
-            }
-
-            break;
-        }
-        //dbg_print("busy: %d - free: %d\n", busy->start_address, location );
-        prev = busy;
-        busy = (heap_node_t *) busy->next;
-    }
-
-//     dbg_print ("Address not found in list\n");
-}
-
-#endif
-
-/**
-  * Print a heap list
-  * @author shainer
-  * @version 1.0
-  * @param list List to be printed
-  */
-void print_heap_list(heap_node_t * list)
-{
-    int count = 0;
-    while (list)
-    {
-        printf("%u) Node_address: %u, Current->start_address: %u size: %u\n",
-               count++,
-               list,
-               list->start_address,
-               list->size);
-        list = (heap_node_t *) list->next;
-    }
-    printf("\n");
-}
-
-/**
-  * Free a memory info node.
-  * @author finarfin
-  * @version 1.0
-  * @param node Node in free_list or used_list to be freed 
-  */
-void free_node(heap_node_t * toadd)
-{
-    toadd->start_address = (unsigned int) NULL;
-    toadd->size = 0;
-    toadd->next = kheap->free_nodes;
-    kheap->free_nodes = toadd;
-}
-
-/**
-  * Insert a new element in the list
-  * @author shainer
-  * @version 0.2
-  * @param new_node New element
-  * @param list Destination list
-  * @return none
-  **/
-void insert_list(heap_node_t * new_node, heap_node_t ** ulist)
-{
-    /* First node */
-    if (!(*ulist))
-    {
-        (*ulist) = new_node;
-    }
-    else
-    {
-        heap_node_t * swap = *ulist;
-        heap_node_t * previous = swap;
-
-        /* Sorting by start address */
-        while (swap->start_address < new_node->start_address)
-        {
-            previous = swap;
-            swap = (heap_node_t *) swap->next;
-            if (!swap) break;
-        }
-
-        if (previous == swap)
-        { /* new_node is to become the new first one */
-            *ulist = new_node;
-            new_node->next = swap;
-        }
-        else
-        { /* new_node is in the middle of the list */
-            previous->next = new_node;
-            new_node->next = swap;
-        }
-    }
-}
-

@@ -20,7 +20,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <vfs.h>
-#include <debug.h>
 
 #ifdef LEGACY
 
@@ -46,12 +45,12 @@ DIR * opendir(const char * path)
     char * rel_path = get_rel_path(mpoint_id, path);
     #ifdef DEBUG
     int error = get_abs_path((char *) path);
-    dbg_print("OPENDIR\n");
-    dbg_print("\tPath     : %s\n", path);
-    dbg_print("\tPLength  : %d\n", strlen(path));
-    dbg_print("\tError    : %d\n", error);
-    dbg_print("\tRelative : %s\n", rel_path);
-    dbg_print("\tRLength  : %d\n", strlen(rel_path));
+    printf("OPENDIR\n");
+    printf("\tPath     : %s\n", path);
+    printf("\tPLength  : %d\n", strlen(path));
+    printf("\tError    : %d\n", error);
+    printf("\tRelative : %s\n", rel_path);
+    printf("\tRLength  : %d\n", strlen(rel_path));
     #else
     get_abs_path((char *) path);
     #endif
@@ -108,7 +107,7 @@ struct dirent * readdir(DIR * dirp)
 int closedir(DIR * dirp)
 {
     //printf("Closing directory\n");
-    free(dirp);
+    kfree(dirp);
     return 0;
 }
 

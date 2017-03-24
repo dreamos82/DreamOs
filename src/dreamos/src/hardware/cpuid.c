@@ -51,7 +51,7 @@ void get_cpuid(struct cpuinfo_generic * sh_info)
     ereg->ebx = ereg->ecx = ereg->edx = 0;
     cpuid_write_proctype(sh_info, ereg);
 
-    free(ereg);
+    kfree(ereg);
 }
 
 /* Actual CPUID call */

@@ -9,4 +9,3 @@ utils/initfscp
 cmake-build-*
 build
 .idea
-src/barrett
