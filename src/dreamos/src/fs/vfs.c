@@ -76,31 +76,31 @@ void vfs_init()
     mountpoint_list[0].operations.read = &initfs_read;
     mountpoint_list[0].operations.write = &initrd_write;
     mountpoint_list[0].stat_op.stat = initrd_stat;
-    //mountpoint_list[0].operations = kmalloc(sizeof(struct super_node_operations));
-//
-//    strcpy(mountpoint_list[1].mountpoint, "/dev");
-//    mountpoint_list[1].uid = 0;
-//    mountpoint_list[1].gid = 0;
-//    mountpoint_list[1].pmask = 0;
-//    mountpoint_list[1].dev_id = 0;
-//    mountpoint_list[1].start_address = 0;
-//    //mountpoint_list[1].operations = kmalloc(sizeof(struct super_node_operations));
-//
-//    strcpy(mountpoint_list[2].mountpoint, "/dev/video");
-//    mountpoint_list[2].uid = 0;
-//    mountpoint_list[2].gid = 0;
-//    mountpoint_list[2].pmask = 0;
-//    mountpoint_list[2].dev_id = 0;
-//    mountpoint_list[2].start_address = 0;
-//    //mountpoint_list[2].operations = kmalloc(sizeof(struct super_node_operations));
-//
-//    strcpy(mountpoint_list[3].mountpoint, "/root");
-//    mountpoint_list[3].uid = 0;
-//    mountpoint_list[3].gid = 0;
-//    mountpoint_list[3].pmask = 0;
-//    mountpoint_list[3].dev_id = 0;
-//    mountpoint_list[3].start_address = 0;
-//    //mountpoint_list[3].operations = kmalloc(sizeof(struct super_node_operations));
+//    mountpoint_list[0].operations = kmalloc(sizeof(struct super_node_operations));
+
+    strcpy(mountpoint_list[1].mountpoint, "/dev");
+    mountpoint_list[1].uid = 0;
+    mountpoint_list[1].gid = 0;
+    mountpoint_list[1].pmask = 0;
+    mountpoint_list[1].dev_id = 0;
+    mountpoint_list[1].start_address = 0;
+    //mountpoint_list[1].operations = kmalloc(sizeof(struct super_node_operations));
+
+    strcpy(mountpoint_list[2].mountpoint, "/dev/video");
+    mountpoint_list[2].uid = 0;
+    mountpoint_list[2].gid = 0;
+    mountpoint_list[2].pmask = 0;
+    mountpoint_list[2].dev_id = 0;
+    mountpoint_list[2].start_address = 0;
+    //mountpoint_list[2].operations = kmalloc(sizeof(struct super_node_operations));
+
+    strcpy(mountpoint_list[3].mountpoint, "/root");
+    mountpoint_list[3].uid = 0;
+    mountpoint_list[3].gid = 0;
+    mountpoint_list[3].pmask = 0;
+    mountpoint_list[3].dev_id = 0;
+    mountpoint_list[3].start_address = 0;
+    //mountpoint_list[3].operations = kmalloc(sizeof(struct super_node_operations));
 
     while (j < _SC_OPEN_MAX)
     {
