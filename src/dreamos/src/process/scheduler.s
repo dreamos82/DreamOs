@@ -1,4 +1,4 @@
-    [global switch_thread]
+[global switch_thread]
 
 switch_thread:
     ; --------------------------------------------------------------------------

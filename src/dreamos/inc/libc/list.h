@@ -9,9 +9,9 @@
 
 typedef struct listnode
 {
+    void * val;
     struct listnode * prev;
     struct listnode * next;
-    void * val;
 } listnode_t;
 
 typedef struct list
