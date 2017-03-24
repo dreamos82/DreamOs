@@ -2,6 +2,7 @@
 #define _DEBUG_H
 
 #include <port_io.h>
+#include <kernel.h>
 
 /******************************
  *		Debug Macros
@@ -70,5 +71,9 @@
 #define REGISTER_TRACE_DISABLE    0x8AE4
 
 void dbg_print(const char * msg, ...);
+
+void print_reg(register_t * reg);
+
+void print_reg16(register16_t * reg);
 
 #endif /* ! _DEBUG_H */

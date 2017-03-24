@@ -26,8 +26,6 @@
 #include <kernel.h>
 #include <video.h>
 #include <pic8259.h>
-#include <gdt.h>
-#include <idt.h>
 #include <cpuid.h>
 #include <stdio.h>
 #include <port_io.h>
@@ -165,4 +163,3 @@ int main_loop(struct multiboot_info * boot_info)
     kernel_create_thread(shell, "Shell", "Shell", 0);
     return 0;
 }
-

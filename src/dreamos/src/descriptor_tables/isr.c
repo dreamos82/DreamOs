@@ -22,12 +22,11 @@
  */
 
 #include <isr.h>
-#include <video.h>
 #include <port_io.h>
 #include <scheduler.h>
 #include <descriptor_tables.h>
-#include <vm.h>
 #include <debug.h>
+#include "stdio.h"
 
 irq_struct_t * shared_irq_handlers[IRQ_NUM];
 
@@ -55,67 +54,68 @@ void global_exception(int n, int error)
     switch (n)
     {
         case DIVIDE_ERROR:
-            _kputs("Divide Error\n");
+            printf("Divide Error\n");
             break;
         case DEBUG_EXC:
-            _kputs("Debug Exception\n");
+            printf("Debug Exception\n");
             break;
         case NMI_INTERRUPT:
-            _kputs("NMI Exception\n");
+            printf("NMI Exception\n");
             break;
         case OVERFLOW:
-            _kputs("OverFlow Exception\n");
+            printf("OverFlow Exception\n");
             break;
         case BOUND_RANGE_EXCEED:
-            _kputs("Bound Exception\n");
+            printf("Bound Exception\n");
             break;
         case DEV_NOT_AVL:
-            _kputs("Device Not Available Exception\n");
+            printf("Device Not Available Exception\n");
             break;
         case COPROC_SEG_OVERRUN:
-            _kputs("CoProcessor Segment Overrun\n");
+            printf("CoProcessor Segment Overrun\n");
             break;
         case BREAKPOINT:
-            _kputs("BreakPoint\n");
+            printf("BreakPoint\n");
             break;
         case INVALID_TSS:
-            _kputs("Invalid TSS\n");
+            printf("Invalid TSS\n");
             break;
         case SEGMENT_NOT_PRESENT:
-            _kputs("Segment Not Present\n");
+            printf("Segment Not Present\n");
             break;
         case STACK_SEGMENT_FAULT:
-            _kputs("Stack Segment Fault Exception\n");
+            printf("Stack Segment Fault Exception\n");
             break;
         case GENERAL_PROTECTION:
-            _kputs("General Protection Exception\n");
+            printf("General Protection Exception\n");
             break;
         case INVALID_OPCODE:
-            _kputs("Invalid Opcode Exception\n");
+            printf("Invalid Opcode Exception\n");
             break;
         case PAGE_FAULT:
-            page_fault_handler(error);
+//            page_fault_handler(error);
+            (void) error;
             break;
         case INT_RSV:
-            _kputs("Intel Reserved\n");
+            printf("Intel Reserved\n");
             break;
         case FLOATING_POINT_ERR:
-            _kputs("Floating Point Exception\n");
+            printf("Floating Point Exception\n");
             break;
         case ALIGNMENT_CHECK:
-            _kputs("Alignment Check Exception\n");
+            printf("Alignment Check Exception\n");
             break;
         case MACHINE_CHECK:
-            _kputs("Machine Check Exception\n");
+            printf("Machine Check Exception\n");
             break;
         case DOUBLE_FAULT:
-            _kputs("Double Fault Exception\n");
+            printf("Double Fault Exception\n");
             break;
         case SIMD_FP_EXC:
-            _kputs("Simd Floating Point Exception\n");
+            printf("Simd Floating Point Exception\n");
             break;
         default:
-            _kputs("Unknown exception\n");
+            printf("Unknown exception\n");
             break;
     }
 }
@@ -165,6 +165,6 @@ void interrupt_handler(unsigned int esp)
 
 void reserved_exception()
 {
-    _kputs("Reserved Exception - PANIC\n");
+    printf("Reserved Exception - PANIC\n");
     while (1);
 }

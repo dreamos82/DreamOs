@@ -26,8 +26,16 @@
 #include <multiboot.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include "kernel.h"
 
 #define PAGING_STACK_ADDR 0xFF000000
+
+// Error code interpretation.
+#define ERR_PRESENT     0x1
+#define ERR_RW          0x2
+#define ERR_USER        0x4
+#define ERR_RESERVED    0x8
+#define ERR_INST        0x10
 
 #define SUPERVISOR 0
 
@@ -40,5 +48,7 @@ uint32_t kernel_alloc_page();
 void kernel_free_page(uint32_t p);
 
 void kernel_map_memory(struct multiboot_info * info);
+
+void page_fault_handler(register_t * reg);
 
 #endif
