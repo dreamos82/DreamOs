@@ -19,6 +19,10 @@
 #ifndef _8253_H
 #define _8253_H
 
+#define PIT_COMREG      0x43
+#define PIT_DATAREG0    0x40
+#define PIT_DIVISOR     1193180
+
 /// @brief Handles the timer.
 /// @details In this case, it's very simple: We
 /// increment the 'timer_ticks' variable every time the

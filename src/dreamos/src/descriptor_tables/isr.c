@@ -120,7 +120,7 @@ void global_exception(int n, int error)
     }
 }
 
-void interrupt_handler()
+void interrupt_handler(unsigned int esp)
 {
     __asm__ __volatile__("cli;");
     // Get the current interrupt request number.
