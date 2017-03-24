@@ -75,7 +75,7 @@ void kernel_deactivate_thread(thread_t * thread)
 {
     // Remove the thread from the list of threads.
     list_remove_node(thread_list, thread->self);
-    
+
     // Attempt to find the thread in the ready queue.
     thread_list_t * iterator = ready_queue;
 
@@ -139,4 +139,9 @@ void schedule()
     // --------------------------------
     // Switch to the new thread.
     switch_thread(&current_thread, new_thread);
+}
+
+size_t get_active_threads()
+{
+    return list_size(thread_list);
 }

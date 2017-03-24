@@ -45,6 +45,10 @@ thread_t * kernel_create_thread(int (* fn)(void *),
                                 void * arg,
                                 uint32_t * stack)
 {
+    if (get_active_threads() + 1 > MAX_THREADS)
+    {
+        return NULL;
+    }
     // Most threads don't want to deal with stack size.
     if (stack == 0)
     {

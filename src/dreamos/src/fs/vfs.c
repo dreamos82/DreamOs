@@ -19,6 +19,7 @@
 #include <video.h>
 #include <vfs.h>
 #include <stdio.h>
+#include "debug.h"
 
 #ifdef LEGACY
 
@@ -165,10 +166,10 @@ char * get_rel_path(int mountpoint_id, const char * path)
         strcpy(tmp_path, path);
     }
     #ifdef DEBUG
-    printf("\tPath     : %s\n", path);
-    printf("\tRelSize  : %d\n", rel_size);
-    printf("\tMP_id    : %d\n", mountpoint_id);
-    printf("\tTemp Path: %s\n", tmp_path);
+    dbg_print("\tPath     : %s\n", path);
+    dbg_print("\tRelSize  : %d\n", rel_size);
+    dbg_print("\tMP_id    : %d\n", mountpoint_id);
+    dbg_print("\tTemp Path: %s\n", tmp_path);
     #endif
     return tmp_path;
 }

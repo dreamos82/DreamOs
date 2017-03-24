@@ -27,7 +27,7 @@
 #include <stdint.h>
 #include <list.h>
 
-#define MAX_THREADS 256
+#define MAX_THREADS 9
 
 #define LLIST 0
 
@@ -56,5 +56,7 @@ void schedule();
 ///// @param next     The next thread.
 void switch_thread(struct thread_list ** current,
                    struct thread_list * next);
+
+size_t get_active_threads();
 
 #endif

@@ -20,6 +20,7 @@
 #include <initrd.h>
 #include <string.h>
 #include <vfs.h>
+#include "debug.h"
 
 #ifdef LEGACY
 
@@ -42,7 +43,7 @@ unsigned int cur_irdfd;
 
 void dummy()
 {
-    printf("Qui solo per una prova\n");
+    dbg_print("Qui solo per una prova\n");
 }
 
 uint32_t initfs_init()
@@ -90,16 +91,16 @@ DIR * initfs_opendir(const char * path)
 struct dirent * initrd_readdir(DIR * dirp)
 {
     initrd_file_t * fs_type;
-//    printf("%d nfiles\n", nfiles);
+//    dbg_print("%d nfiles\n", nfiles);
     if (dirp->cur_entry < fs_specs->nfiles)
     {
         fs_type = (initrd_file_t *) (module_start + sizeof(initrd_t));
         dirp->entry.d_ino = dirp->cur_entry;
         dirp->entry.d_type = fs_type[dirp->cur_entry].file_type;
         strcpy(dirp->entry.d_name, fs_type[dirp->cur_entry].fileName);
-//        printf("%s\n", dirp->entry.d_name);
+//        dbg_print("%s\n", dirp->entry.d_name);
         dirp->cur_entry++;
-//        printf("Placeholder for future readdir of initrd Number of files: %d\n", dirp->cur_entry);
+//        dbg_print("Placeholder for future readdir of initrd Number of files: %d\n", dirp->cur_entry);
         return &(dirp->entry);
     }
     else
@@ -113,43 +114,40 @@ int initfs_open(const char * path, int flags, ...)
 {
     initrd_file_t * module_var;
     module_var = fs_headers;
-    //printf("J vale: %d fs_spec: %d cur_idfd: %d\n", j, fs_specs->nfiles, cur_irdfd);
     if (cur_irdfd >= MAX_INITRD_DESCRIPTORS)
     {
-        int i = 0;
+        uint32_t i = 0;
         cur_irdfd = 0;
         while (ird_descriptors[i].file_descriptor != -1 &&
                i < MAX_INITRD_DESCRIPTORS)
+        {
             i++;
+        }
         cur_irdfd = i;
-        //printf("i: %d\n", i);
     }
     uint32_t it = 0;
     while (it < fs_specs->nfiles)
     {
-        //printf(".");
         if (!strcmp(path, module_var[it].fileName))
         {
+            // Wrong file type.
             if (module_var[it].file_type == FS_DIRECTORY ||
                 module_var[it].file_type == FS_MOUNTPOINT)
-                //Erroneus file type
+            {
                 return -1;
+            }
             ird_descriptors[cur_irdfd].file_descriptor = it;
             ird_descriptors[cur_irdfd].cur_pos = 0;
             if (flags & O_APPEND)
             {
-                printf("Appendiamoci\n");
                 ird_descriptors[cur_irdfd].cur_pos = module_var[it].length;
             }
-            //else printf("Pero' non ci appendiamo\n");
             return cur_irdfd++;
         }
         ++it;
     }
-    //printf("\n");
     if (flags & O_CREAT)
     {
-        printf("O_CREAT Flag\n");
         if (fs_specs->nfiles < MAX_FILES)
         {
             module_var[fs_specs->nfiles].magic = 0xBF;
@@ -165,8 +163,6 @@ int initfs_open(const char * path, int flags, ...)
         }
         return -1;
     }
-
-    //printf("Qua\n");
     return -1;
 }
 
@@ -214,7 +210,7 @@ int initrd_stat(char * path, struct stat * buf)
         }
         i++;
     }
-    //printf("Initrd stat function\n");
+    //dbg_print("Initrd stat function\n");
     //buf->st_uid = 33;
     if (i == MAX_FILES) return -1;
     else return 0;
