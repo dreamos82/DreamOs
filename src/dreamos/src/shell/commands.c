@@ -686,6 +686,9 @@ void ps()
     printf("%-6s", "PID");
     printf("%-50s", "NAME");
     printf("\n");
+#if LLIST
+
+#else
     size_t nprocs = list_size(thread_list);
     for (size_t i = 0; i < nprocs; ++i)
     {
@@ -701,6 +704,7 @@ void ps()
             }
         }
     }
+#endif
     printf("\n");
 }
 
