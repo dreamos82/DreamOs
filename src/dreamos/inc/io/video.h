@@ -29,32 +29,23 @@
 
 typedef enum video_color_t
 {
-    BLACK,
-    BLUE,
-    GREEN,
-    CYAN,
-    RED,
-    MAGENTA,
-    BROWN,
-    GREY,
-    DARK_GREY,
-    BRIGHT_BLUE,
-    BRIGHT_GREEN,
-    BRIGHT_CYAN,
-    BRIGHT_RED,
-    BRIGHT_MAGENTA,
-    YELLOW,
-    WHITE,
+    BLACK,          ///< 0
+    BLUE,           ///< 1
+    GREEN,          ///< 2
+    CYAN,           ///< 3
+    RED,            ///< 4
+    MAGENTA,        ///< 5
+    BROWN,          ///< 6
+    GREY,           ///< 7
+    DARK_GREY,      ///< 8
+    BRIGHT_BLUE,    ///< 9
+    BRIGHT_GREEN,   ///< 10
+    BRIGHT_CYAN,    ///< 11
+    BRIGHT_RED,     ///< 12
+    BRIGHT_MAGENTA, ///< 13
+    YELLOW,         ///< 14
+    WHITE,          ///< 15
 } video_color_t;
-
-/// @brief A rectangle described by a pair of coordinates and a size.
-typedef struct rectangle_t
-{
-    uint32_t x;
-    uint32_t y;
-    uint32_t width;
-    uint32_t height;
-} rectangle_t;
 
 /// @brief Initialize the video.
 void video_init();
@@ -65,50 +56,79 @@ void video_putc(int);
 /// @brief Prints the given string on the screen.
 void video_puts(const char * str);
 
-/// @brief Change text colour.
-void video_set_color(const video_color_t color);
+/// @brief Change foreground colour.
+void video_set_color(const video_color_t foreground);
+
+/// @brief Change background colour.
+void video_set_background(const video_color_t background);
 
 /// @brief Deletes the last inserted character.
 void video_delete_last_character();
 
+/// @brief Move the cursor to the given position.
 void video_set_cursor(const unsigned int x, const unsigned int y);
 
-void _kgoto(int, int);
+/// @brief When something is written in another position, update the cursor.
+void video_set_cursor_auto();
 
-void _ksetcursauto();
+/// @brief Move the cursor at the position x, y on the screen.
+void video_move_cursor(int, int);
 
-void _kshiftAll();
+/// @brief Prints a tab on the screen.
+void video_put_tab();
 
-void _ktab();
+/// @brief Clears the screen.
+void video_clear();
 
-void _kclear();
+/// @brief Move to the following line (the effect of \n character).
+void video_new_line();
 
-void _knewline();
+/// @brief Move to the up line (the effect of \n character).
+void video_cartridge_return();
 
-void _kminline();
+/// @brief Get the current column number.
+uint32_t video_get_column();
 
-void _kprintOK();
+/// @brief Get the current row number.
+uint32_t video_get_line();
 
-int _kgetline();
+// -----------------------------------------------------------------------------
+// Functions concerning video scrolling.
 
-int _kgetcolumn();
+/// @brief The whole screen is shifted up by one line. Used when the cursor
+/// reaches the last position of the screen.
+void video_shift_one_line();
 
-void _krotate_buffer();
+/// @brief The scrolling buffer is updated to contain the screen up the
+/// current one. The oldest line is lost to make space for the new one.
+void video_rotate_scroll_buffer();
 
-void _kscrollup();
+/// @brief Called by the pression of the PAGEUP key.
+/// The screen aboce the current one is printed and the current one is
+/// saved in downbuffer, ready to be restored in future.
+void video_scroll_up();
 
-void _kscrolldown();
-
-void _knntos(char *, int, int);
+/// @brief Called by the pression of the PAGEDOWN key.
+/// The content of downbuffer (that is, the screen present when you pressed
+/// PAGEUP) is printed again.
+void video_scroll_down();
 
 /// Determines the lower-bound on the x axis for the video.
-int32_t lower_bound_x;
+uint32_t lower_bound_x;
 /// Determines the lower-bound on the y axis for the video.
-int32_t lower_bound_y;
+uint32_t lower_bound_y;
 
-int32_t shell_current_x;
-int32_t shell_current_y;
-int32_t shell_lowe_bound_x;
-int32_t shell_lowe_bound_y;
+uint32_t shell_current_x;
+uint32_t shell_current_y;
+uint32_t shell_lowe_bound_x;
+uint32_t shell_lowe_bound_y;
+
+// -----------------------------------------------------------------------------
+// Support functions.
+/// @brief Prints [OK] at the current row and column 60.
+void video_print_ok();
+
+/// @brief Prints [FAIL] at the current row and column 60.
+void video_print_fail();
 
 #endif /* _VIDEO_H */

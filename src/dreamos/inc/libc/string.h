@@ -146,4 +146,6 @@ char * list2str(list_t * list, const char * delim);
 /// @param base     The base used to convert.
 void int_to_str(char * buffer, unsigned int num, unsigned int base);
 
+void _knntos(char *, int, int);
+
 #endif

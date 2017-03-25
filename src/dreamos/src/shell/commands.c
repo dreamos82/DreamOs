@@ -134,42 +134,42 @@ void uname_info()
     // CPU Info
     video_puts(LNG_CPU);
     video_set_color(BRIGHT_RED);
-    _kgoto(61, _kgetline());
+    video_move_cursor(61, video_get_line());
     video_puts(cpu_vendor);
     video_set_color(WHITE);
     printf("\n");
 
     // Memory RAM Info
     /*printf("Memory RAM: ");
-    _kgoto(60, _kgetline());
+    video_move_cursor(60, video_get_line());
     printf(" %d Kb\n", get_memsize()/1024);
 
     // Memory free RAM Info
     printf(LNG_FREERAM);
-    _kgoto(60, _kgetline());
+    video_move_cursor(60, video_get_line());
     printf(" %d Kb\n", get_numpages());
 
     printf("\n");
 
     // Bitmap Info
     printf("Number bitmap's elements: ");
-    _kgoto(60, _kgetline());
+    video_move_cursor(60, video_get_line());
     printf(" %d", get_bmpelements());
-    _kgoto(60, _kgetline());*/
+    video_move_cursor(60, video_get_line());*/
 
     // Mem_area Info
     //printf("\nSize of mem_area: ");
-    //_kgoto(60, _kgetline());
+    //video_move_cursor(60, video_get_line());
     //printf(" %d\n", sizeof(mem_area));
 
     // Page Dir Info
     /*printf("Page Dir Entry n.0 is: ");
-    _kgoto(60, _kgetline());
+    video_move_cursor(60, video_get_line());
     printf(" %d\n", get_pagedir_entry(0));
 
     // Page Table Info
     printf("Page Table Entry n.4 in Page dir 0 is: ");
-    _kgoto(60, _kgetline());
+    video_move_cursor(60, video_get_line());
     printf(" %d\n", get_pagetable_entry(0,4));*/
 
     printf("\n:==========: :===========: :==========:\n\n");
@@ -717,7 +717,7 @@ void date()
 
 void clear()
 {
-    _kclear();
+    video_clear();
 }
 
 void showpid()
