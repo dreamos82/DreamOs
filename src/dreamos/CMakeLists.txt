@@ -148,6 +148,7 @@ set(SOURCE_FILES
         src/libc/list.c
         src/libc/generic_tree.c
         src/libc/ordered_array.c
+        src/libc/double_linked_list.c
         src/libc/mutex.c
         src/mem/kheap.c
         src/mem/paging.c
