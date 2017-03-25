@@ -20,31 +20,27 @@
 // Based on JamesM's kernel developement tutorials.
 //
 
-#ifndef HEAP_H
-#define HEAP_H
+#pragma once
 
 #include <stdint.h>
 #include <stddef.h>
+#include "chunk.h"
 
 #define HEAP_START 0xD0000000
 #define HEAP_END   0xFFBFF000
 
-typedef struct header_t
-{
-    struct header_t * prev;
-    struct header_t * next;
-    uint32_t allocated : 1;
-    uint32_t length : 31;
-} header_t;
+uint32_t heap_max;
+chunk_t * heap_first;
 
+/// @brief Initialize the heap.
 void kernel_init_heap();
 
-// Returns a pointer to a chunk of memory, minimum size 'l' bytes.
+/// @brief Returns a pointer to a chunk of memory.
 void * kmalloc(size_t size);
 
+/// @brief Returns a pointer to a number of chunks of memory.
 void * kcalloc(uint32_t num, uint32_t size);
 
-// Takes a chunk of memory allocated with kmalloc, and returns it to the pool of usable memory.
+/// @brief Takes a chunk of memory allocated with kmalloc, and returns it to
+/// the pool of usable memory.
 void kfree(void * p);
-
-#endif

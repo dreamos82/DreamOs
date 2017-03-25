@@ -153,6 +153,7 @@ set(SOURCE_FILES
         src/mem/kheap.c
         src/mem/paging.c
         src/mem/vm.c
+        src/mem/chunk.c
         src/misc/bitops.c
         src/misc/clock.c
         src/misc/debug.c
