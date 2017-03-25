@@ -402,7 +402,7 @@ void drv_load(void)
 
 void ls()
 {
-    dbg_print("Opened DIR : '%s'\n", current_user.cur_path);
+//    dbg_print("Opened DIR : '%s'\n", current_user.cur_path);
     // Check if the user has provided the '-l' option.
     int flag = 0;
     if (argc > 1 && strcmp(argv[1], "-l") == 0)

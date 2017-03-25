@@ -14,7 +14,7 @@ typedef struct chunk_t
     bool_t used;
 } chunk_t;
 
-void alloc_chunk(const uint32_t start, const size_t size);
+chunk_t * alloc_chunk(const uint32_t start, const size_t size);
 
 void free_chunk(chunk_t * chunk);
 

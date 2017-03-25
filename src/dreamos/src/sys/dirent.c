@@ -44,17 +44,17 @@ DIR * opendir(const char * path)
     int mpoint_id = get_mountpoint_id((char *) path);
     // Get the relative path.
     char * rel_path = get_rel_path(mpoint_id, path);
-    #ifdef DEBUG
-    int error = get_abs_path((char *) path);
-    dbg_print("OPENDIR\n");
-    dbg_print("\tPath     : %s\n", path);
-    dbg_print("\tPLength  : %d\n", strlen(path));
-    dbg_print("\tError    : %d\n", error);
-    dbg_print("\tRelative : %s\n", rel_path);
-    dbg_print("\tRLength  : %d\n", strlen(rel_path));
-    #else
+//    #ifdef DEBUG
+//    int error = get_abs_path((char *) path);
+////    dbg_print("OPENDIR\n");
+////    dbg_print("\tPath     : %s\n", path);
+////    dbg_print("\tPLength  : %d\n", strlen(path));
+////    dbg_print("\tError    : %d\n", error);
+////    dbg_print("\tRelative : %s\n", rel_path);
+////    dbg_print("\tRLength  : %d\n", strlen(rel_path));
+//    #else
     get_abs_path((char *) path);
-    #endif
+//    #endif
     DIR * pdir = NULL;
     if (mountpoint_list[mpoint_id].dir_op.opendir_f != NULL)
     {

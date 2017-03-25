@@ -28,7 +28,11 @@
 void kernel_init_heap()
 {
     heap_max = HEAP_START;
-    heap_first = NULL;
+    dbg_print("# -------------------------------------------\n");
+    dbg_print("# Heap Start : %12p\n", HEAP_START);
+    dbg_print("# Heap End   : %12p\n", HEAP_END);
+    dbg_print("# Pages      : %12d\n", ((HEAP_END - HEAP_START) / PAGE_SIZE));
+    dbg_print("# -------------------------------------------\n");
 }
 
 void * kmalloc(size_t size)
@@ -38,7 +42,7 @@ void * kmalloc(size_t size)
     // Initialize a pointer which will point to the current header to the
     // begin of the heap.
     chunk_t * cur_header = heap_first;
-    chunk_t * prev_header = 0;
+    chunk_t * prev_header = NULL;
     // Iterate through the headers.
     while (cur_header)
     {
@@ -64,11 +68,11 @@ void * kmalloc(size_t size)
     else
     {
         chunk_start = HEAP_START;
-        heap_first = (chunk_t *) chunk_start;
+        heap_first = (chunk_t *) HEAP_START;
     }
+
     // Allocate the memory for a new chunk.
-    alloc_chunk(chunk_start, size);
-    cur_header = (chunk_t *) chunk_start;
+    cur_header = alloc_chunk(chunk_start, size);
     cur_header->prev = prev_header;
     cur_header->next = 0;
     cur_header->used = true;

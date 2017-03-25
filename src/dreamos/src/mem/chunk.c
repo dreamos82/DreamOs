@@ -6,15 +6,26 @@
 #include "paging.h"
 #include "vm.h"
 
-void alloc_chunk(const uint32_t start, const size_t size)
+chunk_t * alloc_chunk(const uint32_t start, const size_t size)
 {
-    dbg_print("Allocating chunk at %p of dimension %d.\n", start, size);
+    uint32_t starting_heap = heap_max;
+    uint32_t count = 0;
     while ((start + size) > heap_max)
     {
         uint32_t page = kernel_alloc_page();
         map(heap_max, page, PAGE_PRESENT | PAGE_WRITE);
         heap_max += PAGE_SIZE;
+        ++count;
     }
+    dbg_print("# ALLOCATE CHUNK ----------------------------\n");
+    dbg_print("# Required   : %12d\n", size);
+    dbg_print("# Start Heap : %12p\n", starting_heap);
+    dbg_print("# New Heap   : %12p\n", heap_max);
+    dbg_print("# Allocated  : %12p\n", (heap_max - starting_heap));
+    dbg_print("# Pages      : %12d\n", count);
+    dbg_print("# Remaining  : %12d\n", ((HEAP_END - heap_max) / PAGE_SIZE));
+    dbg_print("# -------------------------------------------\n");
+    return (chunk_t *) start;
 }
 
 void free_chunk(chunk_t * chunk)
@@ -24,6 +35,8 @@ void free_chunk(chunk_t * chunk)
     {
         heap_first = 0;
     }
+    uint32_t starting_heap = heap_max;
+    uint32_t count = 0;
     // While the heap max can contract by a page and still be greater than
     // the chunk address...
     while ((heap_max - PAGE_SIZE) >= (uint32_t) chunk)
@@ -33,8 +46,15 @@ void free_chunk(chunk_t * chunk)
         get_mapping(heap_max, &page);
         kernel_free_page(page);
         unmap(heap_max);
+        ++count;
     }
-    dbg_print("Freeing chunk at    %p.\n", chunk);
+    dbg_print("\t# FREEING CHUNK -----------------------------\n");
+    dbg_print("\t# Start Heap : %12p\n", starting_heap);
+    dbg_print("\t# New Heap   : %12p\n", heap_max);
+    dbg_print("\t# Allocated  : %12p\n", (heap_max - starting_heap));
+    dbg_print("\t# Pages      : %12d\n", count);
+    dbg_print("\t# Remaining  : %12d\n", ((HEAP_END - heap_max) / PAGE_SIZE));
+    dbg_print("\t# -------------------------------------------\n");
 }
 
 void split_chunk(chunk_t * chunk, uint32_t len)
