@@ -44,11 +44,10 @@ void * kmalloc(size_t size)
     {
         // Check if the current element of the heap has not been used, and its
         // length is greater than the required size.
-        if ((cur_header->allocated == 0) && (cur_header->length >= size))
+        if ((!cur_header->used) && (cur_header->length >= size))
         {
-            dbg_print("I've found a suitable header(%d).\n", size);
             split_chunk(cur_header, size);
-            cur_header->allocated = 1;
+            cur_header->used = true;
             return (void *) ((uint32_t) cur_header + sizeof(chunk_t));
         }
         // Set the previous element.
@@ -56,7 +55,6 @@ void * kmalloc(size_t size)
         // Move to the next element.
         cur_header = cur_header->next;
     }
-    dbg_print("Create a new header(%d).\n", size);
     // If I've not found a suitable header, create a new one.
     uint32_t chunk_start;
     if (prev_header)
@@ -73,7 +71,7 @@ void * kmalloc(size_t size)
     cur_header = (chunk_t *) chunk_start;
     cur_header->prev = prev_header;
     cur_header->next = 0;
-    cur_header->allocated = 1;
+    cur_header->used = true;
     cur_header->length = size;
     if (prev_header)
     {
@@ -92,7 +90,6 @@ void * kcalloc(uint32_t num, uint32_t size)
 void kfree(void * p)
 {
     chunk_t * header = (chunk_t *) ((uint32_t) p - sizeof(chunk_t));
-    dbg_print("Freeing memory at  : %p [%ld]\n", header, header);
-    header->allocated = 0;
+    header->used = false;
     glue_chunk(header);
 }

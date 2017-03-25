@@ -2,38 +2,39 @@
 
 #include "chunk.h"
 #include "debug.h"
-#include "stddef.h"
 #include "kheap.h"
 #include "paging.h"
 #include "vm.h"
 
-void alloc_chunk(uint32_t start, uint32_t len)
+void alloc_chunk(const uint32_t start, const size_t size)
 {
-    while (start + len > heap_max)
+    dbg_print("Allocating chunk at %p of dimension %d.\n", start, size);
+    while ((start + size) > heap_max)
     {
         uint32_t page = kernel_alloc_page();
         map(heap_max, page, PAGE_PRESENT | PAGE_WRITE);
-        heap_max += 0x1000;
+        heap_max += PAGE_SIZE;
     }
 }
 
 void free_chunk(chunk_t * chunk)
 {
-    dbg_print("Freeing chunk at : %p\n", chunk);
     chunk->prev->next = 0;
-
     if (chunk->prev == 0)
-        heap_first = 0;
-
-    // While the heap max can contract by a page and still be greater than the chunk address...
-    while ((heap_max - 0x1000) >= (uint32_t) chunk)
     {
-        heap_max -= 0x1000;
+        heap_first = 0;
+    }
+    // While the heap max can contract by a page and still be greater than
+    // the chunk address...
+    while ((heap_max - PAGE_SIZE) >= (uint32_t) chunk)
+    {
+        heap_max -= PAGE_SIZE;
         uint32_t page;
         get_mapping(heap_max, &page);
         kernel_free_page(page);
         unmap(heap_max);
     }
+    dbg_print("Freeing chunk at    %p.\n", chunk);
 }
 
 void split_chunk(chunk_t * chunk, uint32_t len)
@@ -45,7 +46,7 @@ void split_chunk(chunk_t * chunk, uint32_t len)
         chunk_t * newchunk = (chunk_t *) ((uint32_t) chunk + chunk->length);
         newchunk->prev = chunk;
         newchunk->next = 0;
-        newchunk->allocated = 0;
+        newchunk->used = false;
         newchunk->length = chunk->length - len;
 
         chunk->next = newchunk;
@@ -55,31 +56,23 @@ void split_chunk(chunk_t * chunk, uint32_t len)
 
 void glue_chunk(chunk_t * chunk)
 {
-    dbg_print("Starting glue...\n");
     if (chunk->next)
     {
-        if (chunk->next->allocated == 0)
+        if (!chunk->next->used)
         {
-            dbg_print("Glue next\n");
-            dbg_print("Update length\n");
             chunk->length = chunk->length + chunk->next->length;
-            dbg_print("Update chunk->next->next->prev\n");
             chunk->next->next->prev = chunk;
-            dbg_print("Update chunk->next\n");
             chunk->next = chunk->next->next;
-            dbg_print("Done next...\n");
         }
     }
     if (chunk->prev)
     {
-        if (chunk->prev->allocated == 0)
+        if (!chunk->prev->used)
         {
-            dbg_print("Glue prev\n");
             chunk->prev->length = chunk->prev->length + chunk->length;
             chunk->prev->next = chunk->next;
             chunk->next->prev = chunk->prev;
             chunk = chunk->prev;
-            dbg_print("Done prev...\n");
         }
     }
     if (chunk->next == NULL)

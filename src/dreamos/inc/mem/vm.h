@@ -43,24 +43,28 @@
 
 typedef uint32_t page_directory_t;
 
-// Sets up the environment, page directories etc and enables paging.
+/// @brief Sets up the environment, page directories etc and enables paging.
 void kernel_init_vm();
 
-// Changes address space.
+/// @brief Changes address space.
 void kernel_switch_page_directory(page_directory_t * pd);
 
-// Maps the physical page "pa" into the virtual space at address "va", using 
-// page protection flags "flags".
+/// @brief Maps the physical address pa into the virtual space at address va,
+/// using page protection flags "flags".
+/// @param va       The virtual address.
+/// @param pa       The physical address.
+/// @param flags    The flags.
 void map(uint32_t va, uint32_t pa, uint32_t flags);
 
-// Removes one page of V->P mappings at virtual address "va".
+/// @brief Removes one page of V->P mappings at virtual address "va".
 void unmap(uint32_t va);
 
-// Returns 1 if the given virtual address is mapped in the address space.
-// If "*pa" is non-NULL, the physical address of the mapping is placed in *pa.
+/// @brief If "*pa" is non-NULL, the physical address of the mapping is
+/// placed in *pa.
+/// @param va   The virtual address.
+/// @param pa   The physical address.
+/// @return 1 if the given virtual address is mapped in the address space.
 char get_mapping(uint32_t va, uint32_t * pa);
-
-//void page_fault_handler(int);
 
 /// @brief Enable paging, turn off PSE bit first as it was turned on by the
 /// assembly header when kernel was loading. Then enable PG Bit in cr0.

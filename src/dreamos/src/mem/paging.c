@@ -34,14 +34,14 @@ bool_t paging_enabled = false;
 void kernel_init_paging(uint32_t start)
 {
     // Ensure the initial page allocation location is page-aligned.
-    location = (start + 0x1000) & PAGE_MASK;
+    location = (start + PAGE_SIZE) & PAGE_MASK;
 }
 
 uint32_t kernel_alloc_page()
 {
     if (!paging_enabled)
     {
-        return location += 0x1000;
+        return location += PAGE_SIZE;
     }
 
     // Quick sanity check.
@@ -92,7 +92,7 @@ void kernel_map_memory(struct multiboot_info * info)
             uint32_t j;
             // For every page in this entry, add to the free page stack.
             for (j = me->base_addr_low;
-                 j < me->base_addr_low + me->length_low; j += 0x1000)
+                 j < me->base_addr_low + me->length_low; j += PAGE_SIZE)
             {
                 kernel_free_page(j);
             }
