@@ -129,7 +129,7 @@ void try_module()
         ++it;
     }
     printf("Total Files: %d\n", fs_head->nfiles);
-    _kputs("\n");
+    video_puts("\n");
 }
 
 void try_check()

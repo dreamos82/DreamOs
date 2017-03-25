@@ -92,7 +92,7 @@ void keyboard_isr()
     // Error handling.
     if (scan_code == 0x00 || scan_code == 0xFF)
     {
-        _kputs("Keyboard error\n");
+        video_puts("Keyboard error\n");
         goto end;
     }
 
@@ -163,7 +163,7 @@ void keyboard_isr()
             }
             circular_buffer[buf_w] = '\b';
             buf_w = STEP(buf_w);
-            _kbackspace();
+            video_delete_last_character();
             _ksetcursauto();
             break;
         case KEY_ENTER:
@@ -208,7 +208,7 @@ void keyboard_isr()
         case KEY_ALT:
             // Presente un bug qui che non permette il fix dei relativi tasti
             // se si decommenta, il sistema all'avvio va in panic e si riavvia
-            //_kputs("Alt key pressed, nothing to be done\n");
+            //video_puts("Alt key pressed, nothing to be done\n");
             break;
             /*case KEY_ALTGR:
             break;*/

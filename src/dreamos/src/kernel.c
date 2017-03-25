@@ -64,28 +64,29 @@ asmlinkage void _start(struct multiboot_info * boot_info)
 
 int main_loop(struct multiboot_info * boot_info)
 {
+    // Initialize the video.
+    video_init();
     // -------------------------------------------------------------------------
     // Initialize the system calls.
-    _kclear();
     syscall_init();
     module_start = (char *) *((unsigned int *) boot_info->mods_addr);
     module_end = *((unsigned int *) (boot_info->mods_addr + 4));
 
     // -------------------------------------------------------------------------
     // Show DreamOs version.
-    _kcolor(BRIGHT_GREEN);
-    _kputs(DREAMOS_VER);
-    _kcolor(WHITE);
-    _kputs(LNG_SITE);
-    _kcolor(BRIGHT_BLUE);
-    _kputs(SITEURL);
-    _kputs("\n");
-    _kcolor(WHITE);
-    _kputs("\n");
+    video_set_color(BRIGHT_GREEN);
+    video_puts(DREAMOS_VER);
+    video_set_color(WHITE);
+    video_puts(LNG_SITE);
+    video_set_color(BRIGHT_BLUE);
+    video_puts(SITEURL);
+    video_puts("\n");
+    video_set_color(WHITE);
+    video_puts("\n");
 
     // -------------------------------------------------------------------------
     // Set the GDT.
-    _kputs(LNG_GDT);
+    video_puts(LNG_GDT);
     init_descriptor_tables();
     _kprintOK();
 
@@ -110,8 +111,8 @@ int main_loop(struct multiboot_info * boot_info)
     printf(LNG_INIT_MEMORY);
     kernel_map_memory(boot_info);
     _kprintOK();
-    printf(" * Memory (upper) : %lu Mb \n", boot_info->mem_upper / 1024);
     printf(" * Memory (lower) : %lu kb \n", boot_info->mem_lower);
+    printf(" * Memory (upper) : %lu Mb \n", boot_info->mem_upper / 1024);
 
     // -------------------------------------------------------------------------
     // Alloc and fill CPUID structure.

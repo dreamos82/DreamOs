@@ -107,8 +107,18 @@ void kernel_map_memory(struct multiboot_info * info)
 
 void page_fault_handler(register_t * reg)
 {
+    static bool_t throw_once = false;
+    if (!throw_once)
+    {
+        throw_once = true;
+    }
+    else
+    {
+        return;
+    }
+
     asm volatile("sti");
-    _kcolor(BRIGHT_RED);
+    video_set_color(BRIGHT_RED);
     dbg_print("Page fault:\n");
 
     // Gather fault info and print to screen
@@ -129,4 +139,5 @@ void page_fault_handler(register_t * reg)
     dbg_print("]\n");
 
     print_reg(reg);
+    while (true);
 }

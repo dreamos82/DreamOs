@@ -41,7 +41,7 @@ int last_Yz = 0;
 
 void putchar(int character)
 {
-    _kputc(character);
+    video_putc(character);
 }
 
 int getchar(void)
@@ -139,7 +139,7 @@ int printf(const char * format, ...)
     va_start (ap, format);
     char buffer[1024];
     len = vsprintf(buffer, format, ap);
-    _kputs(buffer);
+    video_puts(buffer);
     va_end (ap); // end of arguments
     return len;
 }

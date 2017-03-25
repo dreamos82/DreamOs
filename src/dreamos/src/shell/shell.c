@@ -84,9 +84,9 @@ int shell(void * args)
     (void) args;
     dbg_print("\nNewShell\n");
     int i = 0;
-    _kcolor(BRIGHT_BLUE);
+    video_set_color(BRIGHT_BLUE);
     printf(LNG_WELCOME);
-    _kcolor(WHITE);
+    video_set_color(WHITE);
 
     shell_login();
 
@@ -143,9 +143,9 @@ int shell(void * args)
 
 void shell_print_prompt()
 {
-    _kcolor(BRIGHT_BLUE);
+    video_set_color(BRIGHT_BLUE);
     printf(current_user.username);
-    _kcolor(WHITE);
+    video_set_color(WHITE);
     printf("~:%s# ", current_user.cur_path);
     // Update the lower-bounds for the video.
     lower_bound_x = _kgetcolumn();
@@ -171,7 +171,7 @@ void shell_get_command()
         {
             // However, the ISR of the keyboard has already put the char.
             // Thus, delete it by using backspace.
-            _kbackspace();
+            video_delete_last_character();
             // Re-set the index to the beginning.
             cmd_cursor_index = 0;
             // Go to the new line.
@@ -299,7 +299,7 @@ void history_start(const int key)
     // Completely delete the current command.
     while (cmd_cursor_index > 0)
     {
-        _kbackspace();
+        video_delete_last_character();
         cmd_cursor_index--;
     }
     // Print the command at the given position of the history.

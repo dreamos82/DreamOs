@@ -27,40 +27,51 @@
 
 #include <stdint.h>
 
-#define _SCR_W 80
-#define _SCR_H 25
+typedef enum video_color_t
+{
+    BLACK,
+    BLUE,
+    GREEN,
+    CYAN,
+    RED,
+    MAGENTA,
+    BROWN,
+    GREY,
+    DARK_GREY,
+    BRIGHT_BLUE,
+    BRIGHT_GREEN,
+    BRIGHT_CYAN,
+    BRIGHT_RED,
+    BRIGHT_MAGENTA,
+    YELLOW,
+    WHITE,
+} video_color_t;
 
-#define BLACK 0
-#define BLUE 1
-#define GREEN 2
-#define CYAN 3
-#define RED 4
-#define MAGENTA 5
-#define BROWN 6
-#define GREY 7
-#define DARK_GREY 8
-#define BRIGHT_BLUE 9
-#define BRIGHT_GREEN 10
-#define BRIGHT_CYAN 11
-#define BRIGHT_RED 12
-#define BRIGHT_MAGENTA 13
-#define YELLOW 14
-#define WHITE 15
+/// @brief A rectangle described by a pair of coordinates and a size.
+typedef struct rectangle_t
+{
+    uint32_t x;
+    uint32_t y;
+    uint32_t width;
+    uint32_t height;
+} rectangle_t;
 
+/// @brief Initialize the video.
+void video_init();
 
-#define OK_POS 70
+/// @brief Print the given character on the screen.
+void video_putc(int);
 
-void _kntos(char * buffer, unsigned int num, unsigned int base);
+/// @brief Prints the given string on the screen.
+void video_puts(const char * str);
 
-void _kputc(int);
+/// @brief Change text colour.
+void video_set_color(const video_color_t color);
 
-void _kcolor(char);
+/// @brief Deletes the last inserted character.
+void video_delete_last_character();
 
-void _kputs(char *);
-
-void _kbackspace();
-
-void _ksetcursor(unsigned int x, unsigned int y);
+void video_set_cursor(const unsigned int x, const unsigned int y);
 
 void _kgoto(int, int);
 

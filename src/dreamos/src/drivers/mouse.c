@@ -196,7 +196,7 @@ void mouse_isr()
 //        dbg_print("\rX: %d | Y: %d\n", mouse_x, mouse_y);
 
         // Move the cursor.
-//        _ksetcursor(mouse_x, mouse_y);
+//        video_set_cursor(mouse_x, mouse_y);
 
         // Qui si rilevato un problema, se il mouse si muove
         // vengono rilevati tasti premuti..

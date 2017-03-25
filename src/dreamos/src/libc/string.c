@@ -34,6 +34,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <kheap.h>
+#include "stdio.h"
 
 #define KERNEL 1
 
@@ -759,4 +760,40 @@ char * list2str(list_t * list, const char * delim)
         strcat(ret, temp);
     }
     return ret;
+}
+
+void int_to_str(char * buffer, unsigned int num, unsigned int base)
+{
+    //int numval;
+    char * p, * pbase;
+
+    p = pbase = buffer;
+
+    if (base == 16)
+    {
+        sprintf(buffer, "%0x", num);
+    }
+    else
+    {
+        if (num == 0)
+        {
+            *p++ = '0';
+        }
+        while (num != 0)
+        {
+            *p++ = (char) ('0' + (num % base));
+            num = num / base;
+        }
+        *p-- = 0;
+        while (p > pbase)
+        {
+            char tmp;
+            tmp = *p;
+            *p = *pbase;
+            *pbase = tmp;
+
+            p--;
+            pbase++;
+        }
+    }
 }

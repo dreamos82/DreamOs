@@ -20,21 +20,21 @@ char ** argv;
 
 void aalogo()
 {
-    _kcolor(BRIGHT_GREEN);
+    video_set_color(BRIGHT_GREEN);
     printf("\t\t ____           _____          _____ _____\n");
     printf("\t\t|    \\ ___ ___ |  _  | _______|     |   __|\n");
     printf("\t\t|  |  |  _| -_|| |_| ||       |  |  |__   |\n");
     printf("\t\t|____/|_| |___||_| |_||_|\134_/|_|_____|_____|\n");
-    _kcolor(WHITE);
+    video_set_color(WHITE);
     printf("\t\tVersion: \"%s %s.%s%s\"\n", NAME, VERSION, PATCHLEVEL,
            EXTRAVERSION);
-    //_kcolor(WHITE);
+    //video_set_color(WHITE);
     logo();
 }
 
 void logo()
 {
-    _kcolor(BRIGHT_BLUE);
+    video_set_color(BRIGHT_BLUE);
     printf("\n");
     printf("\t\t\t The Dream Operating System \n"
                "\t\t           v%s.%s%s %s      \n\n"
@@ -44,7 +44,7 @@ void logo()
            VERSION, PATCHLEVEL, EXTRAVERSION, REV_NUM);
 
     printf("\n\n\n\n");
-    _kcolor(WHITE);
+    video_set_color(WHITE);
 }
 
 void help()
@@ -132,11 +132,11 @@ void uname_info()
            REV_NUM);
 
     // CPU Info
-    _kputs(LNG_CPU);
-    _kcolor(BRIGHT_RED);
+    video_puts(LNG_CPU);
+    video_set_color(BRIGHT_RED);
     _kgoto(61, _kgetline());
-    _kputs(cpu_vendor);
-    _kcolor(WHITE);
+    video_puts(cpu_vendor);
+    video_set_color(WHITE);
     printf("\n");
 
     // Memory RAM Info
@@ -177,15 +177,15 @@ void uname_info()
 
 void credits(void)
 {
-    _kcolor(BRIGHT_BLUE);
-    _kputs("DreamOS Credits\n\n");
-    _kputs("Main Developers:\n");
-    _kcolor(GREEN);
+    video_set_color(BRIGHT_BLUE);
+    video_puts("DreamOS Credits\n\n");
+    video_puts("Main Developers:\n");
+    video_set_color(GREEN);
     printf("Finarfin - Ivan Gualandri (Founder)\n\n");
-    _kcolor(BRIGHT_BLUE);
-    _kputs("Contributors of the past:\n");
-    _kcolor(GREEN);
-    _kputs("Lord Osiris - Diego Stamigni\n"
+    video_set_color(BRIGHT_BLUE);
+    video_puts("Contributors of the past:\n");
+    video_set_color(GREEN);
+    video_puts("Lord Osiris - Diego Stamigni\n"
                "N3m3s1s\n"
                "Blackz\n"
                "vinc94\n"
@@ -195,7 +195,7 @@ void credits(void)
                "Hamcha\n"
                "m0nt0\n"
                "and many others (3 or 4 :P)\n\n");
-    _kcolor(WHITE);
+    video_set_color(WHITE);
 }
 
 void sleep_cmd(void)
@@ -435,11 +435,11 @@ void ls()
             //struct stat
             if (cur_dir_entry->d_type == FS_DIRECTORY)
             {
-                _kcolor(BRIGHT_CYAN);
+                video_set_color(BRIGHT_CYAN);
             }
             if (cur_dir_entry->d_type == FS_MOUNTPOINT)
             {
-                _kcolor(BRIGHT_GREEN);
+                video_set_color(BRIGHT_GREEN);
             }
             if (flag == 1)
             {
@@ -454,7 +454,7 @@ void ls()
                 }
             }
             printf("%s\n", cur_dir_entry->d_name);
-            _kcolor(WHITE);
+            video_set_color(WHITE);
             cur_dir_entry = readdir(dirp);
         }
         closedir(dirp);
@@ -466,7 +466,7 @@ void ls()
     }
     else
     {
-        _kcolor(BRIGHT_BLUE);
+        video_set_color(BRIGHT_BLUE);
         while (i < j)
         {
             if (flag)
@@ -484,7 +484,7 @@ void ls()
             }
             i++;
         }
-        _kcolor(WHITE);
+        video_set_color(WHITE);
         printf("Total: %d\n", j);
     }
 }
@@ -607,9 +607,9 @@ void tester()
     if (!strcmp(argv[1], "--help"))
     {
         printf("Testing functions.. ");
-        _kcolor(4);
+        video_set_color(4);
         printf("Warning: for developers only!\n");
-        _kcolor(7);
+        video_set_color(7);
         for (i = 0; i < MAX_TEST; i++)
         {
             if (testing[i].func == NULL)
