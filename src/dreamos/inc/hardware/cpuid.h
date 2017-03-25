@@ -73,5 +73,6 @@ char * cpuid_brand_index(struct registers *);
 char * cpuid_brand_string(struct registers *);
 
 struct cpuinfo_generic * sinfo;
+
 #endif
 

@@ -26,8 +26,6 @@
 #include <kernel.h>
 #include <video.h>
 #include <pic8259.h>
-#include <gdt.h>
-#include <idt.h>
 #include <cpuid.h>
 #include <stdio.h>
 #include <port_io.h>
@@ -66,30 +64,31 @@ asmlinkage void _start(struct multiboot_info * boot_info)
 
 int main_loop(struct multiboot_info * boot_info)
 {
+    // Initialize the video.
+    video_init();
     // -------------------------------------------------------------------------
     // Initialize the system calls.
-    _kclear();
     syscall_init();
     module_start = (char *) *((unsigned int *) boot_info->mods_addr);
     module_end = *((unsigned int *) (boot_info->mods_addr + 4));
 
     // -------------------------------------------------------------------------
     // Show DreamOs version.
-    _kcolor(BRIGHT_GREEN);
-    _kputs(DREAMOS_VER);
-    _kcolor(WHITE);
-    _kputs(LNG_SITE);
-    _kcolor(BRIGHT_BLUE);
-    _kputs(SITEURL);
-    _kputs("\n");
-    _kcolor(WHITE);
-    _kputs("\n");
+    video_set_color(BRIGHT_GREEN);
+    video_puts(DREAMOS_VER);
+    video_set_color(WHITE);
+    video_puts(LNG_SITE);
+    video_set_color(BRIGHT_BLUE);
+    video_puts(SITEURL);
+    video_puts("\n");
+    video_set_color(WHITE);
+    video_puts("\n");
 
     // -------------------------------------------------------------------------
     // Set the GDT.
-    _kputs(LNG_GDT);
+    video_puts(LNG_GDT);
     init_descriptor_tables();
-    _kprintOK();
+    video_print_ok();
 
     outportb(0xFF, MASTER_PORT_1);
     outportb(0xFF, SLAVE_PORT_1);
@@ -111,22 +110,22 @@ int main_loop(struct multiboot_info * boot_info)
     // Initialize the memory.
     printf(LNG_INIT_MEMORY);
     kernel_map_memory(boot_info);
-    _kprintOK();
-    printf(" * Memory (upper) : %lu Mb \n", boot_info->mem_upper / 1024);
+    video_print_ok();
     printf(" * Memory (lower) : %lu kb \n", boot_info->mem_lower);
+    printf(" * Memory (upper) : %lu Mb \n", boot_info->mem_upper / 1024);
 
     // -------------------------------------------------------------------------
     // Alloc and fill CPUID structure.
     printf(LNG_INIT_CPUID);
     sinfo = kmalloc(sizeof(struct cpuinfo_generic));
     get_cpuid(sinfo);
-    _kprintOK();
+    video_print_ok();
 
     // -------------------------------------------------------------------------
     // Initialize the filesystem.
     printf(LNG_INIT_FS);
     vfs_init();
-    _kprintOK();
+    video_print_ok();
     initfs_init();
 
     if (boot_info->mods_count > 0)
@@ -143,7 +142,7 @@ int main_loop(struct multiboot_info * boot_info)
     // Initialize the scheduler.
     printf(LNG_SCHEDULER);
     kernel_initialize_scheduler();
-    _kprintOK();
+    video_print_ok();
 
     //printf(LNG_PIT8253);
     //printf("----\n");
@@ -161,8 +160,7 @@ int main_loop(struct multiboot_info * boot_info)
     // -------------------------------------------------------------------------
     // Initialize the shell.
     printf(LNG_SHELL);
-    _kprintOK();
+    video_print_ok();
     kernel_create_thread(shell, "Shell", "Shell", 0);
     return 0;
 }
-

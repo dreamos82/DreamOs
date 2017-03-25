@@ -6,7 +6,7 @@ add_subdirectory(src/dreamos)
 add_subdirectory(src/initscp)
 
 # ------------------------------------------------------------------------------
-add_custom_target(prepare_grub
+add_custom_target(grub
         COMMAND echo "--------------------------------------------- "
         COMMAND echo "Copying grub file inside build directory..."
         COMMAND cp -n ${CMAKE_SOURCE_DIR}/boot/grub.img ${CMAKE_BINARY_DIR}/grub.img
@@ -16,7 +16,6 @@ add_custom_target(prepare_grub
         )
 
 add_custom_target(img
-        COMMAND make prepare_grub
         COMMAND echo "--------------------------------------------- "
         COMMAND echo "Copying the DreamOS inside the boot image..."
         COMMAND echo "--------------------------------------------- "
@@ -40,12 +39,12 @@ add_custom_target(img
         COMMAND echo "--------------------------------------------- "
         COMMAND echo "Done!"
         COMMAND echo "--------------------------------------------- "
+        DEPENDS grub
         DEPENDS ${CMAKE_BINARY_DIR}/grub.img
         DEPENDS ${CMAKE_BINARY_DIR}/src/dreamos/dreamos.img
         )
 
 add_custom_target(filesystem
-        COMMAND make prepare_grub
         COMMAND echo "--------------------------------------------- "
         COMMAND echo "Copying the filesystem inside the image..."
         COMMAND echo "--------------------------------------------- "
@@ -69,14 +68,15 @@ add_custom_target(filesystem
         COMMAND echo "--------------------------------------------- "
         COMMAND echo "Done!"
         COMMAND echo "--------------------------------------------- "
+        DEPENDS grub
         DEPENDS ${CMAKE_BINARY_DIR}/grub.img
         DEPENDS ${CMAKE_BINARY_DIR}/src/initfs
         )
 
 # ------------------------------------------------------------------------------
-add_custom_target(init_filesystem
+add_custom_target(initfs
         COMMAND echo "--------------------------------------------- "
-        COMMAND echo "Initializing the filesystem..."
+        COMMAND echo "Initializing 'initfs'..."
         COMMAND echo "--------------------------------------------- "
         COMMAND ${CMAKE_BINARY_DIR}/src/initscp/initfscp
                 `find ${CMAKE_SOURCE_DIR}/files/* -type f -exec echo {} +;`
@@ -89,14 +89,26 @@ add_custom_target(init_filesystem
 
 # ------------------------------------------------------------------------------
 # Builds the code and runs qemu with the built Os.
-add_custom_target(qemu
-        COMMAND make
-        COMMAND make prepare_grub
-        COMMAND make img
-        COMMAND make init_filesystem
-        COMMAND make filesystem
-        COMMAND qemu-system-i386
-                -vga std
-                -serial stdio
-                -fda ${CMAKE_BINARY_DIR}/grub.img
+add_custom_target(qemu-grub
+        COMMAND qemu-system-i386 -vga std
+                                 -serial stdio
+                                 -fda ${CMAKE_BINARY_DIR}/grub.img
+        DEPENDS DreamOs
+        DEPENDS grub
+        DEPENDS img
+        DEPENDS initfs
+        DEPENDS filesystem
         )
+
+# ------------------------------------------------------------------------------
+# Builds the code and runs qemu with the built Os.
+add_custom_target(qemu
+        COMMAND qemu-system-i386 -vga std
+                                 -serial stdio
+                                 -initrd src/initfs
+                                 -kernel src/dreamos/dreamos.img
+        DEPENDS DreamOs
+        DEPENDS grub
+        DEPENDS initfs
+        )
+

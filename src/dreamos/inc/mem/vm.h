@@ -60,7 +60,7 @@ void unmap(uint32_t va);
 // If "*pa" is non-NULL, the physical address of the mapping is placed in *pa.
 char get_mapping(uint32_t va, uint32_t * pa);
 
-void page_fault_handler(int);
+//void page_fault_handler(int);
 
 /// @brief Enable paging, turn off PSE bit first as it was turned on by the
 /// assembly header when kernel was loading. Then enable PG Bit in cr0.

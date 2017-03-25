@@ -27,7 +27,9 @@
 #include <stdint.h>
 #include <list.h>
 
-#define MAX_THREADS 256
+#define MAX_THREADS 9
+
+#define LLIST 0
 
 typedef struct thread_list
 {
@@ -48,11 +50,13 @@ thread_t * kernel_get_current_thread();
 
 void schedule();
 
-/// @brief Switch the current thread with the next thread.
-/// @details Is defined inside "thread.s".
-/// @param current  The current thread.
-/// @param next     The next thread.
+///// @brief Switch the current thread with the next thread.
+///// @details Is defined inside "thread.s".
+///// @param current  The current thread.
+///// @param next     The next thread.
 void switch_thread(struct thread_list ** current,
                    struct thread_list * next);
+
+size_t get_active_threads();
 
 #endif

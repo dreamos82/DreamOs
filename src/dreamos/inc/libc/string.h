@@ -138,4 +138,14 @@ list_t * str_split(const char * str, const char * delim, unsigned int * numtoken
 
 char * list2str(list_t * list, const char * delim);
 
+/// @brief Move the number "num" into a string.
+/// @author Lisa
+/// @version 1.0
+/// @param buffer   The string containing the number.
+/// @param num      The number to convert.
+/// @param base     The base used to convert.
+void int_to_str(char * buffer, unsigned int num, unsigned int base);
+
+void _knntos(char *, int, int);
+
 #endif

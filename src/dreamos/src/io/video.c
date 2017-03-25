@@ -5,7 +5,7 @@
  *  Copyright  2007  sgurtz
  *  Email
  *  Scrolling features and hexadecimal support added by shainer
- *  _kgetline() and _kprintOK developed by ^Inuyasha^
+ *  video_get_line() and video_print_ok developed by ^Inuyasha^
  *  Thanks to Schizzobau
  ****************************************************************************/
 
@@ -28,32 +28,72 @@
 #include <video.h>
 #include <debug.h>
 #include <stdio.h>
+#include <stdbool.h>
 
-char * VIDEO_MEM = (char *) 0xb8000;
-char * VIDEO_PTR = (char *) 0xb8000;
-char VIDEO_CLR = 0x7;
+#define SCREEN_HEIGHT   25
+#define SCREEN_WIDTH    80
 
-// Scrolling buffer 
-char upbuffer[_SCR_H][_SCR_W * 2];
-char downbuffer[_SCR_H][_SCR_W * 2];
-int is_scrolled = 0;
-int is_shifted_once = 0;
-unsigned int last_tab = 0;
-int last_x = 0;
-int last_y = 0;
-
-void _kputc(int c)
+/// @brief Structure used to hold information about the screen.
+typedef struct screen_t
 {
-    // If we are at the end of the line and at the end of the column, scroll
-    // down the page.
-    if (last_x && last_y)
+    /// The width of the screen.
+    uint32_t width;
+    /// The height of the screen.
+    uint32_t height;
+    /// Pointer to the memory of the screen.
+    char * memory;
+    /// Pointer to a position of the screen.
+    char * pointer;
+    /// The current foreground color.
+    char foreground_color;
+    /// The current background color.
+    char background_color;
+    /// The buffer used when scrolling upward.
+    char upbuffer[SCREEN_HEIGHT][SCREEN_WIDTH * 2];
+    /// The buffer used when scrolling downward.
+    char downbuffer[SCREEN_HEIGHT][SCREEN_WIDTH * 2];
+    /// The output has been scrolled.
+    bool_t is_scrolled;
+    /// If the output has been shifted at least once.
+    bool_t is_shifted_once;
+    /// Used to store the last x coordiantes (used when scrolling).
+    uint32_t stored_x;
+    /// Used to store the last y coordiantes (used when scrolling).
+    uint32_t stored_y;
+} screen_t;
+
+/// The information concerning the screen.
+screen_t screen;
+
+unsigned int last_tab = 0;
+
+void video_init()
+{
+    // --------------------------------
+    screen.height = 25;
+    screen.width = 80;
+    screen.memory = (char *) 0xb8000;
+    screen.pointer = (char *) 0xb8000;
+    screen.foreground_color = GREY;
+    screen.background_color = BLACK;
+    screen.is_scrolled = false;
+    screen.is_shifted_once = false;
+    // --------------------------------
+    video_clear();
+}
+
+void video_putc(int c)
+{
+    // If we have stored the last coordinates, this means that we are
+    // currently scrolling upwards. Thus, we need to scroll down first.
+    if (screen.stored_x && screen.stored_y)
     {
-        _kscrolldown();
+        video_scroll_down();
     }
     // If the character is '\n' go the new line.
     if (c == '\n')
     {
-        _knewline();
+        video_new_line();
     }
     else if (c == '\033')
     {
@@ -61,205 +101,103 @@ void _kputc(int c)
     }
     else if (c == '\t')
     {
-        _ktab();
+        video_put_tab();
     }
     else if (c == '\b')
     {
-        _kbackspace();
+        video_delete_last_character();
     }
     else if (c == '\r')
     {
-        _kminline();
+        video_cartridge_return();
     }
     else
     {
-        *(VIDEO_PTR++) = (char) c;
-        *(VIDEO_PTR++) = VIDEO_CLR;
+        *(screen.pointer++) = (char) c;
+        *(screen.pointer++) = (screen.foreground_color +
+                               16 * screen.background_color);
     }
-    _kshiftAll();
-    _ksetcursauto();
-/*
-  while(c != 0) {
-	if ( c=='\n' )
-		_knewline();
-	else if ( c=='\t' )
-		_ktab();
-	//else if(c=='\033')
-	//	_kcolor(++c);	NON STAMPA CORRETTAMENTE I COLORI
-	else if( c=='\b' )
-		_kbackspace();
-	else if ( c=='\r' )
-		_kminline();
-	c++;
-  }
-*/
+    video_shift_one_line();
+    video_set_cursor_auto();
 }
 
-void _kputs(char * s)
+void video_puts(const char * str)
 {
-    while (*s != 0)
+    while ((*str) != 0)
     {
-        if (*s == '\n')
+        if ((*str) == '\n')
         {
-            _knewline();
+            video_new_line();
         }
-        else if (*s == '\033')
+        else if ((*str) == '\033')
         {
-            _kcolor(*++s);
+            video_set_color(*(++str));
         }
-        else if (*s == '\t')
+        else if ((*str) == '\t')
         {
-            _ktab();
+            video_put_tab();
         }
-        else if (*s == '\b')
+        else if ((*str) == '\b')
         {
-            _kbackspace();
+            video_delete_last_character();
         }
-        else if (*s == '\r')
+        else if ((*str) == '\r')
         {
-            _kminline();
+            video_cartridge_return();
         }
         else
         {
-            _kputc(*s);
+            video_putc((*str));
         }
-        s++;
+        ++str;
     }
 }
 
-/*
- * Change text colour
- */
-void _kcolor(char color)
+void video_set_color(const video_color_t foreground)
 {
-    VIDEO_CLR = color;
+    screen.foreground_color = foreground;
 }
 
-/*
- * Pression of the backspace key
- */
-void _kbackspace()
+void video_set_background(const video_color_t background)
+{
+    screen.background_color = background;
+}
+
+void video_delete_last_character()
 {
     if (last_tab)
     {
         unsigned int i;
         for (i = 0; i < 7; i++)
         {
-            VIDEO_PTR -= 2;
-            *VIDEO_PTR = 0x20;
+            screen.pointer -= 2;
+            *screen.pointer = 0x20;
         }
         last_tab--;
     }
-    else if (lower_bound_y != _kgetline() || lower_bound_x < _kgetcolumn())
+    else if (lower_bound_y != video_get_line() ||
+             lower_bound_x < video_get_column())
     {
-        VIDEO_PTR -= 2;
-        *VIDEO_PTR = 0x20; // delete the character
+        screen.pointer -= 2;
+        *screen.pointer = 0x20; // delete the character
     }
 }
 
-/*
- * Pression of the TAB key
- */
-void _ktab()
+void video_set_cursor(const unsigned int x, const unsigned int y)
 {
-    VIDEO_PTR = VIDEO_PTR + (7 * 2);
+    uint32_t position = (x * 80) + y;
+    // cursor LOW port to vga INDEX register
+    outportb(0x3D4, 0x0F);
+    outportb(0x3D5, (uint8_t) (position & 0xFF));
+    // cursor HIGH port to vga INDEX register
+    outportb(0x3D4, 0x0E);
+    outportb(0x3D5, (uint8_t) ((position >> 8) & 0xFF));
 }
 
-/*
- * Move the cursor at the position x, y on the screen
- */
-void _kgoto(int x, int y)
+void video_set_cursor_auto()
 {
-    VIDEO_PTR = VIDEO_MEM + ((y * _SCR_W * 2) + (x * 2));
-    _ksetcursauto();
-}
-
-/*
- * Needed to clear the screen
- */
-void _kclear()
-{
-    int line, row;
-    line = 0;
-    row = 0;
-    VIDEO_PTR = VIDEO_MEM;
-
-    while (row < _SCR_H)
-    {
-        while (line < _SCR_W)
-        {
-            *VIDEO_PTR++ = ' ';
-            *VIDEO_PTR++ = 0x7;
-            line++;
-        }
-        line = 0;
-        row++;
-    }
-
-    VIDEO_PTR = VIDEO_MEM;
-}
-
-/*
- * Move to the following line (the effect of \n character)
- */
-void _knewline()
-{
-    VIDEO_PTR = VIDEO_MEM +
-                ((((VIDEO_PTR - VIDEO_MEM) / (_SCR_W * 2)) + 1) * (_SCR_W * 2));
-    _kshiftAll();
-    _ksetcursauto();
-}
-
-/*
- * Move to the up line (the effect of \n character)
- */
-void _kminline()
-{
-    VIDEO_PTR = VIDEO_MEM +
-                ((((VIDEO_PTR - VIDEO_MEM) / (_SCR_W * 2)) - 1) * (_SCR_W * 2));
-    _knewline();
-    _kshiftAll();
-    _ksetcursauto();
-}
-
-/*
- * Move the cursor to the correct position
- */
-void _ksetcursor(unsigned int x, unsigned int y)
-{
-    __asm__(
-    "movl  %0, %%eax   \n"
-        "movl  %1, %%ebx   \n"
-        "movl  $0x50, %%ecx   \n"
-        "mul   %%ecx         \n"
-        "addl  %%ebx, %%eax   \n"
-        "movw  $0x03d4, %%dx  \n"
-        "pushl %%eax         \n"
-        "movb  $0x0f, %%al    \n"
-        "out   %%al, %%dx     \n"
-        "popl  %%eax         \n"
-        "movw  $0x03d5, %%dx  \n"
-        "out   %%al, %%dx     \n"
-        "shr   $0x08,%%eax      \n"
-        "pushl %%eax         \n"
-        "movw  $0x03d4, %%dx  \n"
-        "movb  $0x0e, %%al    \n"
-        "out   %%al, %%dx     \n"
-        "pop   %%eax         \n"
-        "movw  $0x03d5, %%dx  \n"
-        "out   %%al, %%dx     \n"
-    :
-    : "g" (x), "g" (y)
-    );
-}
-
-/*
- * When something is written in another position, update the cursor
- */
-void _ksetcursauto()
-{
-    long x = ((VIDEO_PTR - VIDEO_MEM) / 2) / _SCR_W;
-    long y = ((VIDEO_PTR - VIDEO_MEM) / 2) % _SCR_W;
+    long x = ((screen.pointer - screen.memory) / 2) / screen.width;
+    long y = ((screen.pointer - screen.memory) / 2) % screen.width;
     if (x < 0)
     {
         dbg_print("Negative x while setting auto-cursor.\n");
@@ -270,236 +208,177 @@ void _ksetcursauto()
         dbg_print("Negative x while setting auto-cursor.\n");
         y = 0;
     }
-    _ksetcursor((uint32_t) x, (uint32_t) y);
+    video_set_cursor((uint32_t) x, (uint32_t) y);
 }
 
-/*
- * Print [OK] at the current row and column 60
- */
-void _kprintOK()
+void video_move_cursor(int x, int y)
 {
-    _kgoto(60, _kgetline());
-    _kputs("\033\001[\033\012OK\033\001]\033\007\n");
-    _kcolor(WHITE);
+    screen.pointer = screen.memory + ((y * screen.width * 2) + (x * 2));
+    video_set_cursor_auto();
 }
 
-/*
- * Get the current column number
- */
-int _kgetcolumn()
+void video_put_tab()
 {
-    long column = ((VIDEO_PTR - VIDEO_MEM) % (_SCR_W * 2)) / 2;
-    if (column < 0)
+    screen.pointer = screen.pointer + (7 * 2);
+}
+
+void video_clear()
+{
+    screen.pointer = screen.memory;
+    for (uint32_t y = 0; y < screen.height; y++)
+    {
+        for (uint32_t x = 0; x < screen.width; x++)
+        {
+            *(screen.pointer++) = ' ';
+            *(screen.pointer++) = 0x7;
+        }
+    }
+    screen.pointer = screen.memory;
+}
+
+void video_new_line()
+{
+    screen.pointer =
+        screen.memory
+        + ((((screen.pointer - screen.memory) / (screen.width * 2)) + 1)
+           * (screen.width * 2));
+    video_shift_one_line();
+    video_set_cursor_auto();
+}
+
+void video_cartridge_return()
+{
+    screen.pointer =
+        screen.memory
+        + ((((screen.pointer - screen.memory) / (screen.width * 2)) - 1) *
+           (screen.width * 2));
+    video_new_line();
+    video_shift_one_line();
+    video_set_cursor_auto();
+}
+
+uint32_t video_get_column()
+{
+    if (screen.pointer < screen.memory)
     {
         dbg_print("Get negative value while getting video column.\n");
-        column = 0;
+        return 0;
     }
-    return column;
+    return ((screen.pointer - screen.memory) % (screen.width * 2)) / 2;
 }
 
-/*
- * Get the current row number
- */
-int _kgetline()
+uint32_t video_get_line()
 {
-    long line = ((VIDEO_PTR - VIDEO_MEM) / (_SCR_W * 2));
-    if (line < 0)
+    if (screen.pointer < screen.memory)
     {
         dbg_print("Get negative value while getting video line.\n");
-        line = 0;
+        return 0;
     }
-    return line;
+    return ((screen.pointer - screen.memory) / (screen.width * 2));
 }
 
-void _knntos(char * buffer, int num, int base)
+void video_shift_one_line(void)
 {
-    //int numval;
-    char * p, * pbase;
-
-    p = pbase = buffer;
-
-    if (num < 0)
-    {
-        num = (~num) + 1;
-        *p++ = '-';
-        pbase++;
-    }
-    while (num > 0)
-    {
-        *p++ = (char) ('0' + (num % base));
-        num = num / base;
-    }
-
-    *p-- = 0;
-    while (p > pbase)
-    {
-        char tmp;
-        tmp = *p;
-        *p = *pbase;
-        *pbase = tmp;
-
-        p--;
-        pbase++;
-    }
-}
-
-/** @author Lisa
-  * @version 1.0
-  * @param  buffer (char*) La stringa che contiene il numero
-  * @param  num Il numero da convertire (intero)
-  * @param  base la base numerica in cui convertire (per ora 0, 16,10)
-  *
-  * Move the number "num" into a string
-  */
-void _kntos(char * buffer, unsigned int num, unsigned int base)
-{
-    //int numval;
-    char * p, * pbase;
-
-    p = pbase = buffer;
-
-    if (base == 16)
-    {
-        sprintf(buffer, "%0x", num);
-    }
-    else
-    {
-        if (num == 0)
-        {
-            *p++ = '0';
-        }
-        while (num != 0)
-        {
-            *p++ = (char) ('0' + (num % base));
-            num = num / base;
-        }
-        *p-- = 0;
-        while (p > pbase)
-        {
-            char tmp;
-            tmp = *p;
-            *p = *pbase;
-            *pbase = tmp;
-
-            p--;
-            pbase++;
-        }
-    }
-}
-
-/***************************************
- *                                     *
- * Functions regarding video scrolling *
- *                                     *
- **************************************/
-
-
-/*
- * First the simplest one: when the cursor reaches the last position of the
- * screen, the whole screen is shifted up by one line
- */
-void _kshiftAll(void)
-{
-    char * i;
-    int index;
-    if (VIDEO_PTR >= VIDEO_MEM + ((_SCR_H) * _SCR_W * 2))
+    if (screen.pointer >= screen.memory + ((screen.height) * screen.width * 2))
     {
         // We save the line to be lost in a buffer, this will be useful for
         // scrolling.
-        _krotate_buffer();
-        for (index = 0; index < _SCR_W * 2; index++)
+        video_rotate_scroll_buffer();
+        uint32_t index;
+        for (index = 0; index < screen.width * 2; index++)
         {
-            upbuffer[_SCR_H - 1][index] = *(VIDEO_MEM + index);
+            screen.upbuffer[screen.height - 1][index] = *(screen.memory +
+                                                          index);
         }
-        for (i = VIDEO_MEM;
-             i <= (VIDEO_MEM + ((_SCR_H) * _SCR_W * 2) + (_SCR_W * 2)); i++)
+        for (char * i = screen.memory;
+             i <= (screen.memory + ((screen.height) * screen.width * 2) +
+                   (screen.width * 2)); ++i)
         {
-            *i = i[_SCR_W * 2];
+            *i = i[screen.width * 2];
         }
-        VIDEO_PTR = VIDEO_MEM +
-                    ((((VIDEO_PTR - VIDEO_MEM) / (_SCR_W * 2)) - 1) *
-                     (_SCR_W * 2));
-        is_shifted_once = 1;
+        screen.pointer = screen.memory +
+                         ((((screen.pointer - screen.memory) /
+                            (screen.width * 2)) -
+                           1) *
+                          (screen.width * 2));
+        // Set that the scroll has been shifted at least once.
+        screen.is_shifted_once = true;
     }
 }
 
-/*
- * The scrolling buffer is updated to contain the screen up the current one
- * The oldest line is lost to make space for the new one
- */
-void _krotate_buffer()
+void video_rotate_scroll_buffer()
 {
-    int y = 1;
-    int x = 0;
-
-    for (y = 1; y < _SCR_H; y++)
+    for (uint32_t y = 1; y < screen.height; y++)
     {
-        for (x = 0; x < _SCR_W * 2; x++)
+        for (uint32_t x = 0; x < screen.width * 2; x++)
         {
-            upbuffer[y - 1][x] = upbuffer[y][x];
+            screen.upbuffer[y - 1][x] = screen.upbuffer[y][x];
         }
     }
 }
 
-
-/*
- * Called by the pression of the PAGEUP key
- * The screen up the current one is printed and the current one is saved in
- * downbuffer for being restored in future
- */
-void _kscrollup()
+void video_scroll_up()
 {
-    int y = 0, x = 0;
-    char * ptr = VIDEO_MEM;
+    char * ptr = screen.memory;
 
-    if (is_scrolled == 1 || is_shifted_once == 0)
+    if (screen.is_scrolled || !screen.is_shifted_once)
     {
         return;
     }
 
-    for (; y < _SCR_H; y++)
+    for (uint32_t y = 0; y < screen.height; y++)
     {
-        for (x = 0; x < _SCR_W * 2; x++)
+        for (uint32_t x = 0; x < screen.width * 2; x++)
         {
-            downbuffer[y][x] = *ptr;
-            *ptr++ = upbuffer[y][x];
+            screen.downbuffer[y][x] = *ptr;
+            *ptr++ = screen.upbuffer[y][x];
         }
     }
-    is_scrolled = 1;
-    last_x = _kgetcolumn();
-    last_y = _kgetline();
-    _kgoto(_SCR_W, _SCR_H);
+    screen.is_scrolled = true;
+    screen.stored_x = video_get_column();
+    screen.stored_y = video_get_line();
+    video_move_cursor(screen.width, screen.height);
 }
 
-/*
- * Called by the pression of the PAGEDOWN key
- * The content of downbuffer (that is, the screen present when you pressed
- * PAGEUP) is printed again
- */
-void _kscrolldown()
+void video_scroll_down()
 {
-    int y = 0, x = 0;
-    char * ptr = VIDEO_MEM;
-
-    /*
-     * If PAGEUP hasn't been pressed, it's useless to go down, there is nothing
-     */
-    if (is_scrolled == 0)
+    char * ptr = screen.memory;
+    // If PAGEUP hasn't been pressed, it's useless to go down, there is nothing.
+    if (!screen.is_scrolled)
     {
         return;
     }
-
-    for (y = 0; y < _SCR_H; y++)
+    for (uint32_t y = 0; y < screen.height; y++)
     {
-        for (x = 0; x < _SCR_W * 2; x++)
+        for (uint32_t x = 0; x < screen.width * 2; x++)
         {
-            *ptr++ = downbuffer[y][x];
+            *ptr++ = screen.downbuffer[y][x];
         }
     }
-    is_scrolled = 0;
-    _kgoto(last_x, last_y);
-    last_x = 0;
-    last_y = 0;
+    screen.is_scrolled = false;
+    video_move_cursor(screen.stored_x, screen.stored_y);
+    screen.stored_x = 0;
+    screen.stored_y = 0;
 }
 
-/* EOF */
+void video_print_ok()
+{
+    video_move_cursor(60, video_get_line());
+    video_set_color(WHITE);
+    video_putc('[');
+    video_set_color(BRIGHT_GREEN);
+    video_puts("OK");
+    video_set_color(WHITE);
+    video_puts("]\n");
+}
+
+void video_print_fail()
+{
+    video_move_cursor(60, video_get_line());
+    video_set_color(WHITE);
+    video_putc('[');
+    video_set_color(BRIGHT_RED);
+    video_puts("FAIL");
+    video_set_color(WHITE);
+    video_puts("]\n");
+}

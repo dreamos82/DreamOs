@@ -138,28 +138,32 @@ char get_mapping(uint32_t va, uint32_t * pa)
     return 0;
 }
 
-void page_fault_handler(int ecode)
-{
-    (void) ecode;
-    // TODO: The system launch this fault continuously and prevent
-    // to read the debug info, this should be investigated.
-    if (fault == 0)
-        fault = 1;
-    else
-        return;
-
-    uint32_t cr2;
-    __asm__ __volatile__ ("mov %%cr2, %0" : "=r" (cr2));
-
-    char message[128];
-
-    // TODO: Support registers in handlers
-    sprintf(message,
-            "Detected page fault at address 0x%x", cr2);
-
-    kernel_panic(message);
-    for (;;);
-}
+//void page_fault_handler(int ecode)
+//{
+//    (void) ecode;
+//    // TODO: The system launch this fault continuously and prevent
+//    // to read the debug info, this should be investigated.
+//    if (fault == 0)
+//    {
+//        fault = 1;
+//    }
+//    else
+//    {
+//        return;
+//    }
+//
+//    uint32_t cr2;
+//    __asm__ __volatile__ ("mov %%cr2, %0" : "=r" (cr2));
+//
+//    char message[128];
+//
+//    // TODO: Support registers in handlers
+//    sprintf(message,
+//            "Detected page fault at address 0x%x", cr2);
+//
+//    kernel_panic(message);
+//    for (;;);
+//}
 
 void kernel_enable_paging()
 {

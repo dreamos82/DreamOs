@@ -75,12 +75,12 @@ void irq_init()
     // Install the mouse.
     printf(" * "LNG_MOUSE_SETUP);
     mouse_install();
-    _kprintOK();
+    video_print_ok();
 
     // Install the timer.
     printf(" * "LNG_TIMER_SETUP);
     timer_install();
-    _kprintOK();
+    video_print_ok();
     __asm__ __volatile__("sti;");
 }
 

@@ -42,7 +42,7 @@ userenv_t current_user;
 /// The input command.
 char cmd[CMD_LEN];
 /// The index of the cursor.
-int cmd_cursor_index;
+uint32_t cmd_cursor_index;
 /// The command history.
 char * cmd_history[HST_LEN];
 /// The number of free slots on the history.
@@ -54,7 +54,7 @@ int write_index = HST_LEN - 1;
 
 command_t shell_cmd[MAX_NUM_COM] = {
     {"aalogo",   aalogo,        "Show an ascii art logo"},
-    {"clear",    _kclear,       "Clear the screen"},
+    {"clear",    video_clear,       "Clear the screen"},
     {"poweroff", poweroff,      "Turn off the machine"},
     {"uname",    uname_cmd,     "Print kernel version, try uname --help for more info"},
     {"credits",  credits,       "Show DreamOS credits"},
@@ -84,15 +84,15 @@ int shell(void * args)
     (void) args;
     dbg_print("\nNewShell\n");
     int i = 0;
-    _kcolor(BRIGHT_BLUE);
+    video_set_color(BRIGHT_BLUE);
     printf(LNG_WELCOME);
-    _kcolor(WHITE);
+    video_set_color(WHITE);
 
     shell_login();
 
     memset(current_user.cur_path, '\0', CURPATH_LEN);
 
-    _kclear();
+    video_clear();
     aalogo();
     printf("\n\n\n\n");
     argc = 1;
@@ -143,13 +143,13 @@ int shell(void * args)
 
 void shell_print_prompt()
 {
-    _kcolor(BRIGHT_BLUE);
+    video_set_color(BRIGHT_BLUE);
     printf(current_user.username);
-    _kcolor(WHITE);
+    video_set_color(WHITE);
     printf("~:%s# ", current_user.cur_path);
     // Update the lower-bounds for the video.
-    lower_bound_x = _kgetcolumn();
-    lower_bound_y = _kgetline();
+    lower_bound_x = video_get_column();
+    lower_bound_y = video_get_line();
 }
 
 //Input shell command (a private hacked version of gets)
@@ -171,7 +171,7 @@ void shell_get_command()
         {
             // However, the ISR of the keyboard has already put the char.
             // Thus, delete it by using backspace.
-            _kbackspace();
+            video_delete_last_character();
             // Re-set the index to the beginning.
             cmd_cursor_index = 0;
             // Go to the new line.
@@ -227,8 +227,8 @@ void shell_login()
         dbg_print("Asking the username.\n");
         printf(LNG_USER);
         // Update the lower-bounds for the video.
-        lower_bound_x = _kgetcolumn();
-        lower_bound_y = _kgetline();
+        lower_bound_x = video_get_column();
+        lower_bound_y = video_get_line();
         // Get the username.
         scanf("%50s", credentials.username);
         // ----------------------------
@@ -236,8 +236,8 @@ void shell_login()
         dbg_print("Asking the password.\n");
         printf(LNG_PWD);
         // Update the lower-bounds for the video.
-        lower_bound_x = _kgetcolumn();
-        lower_bound_y = _kgetline();
+        lower_bound_x = video_get_column();
+        lower_bound_y = video_get_line();
         // Set the shadow option.
         keyboard_set_shadow(true);
         // Get the password.
@@ -299,7 +299,7 @@ void history_start(const int key)
     // Completely delete the current command.
     while (cmd_cursor_index > 0)
     {
-        _kbackspace();
+        video_delete_last_character();
         cmd_cursor_index--;
     }
     // Print the command at the given position of the history.

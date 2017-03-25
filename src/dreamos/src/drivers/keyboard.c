@@ -92,7 +92,7 @@ void keyboard_isr()
     // Error handling.
     if (scan_code == 0x00 || scan_code == 0xFF)
     {
-        _kputs("Keyboard error\n");
+        video_puts("Keyboard error\n");
         goto end;
     }
 
@@ -131,10 +131,10 @@ void keyboard_isr()
             is_shifted = false;
             break;
         case KEY_PGDOWN:
-            _kscrolldown();
+            video_scroll_down();
             break;
         case KEY_PGUP:
-            _kscrollup();
+            video_scroll_up();
             break;
         case CAPS_LED:
             // Switch the state of the tab pressed.
@@ -163,8 +163,8 @@ void keyboard_isr()
             }
             circular_buffer[buf_w] = '\b';
             buf_w = STEP(buf_w);
-            _kbackspace();
-            _ksetcursauto();
+            video_delete_last_character();
+            video_set_cursor_auto();
             break;
         case KEY_ENTER:
             if (STEP(buf_w) == buf_r)
@@ -173,8 +173,8 @@ void keyboard_isr()
             }
             circular_buffer[buf_w] = '\n';
             buf_w = STEP(buf_w);
-            _knewline();
-            _ksetcursauto();
+            video_new_line();
+            video_set_cursor_auto();
             last_tab = 0;
             outportb(MASTER_PORT, EOI);
             break;
@@ -185,30 +185,30 @@ void keyboard_isr()
             }
             circular_buffer[buf_w] = '\t';
             buf_w = STEP(buf_w);
-            _ktab();
-            _ksetcursauto();
+            video_put_tab();
+            video_set_cursor_auto();
             last_tab++;
             break;
         case KEY_UPARROW:
             history_start(scan_code);
-            _ksetcursauto();
+            video_set_cursor_auto();
             break;
         case KEY_DOWNARROW:
             history_start(scan_code);
-            _ksetcursauto();
+            video_set_cursor_auto();
             break;
         case KEY_LEFTARROW:
-//            _kgoto((_kgetcolumn() - 1), (_kgetline()));
+//            video_move_cursor((video_get_column() - 1), (video_get_line()));
 //            move_cursor_left();
             break;
         case KEY_RIGHTARROW:
-//            _kgoto((_kgetcolumn() + 1), (_kgetline()));
+//            video_move_cursor((video_get_column() + 1), (video_get_line()));
 //            move_cursor_right();
             break;
         case KEY_ALT:
             // Presente un bug qui che non permette il fix dei relativi tasti
             // se si decommenta, il sistema all'avvio va in panic e si riavvia
-            //_kputs("Alt key pressed, nothing to be done\n");
+            //video_puts("Alt key pressed, nothing to be done\n");
             break;
             /*case KEY_ALTGR:
             break;*/

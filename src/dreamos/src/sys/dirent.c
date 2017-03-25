@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <vfs.h>
+#include "debug.h"
 
 #ifdef LEGACY
 
@@ -45,12 +46,12 @@ DIR * opendir(const char * path)
     char * rel_path = get_rel_path(mpoint_id, path);
     #ifdef DEBUG
     int error = get_abs_path((char *) path);
-    printf("OPENDIR\n");
-    printf("\tPath     : %s\n", path);
-    printf("\tPLength  : %d\n", strlen(path));
-    printf("\tError    : %d\n", error);
-    printf("\tRelative : %s\n", rel_path);
-    printf("\tRLength  : %d\n", strlen(rel_path));
+    dbg_print("OPENDIR\n");
+    dbg_print("\tPath     : %s\n", path);
+    dbg_print("\tPLength  : %d\n", strlen(path));
+    dbg_print("\tError    : %d\n", error);
+    dbg_print("\tRelative : %s\n", rel_path);
+    dbg_print("\tRLength  : %d\n", strlen(rel_path));
     #else
     get_abs_path((char *) path);
     #endif
@@ -65,7 +66,7 @@ DIR * opendir(const char * path)
     }
     else
     {
-        printf("Could not open_dir no function found!\n");
+        dbg_print("Could not open_dir no function found!\n");
     }
     return pdir;
 }
@@ -82,18 +83,18 @@ struct dirent * readdir(DIR * dirp)
 {
     if (dirp == NULL)
     {
-        printf("NULL dirp\n");
+        dbg_print("NULL dirp\n");
         return NULL;
     }
-//    printf("Handle: %d\n", dirp->handle);
+//    dbg_print("Handle: %d\n", dirp->handle);
     if (mountpoint_list[dirp->handle].dir_op.readdir_f != NULL)
     {
-//        printf("Trovata readdir\n");
+//        dbg_print("Trovata readdir\n");
         return mountpoint_list[dirp->handle].dir_op.readdir_f(dirp);
     }
     else
     {
-//        printf("No readdir - No party\n");
+//        dbg_print("No readdir - No party\n");
     }
     return NULL;
 }
@@ -106,13 +107,13 @@ struct dirent * readdir(DIR * dirp)
   */
 int closedir(DIR * dirp)
 {
-    //printf("Closing directory\n");
+    //dbg_print("Closing directory\n");
     kfree(dirp);
     return 0;
 }
 
 DIR * fake_opendir(const char * path)
 {
-    printf("One day, when i will grow up, i could open that path: %s\n", path);
+    dbg_print("One day, when i will grow up, i could open that path: %s\n", path);
     return NULL;
 }

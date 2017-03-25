@@ -41,7 +41,7 @@ int last_Yz = 0;
 
 void putchar(int character)
 {
-    _kputc(character);
+    video_putc(character);
 }
 
 int getchar(void)
@@ -57,23 +57,23 @@ int puts(char * str)
     {
         if (last_Xz && last_Yz)
         {
-            _kscrolldown();
+            video_scroll_down();
         }
         *(VIDEO_PTRZ++) = (*str);
         *(VIDEO_PTRZ++) = VIDEO_CLRZ;
-        _kshiftAll();
-        _ksetcursauto();
+        video_shift_one_line();
+        video_set_cursor_auto();
         ++str;
     }
-    _knewline();
+    video_new_line();
     return 1;
 }
 
 char * gets(char * str)
 {
     int count = 0;
-    //shell_mess_col = _kgetcolumn();
-    //shell_mess_line = _kgetline();
+    //shell_mess_col = video_get_column();
+    //shell_mess_line = video_get_line();
     char tmp[255];
     memset(tmp, '\0', 255);
     do
@@ -139,7 +139,7 @@ int printf(const char * format, ...)
     va_start (ap, format);
     char buffer[1024];
     len = vsprintf(buffer, format, ap);
-    _kputs(buffer);
+    video_puts(buffer);
     va_end (ap); // end of arguments
     return len;
 }

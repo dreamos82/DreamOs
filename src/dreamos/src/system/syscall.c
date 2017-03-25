@@ -21,25 +21,14 @@
  * Prima versione: 25/11/2007
  */
 
-#include <idt.h>
-#include <isr.h>
 #include <syscall.h>
-#include <stdio.h>
-#include <video.h>
-#include <keyboard.h>
 #include <video.h>
 
 void (* syscall_table[SYSCALL_NUMBER])(int *) = {sysputch};
 
 void sysputch(int * args)
 {
-/*   char s[2];
-   s[0] = args[0];
-   s[1] = '\0';
-
-   _kputs (s);*/
-    //putchar("A");
-    _kputc((char) args[0]);
+    video_putc((char) args[0]);
 }
 
 void syscall_init()

@@ -108,7 +108,7 @@ void init_isr();
 /// @author Ivan Gualandri
 extern void global_exception(int n, int error);
 
-extern void interrupt_handler();
+extern void interrupt_handler(unsigned int esp);
 
 extern void reserved_exception();
 

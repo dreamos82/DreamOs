@@ -27,13 +27,10 @@
 
 thread_list_t * ready_queue = NULL;
 thread_list_t * current_thread = NULL;
-
 list_t * thread_list;
 
 void kernel_initialize_scheduler()
 {
-    // Initialize the list of threads.
-    thread_list = list_create();
     // Create the scheduler thread.
     thread_t * scheduler = kmalloc(sizeof(thread_t));
     scheduler->id = 0;
@@ -42,6 +39,10 @@ void kernel_initialize_scheduler()
     current_thread = (thread_list_t *) kmalloc(sizeof(thread_list_t));
     current_thread->thread = scheduler;
     current_thread->next = NULL;
+    // Initialize the list of threads.
+    thread_list = list_create();
+    // Add the thread to the list of threads.
+//    scheduler->self = list_insert_front(thread_list, scheduler);
 }
 
 void kernel_activate_thread(thread_t * thread)
@@ -72,6 +73,9 @@ void kernel_activate_thread(thread_t * thread)
 
 void kernel_deactivate_thread(thread_t * thread)
 {
+    // Remove the thread from the list of threads.
+    list_remove_node(thread_list, thread->self);
+
     // Attempt to find the thread in the ready queue.
     thread_list_t * iterator = ready_queue;
 
@@ -93,8 +97,6 @@ void kernel_deactivate_thread(thread_t * thread)
         }
         iterator = iterator->next;
     }
-    // Remove the thread from the list of threads.
-    list_remove_node(thread_list, thread->self);
 }
 
 thread_t * kernel_get_current_thread()
@@ -107,11 +109,13 @@ void schedule()
     // The ready queue is empty.
     if (!ready_queue)
     {
+        dbg_print("The ready queue is empty.\n");
         return;
     }
     // Search the first thread which has completed.
     while (ready_queue->thread->exit == 1)
     {
+        dbg_print("Deactivating thread '%s'.\n", ready_queue->thread->name);
         // Store the next thread pointed by the completed thread.
         thread_list_t * next = ready_queue->next;
         // Deactivate the completed thread.
@@ -128,9 +132,16 @@ void schedule()
     // Add the old thread to the end of the queue.
     iterator->next = current_thread;
     current_thread->next = 0;
+    // --------------------------------
     // Remove the moved thread from the start.
     thread_list_t * new_thread = ready_queue;
     ready_queue = ready_queue->next;
+    // --------------------------------
     // Switch to the new thread.
     switch_thread(&current_thread, new_thread);
+}
+
+size_t get_active_threads()
+{
+    return list_size(thread_list);
 }

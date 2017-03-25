@@ -118,6 +118,8 @@ include_directories(
         inc/shell
         inc/sys
         inc/system
+        inc/process
+        inc/elf
 )
 
 # ------------------------------------------------------------------------------
@@ -146,6 +148,7 @@ set(SOURCE_FILES
         src/libc/list.c
         src/libc/generic_tree.c
         src/libc/ordered_array.c
+        src/libc/mutex.c
         src/mem/kheap.c
         src/mem/paging.c
         src/mem/vm.c
@@ -159,7 +162,7 @@ set(SOURCE_FILES
         src/sys/dirent.c
         src/sys/stat.c
         src/sys/utsname.c
-        src/system/elf.c
+        src/elf/elf.c
         src/descriptor_tables/descriptor_tables.c
         src/descriptor_tables/gdt.c
         src/descriptor_tables/gdt.s
@@ -167,12 +170,11 @@ set(SOURCE_FILES
         src/descriptor_tables/isr.s
         src/descriptor_tables/idt.c
         src/descriptor_tables/idt.s
+        src/process/scheduler.c
+        src/process/scheduler.s
+        src/process/thread.c
         src/system/panic.c
-        src/system/scheduler.c
-        src/system/scheduler.s
         src/system/syscall.c
-        src/system/thread.c
-        src/system/mutex.c
         src/kernel.c)
 
 # ------------------------------------------------------------------------------

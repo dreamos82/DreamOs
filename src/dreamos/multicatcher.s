@@ -4,17 +4,20 @@
 ; * Description: the Multiboot header               *
 ; ***************************************************
 
-
-; Multiboot declarations
-MBOOT_PAGE_ALIGN    equ 1	   ; Page aligning
-MBOOT_MEM_INFO      equ 1<<1       ; Provide your kernel with memory info
-MBOOT_HEADER_MAGIC  equ 0x1BADB002 ; Multiboot Magic Number
-; NOTE: We do not use MBOOT_AOUT_KLUDGE. It means that GRUB does not
-; pass us a symbol table.
-MBOOT_HEADER_FLAGS  equ MBOOT_PAGE_ALIGN | MBOOT_MEM_INFO
-MBOOT_CHECKSUM      equ -(MBOOT_HEADER_MAGIC + MBOOT_HEADER_FLAGS)
-
 [BITS 32]
+
+; ***************************************************
+; Multiboot declarations
+; Page aligning.
+MBOOT_PAGE_ALIGN    equ 1
+; Provide your kernel with memory info.
+MBOOT_MEM_INFO      equ 1<<1
+; Multiboot Magic Number
+MBOOT_HEADER_MAGIC  equ 0x1BADB002
+; We do not use MBOOT_AOUT_KLUDGE. It means that GRUB does not pass us a
+; symbol table.
+MBOOT_HEADER_FLAGS  equ MBOOT_PAGE_ALIGN | MBOOT_MEM_INFO
+MBOOT_CHECKSUM      equ - (MBOOT_HEADER_MAGIC + MBOOT_HEADER_FLAGS)
 
 [GLOBAL mboot]
 [EXTERN code]                   ; Start of the '.text' section.

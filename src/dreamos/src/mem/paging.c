@@ -23,6 +23,8 @@
 #include <paging.h>
 #include <vm.h>
 #include <panic.h>
+#include "debug.h"
+#include "video.h"
 
 uint32_t stack_loc = PAGING_STACK_ADDR;
 uint32_t stack_max = PAGING_STACK_ADDR;
@@ -101,4 +103,41 @@ void kernel_map_memory(struct multiboot_info * info)
         // so we must add sizeof (uint32_t).
         i += me->size + sizeof(uint32_t);
     }
+}
+
+void page_fault_handler(register_t * reg)
+{
+    static bool_t throw_once = false;
+    if (!throw_once)
+    {
+        throw_once = true;
+    }
+    else
+    {
+        return;
+    }
+
+    asm volatile("sti");
+    video_set_color(BRIGHT_RED);
+    dbg_print("Page fault:\n");
+
+    // Gather fault info and print to screen
+    uint32_t faulting_addr;
+    asm volatile("mov %%cr2, %0" : "=r" (faulting_addr));
+    uint32_t present = reg->err_code & ERR_PRESENT;
+    uint32_t rw = reg->err_code & ERR_RW;
+    uint32_t user = reg->err_code & ERR_USER;
+    uint32_t reserved = reg->err_code & ERR_RESERVED;
+    uint32_t inst_fetch = reg->err_code & ERR_INST;
+
+    dbg_print("Possible causes: [ ");
+    if (!present) dbg_print("Page not present ");
+    if (rw) dbg_print("Page is read only ");
+    if (user) dbg_print("Page is read only ");
+    if (reserved) dbg_print("Overwrote reserved bits ");
+    if (inst_fetch) dbg_print("Instruction fetch ");
+    dbg_print("]\n");
+
+    print_reg(reg);
+    while (true);
 }
