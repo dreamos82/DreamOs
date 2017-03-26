@@ -85,6 +85,8 @@ void clear();
 
 void showpid();
 
+void heapdump();
+
 struct devel
 {
     char cmd_testname[CMD_LEN];

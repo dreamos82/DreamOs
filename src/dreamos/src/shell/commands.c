@@ -725,3 +725,8 @@ void showpid()
     thread_t * current_thread = kernel_get_current_thread();
     printf("pid %d\n", current_thread->id);
 }
+
+void heapdump()
+{
+    print_heap();
+}

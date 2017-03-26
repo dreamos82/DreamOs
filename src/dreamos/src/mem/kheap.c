@@ -35,6 +35,26 @@ void kernel_init_heap()
     dbg_print("# -------------------------------------------\n");
 }
 
+void print_heap()
+{
+    uint32_t count = 0;
+    chunk_t * current = heap_first;
+    dbg_print("# -------------------------------------------\n");
+    while (current)
+    {
+        dbg_print("[%4d][%s] Chunk: %d\n",
+                  count,
+                  (current->used ? "USED" : "FREE"),
+                  current->length);
+        // Move to the next chunk.
+        current = current->next;
+        // Increment the counter.
+        ++count;
+    }
+    dbg_print("# -------------------------------------------\n");
+}
+
+
 void * kmalloc(size_t size)
 {
     // Add to the size the header.

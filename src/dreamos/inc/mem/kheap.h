@@ -35,6 +35,8 @@ chunk_t * heap_first;
 /// @brief Initialize the heap.
 void kernel_init_heap();
 
+void print_heap();
+
 /// @brief Returns a pointer to a chunk of memory.
 void * kmalloc(size_t size);
 

@@ -54,7 +54,7 @@ int write_index = HST_LEN - 1;
 
 command_t shell_cmd[MAX_NUM_COM] = {
     {"aalogo",   aalogo,        "Show an ascii art logo"},
-    {"clear",    video_clear,       "Clear the screen"},
+    {"clear",    video_clear,   "Clear the screen"},
     {"poweroff", poweroff,      "Turn off the machine"},
     {"uname",    uname_cmd,     "Print kernel version, try uname --help for more info"},
     {"credits",  credits,       "Show DreamOS credits"},
@@ -75,6 +75,7 @@ command_t shell_cmd[MAX_NUM_COM] = {
     {"ps",       ps,            "Show task list"},
     {"clear",    clear,         "Clears the screen"},
     {"showpid",  showpid,       "Shows the PID of the shell"},
+    {"heapdump", heapdump,      "Shows the heap status"},
     {"history",  history_print, "Shows the shell history"}
 };
 
