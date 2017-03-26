@@ -27,7 +27,8 @@
 
 void kernel_init_heap()
 {
-    heap_max = HEAP_START;
+    chunk_counter = 0;
+    heap_top = HEAP_START;
     dbg_print("# -------------------------------------------\n");
     dbg_print("# Heap Start : %12p\n", HEAP_START);
     dbg_print("# Heap End   : %12p\n", HEAP_END);
@@ -38,69 +39,61 @@ void kernel_init_heap()
 void print_heap()
 {
     uint32_t count = 0;
-    chunk_t * current = heap_first;
+    chunk_t * current_chunk = first_chunk;
     dbg_print("# -------------------------------------------\n");
-    while (current)
+    while (current_chunk)
     {
         dbg_print("[%4d][%s] Chunk: %d\n",
                   count,
-                  (current->used ? "USED" : "FREE"),
-                  current->length);
+                  (current_chunk->used ? "USED" : "FREE"),
+                  current_chunk->length);
         // Move to the next chunk.
-        current = current->next;
+        current_chunk = current_chunk->next;
         // Increment the counter.
         ++count;
     }
     dbg_print("# -------------------------------------------\n");
 }
 
-
 void * kmalloc(size_t size)
 {
     // Add to the size the header.
     size += sizeof(chunk_t);
-    // Initialize a pointer which will point to the current header to the
-    // begin of the heap.
-    chunk_t * cur_header = heap_first;
-    chunk_t * prev_header = NULL;
-    // Iterate through the headers.
-    while (cur_header)
+    // -------------------------------------------------------------------------
+    // Check if there is a free chunk.
+    chunk_t * free_chunk = find_free_chunk(size);
+    if (free_chunk)
     {
-        // Check if the current element of the heap has not been used, and its
-        // length is greater than the required size.
-        if ((!cur_header->used) && (cur_header->length >= size))
-        {
-            split_chunk(cur_header, size);
-            cur_header->used = true;
-            return (void *) ((uint32_t) cur_header + sizeof(chunk_t));
-        }
-        // Set the previous element.
-        prev_header = cur_header;
-        // Move to the next element.
-        cur_header = cur_header->next;
+        split_chunk(free_chunk, size);
+        free_chunk->used = true;
+        return (void *) ((uint32_t) free_chunk + sizeof(chunk_t));
     }
-    // If I've not found a suitable header, create a new one.
-    uint32_t chunk_start;
-    if (prev_header)
+    // -------------------------------------------------------------------------
+    // Check if the pointer to the first chunk is set.
+    if (!first_chunk)
     {
-        chunk_start = (uint32_t) prev_header + prev_header->length;
+        first_chunk = (chunk_t *) HEAP_START;
     }
-    else
+    // -------------------------------------------------------------------------
+    // Get the starting address of the new chunk.
+    // By default set the initial address of the chunk at the starting point
+    // of the heap.
+    uint32_t chunk_start = HEAP_START;
+    // Check if there is a last chunk.
+    if (last_chunk)
     {
-        chunk_start = HEAP_START;
-        heap_first = (chunk_t *) HEAP_START;
+        chunk_start = (uint32_t) last_chunk + last_chunk->length;
     }
-
     // Allocate the memory for a new chunk.
-    cur_header = alloc_chunk(chunk_start, size);
-    cur_header->prev = prev_header;
-    cur_header->next = 0;
-    cur_header->used = true;
-    cur_header->length = size;
-    if (prev_header)
+    chunk_t * new_chunk = alloc_chunk(chunk_start, size);
+    // -------------------------------------------------------------------------
+    if (last_chunk)
     {
-        prev_header->next = cur_header;
+        last_chunk->next = new_chunk;
+        new_chunk->prev = last_chunk;
     }
+    // Set the new chunk as last chunk.
+    last_chunk = new_chunk;
     return (void *) (chunk_start + sizeof(chunk_t));
 }
 
@@ -111,9 +104,19 @@ void * kcalloc(uint32_t num, uint32_t size)
     return ptr;
 }
 
-void kfree(void * p)
+void kfree(void * ptr)
 {
-    chunk_t * header = (chunk_t *) ((uint32_t) p - sizeof(chunk_t));
-    header->used = false;
-    glue_chunk(header);
+    // --------------------------------
+    // | HEADER | DATA                |
+    // --------------------------------
+    // In order to take the real chunk, we need to move backward from the
+    // pointer to the header of the chunk.
+    chunk_t * header = (chunk_t *) ((uint32_t) ptr - sizeof(chunk_t));
+    // Check if it is a valid header.
+    if (header)
+    {
+        header->used = false;
+        free_chunk(header);
+//        glue_chunk(header);
+    }
 }
