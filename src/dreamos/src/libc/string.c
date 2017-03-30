@@ -471,7 +471,7 @@ void * memcpy(void * _dst, const void * _src, size_t num)
 void * memccpy(void * dst, const void * src, int c, size_t n)
 {
     while (n && (*((char *) (dst = (char *) dst + 1) - 1) =
-                     *((char *) (src = (char *) src + 1) - 1)) != (char) c)
+                         *((char *) (src = (char *) src + 1) - 1)) != (char) c)
         n--;
 
     return n ? dst : NULL;
@@ -518,17 +518,23 @@ size_t strnlen(const char * s, size_t count)
     return (len < 0) ? 0 : (size_t) len;
 }
 
+#include "debug.h"
+
 int strcmp(const char * s1, const char * s2)
 {
     int ret = 0;
-    while (!(ret = *(unsigned char *) s1 - *(unsigned char *) s2) && *s2)
+    while (!(ret = *s1 - *s2) && *s2)
+    {
         ++s1, ++s2;
-
+    }
     if (ret < 0)
+    {
         ret = -1;
+    }
     else if (ret > 0)
+    {
         ret = 1;
-
+    }
     return ret;
 }
 
@@ -828,4 +834,15 @@ void _knntos(char * buffer, int num, int base)
         p--;
         pbase++;
     }
+}
+
+char * replace_char(char * str, char find, char replace)
+{
+    char * current_pos = strchr(str, find);
+    while (current_pos)
+    {
+        *current_pos = replace;
+        current_pos = strchr(current_pos, find);
+    }
+    return str;
 }

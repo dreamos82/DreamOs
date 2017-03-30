@@ -19,7 +19,7 @@ chunk_t * create_chunk(const uint32_t start, const size_t size)
 
 chunk_t * alloc_chunk(const uint32_t start, const size_t size)
 {
-    uint32_t starting_heap = heap_top;
+    //uint32_t starting_heap = heap_top;
     uint32_t count = 0;
     while (heap_top < (start + size))
     {
@@ -29,6 +29,7 @@ chunk_t * alloc_chunk(const uint32_t start, const size_t size)
         ++count;
     }
     chunk_t * new_chunk = create_chunk(start, size);
+    /*
     dbg_print("# ALL  |%d3| OLD:%12p NEW:%12p ALL:%12p PAG:%12d REM:%12d SIZ:%12d BAL:%12d\n",
               new_chunk->id,
               starting_heap,
@@ -38,6 +39,7 @@ chunk_t * alloc_chunk(const uint32_t start, const size_t size)
               ((HEAP_END - heap_top) / PAGE_SIZE),
               size,
               (heap_top - starting_heap)-size);
+    */
     return new_chunk;
 }
 
@@ -70,7 +72,7 @@ void free_chunk(chunk_t * chunk)
     {
         chunk->prev->next = NULL;
     }
-    uint32_t starting_heap = heap_top;
+    //uint32_t starting_heap = heap_top;
     uint32_t count = 0;
     // While the heap max can contract by a page and still be greater than
     // the chunk address...
@@ -83,14 +85,17 @@ void free_chunk(chunk_t * chunk)
         unmap(heap_top);
         ++count;
     }
-    dbg_print("# FREE |%d3| OLD:%12p NEW:%12p ALL:%12p PAG:%12d REM:%12d SIZ:%12d\n",
-              chunk->id,
-              starting_heap,
-              heap_top,
-              (heap_top - starting_heap),
-              count,
-              ((HEAP_END - heap_top) / PAGE_SIZE),
-              chunk->length);
+    /*
+    dbg_print(
+            "# FREE |%d3| OLD:%12p NEW:%12p ALL:%12p PAG:%12d REM:%12d SIZ:%12d\n",
+            chunk->id,
+            starting_heap,
+            heap_top,
+            (heap_top - starting_heap),
+            count,
+            ((HEAP_END - heap_top) / PAGE_SIZE),
+            chunk->length);
+            */
 }
 
 void split_chunk(chunk_t * chunk, const size_t size)

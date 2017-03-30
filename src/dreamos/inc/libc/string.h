@@ -134,7 +134,8 @@ char * strdup(const char * src);
 
 char * strsep(char ** stringp, const char * delim);
 
-list_t * str_split(const char * str, const char * delim, unsigned int * numtokens);
+list_t *
+str_split(const char * str, const char * delim, unsigned int * numtokens);
 
 char * list2str(list_t * list, const char * delim);
 
@@ -147,5 +148,7 @@ char * list2str(list_t * list, const char * delim);
 void int_to_str(char * buffer, unsigned int num, unsigned int base);
 
 void _knntos(char *, int, int);
+
+char * replace_char(char * str, char find, char replace);
 
 #endif

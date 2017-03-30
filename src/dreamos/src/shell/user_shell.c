@@ -77,15 +77,15 @@ bool_t check_credentials(credentials_t * credentials)
 bool_t user_get(int fd, struct credentials_t * credentials)
 {
     // Create a support array of char.
-    char support[51];
-    memset(support, '\0', 50);
+    char support[CREDENTIALS_LENGTH];
+    memset(support, '\0', CREDENTIALS_LENGTH);
     // Create a variable which will contain the error value for the read
     // functions.
     int error = 1;
     // --------------------------------
     // Get the username.
     int i = 0;
-    while ((i < 50 || support[i] != ':') && error != 0)
+    while ((i < CREDENTIALS_LENGTH || support[i] != ':') && error != 0)
     {
         error = read(fd, &support[i], 1);
         if (support[i] == ':')
@@ -99,14 +99,15 @@ bool_t user_get(int fd, struct credentials_t * credentials)
     {
         return false;
     }
+    replace_char(support, '\r', 0);
     // Save the username.
     strcpy(credentials->username, support);
     // Clear the support array.
-    memset(support, '\0', 50);
+    memset(support, '\0', CREDENTIALS_LENGTH);
     // --------------------------------
     // Get the password.
     i = 0;
-    while ((i < 50 || support[i] != '\n') && error != 0)
+    while ((i < CREDENTIALS_LENGTH || support[i] != '\n') && error != 0)
     {
         error = read(fd, &support[i], 1);
         if (support[i] == '\n')
@@ -116,6 +117,7 @@ bool_t user_get(int fd, struct credentials_t * credentials)
         }
         ++i;
     }
+    replace_char(support, '\r', 0);
     if (error == 0)
     {
         return false;
