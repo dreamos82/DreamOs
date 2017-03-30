@@ -20,9 +20,9 @@
 #define LNG_SITE            "\nSite:"
 #define LNG_GDT             "Initialize GDT"
 #define LNG_IDT             "Initialize IDT"
+#define LNG_IRQ             "Initialize IRQ"
 #define LNG_PAGING          "Enabling Paging:"
 #define LNG_PIT8253         "Initialize PIT"
-#define LNG_PIC8259         "Initialize PIC8259"
 #define LNG_CPU             "\nCPU:"
 #define LNG_FREERAM         "Free RAM:"
 #define LNG_FREEPAGE        "\t- Number free page:"
@@ -43,6 +43,7 @@
 #define LNG_INIT_MEMORY     "Initialize the memory..."
 #define LNG_INIT_CPUID      "Initialize the CPUID structure..."
 #define LNG_INIT_FS         "Initialize the fylesystem..."
+#define LNG_KEYBOARD_SETUP  "Setting up keyboard driver..."
 
 // DATE ME NOE!
 // MONTHS

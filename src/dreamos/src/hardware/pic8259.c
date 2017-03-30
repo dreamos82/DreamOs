@@ -28,15 +28,21 @@
 #include <mouse.h>
 #include <language.h>
 #include <descriptor_tables.h>
+#include "irqflags.h"
 
 byte_t master_cur_mask;
 
 byte_t slave_cur_mask;
 
-void irq_init()
+void pic8259_init_irq()
 {
-    int i;
-    __asm__ __volatile__("cli;");
+    // Disable the IRQs.
+    irq_disable();
+
+    // Set the masks for the master and slave.
+    master_cur_mask = 0xFF;
+    slave_cur_mask = 0xFF;
+
     // Inizializzo i 2 processori pic con ICw1 ICW2 ICW3 e ICW4
     outportb(MASTER_PORT, ICW_1);
     outportb(SLAVE_PORT, ICW_1);
@@ -50,42 +56,10 @@ void irq_init()
     outportb(MASTER_PORT_1, ICW_4);
     outportb(SLAVE_PORT_1, ICW_4);
 
-    master_cur_mask = 0xFF;
-    slave_cur_mask = 0xFF;
+    outportb(MASTER_PORT_1, master_cur_mask);
+    outportb(SLAVE_PORT_1, slave_cur_mask);
 
-    outportb(MASTER_PORT_1, 0xFF);
-    outportb(SLAVE_PORT_1, 0xFF);
-
-    //outportb (0xFC, MASTER_PORT_1);
-    irq_enable(KEYBOARD);
-    irq_enable(MOUSE);
-    irq_enable(TIMER);
-    irq_enable(TO_SLAVE_PIC);
-
-    irq_setup();
-
-    i = 0;
-    while (i < IRQ_NUM)
-    {
-        shared_irq_handlers[i] = NULL;
-        i++;
-    }
-    irq_install_handler(1, keyboard_isr);
-
-    // Install the mouse.
-    printf(" * "LNG_MOUSE_SETUP);
-    mouse_install();
-    video_print_ok();
-
-    // Install the timer.
-    printf(" * "LNG_TIMER_SETUP);
-    timer_install();
-    video_print_ok();
-    __asm__ __volatile__("sti;");
-}
-
-void irq_setup()
-{
+    // Registers the interrupt functions inside the IDT.
     idt_set_gate(32, INT_32, PRESENT | KERNEL, 0x8);
     idt_set_gate(33, INT_33, PRESENT | KERNEL, 0x8);
     idt_set_gate(34, INT_34, PRESENT | KERNEL, 0x8);
@@ -102,9 +76,36 @@ void irq_setup()
     idt_set_gate(46, INT_46, PRESENT | KERNEL, 0x8);
     idt_set_gate(47, INT_47, PRESENT | KERNEL, 0x8);
     idt_set_gate(48, INT_48, PRESENT | KERNEL, 0x8);
+
+    for (uint32_t i = 0; i < IRQ_NUM; ++i)
+    {
+        shared_irq_handlers[i] = NULL;
+    }
+    pic8259_irq_enable(TO_SLAVE_PIC);
+
+    // Install the keyboard.
+    printf(" * "LNG_KEYBOARD_SETUP);
+    keyboard_install();
+    video_print_ok();
+
+    // Install the mouse.
+    printf(" * "LNG_MOUSE_SETUP);
+    mouse_install();
+    video_print_ok();
+
+    // Install the timer.
+    printf(" * "LNG_TIMER_SETUP);
+    timer_install();
+    video_print_ok();
+
+    outportb(0xFF, MASTER_PORT_1);
+    outportb(0xFF, SLAVE_PORT_1);
+
+    // Re-Enable the IRQs.
+    irq_enable();
 }
 
-int irq_enable(irq_type_t irq)
+int pic8259_irq_enable(irq_type_t irq)
 {
     byte_t cur_mask;
     byte_t new_mask;
@@ -116,10 +117,9 @@ int irq_enable(irq_type_t irq)
             cur_mask = inportb(MASTER_PORT_1);
             outportb(MASTER_PORT_1, (new_mask & cur_mask));
             master_cur_mask = (new_mask & cur_mask);
-        }
-        else
+        } else
         {
-            irq = irq - 8;
+            irq -= 8;
             new_mask = ~(1 << irq);
             cur_mask = inportb(SLAVE_PORT_1);
             outportb(SLAVE_PORT_1, (new_mask & cur_mask));
@@ -130,7 +130,7 @@ int irq_enable(irq_type_t irq)
     return -1;
 }
 
-int irq_disable(irq_type_t irq)
+int pic8259_irq_disable(irq_type_t irq)
 {
     byte_t cur_mask;
     if (irq < 15)
@@ -140,8 +140,7 @@ int irq_disable(irq_type_t irq)
             cur_mask = inportb(MASTER_PORT_1);
             cur_mask |= (1 << irq);
             outportb(MASTER_PORT_1, cur_mask & 0xFF);
-        }
-        else
+        } else
         {
             irq = irq - 8;
             cur_mask = inportb(SLAVE_PORT_1);
@@ -153,7 +152,7 @@ int irq_disable(irq_type_t irq)
     return -1;
 }
 
-int irq_get_current()
+int pic8259_irq_get_current()
 {
     outportb(MASTER_PORT, GET_IRR_STATUS);
     int cur_irq = inportb(MASTER_PORT);
@@ -166,22 +165,21 @@ int irq_get_current()
     return find_first_bit(cur_irq);
 }
 
-void irq_install_handler(uint32_t irq_number, interrupt_handler_t handler)
+void pic8259_irq_install_handler(uint32_t irq_number, interrupt_handler_t handler)
 {
     if (irq_number >= IRQ_NUM)
     {
         return;
     }
 
-    irq_struct_t * tmpHandler;
+    irq_struct_t *tmpHandler;
     tmpHandler = shared_irq_handlers[irq_number];
     if (shared_irq_handlers[irq_number] == NULL)
     {
         shared_irq_handlers[irq_number] = (irq_struct_t *) kernel_alloc_page();
         shared_irq_handlers[irq_number]->next = NULL;
         shared_irq_handlers[irq_number]->handler = handler;
-    }
-    else
+    } else
     {
         while (tmpHandler->next != NULL)
         {

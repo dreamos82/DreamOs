@@ -41,6 +41,7 @@
 #include <scheduler.h>
 #include <vm.h>
 #include <descriptor_tables.h>
+#include "debug.h"
 
 #ifdef BOCHS_DEBUG
 
@@ -65,9 +66,11 @@ asmlinkage void _start(struct multiboot_info * boot_info)
 int main_loop(struct multiboot_info * boot_info)
 {
     // Initialize the video.
+    dbg_print("Initialize the video.\n");
     video_init();
     // -------------------------------------------------------------------------
     // Initialize the system calls.
+    dbg_print("Initialize the system calls.\n");
     syscall_init();
     module_start = (char *) *((unsigned int *) boot_info->mods_addr);
     module_end = *((unsigned int *) (boot_info->mods_addr + 4));
@@ -85,30 +88,31 @@ int main_loop(struct multiboot_info * boot_info)
     video_puts("\n");
 
     // -------------------------------------------------------------------------
-    // Set the GDT.
+    // Set the GDT, IDT and IRQ.
+    dbg_print("Initialize the GDT.\n");
     video_puts(LNG_GDT);
-    init_descriptor_tables();
+    init_gdt();
     video_print_ok();
-
-    outportb(0xFF, MASTER_PORT_1);
-    outportb(0xFF, SLAVE_PORT_1);
-
-    // -------------------------------------------------------------------------
+    dbg_print("Initialize the IDT.\n");
+    video_puts(LNG_IDT);
+    init_idt();
+    video_print_ok();
+    dbg_print("Initialize the IRQ.\n");
+    video_puts(LNG_IRQ);
+    pic8259_init_irq();
+    video_print_ok();
     // Breakpoint.
     __asm__ __volatile__("int $0x3");
 
-    kernel_init_paging(boot_info->mem_upper);
-
     // -------------------------------------------------------------------------
-    // Initialize the IRQ.
-    printf(LNG_PIC8259"\n");
-    irq_init();
-    kernel_init_vm();
-    kernel_init_heap();
-
-    // -------------------------------------------------------------------------
-    // Initialize the memory.
+    // Initialize paging.
     printf(LNG_INIT_MEMORY);
+    kernel_init_paging(boot_info->mem_upper);
+    // Initialize the virtual memory.
+    kernel_init_vm();
+    // Initialize the heap.
+    kernel_init_heap();
+    // Initialize the memory.
     kernel_map_memory(boot_info);
     video_print_ok();
     printf(" * Memory (lower) : %lu kb \n", boot_info->mem_lower);
@@ -127,33 +131,18 @@ int main_loop(struct multiboot_info * boot_info)
     vfs_init();
     video_print_ok();
     initfs_init();
-
     if (boot_info->mods_count > 0)
     {
         printf("Found n. %lu Modules\n", boot_info->mods_count);
     }
-
     // Get the kernel image from the boot info
     kernel_elf = elf_from_multiboot(boot_info);
-
-    __asm__ __volatile__("sti;");
 
     // -------------------------------------------------------------------------
     // Initialize the scheduler.
     printf(LNG_SCHEDULER);
     kernel_initialize_scheduler();
     video_print_ok();
-
-    //printf(LNG_PIT8253);
-    //printf("----\n");
-    //
-    //printf("[+] Address: 0x%x\n", &end);
-    //printf("\n");
-
-#ifdef BOCHS_DEBUG
-    dbg_print("DreamOS Debug String for Bochs\n");
-#endif
-
     // We disable floppy driver motor
     fdc_disable_motor();
 

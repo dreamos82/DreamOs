@@ -27,6 +27,7 @@
 #include <descriptor_tables.h>
 #include <debug.h>
 #include "stdio.h"
+#include "irqflags.h"
 
 irq_struct_t * shared_irq_handlers[IRQ_NUM];
 
@@ -123,9 +124,10 @@ void global_exception(int n, int error)
 void interrupt_handler(unsigned int esp)
 {
     (void) esp;
-    __asm__ __volatile__("cli;");
+    // Disable the IRQs.
+    irq_disable();
     // Get the current interrupt request number.
-    int irq_num = irq_get_current();
+    int irq_num = pic8259_irq_get_current();
     if (irq_num >= 0)
     {
         irq_struct_t * irq_struct = shared_irq_handlers[irq_num];
@@ -159,7 +161,8 @@ void interrupt_handler(unsigned int esp)
     }
     // Call the scheduler.
     schedule();
-    __asm__ __volatile__("sti;");
+    // Re-Enable the IRQs.
+    irq_enable();
     return;
 }
 

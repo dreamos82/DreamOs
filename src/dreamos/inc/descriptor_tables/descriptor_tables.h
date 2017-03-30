@@ -26,10 +26,6 @@ typedef enum __attribute__ ((__packed__)) gdt_granularity_option_t
 /// Array of interrupt handler functions.
 extern interrupt_handler_t IntTable[IDT_SIZE];
 
-/// @brief Initialisation routine - zeroes all the interrupt service
-/// routines, initialises the GDT and IDT.
-void init_descriptor_tables();
-
 /// @brief Questa funzione aggiunge un handler di interruzione alla tabella per che contiene le funzioni di gestione chiamate dalle eccezioni/interruzioni della IDT
 /// @param i        Posizione all'interno del vettore.
 /// @param handler  Funzione da aggiungere.

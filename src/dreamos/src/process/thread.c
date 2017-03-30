@@ -52,8 +52,7 @@ thread_t * kernel_create_thread(int (* fn)(void *),
     // Most threads don't want to deal with stack size.
     if (stack == 0)
     {
-        stack = (uint32_t *) (((char *) kmalloc(DEFAULT_STACK_SIZE))
-                              + DEFAULT_STACK_SIZE
+        stack = (uint32_t *) (((char *) kmalloc(DEFAULT_STACK_SIZE)) + DEFAULT_STACK_SIZE
                               - sizeof(uint32_t) * 3);
     }
     // Create the thread.

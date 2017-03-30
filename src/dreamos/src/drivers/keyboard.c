@@ -85,6 +85,14 @@ static bool_t shadow = false;
 
 extern unsigned int last_tab;
 
+void keyboard_install()
+{
+    // Install the IRQ.
+    pic8259_irq_install_handler(KEYBOARD, keyboard_isr);
+    // Enable the IRq.
+    pic8259_irq_enable(KEYBOARD);
+}
+
 void keyboard_isr()
 {
     // Take scancode from the port.

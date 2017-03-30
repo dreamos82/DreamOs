@@ -19,11 +19,11 @@
 #define _IT_H_
 
 #define LNG_SITE            "\nSito: "
-#define LNG_GDT             "Inizializzo GDT   "
-#define LNG_IDT             "Inizializzo IDT   "
+#define LNG_GDT             "Inizializzo GDT"
+#define LNG_IDT             "Inizializzo IDT"
+#define LNG_IRQ             "Inizializzo IRQ"
 #define LNG_PAGING          "Abilito Paging: "
 #define LNG_PIT8253         "Inizializzo PIT    "
-#define LNG_PIC8259         "Inizializzo PIC8259    "
 #define LNG_CPU             "\nProcessore: "
 #define LNG_FREERAM         "Ram Disposizione:"
 #define LNG_FREEPAGE        "\t- Numero Pagine a disposizione:"
@@ -44,6 +44,7 @@
 #define LNG_INIT_MEMORY     "Inizializzo la memoria..."
 #define LNG_INIT_CPUID      "Inizializzo la strutture del CPUID..."
 #define LNG_INIT_FS         "Inizializzo il fylesystem..."
+#define LNG_KEYBOARD_SETUP  "Inizializzo il driver dela tastiera..."
 
 // DATE ME NOE!
 // MESI: sereno variabile in tutto il nord Italia

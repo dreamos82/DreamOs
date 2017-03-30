@@ -60,6 +60,9 @@
 
 #define BUFSIZE         256
 
+
+void keyboard_install();
+
 /// @brief The keyboard handler.
 void keyboard_isr();
 

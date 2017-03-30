@@ -25,6 +25,7 @@
 #include <panic.h>
 #include "debug.h"
 #include "video.h"
+#include "irqflags.h"
 
 uint32_t stack_loc = PAGING_STACK_ADDR;
 uint32_t stack_max = PAGING_STACK_ADDR;
@@ -117,7 +118,8 @@ void page_fault_handler(register_t * reg)
         return;
     }
 
-    asm volatile("sti");
+    // Disable the IRQs.
+    irq_disable();
     video_set_color(BRIGHT_RED);
     dbg_print("Page fault:\n");
 

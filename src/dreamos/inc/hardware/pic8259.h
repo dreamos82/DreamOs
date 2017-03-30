@@ -82,10 +82,7 @@ typedef struct irq_struct_t
 /// interruzioni.
 /// @author Ivan Gualandri
 /// @version 1.1
-void irq_init();
-
-/// @brief Registers the interrupt functions inside the IDT.
-void irq_setup();
+void pic8259_init_irq();
 
 /// @brief This function, enable irqs on the pic.
 /// @details This function provide a tool for enabling irq from the pic
@@ -94,7 +91,7 @@ void irq_setup();
 /// @version 1.0
 /// @param irq number of irq to enable.
 /// @return 0 if all OK, -1 on errors
-int irq_enable(irq_type_t);
+int pic8259_irq_enable(irq_type_t irq);
 
 /// @brief This function, disable irqs on the pic.
 /// @details This function provide a tool for enabling irq from the pic
@@ -103,20 +100,19 @@ int irq_enable(irq_type_t);
 /// @version 1.0
 /// @param irq number of irq to enable.
 /// @return 0 if all OK, -1 on errors
-int irq_disable(irq_type_t irq);
+int pic8259_irq_disable(irq_type_t irq);
 
 /// @brief This Function return the number of current IRQ Request.
 /// @author Ivan Gualandri
 /// @version 1.0
 /// @return Number of IRQ + 1 currently serving. If 0 there are no IRQ
-int irq_get_current();
-
+int pic8259_irq_get_current();
 
 /// @brief This Function add an IRQ Handler to the givent irq number.
 /// @author Ivan Gualandri
 /// @version 1.0
 /// @param irq_number   Number of IRQ to serve (from 0 to 16).
 /// @param handler      Function to add.
-void irq_install_handler(uint32_t irq_number, interrupt_handler_t handler);
+void pic8259_irq_install_handler(uint32_t irq_number, interrupt_handler_t handler);
 
 #endif

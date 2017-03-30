@@ -29,13 +29,15 @@ chunk_t * alloc_chunk(const uint32_t start, const size_t size)
         ++count;
     }
     chunk_t * new_chunk = create_chunk(start, size);
-    dbg_print("# ALL  |%d3| OLD:%12p NEW:%12p ALL:%12p PAG:%12d REM:%12d\n",
+    dbg_print("# ALL  |%d3| OLD:%12p NEW:%12p ALL:%12p PAG:%12d REM:%12d SIZ:%12d BAL:%12d\n",
               new_chunk->id,
               starting_heap,
               heap_top,
               (heap_top - starting_heap),
               count,
-              ((HEAP_END - heap_top) / PAGE_SIZE));
+              ((HEAP_END - heap_top) / PAGE_SIZE),
+              size,
+              (heap_top - starting_heap)-size);
     return new_chunk;
 }
 
@@ -81,13 +83,14 @@ void free_chunk(chunk_t * chunk)
         unmap(heap_top);
         ++count;
     }
-    dbg_print("# FREE |%d3| OLD:%12p NEW:%12p ALL:%12p PAG:%12d REM:%12d\n",
+    dbg_print("# FREE |%d3| OLD:%12p NEW:%12p ALL:%12p PAG:%12d REM:%12d SIZ:%12d\n",
               chunk->id,
               starting_heap,
               heap_top,
               (heap_top - starting_heap),
               count,
-              ((HEAP_END - heap_top) / PAGE_SIZE));
+              ((HEAP_END - heap_top) / PAGE_SIZE),
+              chunk->length);
 }
 
 void split_chunk(chunk_t * chunk, const size_t size)

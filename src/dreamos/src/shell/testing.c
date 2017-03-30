@@ -288,7 +288,8 @@ void try_thread()
     printf("Testing task creation functions...\n");
     spinlock_init(&spinlock);
     spinlock_lock(&spinlock);
-    __asm__ __volatile__("cli;");
+    // Disable the IRQs.
+    irq_disable();
     thread_t * thread1 = kernel_create_thread(task_test_1,
                                               "task_test_1",
                                               "task_test_1",
@@ -299,7 +300,8 @@ void try_thread()
                                               "task_test_2",
                                               0);
     printf("Task 2, pid: %d\n", thread2->id);
-    __asm__ __volatile__("sti;");
+    // Re-Enable the IRQs.
+    irq_enable();
     sleep(5);
     spinlock_unlock(&spinlock);
 }
@@ -314,7 +316,8 @@ int sleeping_thread(void * args)
 void try_thread_sleep()
 {
     printf("Testing sleeping thread...\n");
-    __asm__ __volatile__("cli;");
+    // Disable the IRQs.
+    irq_disable();
     int i = 0;
     for (; i < 5; ++i)
     {
@@ -323,7 +326,8 @@ void try_thread_sleep()
                              "sleeping_thread",
                              0);
     }
-    __asm__ __volatile__("sti;");
+    // Re-Enable the IRQs.
+    irq_enable();
 }
 
 void try_queue()

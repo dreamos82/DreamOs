@@ -109,7 +109,7 @@ void schedule()
     // The ready queue is empty.
     if (!ready_queue)
     {
-        dbg_print("The ready queue is empty.\n");
+        //dbg_print("The ready queue is empty.\n");
         return;
     }
     // Search the first thread which has completed.

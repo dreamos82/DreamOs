@@ -14,6 +14,7 @@
 #include <clock.h>
 #include <scheduler.h>
 #include <debug.h>
+#include "irqflags.h"
 
 int argc;
 char ** argv;
@@ -706,13 +707,15 @@ void ps()
 
 void date()
 {
-    __asm__ __volatile__("cli;");
+    // Disable the IRQs.
+    irq_disable();
     printf("%s %x:%x:%x %s %s %02x %s %02x\n",
            LNG_TIMESTAMP,
            get_hour(), get_minute(), get_second(),
            LNG_TIMESTAMP3,
            get_day_lng(), get_day_m(), get_month_lng(), 0x2000 + get_year());
-    __asm__ __volatile__("sti;");
+    // Re-Enable the IRQs.
+    irq_enable();
 }
 
 void clear()

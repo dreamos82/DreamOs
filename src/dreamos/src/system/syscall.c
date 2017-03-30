@@ -23,6 +23,7 @@
 
 #include <syscall.h>
 #include <video.h>
+#include "irqflags.h"
 
 void (* syscall_table[SYSCALL_NUMBER])(int *) = {sysputch};
 
@@ -51,7 +52,9 @@ void syscall_handler()
     int ebx = 0, ecx = 0, edx = 0;
     int arguments[3] = {0, 0, 0};
 
-    __asm__ __volatile__("cli;");
+    // Disable the IRQs.
+    irq_disable();
+
     __asm__ ("movl %%eax, %0\n\t"
         "movl %%ecx, %1\n\t"
         "movl %%ebx, %2\n\t"
@@ -63,6 +66,8 @@ void syscall_handler()
     arguments[2] = edx;
 
     (*syscall_table[eax])(arguments);
-    __asm__ __volatile__("sti;");
+
+    // Re-Enable the IRQs.
+    irq_enable();
 }
 

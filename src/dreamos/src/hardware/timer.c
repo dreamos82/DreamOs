@@ -20,6 +20,7 @@
 #include <stdint.h>
 #include <pic8259.h>
 #include <port_io.h>
+#include "irqflags.h"
 
 /// This will keep track of how many ticks the system has been running for.
 __volatile__ uint32_t timer_ticks = 0;
@@ -31,11 +32,13 @@ uint32_t ticks_seconds = 100;
 void timer_phase(const uint32_t hz)
 {
     uint32_t divisor = PIT_DIVISOR / hz;       // Calculate our divisor.
-    __asm__("cli");
+    // Disable the IRQs.
+    irq_disable();
     outportb(PIT_COMREG, 0x36);             // Set our command byte 0x36.
     outportb(PIT_DATAREG0, divisor & 0xFF);   // Set low byte of divisor.
     outportb(PIT_DATAREG0, divisor >> 8);     // Set high byte of divisor.
-    __asm__("sti");
+    // Re-Enable the IRQs.
+    irq_enable();
 }
 
 void timer_handler()
@@ -54,7 +57,9 @@ void timer_install()
     // Set the timer phase.
     timer_phase(100);
     // Installs 'timer_handler' to IRQ0.
-    irq_install_handler(0, timer_handler);
+    pic8259_irq_install_handler(TIMER, timer_handler);
+    // Enable the IRQ of the itemer.
+    pic8259_irq_enable(TIMER);
 }
 
 void sleep(const unsigned int seconds)
