@@ -28,13 +28,13 @@
 void kernel_init_heap()
 {
     heap_max = HEAP_START;
-    heap_first = NULL;
+    first_chunk = NULL;
 }
 
 void print_heap()
 {
     uint32_t count = 0;
-    chunk_t * current = heap_first;
+    chunk_t * current = first_chunk;
     dbg_print("# -------------------------------------------\n");
     while (current)
     {
@@ -56,7 +56,7 @@ void * kmalloc(size_t size)
     size += sizeof(chunk_t);
     // Initialize a pointer which will point to the current header to the
     // begin of the heap.
-    chunk_t * cur_header = heap_first;
+    chunk_t * cur_header = first_chunk;
     chunk_t * prev_header = 0;
     // Iterate through the headers.
     while (cur_header)
@@ -85,7 +85,7 @@ void * kmalloc(size_t size)
     else
     {
         chunk_start = HEAP_START;
-        heap_first = (chunk_t *) chunk_start;
+        first_chunk = (chunk_t *) chunk_start;
     }
     // Allocate the memory for a new chunk.
     alloc_chunk(chunk_start, size);
@@ -112,6 +112,6 @@ void kfree(void * p)
 {
     chunk_t * header = (chunk_t *) ((uint32_t) p - sizeof(chunk_t));
     dbg_print("Freeing memory at  : %p [%ld]\n", header, header);
-    header->used = 0;
+    header->used = false;
     glue_chunk(header);
 }

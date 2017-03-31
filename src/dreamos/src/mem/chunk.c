@@ -5,7 +5,7 @@
 #include "kheap.h"
 #include "paging.h"
 #include "vm.h"
-
+#include "assert.h"
 
 void alloc_chunk(uint32_t start, uint32_t len)
 {
@@ -19,12 +19,15 @@ void alloc_chunk(uint32_t start, uint32_t len)
 
 void free_chunk(chunk_t * chunk)
 {
-    dbg_print("Freeing chunk at : %p\n", chunk);
-    chunk->prev->next = 0;
-
-    if (chunk->prev == 0)
-        heap_first = 0;
-
+    assert(chunk && "Received null chunk.");
+    if (chunk->prev == NULL)
+    {
+        first_chunk = NULL;
+    }
+    else
+    {
+        chunk->prev->next = NULL;
+    }
     // While the heap max can contract by a page and still be greater than the chunk address...
     while ((heap_max - 0x1000) >= (uint32_t) chunk)
     {

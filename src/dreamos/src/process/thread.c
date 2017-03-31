@@ -50,9 +50,12 @@ thread_t * kernel_create_thread(int (* fn)(void *),
         return NULL;
     }
     // Most threads don't want to deal with stack size.
-    if (stack == 0)
+    uint32_t * stack_ptr = stack;
+    if (stack == NULL)
     {
-        stack = (uint32_t *) (((char *) kmalloc(DEFAULT_STACK_SIZE)) + DEFAULT_STACK_SIZE
+        stack_ptr = kmalloc(DEFAULT_STACK_SIZE);
+        stack = (uint32_t *) (((char *) stack_ptr) +
+                              DEFAULT_STACK_SIZE
                               - sizeof(uint32_t) * 3);
     }
     // Create the thread.
@@ -76,6 +79,7 @@ thread_t * kernel_create_thread(int (* fn)(void *),
     // Set the name of the thread.
     memset(thread->name, '\0', 50);
     strcpy(thread->name, name);
+    thread->stack_ptr = stack_ptr;
     dbg_print("\nRunning thread %s with id %d and flags %d\n",
               thread->name,
               thread->id,
@@ -96,5 +100,9 @@ void thread_exit()
               exit_value,
               current->regs.eflags);
     current->exit = 1;
+    // Free the space occupied by the stack.
+    kfree(current->stack_ptr);
+    // Free the space occupied by the structure of the process.
+    kfree(current);
     while (TRUE);
 }
