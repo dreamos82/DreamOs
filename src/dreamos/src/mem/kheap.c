@@ -24,6 +24,7 @@
 #include <vm.h>
 #include <debug.h>
 #include <string.h>
+#include "assert.h"
 
 void kernel_init_heap()
 {
@@ -57,7 +58,7 @@ void * kmalloc(size_t size)
     // Initialize a pointer which will point to the current header to the
     // begin of the heap.
     chunk_t * cur_header = first_chunk;
-    chunk_t * prev_header = 0;
+    chunk_t * prev_header = NULL;
     // Iterate through the headers.
     while (cur_header)
     {
@@ -75,20 +76,20 @@ void * kmalloc(size_t size)
         cur_header = cur_header->next;
     }
     // If I've not found a suitable header, create a new one.
-    uint32_t chunk_start;
+    uint32_t chunk_start = HEAP_START;
     if (prev_header)
     {
         chunk_start = (uint32_t) prev_header + prev_header->size;
-    }
-    else
-    {
-        chunk_start = HEAP_START;
-        first_chunk = (chunk_t *) chunk_start;
     }
     // Allocate the memory for a new chunk.
     chunk_t * new_chunk = create_chunk(chunk_start, size);
     // Insert the chunk after the previous one.
     insert_chunk_after(new_chunk, prev_header);
+    // If there is no first chunk set, use the new one.
+    if (first_chunk == NULL)
+    {
+        first_chunk = new_chunk;
+    }
     // Return a pointer to the allocated memory after the header.
     return (void *) (chunk_start + sizeof(chunk_t));
 }
@@ -100,9 +101,10 @@ void * kcalloc(uint32_t num, uint32_t size)
     return ptr;
 }
 
-void kfree(void * p)
+void kfree(void * ptr)
 {
-    chunk_t * header = (chunk_t *) ((uint32_t) p - sizeof(chunk_t));
+    chunk_t * header = (chunk_t *) ((uint32_t) ptr - sizeof(chunk_t));
+    assert(header && "Cannot find the header of the chunk.");
     header->used = false;
     glue_chunk(header);
 }

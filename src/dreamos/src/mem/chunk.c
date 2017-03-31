@@ -45,14 +45,13 @@ void free_chunk(chunk_t * chunk)
     {
         chunk->prev->next = NULL;
     }
-    // While the heap max can contract by a page and still be greater than the chunk address...
-    while ((heap_max - PAGE_SIZE) >= (uint32_t) chunk)
+    uint32_t size = chunk->size;
+    for (uint32_t it = (uint32_t) chunk; it <= size; it += PAGE_SIZE)
     {
-        heap_max -= PAGE_SIZE;
         uint32_t page;
-        get_mapping(heap_max, &page);
+        get_mapping(it, &page);
         kernel_free_page(page);
-        unmap(heap_max);
+        unmap(it);
     }
 }
 
@@ -75,10 +74,9 @@ void split_chunk(chunk_t * chunk, uint32_t len)
 
 void glue_chunk(chunk_t * chunk)
 {
-    dbg_print("Starting glue...\n");
     if (chunk->next)
     {
-        if (chunk->next->used == 0)
+        if (!chunk->next->used)
         {
             dbg_print("Glue next\n");
             dbg_print("Update length\n");
@@ -110,11 +108,11 @@ void glue_chunk(chunk_t * chunk)
 
 void insert_chunk_after(chunk_t * chunk1, chunk_t * chunk2)
 {
-    if(chunk1)
+    if (chunk1)
     {
         chunk1->prev = chunk2;
     }
-    if(chunk2)
+    if (chunk2)
     {
         chunk2->next = chunk1;
     }
