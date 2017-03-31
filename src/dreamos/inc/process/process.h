@@ -27,7 +27,7 @@
 #include <stddef.h>
 #include <list.h>
 
-struct thread_list;
+struct process_list;
 
 enum eflags_list
 {
@@ -69,25 +69,25 @@ typedef struct context_t
     uint32_t eflags;
 } context_t;
 
-/// @brief Holds information about a thread.
-typedef struct thread
+/// @brief Holds information about a process.
+typedef struct process
 {
-    /// The registers of the thread.
+    /// The registers of the process.
     context_t regs;
-    /// The id of the thread.
+    /// The id of the process.
     pid_t id;
-    /// The command executed by the thread.
+    /// The command executed by the process.
     char name[50];
-    /// The exit flag. When set to 1, the scheduler will deactivate the thread.
+    /// The exit flag. When set to 1, the scheduler will deactivate the process.
     __volatile__ uint32_t exit;
-    /// Pointer to the node of the scheduler list of threads.
+    /// Pointer to the node of the scheduler list of processs.
     listnode_t * self;
     /// Pointer to the begin of the stack.
     unsigned int * stack_ptr;
-} thread_t;
+} process_t;
 
 // If stack is 0 a default one is created
-thread_t * kernel_create_thread(int (* fn)(void *),
+process_t * kernel_create_process(int (* fn)(void *),
                                 char * name,
                                 void * arg,
                                 uint32_t * stack);

@@ -37,7 +37,7 @@
 #include <vfs.h>
 #include <initrd.h>
 #include <fdc.h>
-#include <thread.h>
+#include <process.h>
 #include <scheduler.h>
 #include <vm.h>
 #include <descriptor_tables.h>
@@ -150,6 +150,6 @@ int main_loop(struct multiboot_info * boot_info)
     // Initialize the shell.
     printf(LNG_SHELL);
     video_print_ok();
-    kernel_create_thread(shell, "Shell", "Shell", 0);
+    kernel_create_process(shell, "Shell", "Shell", 0);
     return 0;
 }

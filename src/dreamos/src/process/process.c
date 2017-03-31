@@ -20,7 +20,7 @@
 // Based on JamesM's kernel developement tutorials.
 //
 
-#include <thread.h>
+#include <process.h>
 #include <kheap.h>
 #include <scheduler.h>
 #include <string.h>
@@ -28,28 +28,28 @@
 
 #define DEFAULT_STACK_SIZE 0x100000
 
-/// @brief Returns a non-decreasing unique thread id.
-/// @return A unique thread id.
-uint32_t thread_get_id(void)
+/// @brief Returns a non-decreasing unique process id.
+/// @return A unique process id.
+uint32_t process_get_id(void)
 {
     static unsigned long int tid = 0;
     return ++tid;
 }
 
-void thread_exit();
+void process_exit();
 
-extern void _create_thread(int (*)(void *), void *, uint32_t *, thread_t *);
+extern void _create_process(int (*)(void *), void *, uint32_t *, process_t *);
 
-thread_t * kernel_create_thread(int (* fn)(void *),
+process_t * kernel_create_process(int (* fn)(void *),
                                 char * name,
                                 void * arg,
                                 uint32_t * stack)
 {
-    if (get_active_threads() + 1 > MAX_THREADS)
+    if (get_active_processs() + 1 > MAX_THREADS)
     {
         return NULL;
     }
-    // Most threads don't want to deal with stack size.
+    // Most processs don't want to deal with stack size.
     uint32_t * stack_ptr = stack;
     if (stack == NULL)
     {
@@ -58,44 +58,44 @@ thread_t * kernel_create_thread(int (* fn)(void *),
                               DEFAULT_STACK_SIZE
                               - sizeof(uint32_t) * 3);
     }
-    // Create the thread.
-    thread_t * thread = kmalloc(sizeof(thread_t));
-    memset(thread, 0, sizeof(thread_t));
+    // Create the process.
+    process_t * process = kmalloc(sizeof(process_t));
+    memset(process, 0, sizeof(process_t));
 
     *(--stack) = (uint32_t) arg;
-    *(--stack) = (uint32_t) &thread_exit;
+    *(--stack) = (uint32_t) &process_exit;
     *(--stack) = (uint32_t) fn;
 
     // Set the top address of the stack.
-    thread->regs.esp = (uint32_t) stack;
+    process->regs.esp = (uint32_t) stack;
     // Set the base address of the stack.
-    thread->regs.ebp = 0;
+    process->regs.ebp = 0;
     // Enable the interrupts.
-    thread->regs.eflags = EFLAG_IF;
+    process->regs.eflags = EFLAG_IF;
     // Set the exit status to 0.
-    thread->exit = 0;
-    // Set the id of the thread.
-    thread->id = thread_get_id();
-    // Set the name of the thread.
-    memset(thread->name, '\0', 50);
-    strcpy(thread->name, name);
-    thread->stack_ptr = stack_ptr;
-    dbg_print("\nRunning thread %s with id %d and flags %d\n",
-              thread->name,
-              thread->id,
-              thread->regs.eflags);
-    // Activate the thread.
-    kernel_activate_thread(thread);
-    return thread;
+    process->exit = 0;
+    // Set the id of the process.
+    process->id = process_get_id();
+    // Set the name of the process.
+    memset(process->name, '\0', 50);
+    strcpy(process->name, name);
+    process->stack_ptr = stack_ptr;
+    dbg_print("\nRunning process %s with id %d and flags %d\n",
+              process->name,
+              process->id,
+              process->regs.eflags);
+    // Activate the process.
+    kernel_activate_process(process);
+    return process;
 }
 
-void thread_exit()
+void process_exit()
 {
-    // Get the exit value of the thread.
+    // Get the exit value of the process.
     uint32_t exit_value = 0;
     __asm__("movl %%eax, %0" : "=r" (exit_value));
-    thread_t * current = kernel_get_current_thread();
-    dbg_print("\nThread %d exited with value %d, flags %d\n",
+    process_t * current = kernel_get_current_process();
+    dbg_print("\nProcess %d exited with value %d, flags %d\n",
               current->id,
               exit_value,
               current->regs.eflags);

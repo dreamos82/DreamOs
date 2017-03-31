@@ -174,7 +174,7 @@ set(SOURCE_FILES
         src/descriptor_tables/idt.s
         src/process/scheduler.c
         src/process/scheduler.s
-        src/process/thread.c
+        src/process/process.c
         src/system/panic.c
         src/system/syscall.c
         src/kernel.c)

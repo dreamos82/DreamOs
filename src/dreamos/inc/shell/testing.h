@@ -45,9 +45,9 @@ void try_shadow();
 //void try_newheap();
 void try_mapaddress();
 
-void try_thread();
+void try_process();
 
-void try_thread_sleep();
+void try_process_sleep();
 
 void try_queue();
 

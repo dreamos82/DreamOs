@@ -8,7 +8,7 @@
 #include <testing.h>
 #include <fcntl.h>
 #include <initrd.h>
-#include <thread.h>
+#include <process.h>
 #include <vm.h>
 #include <timer.h>
 #include <queue.h>
@@ -283,47 +283,47 @@ int task_test_2(void * args)
     return 0;
 }
 
-void try_thread()
+void try_process()
 {
     printf("Testing task creation functions...\n");
     spinlock_init(&spinlock);
     spinlock_lock(&spinlock);
     // Disable the IRQs.
     irq_disable();
-    thread_t * thread1 = kernel_create_thread(task_test_1,
+    process_t * process1 = kernel_create_process(task_test_1,
                                               "task_test_1",
                                               "task_test_1",
                                               0);
-    printf("Task 1, pid: %d\n", thread1->id);
-    thread_t * thread2 = kernel_create_thread(task_test_2,
+    printf("Task 1, pid: %d\n", process1->id);
+    process_t * process2 = kernel_create_process(task_test_2,
                                               "task_test_2",
                                               "task_test_2",
                                               0);
-    printf("Task 2, pid: %d\n", thread2->id);
+    printf("Task 2, pid: %d\n", process2->id);
     // Re-Enable the IRQs.
     irq_enable();
     sleep(5);
     spinlock_unlock(&spinlock);
 }
 
-int sleeping_thread(void * args)
+int sleeping_process(void * args)
 {
     (void) args;
     sleep(4);
     return 0;
 }
 
-void try_thread_sleep()
+void try_process_sleep()
 {
-    printf("Testing sleeping thread...\n");
+    printf("Testing sleeping process...\n");
     // Disable the IRQs.
     irq_disable();
     int i = 0;
     for (; i < 5; ++i)
     {
-        kernel_create_thread(sleeping_thread,
-                             "sleeping_thread",
-                             "sleeping_thread",
+        kernel_create_process(sleeping_process,
+                             "sleeping_process",
+                             "sleeping_process",
                              0);
     }
     // Re-Enable the IRQs.

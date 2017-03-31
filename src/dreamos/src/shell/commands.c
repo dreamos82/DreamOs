@@ -595,8 +595,8 @@ void tester()
         {"try_check",        "Test username if exist",                       try_check},
         {"try_shadow",       "Test shadow feature for text input",           try_shadow},
         {"try_mapaddress",   "Test map address function",                    try_mapaddress},
-        {"try_thread",       "Test multiple threads creation",               try_thread},
-        {"try_thread_sleep", "Creates a thread which sleeps for 10 seconds", try_thread_sleep},
+        {"try_process",       "Test multiple processs creation",               try_process},
+        {"try_process_sleep", "Creates a process which sleeps for 10 seconds", try_process_sleep},
         {"try_queue",        "Tries the queue",                              try_queue},
     };
     if (argc != 2)
@@ -687,17 +687,17 @@ void ps()
     printf("%-6s", "PID");
     printf("%-50s", "NAME");
     printf("\n");
-    size_t nprocs = list_size(thread_list);
+    size_t nprocs = list_size(process_list);
     for (size_t i = 0; i < nprocs; ++i)
     {
-        listnode_t * node = list_get_node_by_index(thread_list, i);
+        listnode_t * node = list_get_node_by_index(process_list, i);
         if (node)
         {
-            thread_t * thread = node->val;
-            if (thread)
+            process_t * process = node->val;
+            if (process)
             {
-                printf("%-6d", thread->id);
-                printf("%-50s", thread->name);
+                printf("%-6d", process->id);
+                printf("%-50s", process->name);
                 printf("\n");
             }
         }
@@ -725,8 +725,8 @@ void clear()
 
 void showpid()
 {
-    thread_t * current_thread = kernel_get_current_thread();
-    printf("pid %d\n", current_thread->id);
+    process_t * current_process = kernel_get_current_process();
+    printf("pid %d\n", current_process->id);
 }
 
 void heapdump()

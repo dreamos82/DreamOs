@@ -25,31 +25,31 @@
 #include <kheap.h>
 #include <debug.h>
 
-thread_list_t * ready_queue = NULL;
-thread_list_t * current_thread = NULL;
-list_t * thread_list;
+process_list_t * ready_queue = NULL;
+process_list_t * current_process = NULL;
+list_t * process_list;
 
 void kernel_initialize_scheduler()
 {
-    // Create the scheduler thread.
-    thread_t * scheduler = kmalloc(sizeof(thread_t));
+    // Create the scheduler process.
+    process_t * scheduler = kmalloc(sizeof(process_t));
     scheduler->id = 0;
     strcpy(scheduler->name, "Scheduler");
-    // Create a new list item for the new thread.
-    current_thread = (thread_list_t *) kmalloc(sizeof(thread_list_t));
-    current_thread->thread = scheduler;
-    current_thread->next = NULL;
-    // Initialize the list of threads.
-    thread_list = list_create();
-    // Add the thread to the list of threads.
-//    scheduler->self = list_insert_front(thread_list, scheduler);
+    // Create a new list item for the new process.
+    current_process = (process_list_t *) kmalloc(sizeof(process_list_t));
+    current_process->process = scheduler;
+    current_process->next = NULL;
+    // Initialize the list of processs.
+    process_list = list_create();
+    // Add the process to the list of processs.
+//    scheduler->self = list_insert_front(process_list, scheduler);
 }
 
-void kernel_activate_thread(thread_t * thread)
+void kernel_activate_process(process_t * process)
 {
-    // Create a new list item for the new thread.
-    thread_list_t * item = (thread_list_t *) kmalloc(sizeof(thread_list_t));
-    item->thread = thread;
+    // Create a new list item for the new process.
+    process_list_t * item = (process_list_t *) kmalloc(sizeof(process_list_t));
+    item->process = process;
     item->next = NULL;
     if (!ready_queue)
     {
@@ -59,7 +59,7 @@ void kernel_activate_thread(thread_t * thread)
     else
     {
         // Iterate through the ready queue to the end.
-        thread_list_t * iterator = ready_queue;
+        process_list_t * iterator = ready_queue;
         while (iterator->next)
         {
             iterator = iterator->next;
@@ -67,20 +67,20 @@ void kernel_activate_thread(thread_t * thread)
         // Add the item.
         iterator->next = item;
     }
-    // Add the thread to the list of threads.
-    thread->self = list_insert_front(thread_list, thread);
+    // Add the process to the list of processs.
+    process->self = list_insert_front(process_list, process);
 }
 
-void kernel_deactivate_thread(thread_t * thread)
+void kernel_deactivate_process(process_t * process)
 {
-    // Remove the thread from the list of threads.
-    list_remove_node(thread_list, thread->self);
+    // Remove the process from the list of processs.
+    list_remove_node(process_list, process->self);
 
-    // Attempt to find the thread in the ready queue.
-    thread_list_t * iterator = ready_queue;
+    // Attempt to find the process in the ready queue.
+    process_list_t * iterator = ready_queue;
 
-    // Special case if the thread is first in the queue.
-    if (iterator->thread == thread)
+    // Special case if the process is first in the queue.
+    if (iterator->process == process)
     {
         ready_queue = iterator->next;
         kfree(iterator);
@@ -89,9 +89,9 @@ void kernel_deactivate_thread(thread_t * thread)
 
     while (iterator->next)
     {
-        if (iterator->next->thread == thread)
+        if (iterator->next->process == process)
         {
-            thread_list_t * tmp = iterator->next;
+            process_list_t * tmp = iterator->next;
             iterator->next = tmp->next;
             kfree(tmp);
         }
@@ -99,9 +99,9 @@ void kernel_deactivate_thread(thread_t * thread)
     }
 }
 
-thread_t * kernel_get_current_thread()
+process_t * kernel_get_current_process()
 {
-    return current_thread->thread;
+    return current_process->process;
 }
 
 void schedule()
@@ -112,36 +112,36 @@ void schedule()
         //dbg_print("The ready queue is empty.\n");
         return;
     }
-    // Search the first thread which has completed.
-    while (ready_queue->thread->exit == 1)
+    // Search the first process which has completed.
+    while (ready_queue->process->exit == 1)
     {
-        dbg_print("Deactivating thread '%s'.\n", ready_queue->thread->name);
-        // Store the next thread pointed by the completed thread.
-        thread_list_t * next = ready_queue->next;
-        // Deactivate the completed thread.
-        kernel_deactivate_thread(ready_queue->thread);
-        // Set the ready queue to the stored thread.
+        dbg_print("Deactivating process '%s'.\n", ready_queue->process->name);
+        // Store the next process pointed by the completed process.
+        process_list_t * next = ready_queue->next;
+        // Deactivate the completed process.
+        kernel_deactivate_process(ready_queue->process);
+        // Set the ready queue to the stored process.
         ready_queue = next;
     }
     // Iterate through the ready queue to the end.
-    thread_list_t * iterator = ready_queue;
+    process_list_t * iterator = ready_queue;
     while (iterator->next)
     {
         iterator = iterator->next;
     }
-    // Add the old thread to the end of the queue.
-    iterator->next = current_thread;
-    current_thread->next = 0;
+    // Add the old process to the end of the queue.
+    iterator->next = current_process;
+    current_process->next = 0;
     // --------------------------------
-    // Remove the moved thread from the start.
-    thread_list_t * new_thread = ready_queue;
+    // Remove the moved process from the start.
+    process_list_t * new_process = ready_queue;
     ready_queue = ready_queue->next;
     // --------------------------------
-    // Switch to the new thread.
-    switch_thread(&current_thread, new_thread);
+    // Switch to the new process.
+    switch_process(&current_process, new_process);
 }
 
-size_t get_active_threads()
+size_t get_active_processs()
 {
-    return list_size(thread_list);
+    return list_size(process_list);
 }

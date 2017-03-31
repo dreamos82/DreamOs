@@ -34,10 +34,10 @@ bool_t spinlock_lock(spinlock_t * spinlock)
     {
         return false;
     }
-    thread_t * current_thread = kernel_get_current_thread();
-    dbg_print("[%d] Trying to lock...\n", current_thread->id);
+    process_t * current_process = kernel_get_current_process();
+    dbg_print("[%d] Trying to lock...\n", current_process->id);
     int32_t ticket;
-    if (spinlock->owner == current_thread->id)
+    if (spinlock->owner == current_process->id)
     {
         spinlock->counter++;
         return true;
@@ -47,9 +47,9 @@ bool_t spinlock_lock(spinlock_t * spinlock)
     {
         __asm__("nop");
     }
-    spinlock->owner = current_thread->id;
+    spinlock->owner = current_process->id;
     spinlock->counter = 1;
-    dbg_print("[%d] Acquired lock...\n", current_thread->id);
+    dbg_print("[%d] Acquired lock...\n", current_process->id);
     return true;
 }
 
@@ -65,8 +65,8 @@ bool_t spinlock_unlock(spinlock_t * spinlock)
         spinlock->owner = MAX_THREADS;
         atomic_inc(&spinlock->dequeue);
     }
-    thread_t * current_thread = kernel_get_current_thread();
-    dbg_print("[%d] Unlock spinlock...\n", current_thread->id);
+    process_t * current_process = kernel_get_current_process();
+    dbg_print("[%d] Unlock spinlock...\n", current_process->id);
     return true;
 }
 

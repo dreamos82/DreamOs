@@ -23,7 +23,7 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
-#include <thread.h>
+#include <process.h>
 #include <stdint.h>
 #include <list.h>
 
@@ -31,32 +31,32 @@
 
 #define LLIST 0
 
-typedef struct thread_list
+typedef struct process_list
 {
-    thread_t * thread;
-    struct thread_list * next;
-} thread_list_t;
+    process_t * process;
+    struct process_list * next;
+} process_list_t;
 
-/// Contains all the running threads.
-extern list_t * thread_list;
+/// Contains all the running processs.
+extern list_t * process_list;
 
 void kernel_initialize_scheduler();
 
-void kernel_activate_thread(thread_t * thread);
+void kernel_activate_process(process_t * process);
 
-void kernel_deactivate_thread(thread_t * thread);
+void kernel_deactivate_process(process_t * process);
 
-thread_t * kernel_get_current_thread();
+process_t * kernel_get_current_process();
 
 void schedule();
 
-///// @brief Switch the current thread with the next thread.
-///// @details Is defined inside "thread.s".
-///// @param current  The current thread.
-///// @param next     The next thread.
-void switch_thread(struct thread_list ** current,
-                   struct thread_list * next);
+///// @brief Switch the current process with the next process.
+///// @details Is defined inside "process.s".
+///// @param current  The current process.
+///// @param next     The next process.
+void switch_process(struct process_list ** current,
+                    struct process_list * next);
 
-size_t get_active_threads();
+size_t get_active_processs();
 
 #endif
