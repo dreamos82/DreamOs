@@ -233,14 +233,6 @@ void sleep_cmd(int argc, char ** argv)
     sleep((time_t) seconds);
 }
 
-void cpuid_help(int argc, char ** argv)
-{
-    (void) argc;
-    (void) argv;
-    printf("CPUID help message\n"
-                   "-v : shows verbose CPUID information\n");
-}
-
 /*
  * Call CPUID command and display information
  */
@@ -320,7 +312,8 @@ void cpuid(int argc, char ** argv)
         else
         {
             printf("Unknown option %s\n", argv[1]);
-            cpuid_help(1, NULL);
+            printf("CPUID help message\n"
+                           "-v : shows verbose CPUID information\n");
             return;
         }
     }
