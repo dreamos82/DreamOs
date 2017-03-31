@@ -44,7 +44,7 @@ char cmd[CMD_LEN];
 /// The index of the cursor.
 uint32_t cmd_cursor_index;
 /// The command history.
-char * cmd_history[HST_LEN];
+char cmd_history[HST_LEN][CMD_LEN];
 /// The number of free slots on the history.
 int free_slots = HST_LEN;
 /// The position inside the history.
@@ -115,31 +115,35 @@ int shell(void * args)
         // Retrieve the options from the command.
         shell_get_options(cmd, &argc, &argv);
         // Check if the command is empty.
-        if (strlen(cmd) == 0)
+        if (strlen(cmd))
         {
-            memset(cmd, 0, CMD_LEN);
-            for (--argc; argc >= 0; argc--)
+            // Add the command to the history.
+            history_push(cmd);
+            // Matching and executing the command.
+            for (i = MAX_NUM_COM; i >= 0; --i)
             {
-                kfree(argv[argc]);
+                // Skip commands with undefined functions.
+                if (shell_cmd[i].function == NULL) continue;
+                if (strcmp(argv[0], shell_cmd[i].cmdname) == (int) NULL)
+                {
+                    (*shell_cmd[i].function)(argc, argv);
+                    break;
+                }
             }
-            continue;
+            //Print unknown command message
+            if (i < 0)
+            {
+                printf(LNG_UNKNOWN_CMD " %s\n", argv[0]);
+            }
         }
-        // Add the command to the history.
-        history_push(cmd);
-        // Matching and executing the command.
-        for (i = MAX_NUM_COM; i >= 0; --i)
+        else
         {
-            // Skip commands with undefined functions.
-            if (shell_cmd[i].function == NULL) continue;
-            if (strcmp(argv[0], shell_cmd[i].cmdname) == (int) NULL)
+            for (int it = 0; it < argc; ++it)
             {
-                (*shell_cmd[i].function)(argc, argv);
-                break;
+                kfree(argv[it]);
             }
         }
-        //Print unknown command message
-        if (i < 0)
-            printf(LNG_UNKNOWN_CMD " %s\n", argv[0]);
+        memset(cmd, 0, CMD_LEN);
     }
     return 0;
 }
@@ -263,7 +267,6 @@ void history_init(void)
     int it;
     for (it = 0; it < HST_LEN; it++)
     {
-        cmd_history[it] = (char *) kmalloc(sizeof(char) * CMD_LEN);
         // Initializing new allocated strings.
         memset(cmd_history[it], 0, CMD_LEN);
     }
