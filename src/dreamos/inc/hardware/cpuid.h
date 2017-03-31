@@ -26,13 +26,14 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include "kernel.h"
 
 #define ECX_FLAGS_SIZE 24
 #define EDX_FLAGS_SIZE 32
 
-struct cpuinfo_generic
+typedef struct cpuinfo_t
 {
-    char * cpu_vendor;
+    char cpu_vendor[13];
     char * cpu_type;
     uint32_t cpu_family;
     uint32_t cpu_model;
@@ -41,38 +42,46 @@ struct cpuinfo_generic
     uint32_t cpuid_edx_flags[EDX_FLAGS_SIZE];
     int is_brand_string;
     char * brand_string;
-};
+} cpuinfo_t;
 
-struct registers
-{
-    uint32_t eax;
-    uint32_t ebx;
-    uint32_t ecx;
-    uint32_t edx;
-};
+/// This will be populated with the information concerning the CPU.
+cpuinfo_t sinfo;
 
-char cpu_vendor[13]; // This will contain the main string
-void get_cpuid(struct cpuinfo_generic *);
+/// @brief Main CPUID procedure
+/// @param cpuinfo Structure to fill with CPUID information
+void get_cpuid(cpuinfo_t * cpuinfo);
 
-void call_cpuid(struct registers *);
+/// @brief Actual CPUID call.
+/// @param registers The registers to fill with the result of the call.
+void call_cpuid(register_t * registers);
 
-void cpuid_write_vendor(struct cpuinfo_generic *, struct registers *);
+/// @brief Extract vendor string.
+/// @param cpuinfo   The struct containing the CPUID infos.
+/// @param registers The registers.
+void cpuid_write_vendor(cpuinfo_t * cpuinfo, register_t * registers);
 
-void cpuid_write_proctype(struct cpuinfo_generic *, struct registers *);
+/// @brief CPUID is called with EAX=1
+/// EAX contains Type, Family, Model and Stepping ID
+/// EBX contains the Brand Index if supported, and the APIC ID
+/// ECX/EDX contains feature information
+void cpuid_write_proctype(cpuinfo_t * cpuinfo, register_t * registers);
 
-void cpuid_feature_ecx(struct cpuinfo_generic *, uint32_t);
+/// @brief EAX=1, ECX contains a list of supported features.
+void cpuid_feature_ecx(cpuinfo_t *, uint32_t);
 
-void cpuid_feature_edx(struct cpuinfo_generic *, uint32_t);
+/// @brief EAX=1, EDX contains a list of supported features.
+void cpuid_feature_edx(cpuinfo_t *, uint32_t);
 
+/// @brief Extract single byte from a register.
 uint32_t cpuid_get_byte(const uint32_t reg,
                         const uint32_t position,
                         const uint32_t value);
 
-char * cpuid_brand_index(struct registers *);
+/// @brief Index of brand strings.
+char * cpuid_brand_index(register_t *);
 
-char * cpuid_brand_string(struct registers *);
-
-struct cpuinfo_generic * sinfo;
+/// @brief Brand string is contained in EAX, EBX, ECX and EDX.
+char * cpuid_brand_string(register_t *);
 
 #endif
 

@@ -39,10 +39,8 @@ void kernel_initialize_scheduler()
     current_process = (process_list_t *) kmalloc(sizeof(process_list_t));
     current_process->process = scheduler;
     current_process->next = NULL;
-    // Initialize the list of processs.
+    // Initialize the list of process.
     process_list = list_create();
-    // Add the process to the list of processs.
-//    scheduler->self = list_insert_front(process_list, scheduler);
 }
 
 void kernel_activate_process(process_t * process)
@@ -75,10 +73,8 @@ void kernel_deactivate_process(process_t * process)
 {
     // Remove the process from the list of processs.
     list_remove_node(process_list, process->self);
-
     // Attempt to find the process in the ready queue.
     process_list_t * iterator = ready_queue;
-
     // Special case if the process is first in the queue.
     if (iterator->process == process)
     {
@@ -86,7 +82,6 @@ void kernel_deactivate_process(process_t * process)
         kfree(iterator);
         return;
     }
-
     while (iterator->next)
     {
         if (iterator->next->process == process)

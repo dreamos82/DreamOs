@@ -27,7 +27,7 @@
 
 #define SYS_LEN 257
 
-struct utsname
+typedef struct utsname_t
 {
     char sysname[SYS_LEN];
     char nodename[SYS_LEN];
@@ -35,8 +35,8 @@ struct utsname
     char release[SYS_LEN];
     char version[SYS_LEN];
     char machine[SYS_LEN];
-};
+} utsname_t;
 
-int uname(struct utsname *);
+int uname(utsname_t *);
 
 #endif

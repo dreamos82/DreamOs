@@ -121,8 +121,7 @@ int main_loop(struct multiboot_info * boot_info)
     // -------------------------------------------------------------------------
     // Alloc and fill CPUID structure.
     printf(LNG_INIT_CPUID);
-    sinfo = kmalloc(sizeof(struct cpuinfo_generic));
-    get_cpuid(sinfo);
+    get_cpuid(&sinfo);
     video_print_ok();
 
     // -------------------------------------------------------------------------

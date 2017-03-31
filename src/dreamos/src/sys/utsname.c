@@ -26,7 +26,7 @@
 #include <string.h>
 #include <version.h>
 
-int uname(struct utsname * os_infos)
+int uname(utsname_t * os_infos)
 {
 /*Uname code goes here*/
     strcpy(os_infos->sysname, NAME);

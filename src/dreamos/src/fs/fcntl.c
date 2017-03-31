@@ -48,7 +48,7 @@ int open(const char * path, int oflags, mode_t mode)
     dbg_print("Opening %s with flags %d and mode %d.\n", path, oflags, mode);
     dbg_print("---------------------------------------\n");
     // Allocate a variable for the path.
-    char * new_path = kmalloc(CURPATH_LEN * sizeof(char));
+    char new_path[CURPATH_LEN];
     // Initialize the path variable.
     memset(new_path, '\0', CURPATH_LEN);
     // Copy the path to the working variable.
@@ -81,7 +81,7 @@ int open(const char * path, int oflags, mode_t mode)
     if (mpid > -1)
     {
         fd_list[current_fd].mountpoint_id = mpid;
-        new_path = get_rel_path(mpid, new_path);
+        strcpy(new_path, get_rel_path(mpid, new_path));
     }
     else
     {
@@ -112,8 +112,6 @@ int open(const char * path, int oflags, mode_t mode)
     int ret_fd = current_fd;
     // Increment the current file descriptor.
     current_fd++;
-    // Fre the path variable.
-    kfree(new_path);
     // Return the file descriptor.
     return ret_fd;
 }

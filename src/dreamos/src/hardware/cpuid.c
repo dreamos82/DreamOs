@@ -22,131 +22,133 @@
  */
 
 #include <cpuid.h>
-
-#ifdef LEGACY
-
 #include <kheap.h>
-
-#endif
-#ifdef LATEST
-#include <heap.h>
-#endif
-
 #include <string.h>
 
-/*
- * Main CPUID procedure
- * @author shainer
- * @param sh_info Structure to fill with CPUID information
- * @return none
- */
-void get_cpuid(struct cpuinfo_generic * sh_info)
+void get_cpuid(cpuinfo_t * cpuinfo)
 {
-    struct registers * ereg = kmalloc(sizeof(struct registers));
+    register_t ereg;
 
-    ereg->eax = ereg->ebx = ereg->ecx = ereg->edx = 0;
-    cpuid_write_vendor(sh_info, ereg);
+    ereg.eax = ereg.ebx = ereg.ecx = ereg.edx = 0;
+    cpuid_write_vendor(cpuinfo, &ereg);
 
-    ereg->eax = 1;
-    ereg->ebx = ereg->ecx = ereg->edx = 0;
-    cpuid_write_proctype(sh_info, ereg);
-
-    kfree(ereg);
+    ereg.eax = 1;
+    ereg.ebx = ereg.ecx = ereg.edx = 0;
+    cpuid_write_proctype(cpuinfo, &ereg);
 }
 
-/* Actual CPUID call */
-void call_cpuid(struct registers * regs)
+void call_cpuid(register_t * registers)
 {
     __asm__ ("cpuid\n\t" :
-    "=a" (regs->eax), "=b" (regs->ebx), "=c" (regs->ecx), "=d" (regs->edx) :
-    "a" (regs->eax));
+    "=a" (registers->eax),
+    "=b" (registers->ebx),
+    "=c" (registers->ecx),
+    "=d" (registers->edx) :
+    "a" (registers->eax));
 }
 
-/* Extract vendor string */
-void cpuid_write_vendor(struct cpuinfo_generic * s, struct registers * regs)
+void cpuid_write_vendor(cpuinfo_t * cpuinfo, register_t * registers)
 {
-    call_cpuid(regs);
+    call_cpuid(registers);
 
-    cpu_vendor[0] = (char) ((regs->ebx & 0x000000FF));
-    cpu_vendor[1] = (char) ((regs->ebx & 0x0000FF00) >> 8);
-    cpu_vendor[2] = (char) ((regs->ebx & 0x00FF0000) >> 16);
-    cpu_vendor[3] = (char) ((regs->ebx & 0xFF000000) >> 24);
-    cpu_vendor[4] = (char) ((regs->edx & 0x000000FF));
-    cpu_vendor[5] = (char) ((regs->edx & 0x0000FF00) >> 8);
-    cpu_vendor[6] = (char) ((regs->edx & 0x00FF0000) >> 16);
-    cpu_vendor[7] = (char) ((regs->edx & 0xFF000000) >> 24);
-    cpu_vendor[8] = (char) ((regs->ecx & 0x000000FF));
-    cpu_vendor[9] = (char) ((regs->ecx & 0x0000FF00) >> 8);
-    cpu_vendor[10] = (char) ((regs->ecx & 0x00FF0000) >> 16);
-    cpu_vendor[11] = (char) ((regs->ecx & 0xFF000000) >> 24);
-    cpu_vendor[12] = '\0';
-    s->cpu_vendor = cpu_vendor;
+    cpuinfo->cpu_vendor[0] = (char) ((registers->ebx & 0x000000FF));
+    cpuinfo->cpu_vendor[1] = (char) ((registers->ebx & 0x0000FF00) >> 8);
+    cpuinfo->cpu_vendor[2] = (char) ((registers->ebx & 0x00FF0000) >> 16);
+    cpuinfo->cpu_vendor[3] = (char) ((registers->ebx & 0xFF000000) >> 24);
+    cpuinfo->cpu_vendor[4] = (char) ((registers->edx & 0x000000FF));
+    cpuinfo->cpu_vendor[5] = (char) ((registers->edx & 0x0000FF00) >> 8);
+    cpuinfo->cpu_vendor[6] = (char) ((registers->edx & 0x00FF0000) >> 16);
+    cpuinfo->cpu_vendor[7] = (char) ((registers->edx & 0xFF000000) >> 24);
+    cpuinfo->cpu_vendor[8] = (char) ((registers->ecx & 0x000000FF));
+    cpuinfo->cpu_vendor[9] = (char) ((registers->ecx & 0x0000FF00) >> 8);
+    cpuinfo->cpu_vendor[10] = (char) ((registers->ecx & 0x00FF0000) >> 16);
+    cpuinfo->cpu_vendor[11] = (char) ((registers->ecx & 0xFF000000) >> 24);
+    cpuinfo->cpu_vendor[12] = '\0';
 }
 
-/*
- * CPUID is called with EAX=1
- * EAX contains Type, Family, Model and Stepping ID
- * EBX contains the Brand Index if supported, and the APIC ID
- * ECX/EDX contains feature information
- */
-void cpuid_write_proctype(struct cpuinfo_generic * s, struct registers * regs)
+void cpuid_write_proctype(cpuinfo_t * cpuinfo, register_t * registers)
 {
-    call_cpuid(regs);
+    call_cpuid(registers);
 
-    uint32_t type = cpuid_get_byte(regs->eax, 0xB, 0x3);
+    uint32_t type = cpuid_get_byte(registers->eax, 0xB, 0x3);
 
     switch (type)
     {
         case 0:
-            s->cpu_type = "Original OEM Processor";
+            cpuinfo->cpu_type = "Original OEM Processor";
             break;
-
         case 1:
-            s->cpu_type = "Intel Overdrive Processor";
+            cpuinfo->cpu_type = "Intel Overdrive Processor";
             break;
-
         case 2:
-            s->cpu_type = "Dual processor";
+            cpuinfo->cpu_type = "Dual processor";
             break;
-
         case 3:
-            s->cpu_type = "(Intel reserved bit)";
+            cpuinfo->cpu_type = "(Intel reserved bit)";
             break;
     }
 
-    uint32_t familyID = cpuid_get_byte(regs->eax, 0x7, 0xE);
-    s->cpu_family = familyID;
+    uint32_t familyID = cpuid_get_byte(registers->eax, 0x7, 0xE);
+    cpuinfo->cpu_family = familyID;
     if (familyID == 0x0F)
     {
-        s->cpu_family += cpuid_get_byte(regs->eax, 0x13, 0xFF);
+        cpuinfo->cpu_family += cpuid_get_byte(registers->eax, 0x13, 0xFF);
     }
 
-    uint32_t model = cpuid_get_byte(regs->eax, 0x3, 0xE);
-    s->cpu_model = model;
+    uint32_t model = cpuid_get_byte(registers->eax, 0x3, 0xE);
+    cpuinfo->cpu_model = model;
     if (familyID == 0x06 || familyID == 0x0F)
     {
-        uint32_t ext_model = cpuid_get_byte(regs->eax, 0xF, 0xE);
-        s->cpu_model += (ext_model << 4);
+        uint32_t ext_model = cpuid_get_byte(registers->eax, 0xF, 0xE);
+        cpuinfo->cpu_model += (ext_model << 4);
     }
-    s->apic_id = cpuid_get_byte(regs->ebx, 0x17, 0xFF);
+    cpuinfo->apic_id = cpuid_get_byte(registers->ebx, 0x17, 0xFF);
 
-    cpuid_feature_ecx(s, regs->ecx);
-    cpuid_feature_edx(s, regs->edx);
+    cpuid_feature_ecx(cpuinfo, registers->ecx);
+    cpuid_feature_edx(cpuinfo, registers->edx);
     /* Get brand string to identify the processor */
     if (familyID >= 0x0F && model >= 0x03)
     {
-        s->brand_string = cpuid_brand_string(regs);
+        cpuinfo->brand_string = cpuid_brand_string(registers);
     }
     else
     {
-        s->brand_string = cpuid_brand_index(regs);
+        cpuinfo->brand_string = cpuid_brand_index(registers);
     }
 }
 
-/*
- * Index of brand strings
- */
-char * cpuid_brand_index(struct registers * r)
+void cpuid_feature_ecx(cpuinfo_t * cpuinfo, uint32_t ecx)
+{
+    uint32_t temp = ecx;
+    uint32_t i;
+    for (i = 0; i < ECX_FLAGS_SIZE; ++i)
+    {
+        temp = cpuid_get_byte(temp, i, 1);
+        cpuinfo->cpuid_ecx_flags[i] = temp;
+        temp = ecx;
+    }
+}
+
+void cpuid_feature_edx(cpuinfo_t * cpuinfo, uint32_t edx)
+{
+    uint32_t temp = edx;
+    uint32_t i;
+    for (i = 0; i < EDX_FLAGS_SIZE; ++i)
+    {
+        temp = cpuid_get_byte(temp, i, 1);
+        cpuinfo->cpuid_edx_flags[i] = temp;
+        temp = edx;
+    }
+}
+
+inline uint32_t cpuid_get_byte(const uint32_t reg,
+                               const uint32_t position,
+                               const uint32_t value)
+{
+    return ((reg >> position) & value);
+}
+
+char * cpuid_brand_index(register_t * r)
 {
     char * indexes[21] = {"Reserved",
                           "Intel Celeron",
@@ -177,10 +179,7 @@ char * cpuid_brand_index(struct registers * r)
     return indexes[bx];
 }
 
-/*
- * Brand string is contained in EAX, EBX, ECX and EDX
- */
-char * cpuid_brand_string(struct registers * r)
+char * cpuid_brand_string(register_t * r)
 {
     char * temp = "";
     for (r->eax = 0x80000002; r->eax <= 0x80000004; (r->eax)++)
@@ -197,45 +196,4 @@ char * cpuid_brand_string(struct registers * r)
                        strlen((const char *) r->edx));
     }
     return temp;
-}
-
-/*
- * EAX=1
- * ECX contains a list of supported features
- */
-void cpuid_feature_ecx(struct cpuinfo_generic * s, uint32_t ecx)
-{
-    uint32_t temp = ecx;
-    uint32_t i;
-    for (i = 0; i < ECX_FLAGS_SIZE; ++i)
-    {
-        temp = cpuid_get_byte(temp, i, 1);
-        s->cpuid_ecx_flags[i] = temp;
-        temp = ecx;
-    }
-}
-
-/*
- * Same as above
- */
-void cpuid_feature_edx(struct cpuinfo_generic * s, uint32_t edx)
-{
-    uint32_t temp = edx;
-    uint32_t i;
-    for (i = 0; i < EDX_FLAGS_SIZE; ++i)
-    {
-        temp = cpuid_get_byte(temp, i, 1);
-        s->cpuid_edx_flags[i] = temp;
-        temp = edx;
-    }
-}
-
-/*
- * Extract single byte from a register
- */
-inline uint32_t cpuid_get_byte(const uint32_t reg,
-                               const uint32_t position,
-                               const uint32_t value)
-{
-    return ((reg >> position) & value);
 }
