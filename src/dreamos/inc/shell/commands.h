@@ -28,64 +28,53 @@
 
 #define MAX_TEST 14
 
-extern int argc;
-extern char ** argv;
+void aalogo(int argc, char ** argv);
 
-void aalogo();
+void logo(int argc, char ** argv);
 
-void logo();
+void help(int argc, char ** argv);
 
-void help();
+void echo(int argc, char ** argv);
 
-void echo();
+void poweroff(int argc, char ** argv);
 
-void poweroff();
+void kmalloc_try(int argc, char ** argv);
 
-void kmalloc_try();
+void uname_cmd(int argc, char ** argv);
 
-void do_fault();
+void printmem(int argc, char ** argv);
 
-void uname_cmd();
+void credits(int argc, char ** argv);
 
-void uname_help();
+void sleep_cmd(int argc, char ** argv);
 
-void uname_info();
+void cpuid(int argc, char ** argv);
 
-void printmem();
+void drv_load(int argc, char ** argv);
 
-void credits();
+void ls(int argc, char ** argv);
 
-void sleep_cmd();
+void cd(int argc, char ** argv);
 
-void cpuid();
+void whoami(int argc, char ** argv);
 
-void answer();
+void tester(int argc, char ** argv);
 
-void drv_load();
+void pwd(int argc, char ** argv);
 
-void ls();
+void more(int argc, char ** argv);
 
-void cd();
+void newfile(int argc, char ** argv);
 
-void whoami();
+void ps(int argc, char ** argv);
 
-void tester();
+void date(int argc, char ** argv);
 
-void pwd();
+void clear(int argc, char ** argv);
 
-void more();
+void showpid(int argc, char ** argv);
 
-void newfile();
-
-void ps();
-
-void date();
-
-void clear();
-
-void showpid();
-
-void heapdump();
+void heapdump(int argc, char ** argv);
 
 struct devel
 {

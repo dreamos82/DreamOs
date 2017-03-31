@@ -28,7 +28,7 @@
 #define HST_LEN 10
 
 /// Pointer to the function of a commmand.
-typedef void (* CommandFunction)(void);
+typedef void (* CommandFunction)(int argc, char ** argv);
 
 /// @brief Holds information about a command.
 typedef struct command_t
@@ -68,11 +68,11 @@ void history_push(char * command);
 /// @brief Give the key allows to navigate through the history.
 void history_start(const int key);
 
-/// @brief Prints the history.
-void history_print(void);
-
 void move_cursor_left(void);
 
 void move_cursor_right(void);
+
+/// @brief Prints the history.
+void history_print(int argc, char ** argv);
 
 #endif

@@ -16,11 +16,10 @@
 #include <debug.h>
 #include "irqflags.h"
 
-int argc;
-char ** argv;
-
-void aalogo()
+void aalogo(int argc, char ** argv)
 {
+    (void) argc;
+    (void) argv;
     video_set_color(BRIGHT_GREEN);
     printf("\t\t ____           _____          _____ _____\n");
     printf("\t\t|    \\ ___ ___ |  _  | _______|     |   __|\n");
@@ -30,11 +29,13 @@ void aalogo()
     printf("\t\tVersion: \"%s %s.%s%s\"\n", NAME, VERSION, PATCHLEVEL,
            EXTRAVERSION);
     //video_set_color(WHITE);
-    logo();
+    logo(1, NULL);
 }
 
-void logo()
+void logo(int argc, char ** argv)
 {
+    (void) argc;
+    (void) argv;
     video_set_color(BRIGHT_BLUE);
     printf("\n");
     printf("\t\t\t The Dream Operating System \n"
@@ -48,8 +49,10 @@ void logo()
     video_set_color(WHITE);
 }
 
-void help()
+void help(int argc, char ** argv)
 {
+    (void) argc;
+    (void) argv;
     printf("Available commands:\n");
     int i = 0;
     for (i = 0; i < MAX_NUM_COM; ++i)
@@ -62,7 +65,7 @@ void help()
     }
 }
 
-void echo()
+void echo(int argc, char ** argv)
 {
     int i = argc;
     int j = 0;
@@ -80,8 +83,10 @@ void echo()
     printf("\n");
 }
 
-void poweroff()
+void poweroff(int argc, char ** argv)
 {
+    (void) argc;
+    (void) argv;
     printf("Poweroff...\n");
 
     __asm__ __volatile__("cli;");
@@ -89,10 +94,15 @@ void poweroff()
     while (1);
 }
 
-void uname_cmd()
+void uname_cmd(int argc, char ** argv)
 {
     utsname_t utsname;
     uname(&utsname);
+    if (argc != 2)
+    {
+        printf(utsname.sysname);
+        return;
+    }
     if (!(strcmp(argv[1], "-a")) || !(strcmp(argv[1], "--all")))
     {
         printf("%s %s.%s%s Hash: %s #1 CEST 2013 %s\n", utsname.sysname,
@@ -105,11 +115,68 @@ void uname_cmd()
     }
     else if (!(strcmp(argv[1], "-h")) || !(strcmp(argv[1], "--help")))
     {
-        uname_help();
+        printf(
+                "Uname function allow you to see the kernel and system information.\n");
+        printf("Function avaibles:\n");
+        printf("1) -a   - Kernel version and processor type\n"
+                       "2) -r   - Only the kernel version\n"
+                       "3) -i   - All info of system and kernel\n");
     }
     else if (!(strcmp(argv[1], "-i")) || !(strcmp(argv[1], "--info")))
     {
-        uname_info();
+        printf("\n:==========: :System info: :==========:\n\n");
+
+        // Kernel info
+        printf("Version: %s\n"
+                       "Patchlevel: %s\n"
+                       "Extraversion: %s\n"
+                       "Name: %s\n"
+                       "Revision: %s\n", VERSION, PATCHLEVEL, EXTRAVERSION,
+               NAME,
+               REV_NUM);
+
+        // CPU Info
+        video_puts(LNG_CPU);
+        video_set_color(BRIGHT_RED);
+        video_move_cursor(61, video_get_line());
+        video_puts(sinfo.cpu_vendor);
+        video_set_color(WHITE);
+        printf("\n");
+
+        // Memory RAM Info
+        /*printf("Memory RAM: ");
+        video_move_cursor(60, video_get_line());
+        printf(" %d Kb\n", get_memsize()/1024);
+
+        // Memory free RAM Info
+        printf(LNG_FREERAM);
+        video_move_cursor(60, video_get_line());
+        printf(" %d Kb\n", get_numpages());
+
+        printf("\n");
+
+        // Bitmap Info
+        printf("Number bitmap's elements: ");
+        video_move_cursor(60, video_get_line());
+        printf(" %d", get_bmpelements());
+        video_move_cursor(60, video_get_line());*/
+
+        // Mem_area Info
+        //printf("\nSize of mem_area: ");
+        //video_move_cursor(60, video_get_line());
+        //printf(" %d\n", sizeof(mem_area));
+
+        // Page Dir Info
+        /*printf("Page Dir Entry n.0 is: ");
+        video_move_cursor(60, video_get_line());
+        printf(" %d\n", get_pagedir_entry(0));
+
+        // Page Table Info
+        printf("Page Table Entry n.4 in Page dir 0 is: ");
+        video_move_cursor(60, video_get_line());
+        printf(" %d\n", get_pagetable_entry(0,4));*/
+
+        printf("\n:==========: :===========: :==========:\n\n");
     }
     else
     {
@@ -118,74 +185,10 @@ void uname_cmd()
     }
 }
 
-void uname_help()
+void credits(int argc, char ** argv)
 {
-    printf(
-            "Uname function allow you to see the kernel and system information.\n");
-    printf("Function avaibles:\n");
-    printf("1) -a   - Kernel version and processor type\n"
-                   "2) -r   - Only the kernel version\n"
-                   "3) -i   - All info of system and kernel\n");
-}
-
-void uname_info()
-{
-    printf("\n:==========: :System info: :==========:\n\n");
-
-    // Kernel info
-    printf("Version: %s\n"
-                   "Patchlevel: %s\n"
-                   "Extraversion: %s\n"
-                   "Name: %s\n"
-                   "Revision: %s\n", VERSION, PATCHLEVEL, EXTRAVERSION, NAME,
-           REV_NUM);
-
-    // CPU Info
-    video_puts(LNG_CPU);
-    video_set_color(BRIGHT_RED);
-    video_move_cursor(61, video_get_line());
-    video_puts(sinfo.cpu_vendor);
-    video_set_color(WHITE);
-    printf("\n");
-
-    // Memory RAM Info
-    /*printf("Memory RAM: ");
-    video_move_cursor(60, video_get_line());
-    printf(" %d Kb\n", get_memsize()/1024);
-
-    // Memory free RAM Info
-    printf(LNG_FREERAM);
-    video_move_cursor(60, video_get_line());
-    printf(" %d Kb\n", get_numpages());
-
-    printf("\n");
-
-    // Bitmap Info
-    printf("Number bitmap's elements: ");
-    video_move_cursor(60, video_get_line());
-    printf(" %d", get_bmpelements());
-    video_move_cursor(60, video_get_line());*/
-
-    // Mem_area Info
-    //printf("\nSize of mem_area: ");
-    //video_move_cursor(60, video_get_line());
-    //printf(" %d\n", sizeof(mem_area));
-
-    // Page Dir Info
-    /*printf("Page Dir Entry n.0 is: ");
-    video_move_cursor(60, video_get_line());
-    printf(" %d\n", get_pagedir_entry(0));
-
-    // Page Table Info
-    printf("Page Table Entry n.4 in Page dir 0 is: ");
-    video_move_cursor(60, video_get_line());
-    printf(" %d\n", get_pagetable_entry(0,4));*/
-
-    printf("\n:==========: :===========: :==========:\n\n");
-}
-
-void credits(void)
-{
+    (void) argc;
+    (void) argv;
     video_set_color(BRIGHT_BLUE);
     video_puts("DreamOS Credits\n\n");
     video_puts("Main Developers:\n");
@@ -207,7 +210,7 @@ void credits(void)
     video_set_color(WHITE);
 }
 
-void sleep_cmd(void)
+void sleep_cmd(int argc, char ** argv)
 {
     if (argc != 2)
     {
@@ -230,8 +233,10 @@ void sleep_cmd(void)
     sleep((time_t) seconds);
 }
 
-void cpuid_help()
+void cpuid_help(int argc, char ** argv)
 {
+    (void) argc;
+    (void) argv;
     printf("CPUID help message\n"
                    "-v : shows verbose CPUID information\n");
 }
@@ -239,9 +244,10 @@ void cpuid_help()
 /*
  * Call CPUID command and display information
  */
-void cpuid(void)
+void cpuid(int argc, char ** argv)
 {
-
+    (void) argc;
+    (void) argv;
     /* List of features */
     const char * ecx_features[ECX_FLAGS_SIZE] = {
             "SSE3",
@@ -314,7 +320,7 @@ void cpuid(void)
         else
         {
             printf("Unknown option %s\n", argv[1]);
-            cpuid_help();
+            cpuid_help(1, NULL);
             return;
         }
     }
@@ -344,12 +350,7 @@ void cpuid(void)
     }
 }
 
-void answer(void)
-{
-    printf("42\n");
-}
-
-void drv_load(void)
+void drv_load(int argc, char ** argv)
 {
     if (argc < 2)
         printf(
@@ -409,7 +410,7 @@ void drv_load(void)
 
 }
 
-void ls()
+void ls(int argc, char ** argv)
 {
 //    dbg_print("Opened DIR : '%s'\n", current_user.cur_path);
     // Check if the user has provided the '-l' option.
@@ -498,7 +499,7 @@ void ls()
     }
 }
 
-void more()
+void more(int argc, char ** argv)
 {
     if (argc == 1)
         printf("Usage:\n\t more filename\nfor read a file\n");
@@ -526,7 +527,7 @@ void more()
     }
 }
 
-void cd()
+void cd(int argc, char ** argv)
 {
     // Check the number of arguments.
     if (argc != 2)
@@ -583,12 +584,14 @@ void cd()
     strcpy(current_user.cur_path, abspath);
 }
 
-void whoami()
+void whoami(int argc, char ** argv)
 {
+    (void) argc;
+    (void) argv;
     printf("%s\n", current_user.username);
 }
 
-void tester()
+void tester(int argc, char ** argv)
 {
     int i = 0;
     struct devel testing[MAX_TEST] = {
@@ -647,12 +650,14 @@ void tester()
     }
 }
 
-void pwd()
+void pwd(int argc, char ** argv)
 {
+    (void) argc;
+    (void) argv;
     printf("%s\n", current_user.cur_path);
 }
 
-void newfile()
+void newfile(int argc, char ** argv)
 {
     if (argc != 2)
     {
@@ -689,8 +694,10 @@ void newfile()
     }
 }
 
-void ps()
+void ps(int argc, char ** argv)
 {
+    (void) argc;
+    (void) argv;
     // Print the header.
     printf("%-6s", "PID");
     printf("%-50s", "NAME");
@@ -713,8 +720,10 @@ void ps()
     printf("\n");
 }
 
-void date()
+void date(int argc, char ** argv)
 {
+    (void) argc;
+    (void) argv;
     // Disable the IRQs.
     irq_disable();
     printf("%s %x:%x:%x %s %s %02x %s %02x\n",
@@ -726,18 +735,25 @@ void date()
     irq_enable();
 }
 
-void clear()
+void clear(int argc, char ** argv)
 {
+    (void) argc;
+    (void) argv;
     video_clear();
 }
 
-void showpid()
+void showpid(int argc, char ** argv)
 {
+    (void) argc;
+    (void) argv;
     process_t * current_process = kernel_get_current_process();
     printf("pid %d\n", current_process->id);
 }
 
-void heapdump()
+void heapdump(int argc, char ** argv)
 {
+    (void) argc;
+    (void) argv;
     print_heap();
 }
+

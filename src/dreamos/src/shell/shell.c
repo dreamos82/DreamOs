@@ -33,7 +33,7 @@ void shell_print_prompt();
 
 void shell_get_command();
 
-void shell_get_options(char * command);
+void shell_get_options(char * command, int * argc, char *** argv);
 
 void shell_login();
 
@@ -53,35 +53,37 @@ int pos = HST_LEN - 1;
 int write_index = HST_LEN - 1;
 
 command_t shell_cmd[MAX_NUM_COM] = {
-    {"aalogo",   aalogo,        "Show an ascii art logo"},
-    {"clear",    video_clear,   "Clear the screen"},
-    {"poweroff", poweroff,      "Turn off the machine"},
-    {"uname",    uname_cmd,     "Print kernel version, try uname --help for more info"},
-    {"credits",  credits,       "Show DreamOS credits"},
-    {"sleep",    sleep_cmd,     "Pause DreamOS for a particular number of seconds"},
-    {"cpuid",    cpuid,         "Show cpu identification informations"},
-    {"date",     date,          "Show date and time"},
-    {"echo",     echo,          "Print some lines of text"},
-    {"help",     help,          "See the 'help' list to learn the DreamOS commands now available"},
-    {"answer",   answer,        "42"},
-    {"drv_load", drv_load,      "Tool to load and kill drivers"},
-    {"ls",       ls,            "Tool for listing dir - not complete-"},
-    {"cd",       cd,            "Change dir - not complete-"},
-    {"whoami",   whoami,        "Show the current user name"},
-    {"tester",   tester,        "Try some functions, 'tester --help' for more info'"},
-    {"pwd",      pwd,           "Print current working directory"},
-    {"more",     more,          "Read content of a file"},
-    {"newfile",  newfile,       "Create a new file"},
-    {"ps",       ps,            "Show task list"},
-    {"clear",    clear,         "Clears the screen"},
-    {"showpid",  showpid,       "Shows the PID of the shell"},
-    {"heapdump", heapdump,      "Shows the heap status"},
-    {"history",  history_print, "Shows the shell history"}
+        {"aalogo",   aalogo,        "Show an ascii art logo"},
+        {"clear",    clear,         "Clear the screen"},
+        {"poweroff", poweroff,      "Turn off the machine"},
+        {"uname",    uname_cmd,     "Print kernel version, try uname --help for more info"},
+        {"credits",  credits,       "Show DreamOS credits"},
+        {"sleep",    sleep_cmd,     "Pause DreamOS for a particular number of seconds"},
+        {"cpuid",    cpuid,         "Show cpu identification informations"},
+        {"date",     date,          "Show date and time"},
+        {"echo",     echo,          "Print some lines of text"},
+        {"help",     help,          "See the 'help' list to learn the DreamOS commands now available"},
+        {"drv_load", drv_load,      "Tool to load and kill drivers"},
+        {"ls",       ls,            "Tool for listing dir - not complete-"},
+        {"cd",       cd,            "Change dir - not complete-"},
+        {"whoami",   whoami,        "Show the current user name"},
+        {"tester",   tester,        "Try some functions, 'tester --help' for more info'"},
+        {"pwd",      pwd,           "Print current working directory"},
+        {"more",     more,          "Read content of a file"},
+        {"newfile",  newfile,       "Create a new file"},
+        {"ps",       ps,            "Show task list"},
+        {"clear",    clear,         "Clears the screen"},
+        {"showpid",  showpid,       "Shows the PID of the shell"},
+        {"heapdump", heapdump,      "Shows the heap status"},
+        {"history",  history_print, "Shows the shell history"}
 };
 
 /* corpo della shell */
 int shell(void * args)
 {
+    int argc = 1;
+    char ** argv;
+
     (void) args;
     dbg_print("\nNewShell\n");
     int i = 0;
@@ -94,9 +96,9 @@ int shell(void * args)
     memset(current_user.cur_path, '\0', CURPATH_LEN);
 
     video_clear();
-    aalogo();
+    aalogo(1, NULL);
     printf("\n\n\n\n");
-    argc = 1;
+
     strcpy(current_user.cur_path, "/");
     current_user.uid = 1;
     current_user.gid = 0;
@@ -111,7 +113,7 @@ int shell(void * args)
         // Cleans all blanks at the beginning of the command.
         trim(cmd);
         // Retrieve the options from the command.
-        shell_get_options(cmd);
+        shell_get_options(cmd, &argc, &argv);
         // Check if the command is empty.
         if (strlen(cmd) == 0)
         {
@@ -131,7 +133,7 @@ int shell(void * args)
             if (shell_cmd[i].function == NULL) continue;
             if (strcmp(argv[0], shell_cmd[i].cmdname) == (int) NULL)
             {
-                (*shell_cmd[i].function)();
+                (*shell_cmd[i].function)(argc, argv);
                 break;
             }
         }
@@ -197,23 +199,23 @@ void shell_get_command()
     }
 }
 
-void shell_get_options(char * command)
+void shell_get_options(char * command, int * argc, char *** argv)
 {
     int i = 0;
-    argc = 0;
+    (*argc) = 0;
     for (; *command; command++)
     {
-        argv[argc] = (char *) kmalloc(sizeof(char) * 30);
+        (*argv)[(*argc)] = (char *) kmalloc(sizeof(char) * 30);
         while (*command != ' ' && *command != '\0')
         {
-            *(argv[argc] + i) = *command++;
+            *((*argv)[(*argc)] + i) = *command++;
             i++;
         }
-        *(argv[argc] + i) = '\0';
-        argc++;
+        *((*argv)[(*argc)] + i) = '\0';
+        (*argc)++;
         i = 0;
     }
-    argv[argc] = "\0";
+    (*argv)[(*argc)] = "\0";
 }
 
 void shell_login()
@@ -330,24 +332,6 @@ void history_start(const int key)
     cmd_cursor_index = strlen(cmd);
 }
 
-void history_print(void)
-{
-    //Prints the history stack with current indexes values
-    int i;
-    printf("\n");
-    printf("------------------------------\n");
-    printf("        Debug history         \n");
-    printf("------------------------------\n");
-    for (i = 0; i < HST_LEN; ++i)
-    {
-        if (i == write_index) printf("w "); //write_index value is here
-        else if (i == pos) printf("->");    //pos value is here
-        else printf("  ");
-        printf("\tHistory[%d]: %s\n", i, cmd_history[i]);
-    }
-    printf("#free slots: %d\n", free_slots);
-}
-
 void move_cursor_left(void)
 {
     if (cmd_cursor_index > lower_bound_x)
@@ -362,4 +346,24 @@ void move_cursor_right(void)
     {
         ++cmd_cursor_index;
     }
+}
+
+void history_print(int argc, char ** argv)
+{
+    (void) argc;
+    (void) argv;
+    //Prints the history stack with current indexes values
+    int i;
+    printf("\n");
+    printf("------------------------------\n");
+    printf("        Debug history         \n");
+    printf("------------------------------\n");
+    for (i = 0; i < HST_LEN; ++i)
+    {
+        if (i == write_index) printf("w "); //write_index value is here
+        else if (i == pos) printf("->");    //pos value is here
+        else printf("  ");
+        printf("\tHistory[%d]: %s\n", i, cmd_history[i]);
+    }
+    printf("#free slots: %d\n", free_slots);
 }
