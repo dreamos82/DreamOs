@@ -29,6 +29,9 @@
 #define HEAP_START 0xD0000000
 #define HEAP_END   0xFFBFF000
 
+uint32_t heap_max;
+chunk_t * heap_first;
+
 /// @brief Initialize the heap.
 void kernel_init_heap();
 
