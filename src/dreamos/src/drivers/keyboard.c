@@ -29,7 +29,7 @@
 #include <ctype.h>
 #include <port_io.h>
 #include <pic8259.h>
-#include <shell.h>
+#include "shell_history.h"
 
 /// A macro from Ivan to update buffer indexes.
 #define STEP(x) ((x) == BUFSIZE-1 ? 0 : x+1)

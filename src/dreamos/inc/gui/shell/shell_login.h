@@ -18,19 +18,8 @@
 
 #pragma once
 
+#include "shell.h"
 #include "stdbool.h"
 
-#define CREDENTIALS_LENGTH 50
+void shell_login();
 
-/// @brief Contains the credentials retrieved from the file.
-typedef struct credentials_t
-{
-    /// The username.
-    char username[CREDENTIALS_LENGTH];
-    /// The password.
-    char password[CREDENTIALS_LENGTH];
-} credentials_t;
-
-void init_credentials(credentials_t * credentials);
-
-bool_t check_credentials(credentials_t * credentials);

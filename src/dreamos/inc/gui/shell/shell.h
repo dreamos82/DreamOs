@@ -17,14 +17,15 @@
 
 #pragma once
 
-#include "user_shell.h"
+#include "stdint.h"
 
-#define CMD_LEN     256
-#define DESC_LEN    256
-#define CURPATH_LEN 256
-#define MAX_NUM_COM 50
-#define DEF_COM     18
-#define HST_LEN     10
+#define CREDENTIALS_LENGTH  50
+#define CMD_LEN             256
+#define DESC_LEN            256
+#define CURPATH_LEN         256
+#define MAX_NUM_COM         50
+#define DEF_COM             18
+#define HST_LEN             10
 
 /// Pointer to the function of a commmand.
 typedef void (* CommandFunction)(int argc, char ** argv);
@@ -53,23 +54,17 @@ typedef struct userenv_t
     unsigned int gid;
 } userenv_t;
 
+/// Contains the list of all the commands.
 extern command_t shell_cmd[MAX_NUM_COM];
+/// Contains the information about the current user.
 extern userenv_t current_user;
+/// The input command.
+extern char cmd[CMD_LEN];
+/// The index of the cursor.
+extern uint32_t cmd_cursor_index;
 
 int shell(void *);
-
-/// @brief Initialize the init.
-void history_init(void);
-
-/// @brief Push the command inside the history.
-void history_push(char * command);
-
-/// @brief Give the key allows to navigate through the history.
-void history_start(const int key);
 
 void move_cursor_left(void);
 
 void move_cursor_right(void);
-
-/// @brief Prints the history.
-void history_print(int argc, char ** argv);

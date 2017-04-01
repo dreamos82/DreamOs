@@ -16,6 +16,7 @@
 #include <scheduler.h>
 #include <spinlock.h>
 #include "kheap.h"
+#include "shell_login.h"
 
 char * module_start;
 file_descriptor_t fd_list[_SC_OPEN_MAX];
@@ -131,25 +132,6 @@ void try_module()
     }
     printf("Total Files: %d\n", fs_head->nfiles);
     video_puts("\n");
-}
-
-void try_check()
-{
-    credentials_t credentials;
-    init_credentials(&credentials);
-    printf("Please insert a username: ");
-    scanf("%50s", credentials.username);
-    printf("Please insert a password: ");
-    scanf("%50s", credentials.password);
-    if (check_credentials(&credentials))
-    {
-        printf("[Correct]\n");
-    }
-    else
-    {
-        printf("[Wrong]\n");
-    }
-    printf("\n");
 }
 
 void try_open()

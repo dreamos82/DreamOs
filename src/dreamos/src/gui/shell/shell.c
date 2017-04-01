@@ -23,12 +23,10 @@
 #include <string.h>
 #include <keyboard.h>
 #include <language.h>
-#include <user_shell.h>
 #include <debug.h>
 #include "kheap.h"
-
-#define RESET_MAX(A)   A = HST_LEN - 1
-#define RESET_MIN(A)   A = free_slots
+#include "shell_login.h"
+#include "shell_history.h"
 
 void shell_print_prompt();
 
@@ -36,22 +34,12 @@ void shell_get_command();
 
 void shell_get_options(char * command, int * argc, char *** argv);
 
-void shell_login();
-
 /// The current user.
 userenv_t current_user;
 /// The input command.
 char cmd[CMD_LEN];
 /// The index of the cursor.
 uint32_t cmd_cursor_index;
-/// The command history.
-char cmd_history[HST_LEN][CMD_LEN];
-/// The number of free slots on the history.
-int free_slots = HST_LEN;
-/// The position inside the history.
-int pos = HST_LEN - 1;
-/// Index of history array, where we save the command
-int write_index = HST_LEN - 1;
 
 command_t shell_cmd[MAX_NUM_COM] = {
         {"aalogo",   aalogo,        "Show an ascii art logo"},
@@ -223,119 +211,6 @@ void shell_get_options(char * command, int * argc, char *** argv)
     (*argv)[(*argc)] = "\0";
 }
 
-void shell_login()
-{
-    do
-    {
-        // Initialize the credentials.
-        credentials_t credentials;
-        init_credentials(&credentials);
-        // ----------------------------
-        // Ask the username.
-        dbg_print("Asking the username.\n");
-        printf(LNG_USER);
-        // Update the lower-bounds for the video.
-        lower_bound_x = video_get_column();
-        lower_bound_y = video_get_line();
-        // Get the username.
-        scanf("%50s", credentials.username);
-        // ----------------------------
-        // Ask the password.
-        dbg_print("Asking the password.\n");
-        printf(LNG_PWD);
-        // Update the lower-bounds for the video.
-        lower_bound_x = video_get_column();
-        lower_bound_y = video_get_line();
-        // Set the shadow option.
-        keyboard_set_shadow(true);
-        // Get the password.
-        scanf("%50s", credentials.password);
-        // Disable the shadow option.
-        keyboard_set_shadow(false);
-        // ----------------------------
-        // Check if the data are correct.
-        if (check_credentials(&credentials))
-        {
-            strcpy(current_user.username, credentials.username);
-            break;
-        }
-        printf(LNG_WRONG_CRED);
-    } while (true);
-}
-
-void history_init(void)
-{
-    int it;
-    for (it = 0; it < HST_LEN; it++)
-    {
-        // Initializing new allocated strings.
-        memset(cmd_history[it], 0, CMD_LEN);
-    }
-}
-
-// Saves cmd_pass string to history buffer (lastcmd)
-void history_push(char * command)
-{
-    int prev_index = write_index + 1;
-    if (prev_index > HST_LEN - 1)
-    {
-        prev_index = free_slots;
-    }
-    // Clean the history slot.
-    memset(cmd_history[write_index], 0, CMD_LEN);
-    // Copy the command inside the slot.
-    strcpy(cmd_history[write_index], command);
-    // Increment the history position.
-    pos = write_index;
-    // Decrement the index.
-    --write_index;
-    if (write_index < 0)
-    {
-        RESET_MAX(write_index);
-    }
-    if (free_slots > 0)
-    {
-        --free_slots;
-    }
-}
-
-void history_start(const int key)
-{
-    // If the history is empty do nothing.
-    if (free_slots == HST_LEN) return;
-    // Completely delete the current command.
-    while (cmd_cursor_index > 0)
-    {
-        video_delete_last_character();
-        cmd_cursor_index--;
-    }
-    // Print the command at the given position of the history.
-    printf("%s", cmd_history[pos]);
-    // Completely clear the variable which holds the command.
-    memset(cmd, 0, CMD_LEN);
-    // Set the variable to the retrieved command.
-    strcpy(cmd, cmd_history[pos]);
-    // Update the position inside the history.
-    if (key == KEY_UPARROW)
-    {
-        ++pos;
-    }
-    else if (key == KEY_DOWNARROW)
-    {
-        --pos;
-    }
-    if (pos < free_slots)
-    {
-        RESET_MAX(pos);
-    }
-    else if (pos > HST_LEN - 1)
-    {
-        RESET_MIN(pos);
-    }
-    // Set the cursor index to the end of the current command.
-    cmd_cursor_index = strlen(cmd);
-}
-
 void move_cursor_left(void)
 {
     if (cmd_cursor_index > lower_bound_x)
@@ -350,24 +225,4 @@ void move_cursor_right(void)
     {
         ++cmd_cursor_index;
     }
-}
-
-void history_print(int argc, char ** argv)
-{
-    (void) argc;
-    (void) argv;
-    //Prints the history stack with current indexes values
-    int i;
-    printf("\n");
-    printf("------------------------------\n");
-    printf("        Debug history         \n");
-    printf("------------------------------\n");
-    for (i = 0; i < HST_LEN; ++i)
-    {
-        if (i == write_index) printf("w "); //write_index value is here
-        else if (i == pos) printf("->");    //pos value is here
-        else printf("  ");
-        printf("\tHistory[%d]: %s\n", i, cmd_history[i]);
-    }
-    printf("#free slots: %d\n", free_slots);
 }

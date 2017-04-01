@@ -176,10 +176,11 @@ set(SOURCE_FILES
         src/system/panic.c
         src/system/syscall.c
         src/kernel.c
-        src/gui/shell/shell.c
         src/gui/command/testing.c
-        src/gui/shell/user_shell.c
         src/gui/command/commands.c
+        src/gui/shell/shell.c
+        src/gui/shell/shell_login.c
+        src/gui/shell/shell_history.c
         )
 
 # ------------------------------------------------------------------------------

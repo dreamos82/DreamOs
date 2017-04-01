@@ -597,7 +597,6 @@ void tester(int argc, char ** argv)
             {"try_syscall",       "Try some syscall functions",                    try_syscall},
             {"show_fd",           "Test file descriptors",                         show_fd},
             {"test_stat",         "Test stat function",                            test_stat},
-            {"try_check",         "Test username if exist",                        try_check},
             {"try_shadow",        "Test shadow feature for text input",            try_shadow},
             {"try_mapaddress",    "Test map address function",                     try_mapaddress},
             {"try_process",       "Test multiple processs creation",               try_process},
