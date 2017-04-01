@@ -16,10 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef USER_SHELL_H
-#define USER_SHELL_H
+#pragma once
 
-#include <stdbool.h>
+#include "stdbool.h"
 
 #define CREDENTIALS_LENGTH 50
 
@@ -35,5 +34,3 @@ typedef struct credentials_t
 void init_credentials(credentials_t * credentials);
 
 bool_t check_credentials(credentials_t * credentials);
-
-#endif

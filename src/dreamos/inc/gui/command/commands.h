@@ -20,11 +20,9 @@
  * Prototipi di funzione e variabili globali per la shell
  */
 
-#ifndef __COMMANDS_H
-#define __COMMANDS_H
+#pragma once
 
-#include <shell.h>
-#include <kheap.h>
+#include "shell.h"
 
 #define MAX_TEST 14
 
@@ -82,5 +80,3 @@ struct devel
     char cmd_description[DESC_LEN];
     void (* func)(void);
 };
-
-#endif

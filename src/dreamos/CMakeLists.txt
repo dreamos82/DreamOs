@@ -115,11 +115,13 @@ include_directories(
         inc/lng
         inc/mem
         inc/misc
-        inc/shell
         inc/sys
         inc/system
         inc/process
         inc/elf
+        inc/gui
+        inc/gui/shell
+        inc/gui/command
 )
 
 # ------------------------------------------------------------------------------
@@ -157,10 +159,6 @@ set(SOURCE_FILES
         src/misc/bitops.c
         src/misc/clock.c
         src/misc/debug.c
-        src/shell/commands.c
-        src/shell/shell.c
-        src/shell/testing.c
-        src/shell/user_shell.c
         src/sys/dirent.c
         src/sys/stat.c
         src/sys/utsname.c
@@ -177,7 +175,12 @@ set(SOURCE_FILES
         src/process/process.c
         src/system/panic.c
         src/system/syscall.c
-        src/kernel.c)
+        src/kernel.c
+        src/gui/shell/shell.c
+        src/gui/shell/testing.c
+        src/gui/shell/user_shell.c
+        src/gui/command/commands.c
+        )
 
 # ------------------------------------------------------------------------------
 # Add the executable.

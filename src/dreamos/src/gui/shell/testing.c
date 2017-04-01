@@ -1,4 +1,4 @@
-#include <commands.h>
+#include "commands.h"
 #include <kernel.h>
 #include <video.h>
 #include <stdio.h>
@@ -15,6 +15,7 @@
 #include <mutex.h>
 #include <scheduler.h>
 #include <spinlock.h>
+#include "kheap.h"
 
 char * module_start;
 file_descriptor_t fd_list[_SC_OPEN_MAX];

@@ -15,8 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef TESTING_H
-#define TESTING_H
+#pragma once
 
 void try_strtok();
 
@@ -50,5 +49,3 @@ void try_process();
 void try_process_sleep();
 
 void try_queue();
-
-#endif

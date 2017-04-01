@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <commands.h>
+#include "commands.h"
 #include <stddef.h>
 #include <video.h>
 #include <stdio.h>
@@ -25,6 +25,7 @@
 #include <language.h>
 #include <user_shell.h>
 #include <debug.h>
+#include "kheap.h"
 
 #define RESET_MAX(A)   A = HST_LEN - 1
 #define RESET_MIN(A)   A = free_slots

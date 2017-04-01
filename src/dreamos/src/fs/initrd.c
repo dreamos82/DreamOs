@@ -21,6 +21,7 @@
 #include <string.h>
 #include <vfs.h>
 #include "debug.h"
+#include "shell.h"
 
 #ifdef LEGACY
 
@@ -32,7 +33,6 @@
 #endif
 
 #include <fcntl.h>
-#include <commands.h>
 
 char * module_start;
 initrd_t * fs_specs;

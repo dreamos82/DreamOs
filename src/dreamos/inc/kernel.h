@@ -25,7 +25,8 @@
 #ifndef _KERNEL_H
 #define _KERNEL_H
 
-#include <multiboot.h>
+#include "multiboot.h"
+#include "stdint.h"
 
 #define asmlinkage __attribute__((regparm(0)))
 

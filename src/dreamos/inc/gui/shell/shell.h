@@ -15,17 +15,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _SHELL_H
-#define _SHELL_H
+#pragma once
 
-#include <user_shell.h>
+#include "user_shell.h"
 
-#define CMD_LEN 256
-#define DESC_LEN 256
+#define CMD_LEN     256
+#define DESC_LEN    256
 #define CURPATH_LEN 256
 #define MAX_NUM_COM 50
-#define DEF_COM 18
-#define HST_LEN 10
+#define DEF_COM     18
+#define HST_LEN     10
 
 /// Pointer to the function of a commmand.
 typedef void (* CommandFunction)(int argc, char ** argv);
@@ -74,5 +73,3 @@ void move_cursor_right(void);
 
 /// @brief Prints the history.
 void history_print(int argc, char ** argv);
-
-#endif

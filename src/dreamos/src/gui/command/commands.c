@@ -1,4 +1,4 @@
-#include <commands.h>
+#include "commands.h"
 #include <video.h>
 #include <timer.h>
 #include <cpuid.h>
@@ -15,6 +15,7 @@
 #include <scheduler.h>
 #include <debug.h>
 #include "irqflags.h"
+#include "kheap.h"
 
 void aalogo(int argc, char ** argv)
 {
