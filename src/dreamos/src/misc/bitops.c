@@ -26,3 +26,18 @@ int find_first_bit(unsigned short int irq_mask)
     for (i = 0; i < 8; i++) if ((1 << i) & irq_mask) break;
     return i;
 }
+
+bool_t has_flag(const uint32_t flags, const uint32_t flag)
+{
+    return (flags & flag) != 0;
+}
+
+void set_flag(uint32_t * flags, const uint32_t flag)
+{
+    (*flags) |= flag;
+}
+
+void clear_flag(uint32_t * flags, const uint32_t flag)
+{
+    (*flags) &= ~flag;
+}

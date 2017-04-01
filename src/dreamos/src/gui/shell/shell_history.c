@@ -6,6 +6,7 @@
 #include "string.h"
 #include "video.h"
 #include "stdio.h"
+#include "keymap.h"
 
 #define RESET_MAX(A)   A = HST_LEN - 1
 #define RESET_MIN(A)   A = free_slots
@@ -72,11 +73,11 @@ void history_start(const int key)
     // Set the variable to the retrieved command.
     strcpy(cmd, cmd_history[pos]);
     // Update the position inside the history.
-    if (key == KEY_UPARROW)
+    if (key == KEY_UP_ARROW)
     {
         ++pos;
     }
-    else if (key == KEY_DOWNARROW)
+    else if (key == KEY_DOWN_ARROW)
     {
         --pos;
     }

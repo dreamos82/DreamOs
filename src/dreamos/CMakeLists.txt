@@ -108,6 +108,7 @@ include_directories(
         inc
         inc/descriptor_tables
         inc/drivers
+        inc/drivers/keyboard
         inc/fs
         inc/hardware
         inc/io
@@ -128,8 +129,9 @@ include_directories(
 # Add the source files.
 set(SOURCE_FILES
         src/drivers/fdc.c
-        src/drivers/keyboard.c
         src/drivers/mouse.c
+        src/drivers/keyboard/keyboard.c
+        src/drivers/keyboard/keymap.c
         src/fs/fcntl.c
         src/fs/initrd.c
         src/fs/unistd.c

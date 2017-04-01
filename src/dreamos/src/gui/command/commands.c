@@ -13,7 +13,6 @@
 #include <fcntl.h>
 #include <clock.h>
 #include <scheduler.h>
-#include <debug.h>
 #include "irqflags.h"
 #include "kheap.h"
 
@@ -40,10 +39,10 @@ void logo(int argc, char ** argv)
     video_set_color(BRIGHT_BLUE);
     printf("\n");
     printf("\t\t\t The Dream Operating System \n"
-                   "\t\t           v%s.%s%s %s      \n\n"
-                   "\t\t\t   Welcome to DreamOS\n"
-                   "\t  Where dreams don't become Reality and remain dreams. \n"
-                   "\t          R.I.P - Rest in peace with dreamos ^_^        \n",
+               "\t\t           v%s.%s%s %s      \n\n"
+               "\t\t\t   Welcome to DreamOS\n"
+               "\t  Where dreams don't become Reality and remain dreams. \n"
+               "\t          R.I.P - Rest in peace with dreamos ^_^        \n",
            VERSION, PATCHLEVEL, EXTRAVERSION, REV_NUM);
 
     printf("\n\n\n\n");
@@ -60,9 +59,7 @@ void help(int argc, char ** argv)
     {
         // Skip commands with undefined functions.
         if (shell_cmd[i].function == NULL) continue;
-        printf("  %-10s %s\n",
-               shell_cmd[i].cmdname,
-               shell_cmd[i].cmddesc);
+        printf("  %-10s %s\n", shell_cmd[i].cmdname, shell_cmd[i].cmddesc);
     }
 }
 
@@ -117,11 +114,11 @@ void uname_cmd(int argc, char ** argv)
     else if (!(strcmp(argv[1], "-h")) || !(strcmp(argv[1], "--help")))
     {
         printf(
-                "Uname function allow you to see the kernel and system information.\n");
+            "Uname function allow you to see the kernel and system information.\n");
         printf("Function avaibles:\n");
         printf("1) -a   - Kernel version and processor type\n"
-                       "2) -r   - Only the kernel version\n"
-                       "3) -i   - All info of system and kernel\n");
+                   "2) -r   - Only the kernel version\n"
+                   "3) -i   - All info of system and kernel\n");
     }
     else if (!(strcmp(argv[1], "-i")) || !(strcmp(argv[1], "--info")))
     {
@@ -129,10 +126,10 @@ void uname_cmd(int argc, char ** argv)
 
         // Kernel info
         printf("Version: %s\n"
-                       "Patchlevel: %s\n"
-                       "Extraversion: %s\n"
-                       "Name: %s\n"
-                       "Revision: %s\n", VERSION, PATCHLEVEL, EXTRAVERSION,
+                   "Patchlevel: %s\n"
+                   "Extraversion: %s\n"
+                   "Name: %s\n"
+                   "Revision: %s\n", VERSION, PATCHLEVEL, EXTRAVERSION,
                NAME,
                REV_NUM);
 
@@ -199,15 +196,15 @@ void credits(int argc, char ** argv)
     video_puts("Contributors of the past:\n");
     video_set_color(GREEN);
     video_puts("Lord Osiris - Diego Stamigni\n"
-                       "N3m3s1s\n"
-                       "Blackz\n"
-                       "vinc94\n"
-                       "tk0\n"
-                       "DT\n"
-                       "Celeron\n"
-                       "Hamcha\n"
-                       "m0nt0\n"
-                       "and many others (3 or 4 :P)\n\n");
+                   "N3m3s1s\n"
+                   "Blackz\n"
+                   "vinc94\n"
+                   "tk0\n"
+                   "DT\n"
+                   "Celeron\n"
+                   "Hamcha\n"
+                   "m0nt0\n"
+                   "and many others (3 or 4 :P)\n\n");
     video_set_color(WHITE);
 }
 
@@ -243,63 +240,63 @@ void cpuid(int argc, char ** argv)
     (void) argv;
     /* List of features */
     const char * ecx_features[ECX_FLAGS_SIZE] = {
-            "SSE3",
-            "Reserved",
-            "Reserved",
-            "Monitor/MWAIT",
-            "CPL Debug Store",
-            "Virtual Machine",
-            "Safer Mode",
-            "Enhanced Intel SpeedStep Technology",
-            "Thermal Monitor 2",
-            "SSSE3",
-            "L1 Context ID",
-            "Reserved",
-            "Reserved",
-            "CMPXCHG16B",
-            "xTPR Update Control",
-            "Perfmon and Debug Capability",
-            "Reserved",
-            "Reserved",
-            "DCA",
-            "SSE4.1",
-            "SSE4.2",
-            "Reserved",
-            "Reserved",
-            "POPCNT"
+        "SSE3",
+        "Reserved",
+        "Reserved",
+        "Monitor/MWAIT",
+        "CPL Debug Store",
+        "Virtual Machine",
+        "Safer Mode",
+        "Enhanced Intel SpeedStep Technology",
+        "Thermal Monitor 2",
+        "SSSE3",
+        "L1 Context ID",
+        "Reserved",
+        "Reserved",
+        "CMPXCHG16B",
+        "xTPR Update Control",
+        "Perfmon and Debug Capability",
+        "Reserved",
+        "Reserved",
+        "DCA",
+        "SSE4.1",
+        "SSE4.2",
+        "Reserved",
+        "Reserved",
+        "POPCNT"
     };
     const char * edx_features[EDX_FLAGS_SIZE] = {
-            "x87 FPU",
-            "Virtual 8086 Mode",
-            "Debugging Extensions",
-            "Page Size Extensions",
-            "Time Stamp Counter",
-            "RDMSR and WRMSR",
-            "Physical Address Extensions",
-            "Machine Check Exception",
-            "CMPXCHG8B",
-            "APIC On-chip",
-            "Reserved",
-            "SYSENTER and SYSEXIT",
-            "Memory Type Range Registers",
-            "PTE Global Bit",
-            "Machine Check Architecture",
-            "Conditional Move Instructions",
-            "Page Attribute Table",
-            "36-bit Page Size",
-            "Processor Serial Number",
-            "Reserved",
-            "Debug Store",
-            "Thermal Monitor and Clock Facilities",
-            "Intel MMX",
-            "FXSAVE and FXRSTOR",
-            "SSE",
-            "SSE2",
-            "Self Snoop",
-            "Multi-Threading",
-            "TTC",
-            "Reserved",
-            "Pending Break Enable"
+        "x87 FPU",
+        "Virtual 8086 Mode",
+        "Debugging Extensions",
+        "Page Size Extensions",
+        "Time Stamp Counter",
+        "RDMSR and WRMSR",
+        "Physical Address Extensions",
+        "Machine Check Exception",
+        "CMPXCHG8B",
+        "APIC On-chip",
+        "Reserved",
+        "SYSENTER and SYSEXIT",
+        "Memory Type Range Registers",
+        "PTE Global Bit",
+        "Machine Check Architecture",
+        "Conditional Move Instructions",
+        "Page Attribute Table",
+        "36-bit Page Size",
+        "Processor Serial Number",
+        "Reserved",
+        "Debug Store",
+        "Thermal Monitor and Clock Facilities",
+        "Intel MMX",
+        "FXSAVE and FXRSTOR",
+        "SSE",
+        "SSE2",
+        "Self Snoop",
+        "Multi-Threading",
+        "TTC",
+        "Reserved",
+        "Pending Break Enable"
     };
 
     int i;
@@ -314,7 +311,7 @@ void cpuid(int argc, char ** argv)
         {
             printf("Unknown option %s\n", argv[1]);
             printf("CPUID help message\n"
-                           "-v : shows verbose CPUID information\n");
+                       "-v : shows verbose CPUID information\n");
             return;
         }
     }
@@ -348,8 +345,8 @@ void drv_load(int argc, char ** argv)
 {
     if (argc < 2)
         printf(
-                "No driver inserted or bad usage! Type %s --help for the usage.\n",
-                argv[0]);
+            "No driver inserted or bad usage! Type %s --help for the usage.\n",
+            argv[0]);
 
     else
     {
@@ -380,13 +377,13 @@ void drv_load(int argc, char ** argv)
                  (_kstrncmp(argv[1], "-h", 2) == 0))
         {
             printf("---------------------------------------------------\n"
-                           "Driver tool to load and kill driver\n"
-                           "Simple to use, just type:\n"
-                           "\n"
-                           "Usage: %s -<options> driver_name\n"
-                           "\t-> %s module_name     - to load driver\n"
-                           "\t-> %s -r module_name  - to kill driver\n"
-                           "---------------------------------------------------\n",
+                       "Driver tool to load and kill driver\n"
+                       "Simple to use, just type:\n"
+                       "\n"
+                       "Usage: %s -<options> driver_name\n"
+                       "\t-> %s module_name     - to load driver\n"
+                       "\t-> %s -r module_name  - to kill driver\n"
+                       "---------------------------------------------------\n",
                    argv[0], argv[0], argv[0]);
         }
 
@@ -589,19 +586,19 @@ void tester(int argc, char ** argv)
 {
     int i = 0;
     struct devel testing[MAX_TEST] = {
-            {"try_kmalloc",       "Test a basic kmalloc() function",               try_kmalloc},
-            {"try_strtok",        "Test strtok() function in string.h",            try_strtok},
-            {"try_printmem",      "Print used locations of memory",                try_printmem},
-            {"try_ocreat",        "Test file creation",                            try_ocreat},
-            {"try_open",          "Function to test open() & stdarg()",            try_open},
-            {"try_syscall",       "Try some syscall functions",                    try_syscall},
-            {"show_fd",           "Test file descriptors",                         show_fd},
-            {"test_stat",         "Test stat function",                            test_stat},
-            {"try_shadow",        "Test shadow feature for text input",            try_shadow},
-            {"try_mapaddress",    "Test map address function",                     try_mapaddress},
-            {"try_process",       "Test multiple processs creation",               try_process},
-            {"try_process_sleep", "Creates a process which sleeps for 10 seconds", try_process_sleep},
-            {"try_queue",         "Tries the queue",                               try_queue},
+        {"try_kmalloc",       "Test a basic kmalloc() function",               try_kmalloc},
+        {"try_strtok",        "Test strtok() function in string.h",            try_strtok},
+        {"try_printmem",      "Print used locations of memory",                try_printmem},
+        {"try_ocreat",        "Test file creation",                            try_ocreat},
+        {"try_open",          "Function to test open() & stdarg()",            try_open},
+        {"try_syscall",       "Try some syscall functions",                    try_syscall},
+        {"show_fd",           "Test file descriptors",                         show_fd},
+        {"test_stat",         "Test stat function",                            test_stat},
+        {"try_shadow",        "Test shadow feature for text input",            try_shadow},
+        {"try_mapaddress",    "Test map address function",                     try_mapaddress},
+        {"try_process",       "Test multiple processs creation",               try_process},
+        {"try_process_sleep", "Creates a process which sleeps for 10 seconds", try_process_sleep},
+        {"try_queue",         "Tries the queue",                               try_queue},
     };
     if (argc != 2)
     {
@@ -661,7 +658,7 @@ void newfile(int argc, char ** argv)
         if (strcmp(argv[1], "--help") == 0)
         {
             printf(
-                    "newfile FILENAME - Make a new file, and prompt for it's content\n");
+                "newfile FILENAME - Make a new file, and prompt for it's content\n");
         }
         else
         {
@@ -677,7 +674,7 @@ void newfile(int argc, char ** argv)
                 if (fd >= 0)
                 {
                     printf(
-                            "Type your text here, actually only one line available!!\n");
+                        "Type your text here, actually only one line available!!\n");
                     scanf("%s", text);
                     write(fd, text, strlen(text));
                     if (close(fd) == -1) printf("something went wrong\n");

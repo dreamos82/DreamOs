@@ -106,6 +106,7 @@ add_custom_target(qemu
         COMMAND qemu-system-i386 -vga std
                                  -serial stdio
                                  -initrd src/initfs
+                                 -k it
                                  -kernel src/dreamos/dreamos.img
         DEPENDS DreamOs
         DEPENDS grub
