@@ -1,3 +1,4 @@
+#include "testing.h"
 #include "commands.h"
 #include <kernel.h>
 #include <video.h>
@@ -5,7 +6,6 @@
 #include <string.h>
 #include <keyboard.h>
 #include <vfs.h>
-#include <testing.h>
 #include <fcntl.h>
 #include <initrd.h>
 #include <process.h>

@@ -177,7 +177,7 @@ set(SOURCE_FILES
         src/system/syscall.c
         src/kernel.c
         src/gui/shell/shell.c
-        src/gui/shell/testing.c
+        src/gui/command/testing.c
         src/gui/shell/user_shell.c
         src/gui/command/commands.c
         )
