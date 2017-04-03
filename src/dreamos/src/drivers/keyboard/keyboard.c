@@ -103,7 +103,6 @@ void keyboard_isr()
     }
     else
     {
-        dbg_print("|%6d|\n", scancode);
         int32_t character = 0;
         // Parse the key.
         switch (scancode)

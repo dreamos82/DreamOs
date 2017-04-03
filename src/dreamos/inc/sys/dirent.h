@@ -24,15 +24,14 @@
 #define NAME_MAX 30
 
 /*! 
-    \struct dirent
     \brief Struttura dati che contiene le entry della cartella.
 */
-struct dirent
+typedef struct dirent_t
 {
     ino_t d_ino;
     int d_type;
     char d_name[NAME_MAX + 1];
-};
+} dirent_t;
 
 /*! 
     \struct DIR
@@ -43,17 +42,16 @@ typedef struct
     int handle; /**< Filesystem directory handle*/
     ino_t cur_entry;
     char path[NAME_MAX + 1]; /**< dir path*/
-    struct dirent entry; /**< Next directory item*/
+    dirent_t entry; /**< Next directory item*/
 } DIR;
-
 
 int closedir(DIR *);
 
 DIR * opendir(const char *);
 
-struct dirent * readdir(DIR *);
+dirent_t * readdir(DIR *);
 
-int readdir_r(DIR *, struct dirent *, struct dirent **);
+int readdir_r(DIR *, dirent_t *, dirent_t **);
 
 void rewinddir(DIR *);
 

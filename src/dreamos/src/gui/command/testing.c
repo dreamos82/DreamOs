@@ -206,9 +206,9 @@ void show_fd()
 
 void test_stat()
 {
-    struct stat * stats;
+    stat_t * stats;
     printf("Testing stat functions on README\n");
-    stats = (struct stat *) kmalloc(sizeof(struct stat));
+    stats = (stat_t *) kmalloc(sizeof(stat_t));
     stat("README", stats);
     printf("Device_id: %d\n", stats->st_dev);
     printf("Size: %d\n", stats->st_size);

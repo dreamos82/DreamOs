@@ -145,7 +145,6 @@ void shell_login()
         init_credentials(&credentials);
         // ----------------------------
         // Ask the username.
-        dbg_print("Asking the username.\n");
         printf(LNG_USER);
         // Update the lower-bounds for the video.
         lower_bound_x = video_get_column();
@@ -154,7 +153,6 @@ void shell_login()
         scanf("%50s", credentials.username);
         // ----------------------------
         // Ask the password.
-        dbg_print("Asking the password.\n");
         printf(LNG_PWD);
         // Update the lower-bounds for the video.
         lower_bound_x = video_get_column();

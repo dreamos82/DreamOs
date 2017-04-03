@@ -403,7 +403,6 @@ void drv_load(int argc, char ** argv)
 
 void ls(int argc, char ** argv)
 {
-//    dbg_print("Opened DIR : '%s'\n", current_user.cur_path);
     // Check if the user has provided the '-l' option.
     int flag = 0;
     if (argc > 1 && strcmp(argv[1], "-l") == 0)
@@ -422,47 +421,44 @@ void ls(int argc, char ** argv)
     dirp = opendir(current_user.cur_path);
     if (dirp != NULL)
     {
-        int tot = 0;
-        /*while(i<j){
-            if(strcmp(mountpoint_list[i].mountpoint, current_user.cur_path)){
-
-            }
-            i++;
-        }*/
-        struct dirent * cur_dir_entry;
-        cur_dir_entry = readdir(dirp);
-        while (cur_dir_entry != NULL)
+        size_t total_size = 0;
+        dirent_t * dirent = readdir(dirp);
+        while (dirent != NULL)
         {
-            //struct stat
-            if (cur_dir_entry->d_type == FS_DIRECTORY)
+            if (dirent->d_type == FS_DIRECTORY)
             {
                 video_set_color(BRIGHT_CYAN);
             }
-            if (cur_dir_entry->d_type == FS_MOUNTPOINT)
+            if (dirent->d_type == FS_MOUNTPOINT)
             {
                 video_set_color(BRIGHT_GREEN);
             }
-            if (flag == 1)
+            if (flag)
             {
-                struct stat tmp_stat;
-                if (stat(cur_dir_entry->d_name, &tmp_stat) != -1)
+                stat_t entry_stat;
+                if (stat(dirent->d_name, &entry_stat) != -1)
                 {
-                    printf("uid=%d(%s) - size:  %d ",
-                           tmp_stat.st_uid,
-                           current_user.username,
-                           tmp_stat.st_size);
-                    tot = tot + tmp_stat.st_size;
+                    printf("%d %3d %3d %8d %s\n",
+                           dirent->d_type,
+                           entry_stat.st_uid,
+                           entry_stat.st_gid,
+                           entry_stat.st_size,
+                           dirent->d_name);
+                    total_size += entry_stat.st_size;
                 }
             }
-            printf("%s\n", cur_dir_entry->d_name);
+            else
+            {
+                printf("%s ", dirent->d_name);
+            }
             video_set_color(WHITE);
-            cur_dir_entry = readdir(dirp);
+            dirent = readdir(dirp);
         }
         closedir(dirp);
         printf("\n");
-        if (flag == 1)
+        if (flag)
         {
-            printf("Total: %d byte\n", tot);
+            printf("Total: %d byte\n", total_size);
         }
     }
     else
@@ -486,7 +482,11 @@ void ls(int argc, char ** argv)
             i++;
         }
         video_set_color(WHITE);
-        printf("Total: %d\n", j);
+        printf("\n");
+        if (flag)
+        {
+            printf("Total: %d\n", j);
+        }
     }
 }
 
@@ -530,12 +530,10 @@ void cd(int argc, char ** argv)
     memset(abspath, '\0', CURPATH_LEN);
 
     DIR * dirp = NULL;
-
-    int i = 0;
-
+    int32_t mp_id = 0;
     if (argv[1][0] == '/')
     {
-        i = get_mountpoint_id(argv[1]);
+        mp_id = get_mountpoint_id(argv[1]);
         strcpy(abspath, argv[1]);
         dirp = opendir(argv[1]);
     }
@@ -558,7 +556,7 @@ void cd(int argc, char ** argv)
         // Copy the current path.
         strcpy(abspath, current_user.cur_path);
         // Get the absolute path.
-        get_abs_path(abspath);
+        get_absolute_path(abspath);
         // If the current directory is not the root, add a '/'
         if (strcmp(abspath, "/") != 0) strncat(abspath, "/", 1);
         // Concatenate the input dir.
@@ -566,7 +564,7 @@ void cd(int argc, char ** argv)
         // Open the directory.
         dirp = opendir(abspath);
     }
-    if ((dirp == NULL) || (i == -1))
+    if ((dirp == NULL) || (mp_id == -1))
     {
         printf("cd: %s: No such file or directory\n\n", argv[1]);
         return;

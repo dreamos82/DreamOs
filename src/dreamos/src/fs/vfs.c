@@ -18,7 +18,6 @@
 
 #include <video.h>
 #include <vfs.h>
-#include <stdio.h>
 #include "debug.h"
 
 #ifdef LEGACY
@@ -32,7 +31,6 @@
 
 #include <string.h>
 #include <initrd.h>
-#include <kernel.h>
 #include <shell.h>
 
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
@@ -112,76 +110,53 @@ void vfs_init()
     }
 }
 
-int get_mountpoint_id(char * path)
+int32_t get_mountpoint_id(const char * path)
 {
-    int i = 0;
-    int last = -1;
-    while (i < MAX_MOUNTPOINT)
+    size_t last_mpl = 0;
+    int32_t last_mp_id = -1;
+    for (uint32_t it = 0; it < MAX_MOUNTPOINT; ++it)
     {
-        if (!_kstrncmp(path,
-                       mountpoint_list[i].mountpoint,
-                       strlen(mountpoint_list[i].mountpoint)))
+        size_t mpl = strlen(mountpoint_list[it].mountpoint);
+        if (!strncmp(path, mountpoint_list[it].mountpoint, mpl))
         {
-            if (strlen(mountpoint_list[i].mountpoint) >
-                strlen(mountpoint_list[last].mountpoint) && i > 0)
-                last = i;
-            else if (i == 0) last = i;
+            if (((mpl > last_mpl) && it > 0) || (it == 0))
+            {
+                last_mpl = mpl;
+                last_mp_id = it;
+            }
         }
-        i++;
     }
-    //if(last!=-1) printf("Changing dir %s\n", mountpoint_list[last].mountpoint, last);
-    return last;
+    return last_mp_id;
 }
 
-/**
-  * @author Ivan Gualandri
-  * @param int mountpoint_id id del punto di mountpoint del file
-  * @param char* path percorso del file da aprire
-  *
-  * Dato un path viene estratto il percorso relativo, escluso il mountpoint.
-  * @return path senza la parte relativa al mountpoint.
-  */
-char * get_rel_path(int mountpoint_id, const char * path)
+char * get_relative_path(uint32_t mp_id, const char * path)
 {
     // Prepare the variables.
     int rel_size = 0;
     int j = 0;
-    char * tmp_path = NULL;
+    char * relative_path = NULL;
     // Get the size of the relative path.
-    rel_size = strlen(path) - strlen(mountpoint_list[mountpoint_id].mountpoint);
+    rel_size = strlen(path) - strlen(mountpoint_list[mp_id].mountpoint);
     if (rel_size > 0)
     {
         int mp_size = 0;
-        tmp_path = kmalloc(rel_size * sizeof(char));
-        mp_size = strlen(mountpoint_list[mountpoint_id].mountpoint);
+        relative_path = kmalloc(rel_size * sizeof(char));
+        mp_size = strlen(mountpoint_list[mp_id].mountpoint);
         while (j < rel_size)
         {
-            tmp_path[j] = path[mp_size + j];
+            relative_path[j] = path[mp_size + j];
             j++;
         }
-        tmp_path[j] = '\0';
+        relative_path[j] = '\0';
     }
     else
     {
-        strcpy(tmp_path, path);
+        strcpy(relative_path, path);
     }
-//    #ifdef DEBUG
-//    dbg_print("\tPath     : %s\n", path);
-//    dbg_print("\tRelSize  : %d\n", rel_size);
-//    dbg_print("\tMP_id    : %d\n", mountpoint_id);
-//    dbg_print("\tTemp Path: %s\n", tmp_path);
-//    #endif
-    return tmp_path;
+    return relative_path;
 }
 
-/**
-  * @author Ivan Gualandri
-  * @param char* path percorso del file da aprire  
-  *
-  * Dato un path ne estrae il percorso assoluto (a partire da quello corrente)
-  * @return error code  
-  */
-int get_abs_path(char * path)
+int get_absolute_path(char * path)
 {
     if (path[0] != '/')
     {
@@ -189,7 +164,6 @@ int get_abs_path(char * path)
         int abs_size = 0;
         abs_size = strlen(current_user.cur_path);
         memset(abspath, '\0', CURPATH_LEN);
-        //printf("Abs: %s\n", abspath);
         strcpy(abspath, current_user.cur_path);
         if (abspath[abs_size - 1] == '/')
         {
@@ -200,12 +174,8 @@ int get_abs_path(char * path)
             strncat(abspath, "/", strlen(path));
             strncat(abspath, path, strlen(path));
         }
-        //printf("abspath: %s\n", abspath);
         strcpy(path, abspath);
         return strlen(path);
     }
-    else
-    {
-        return 0;
-    }
+    return 0;
 }

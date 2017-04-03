@@ -89,20 +89,17 @@ int main_loop(struct multiboot_info * boot_info)
 
     // -------------------------------------------------------------------------
     // Set the GDT, IDT and IRQ.
-    dbg_print("Initialize the GDT.\n");
     video_puts(LNG_GDT);
     init_gdt();
     video_print_ok();
-    dbg_print("Initialize the IDT.\n");
     video_puts(LNG_IDT);
     init_idt();
     video_print_ok();
-    dbg_print("Initialize the IRQ.\n");
     video_puts(LNG_IRQ);
-    pic8259_init_irq();
     video_print_ok();
+    pic8259_init_irq();
     // Breakpoint.
-    __asm__ __volatile__("int $0x3");
+//    __asm__ __volatile__("int $0x3");
 
     // -------------------------------------------------------------------------
     // Initialize paging.

@@ -88,7 +88,7 @@ DIR * initfs_opendir(const char * path)
     }
 }
 
-struct dirent * initrd_readdir(DIR * dirp)
+dirent_t * initrd_readdir(DIR * dirp)
 {
     initrd_file_t * fs_type;
 //    dbg_print("%d nfiles\n", nfiles);
@@ -194,7 +194,7 @@ ssize_t initfs_read(int fildes, char * buf, size_t nbyte)
     return nbyte;
 }
 
-int initrd_stat(char * path, struct stat * buf)
+int initrd_stat(const char * path, stat_t * buf)
 {
     int i;
     initrd_file_t * module_var;

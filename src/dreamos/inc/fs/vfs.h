@@ -21,8 +21,9 @@
 #include <dirent.h>
 #include <stddef.h>
 #include <unistd.h>
+#include "stdint.h"
 #include <language.h>
-#include <sys/stat.h>
+#include <stat.h>
 
 #define MAX_MOUNTPOINT 10
 #define MAX_FD _SC_OPEN_MAX
@@ -38,7 +39,7 @@ struct directory_operations
 
     int (* closedir_f)(DIR * dirp);
 
-    struct dirent * (* readdir_f)(DIR * dirp);
+    dirent_t * (* readdir_f)(DIR * dirp);
 };
 
 struct super_node_operations
@@ -55,7 +56,7 @@ struct super_node_operations
 
 struct stat_operations
 {
-    int (* stat)(char *, struct stat *);
+    int (* stat)(const char *, stat_t *);
 };
 
 /*!  \struct mountpoint_t
@@ -63,12 +64,18 @@ struct stat_operations
  */
 struct mountpoint_t
 {
-    char mountpoint[64];/**< Indica il nome del mountpoint*/
-    unsigned int pmask; /**< Maschera dei permessi*/
-    unsigned int uid; /**< User ID*/
-    unsigned int gid; /**< Group ID*/
-    unsigned int start_address; /**< Indirizzo di partenza del FileSystem*/
-    int dev_id; /**< Device ID*/
+    /// Indica il nome del mountpoint.
+    char mountpoint[64];
+    /// Maschera dei permessi.
+    unsigned int pmask;
+    /// User ID.
+    unsigned int uid;
+    /// Group ID.
+    unsigned int gid;
+    /// Indirizzo di partenza del FileSystem.
+    unsigned int start_address;
+    /// Device ID.
+    int dev_id;
     struct super_node_operations operations;
     struct directory_operations dir_op;
     struct stat_operations stat_op;
@@ -95,15 +102,26 @@ extern struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 
 //void open_vfs (struct inode *);
 //void close (int);
-int get_mountpoint_id(char *);
 
-char * get_rel_path(int, const char *);
+/// @brief Retrieves the id of the mount point where the path resides.
+int32_t get_mountpoint_id(const char * path);
+
+/// @brief Dato un path viene estratto il percorso relativo, escluso il mountpoint.
+/// @param mp_id    Id del punto di mountpoint del file.
+/// @param path     Percorso del file da aprire.
+/// @return Rath senza la parte relativa al mountpoint.
+char * get_relative_path(uint32_t mp_id, const char * path);
 
 int open_dir(char *);
 
 //int read (int, void*, size_t);
 //int write (int, void*, size_t);
-int get_abs_path(char *);
+
+/// @brief Dato un path ne estrae il percorso assoluto (a partire da quello
+/// corrente).
+/// @param path Percorso del file da aprire.
+/// @return Error code.
+int get_absolute_path(char * path);
 
 void vfs_init();
 

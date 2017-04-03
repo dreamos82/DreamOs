@@ -17,7 +17,6 @@
  */
 
 #include <dirent.h>
-#include <stdio.h>
 #include <string.h>
 #include <vfs.h>
 #include "debug.h"
@@ -41,45 +40,35 @@
 DIR * opendir(const char * path)
 {
     // Get the mount point id.
-    int mpoint_id = get_mountpoint_id((char *) path);
-    // Get the relative path.
-    char * rel_path = get_rel_path(mpoint_id, path);
-//    #ifdef DEBUG
-//    int error = get_abs_path((char *) path);
-////    dbg_print("OPENDIR\n");
-////    dbg_print("\tPath     : %s\n", path);
-////    dbg_print("\tPLength  : %d\n", strlen(path));
-////    dbg_print("\tError    : %d\n", error);
-////    dbg_print("\tRelative : %s\n", rel_path);
-////    dbg_print("\tRLength  : %d\n", strlen(rel_path));
-//    #else
-    get_abs_path((char *) path);
-//    #endif
-    DIR * pdir = NULL;
-    if (mountpoint_list[mpoint_id].dir_op.opendir_f != NULL)
+    int32_t mp_id = get_mountpoint_id(path);
+    if (mp_id < 0)
     {
-        pdir = mountpoint_list[mpoint_id].dir_op.opendir_f(rel_path);
+        return NULL;
+    }
+    if (mountpoint_list[mp_id].dir_op.opendir_f != NULL)
+    {
+        // Get the relative path.
+        char * rel_path = get_relative_path((uint32_t) mp_id, path);
+        DIR * pdir = mountpoint_list[mp_id].dir_op.opendir_f(rel_path);
         if (pdir != NULL)
         {
-            pdir->handle = mpoint_id;
+            pdir->handle = mp_id;
         }
+        return pdir;
     }
-    else
-    {
-        dbg_print("Could not open_dir no function found!\n");
-    }
-    return pdir;
+    dbg_print("Could not open_dir no function found!\n");
+    return NULL;
 }
 
 /**
   * @author Ivan Gualandri
   * @param DIR* dirp la cartella aperta
-  * @return struct dirent Struttura dati contenente il prossimo elemento della cartella. 
+  * @return Struttura dati contenente il prossimo elemento della cartella.
   * 
   * ad ogni chiamata su dirp torna il successivo elemento presente in quel path. Se non ve ne sono piu torna NULL
   *  
   */
-struct dirent * readdir(DIR * dirp)
+dirent_t * readdir(DIR * dirp)
 {
     if (dirp == NULL)
     {
@@ -114,6 +103,7 @@ int closedir(DIR * dirp)
 
 DIR * fake_opendir(const char * path)
 {
-    dbg_print("One day, when i will grow up, i could open that path: %s\n", path);
+    dbg_print("One day, when i will grow up, i could open that path: %s\n",
+              path);
     return NULL;
 }

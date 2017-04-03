@@ -21,44 +21,42 @@
 #include <shell.h>
 #include <string.h>
 
-//struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
-
-int stat(const char * path, struct stat * buf)
+int stat(const char * path, stat_t * buf)
 {
+    // Reset the structure.
+    buf->st_dev = 0;
+    buf->st_ino = 0;
+    buf->st_mode = 0;
+    buf->st_uid = 0;
+    buf->st_gid = 0;
+    buf->st_size = 0;
+    buf->st_atime = 0;
+    buf->st_mtime = 0;
+    buf->st_ctime = 0;
     char tmp_path[CURPATH_LEN];
-    int mp_id;
-    mp_id = 0;
     strcpy(tmp_path, path);
-//    printf("Tmp Path: %s\n", tmp_path);
     if (path[0] != '/')
     {
-        get_abs_path((char *) tmp_path);
-//        printf("Path: %s\n", tmp_path);
-//        printf("Arg Path: %s\n", path);
+        get_absolute_path(tmp_path);
     }
-
-    mp_id = get_mountpoint_id((char *) tmp_path);
-    if (mp_id == -1)
+    int32_t mp_id = get_mountpoint_id(tmp_path);
+    if (mp_id < 0)
     {
-        printf("No file\n");
+        printf("stat: cannot execute stat of \"%s\": Not exists\n", path);
         return -1;
     }
-//    printf("%d\n", mp_id);
-    buf->st_dev = mp_id;
-    if (mountpoint_list[mp_id].stat_op.stat != NULL)
+    buf->st_dev = (uint32_t) mp_id;
+    if (mountpoint_list[mp_id].stat_op.stat == NULL)
     {
-        if (path[0] == '/')
-        {
-            path = get_rel_path(mp_id, path);
-        }
-//        printf("Absolute path: %s\n", path);
-        mountpoint_list[mp_id].stat_op.stat((char *) path, buf);
+        printf("stat: cannot execute stat of \"%s\": Not stat function\n",
+               path);
+        return -1;
     }
-    else
+    if (path[0] == '/')
     {
-        printf("Null\n");
+        path = get_relative_path((uint32_t) mp_id, path);
     }
-//    printf("%d\n", buf->st_uid);
+    mountpoint_list[mp_id].stat_op.stat(path, buf);
     return 0;
 }
 

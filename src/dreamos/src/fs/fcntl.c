@@ -18,14 +18,10 @@
 
 #include <vfs.h>
 #include <fcntl.h>
-#include <stdarg.h>
-#include <stdio.h>
 #include <string.h>
 #include <debug.h>
 
 #ifdef LEGACY
-
-#include <kheap.h>
 
 #endif
 #ifdef LATEST
@@ -44,9 +40,6 @@
   */
 int open(const char * path, int oflags, mode_t mode)
 {
-    dbg_print("---------------------------------------\n");
-    dbg_print("Opening %s with flags %d and mode %d.\n", path, oflags, mode);
-    dbg_print("---------------------------------------\n");
     // Allocate a variable for the path.
     char new_path[CURPATH_LEN];
     // Initialize the path variable.
@@ -56,13 +49,12 @@ int open(const char * path, int oflags, mode_t mode)
     // If the first character is not the '/' then get the absolute path.
     if (new_path[0] != '/')
     {
-        if (!get_abs_path(new_path))
+        if (!get_absolute_path(new_path))
         {
             dbg_print("Cannot get the absolute path.\n");
             return -1;
         }
     }
-    dbg_print("Opening path: %s\n", new_path);
     // Reset the current file descriptor variable.
     current_fd = 0;
     while ((fd_list[current_fd].mountpoint_id != -1) &&
@@ -75,33 +67,24 @@ int open(const char * path, int oflags, mode_t mode)
         dbg_print("No more file descriptors available\n");
         return -1;
     }
-    int mpid = get_mountpoint_id(new_path);
-    dbg_print("File Descriptor: %d\n", current_fd);
-    dbg_print("Mount Point ID : %d\n", mpid);
-    if (mpid > -1)
-    {
-        fd_list[current_fd].mountpoint_id = mpid;
-        strcpy(new_path, get_rel_path(mpid, new_path));
-    }
-    else
+    int32_t mp_id = get_mountpoint_id(new_path);
+    if (mp_id < 0)
     {
         dbg_print("That path doesn't exist\n");
         return -1;
     }
-    if (mountpoint_list[mpid].operations.open != NULL)
-    {
-        fd_list[current_fd].fs_spec_id =
-            mountpoint_list[mpid].operations.open(
-                new_path, oflags);
-        if (fd_list[current_fd].fs_spec_id == -1)
-        {
-            dbg_print("No file's Found\n");
-            return -1;
-        }
-    }
-    else
+    fd_list[current_fd].mountpoint_id = mp_id;
+    strcpy(new_path, get_relative_path((uint32_t) mp_id, new_path));
+    if (mountpoint_list[mp_id].operations.open == NULL)
     {
         dbg_print("No OPEN function found here.\n");
+        return -1;
+    }
+    fd_list[current_fd].fs_spec_id =
+        mountpoint_list[mp_id].operations.open(new_path, oflags, mode);
+    if (fd_list[current_fd].fs_spec_id == -1)
+    {
+        dbg_print("No file's Found\n");
         return -1;
     }
     // Reset the offset.
