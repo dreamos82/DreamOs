@@ -66,11 +66,9 @@ asmlinkage void _start(struct multiboot_info * boot_info)
 int main_loop(struct multiboot_info * boot_info)
 {
     // Initialize the video.
-    dbg_print("Initialize the video.\n");
     video_init();
     // -------------------------------------------------------------------------
     // Initialize the system calls.
-    dbg_print("Initialize the system calls.\n");
     syscall_init();
     module_start = (char *) *((unsigned int *) boot_info->mods_addr);
     module_end = *((unsigned int *) (boot_info->mods_addr + 4));

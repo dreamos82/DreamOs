@@ -32,7 +32,7 @@ void shell_print_prompt();
 
 void shell_get_command();
 
-void shell_get_options(char * command, int * argc, char *** argv);
+void shell_get_options(char * command);
 
 /// The current user.
 userenv_t current_user;
@@ -40,6 +40,10 @@ userenv_t current_user;
 char cmd[CMD_LEN];
 /// The index of the cursor.
 uint32_t cmd_cursor_index;
+/// The current number of arguments.
+int argc = 1;
+/// The vector of arguments.
+char ** argv;
 
 command_t shell_cmd[MAX_NUM_COM] = {
         {"aalogo",   aalogo,        "Show an ascii art logo"},
@@ -70,9 +74,6 @@ command_t shell_cmd[MAX_NUM_COM] = {
 /* corpo della shell */
 int shell(void * args)
 {
-    int argc = 1;
-    char ** argv;
-
     (void) args;
     dbg_print("\nNewShell\n");
     int i = 0;
@@ -102,7 +103,7 @@ int shell(void * args)
         // Cleans all blanks at the beginning of the command.
         trim(cmd);
         // Retrieve the options from the command.
-        shell_get_options(cmd, &argc, &argv);
+        shell_get_options(cmd);
         // Check if the command is empty.
         if (strlen(cmd))
         {
@@ -124,12 +125,9 @@ int shell(void * args)
             {
                 printf(LNG_UNKNOWN_CMD " %s\n", argv[0]);
             }
-        }
-        else
-        {
             for (int it = 0; it < argc; ++it)
             {
-                kfree(argv[it]);
+                dbg_print("[%d] %s\n", it, argv[it]);
             }
         }
         memset(cmd, 0, CMD_LEN);
@@ -192,23 +190,35 @@ void shell_get_command()
     }
 }
 
-void shell_get_options(char * command, int * argc, char *** argv)
+void shell_get_options(char * command)
 {
-    int i = 0;
-    (*argc) = 0;
-    for (; *command; command++)
+    // Reset the number of arguments.
+    argc = 0;
+    // Prepare an index.
+    int idx = 0;
+    // Create a pointer to the original command.
+    char * c = command;
+    while (*c)
     {
-        (*argv)[(*argc)] = (char *) kmalloc(sizeof(char) * 30);
-        while (*command != ' ' && *command != '\0')
+        // Reserve the space for the current argument.
+        argv[argc] = (char *) kmalloc(sizeof(char) * CMD_LEN);
+        // Parse the string until it finds a space or the end of the command.
+        for (idx = 0; ((*c) && (*c) != ' '); ++c)
         {
-            *((*argv)[(*argc)] + i) = *command++;
-            i++;
+            // Store the current character.
+            *(argv[argc] + idx) = (*c);
+            // Increment the index.
+            ++idx;
         }
-        *((*argv)[(*argc)] + i) = '\0';
-        (*argc)++;
-        i = 0;
+        // Tap the current argument.
+        *(argv[argc] + idx) = '\0';
+        // Increment the number of arguments.
+        ++argc;
+        // Skip the space.
+        ++c;
     }
-    (*argv)[(*argc)] = "\0";
+    // Tap the argument after the last one.
+    argv[argc] = "\0";
 }
 
 void move_cursor_left(void)
