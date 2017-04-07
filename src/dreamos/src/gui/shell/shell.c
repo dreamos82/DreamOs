@@ -125,12 +125,17 @@ int shell(void * args)
             {
                 printf(LNG_UNKNOWN_CMD " %s\n", argv[0]);
             }
+            // Free up the memory reserved for the arguments.
             for (int it = 0; it < argc; ++it)
             {
-                dbg_print("[%d] %s\n", it, argv[it]);
+                // Check if the argument is not empty.
+                if (strlen(argv[it]))
+                {
+                    // Free up its memory.
+                    kfree(argv[it]);
+                }
             }
         }
-        memset(cmd, 0, CMD_LEN);
     }
     return 0;
 }
