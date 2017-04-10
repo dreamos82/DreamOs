@@ -15,38 +15,41 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _IT_H_
-#define _IT_H_
+#pragma once
 
+// -----------------------------------------------------------------------------
+// Boot Messages
+#define LNG_INIT_SYSCALL    "Inizializzo le system calls..."
+#define LNG_INIT_MEMORY     "Inizializzo la memoria..."
+#define LNG_INIT_GDT        "Inizializzo la GDT..."
+#define LNG_INIT_IDT        "Inizializzo la IDT..."
+#define LNG_INIT_IRQ        "Inizializzo gli IRQs..."
+#define LNG_INIT_VM         "Inizializzo la memoria virtuale..."
+#define LNG_INIT_HEAP       "Inizializzo l'heap..."
+#define LNG_INIT_CPUID      "Inizializzo la strutture del CPUID..."
+#define LNG_INIT_FS         "Inizializzo il fylesystem..."
+#define LNG_INIT_SCHEDULER  "Inizializzo lo scheduler..."
+#define LNG_INIT_SHELL      "Inizializzo la shell..."
 #define LNG_SITE            "\nSito: "
-#define LNG_GDT             "Inizializzo GDT"
-#define LNG_IDT             "Inizializzo IDT"
-#define LNG_IRQ             "Inizializzo IRQ"
-#define LNG_PAGING          "Abilito Paging: "
-#define LNG_PIT8253         "Inizializzo PIT    "
+
+// -----------------------------------------------------------------------------
+// Driver Loading Messages
+#define LNG_KEYBOARD_SETUP  "Inizializzo il driver dela tastiera..."
+#define LNG_MOUSE_SETUP     "Inizializzo il driver del mouse.."
+#define LNG_TIMER_SETUP     "Inizializzo il timer.."
+
+// -----------------------------------------------------------------------------
+// Shell Messages
+#define LNG_WELCOME         "\t\t.: Benvenuto in DreamOS :.\n\n"
+
+// -----------------------------------------------------------------------------
 #define LNG_CPU             "\nProcessore: "
-#define LNG_FREERAM         "Ram Disposizione:"
-#define LNG_FREEPAGE        "\t- Numero Pagine a disposizione:"
-#define LNG_BITMAP          "\t- Numero elementi della bitmap:"
-#define LNG_SHELL           "Inizializzo la shell..."
 #define LNG_USER            "[?] Inserisci il nome utente :"
 #define LNG_PWD             "[?] Inserisci la password    :"
 #define LNG_WRONG_CRED      "[x] Mi dispiace, riprova.\n"
 #define LNG_UNKNOWN_CMD     "Comando sconosciuto:"
-#define LNG_MOUSE_SETUP     "Inizializzo il driver del mouse.."
-#define LNG_MOUSE_REMOVE    "Disattivo il driver del mouse.."
-#define LNG_TIMER_SETUP     "Inizializzo il timer.."
-#define LNG_MOUSE_MID       "\n[+] Mouse driver: rilevato tasto centrale premuto!"
-#define LNG_MOUSE_RIGHT     "\n[+] Mouse driver: rilevato tasto destro premuto!"
-#define LNG_MOUSE_LEFT      "\n[+] Mouse driver: rilevato tasto sinistro premuto!"
-#define LNG_WELCOME         "\t\t.: Benvenuto in DreamOS :.\n\n"
-#define LNG_SCHEDULER       "Inizializzo lo scheduler..."
-#define LNG_INIT_MEMORY     "Inizializzo la memoria..."
-#define LNG_INIT_CPUID      "Inizializzo la strutture del CPUID..."
-#define LNG_INIT_FS         "Inizializzo il fylesystem..."
-#define LNG_KEYBOARD_SETUP  "Inizializzo il driver dela tastiera..."
 
-// DATE ME NOE!
+// -----------------------------------------------------------------------------
 // MESI: sereno variabile in tutto il nord Italia
 #define LNG_DATE_JAN "Gennaio"
 #define LNG_DATE_FEB "Febbraio"
@@ -74,5 +77,3 @@
 #define LNG_TIMESTAMP "Sono le "
 #define LNG_TIMESTAMP2 " del "
 #define LNG_TIMESTAMP3 " di "
-
-#endif

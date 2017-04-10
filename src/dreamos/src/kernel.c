@@ -67,11 +67,6 @@ int main_loop(struct multiboot_info * boot_info)
 {
     // Initialize the video.
     video_init();
-    // -------------------------------------------------------------------------
-    // Initialize the system calls.
-    syscall_init();
-    module_start = (char *) *((unsigned int *) boot_info->mods_addr);
-    module_end = *((unsigned int *) (boot_info->mods_addr + 4));
 
     // -------------------------------------------------------------------------
     // Show DreamOs version.
@@ -86,42 +81,56 @@ int main_loop(struct multiboot_info * boot_info)
     video_puts("\n");
 
     // -------------------------------------------------------------------------
-    // Set the GDT, IDT and IRQ.
-    video_puts(LNG_GDT);
-    init_gdt();
+    // Initialize the system calls.
+    video_puts(LNG_INIT_SYSCALL);
+    syscall_init();
     video_print_ok();
-    video_puts(LNG_IDT);
-    init_idt();
-    video_print_ok();
-    video_puts(LNG_IRQ);
-    video_print_ok();
-    pic8259_init_irq();
-    // Breakpoint.
-//    __asm__ __volatile__("int $0x3");
+
+    // -------------------------------------------------------------------------
+    module_start = (char *) *((unsigned int *) boot_info->mods_addr);
+    module_end = *((unsigned int *) (boot_info->mods_addr + 4));
 
     // -------------------------------------------------------------------------
     // Initialize paging.
-    printf(LNG_INIT_MEMORY);
+    video_puts(LNG_INIT_MEMORY);
     kernel_init_paging(boot_info->mem_upper);
+    video_print_ok();
+
+    // -------------------------------------------------------------------------
+    // Set the GDT, IDT and IRQ.
+    video_puts(LNG_INIT_GDT);
+    init_gdt();
+    video_print_ok();
+    video_puts(LNG_INIT_IDT);
+    init_idt();
+    video_print_ok();
+    video_puts(LNG_INIT_IRQ);
+    video_print_ok();
+    pic8259_init_irq();
+
+    // -------------------------------------------------------------------------
     // Initialize the virtual memory.
+    video_puts(LNG_INIT_VM);
     kernel_init_vm();
+    video_print_ok();
     // Initialize the heap.
+    video_puts(LNG_INIT_HEAP);
     kernel_init_heap();
+    video_print_ok();
     // Initialize the memory.
     kernel_map_memory(boot_info);
-    video_print_ok();
     printf(" * Memory (lower) : %lu kb \n", boot_info->mem_lower);
     printf(" * Memory (upper) : %lu Mb \n", boot_info->mem_upper / 1024);
 
     // -------------------------------------------------------------------------
     // Alloc and fill CPUID structure.
-    printf(LNG_INIT_CPUID);
+    video_puts(LNG_INIT_CPUID);
     get_cpuid(&sinfo);
     video_print_ok();
 
     // -------------------------------------------------------------------------
     // Initialize the filesystem.
-    printf(LNG_INIT_FS);
+    video_puts(LNG_INIT_FS);
     vfs_init();
     video_print_ok();
     initfs_init();
@@ -134,7 +143,7 @@ int main_loop(struct multiboot_info * boot_info)
 
     // -------------------------------------------------------------------------
     // Initialize the scheduler.
-    printf(LNG_SCHEDULER);
+    video_puts(LNG_INIT_SCHEDULER);
     kernel_initialize_scheduler();
     video_print_ok();
     // We disable floppy driver motor
@@ -142,7 +151,7 @@ int main_loop(struct multiboot_info * boot_info)
 
     // -------------------------------------------------------------------------
     // Initialize the shell.
-    printf(LNG_SHELL);
+    video_puts(LNG_INIT_SHELL);
     video_print_ok();
     kernel_create_process(shell, "Shell", "Shell", 0);
     return 0;
