@@ -20,6 +20,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <debug.h>
+#include "kheap.h"
 
 #ifdef LEGACY
 
@@ -74,14 +75,16 @@ int open(const char * path, int oflags, mode_t mode)
         return -1;
     }
     fd_list[current_fd].mountpoint_id = mp_id;
-    strcpy(new_path, get_relative_path((uint32_t) mp_id, new_path));
+    char * relative_path = get_relative_path((uint32_t) mp_id, new_path);
+    strcpy(new_path, relative_path);
+    kfree(relative_path);
     if (mountpoint_list[mp_id].operations.open == NULL)
     {
         dbg_print("No OPEN function found here.\n");
         return -1;
     }
     fd_list[current_fd].fs_spec_id =
-        mountpoint_list[mp_id].operations.open(new_path, oflags, mode);
+            mountpoint_list[mp_id].operations.open(new_path, oflags, mode);
     if (fd_list[current_fd].fs_spec_id == -1)
     {
         dbg_print("No file's Found\n");
