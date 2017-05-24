@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <shell.h>
 #include <string.h>
+#include "kheap.h"
 
 int stat(const char * path, stat_t * buf)
 {
@@ -54,9 +55,14 @@ int stat(const char * path, stat_t * buf)
     }
     if (path[0] == '/')
     {
-        path = get_relative_path((uint32_t) mp_id, path);
+        char * relative_path = get_relative_path((uint32_t) mp_id, path);
+        mountpoint_list[mp_id].stat_op.stat(relative_path, buf);
+        kfree(relative_path);
     }
-    mountpoint_list[mp_id].stat_op.stat(path, buf);
+    else
+    {
+        mountpoint_list[mp_id].stat_op.stat(path, buf);
+    }
     return 0;
 }
 
