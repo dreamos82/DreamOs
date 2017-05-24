@@ -346,13 +346,16 @@ void try_stress_heap()
 {
     dbg_print("Starting allocation...\n");
     print_heap();
-    const uint32_t max_element = 100;
+    const uint32_t max_element = 10000;
+    uint32_t ** elements = kmalloc(max_element * sizeof(uint32_t *));
     for (uint32_t i = 0; i < max_element; ++i)
     {
-        uint32_t * data = kmalloc(sizeof(uint32_t));
-        (*data) = i;
-        printf("%d\n", (*data));
-        kfree(data);
+        elements[i] = kmalloc(100 * sizeof(uint32_t));
+        (*elements[i]) = i;
+    }
+    for (uint32_t i = 0; i < max_element; ++i)
+    {
+        kfree(elements[i]);
     }
     dbg_print("Done\n");
     print_heap();
