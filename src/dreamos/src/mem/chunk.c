@@ -7,7 +7,7 @@
 #include "vm.h"
 #include "assert.h"
 
-uint32_t chunk_id = 0;
+uint32_t chunk_id = 1;
 
 chunk_t * create_chunk(const uint32_t start, const size_t size)
 {
