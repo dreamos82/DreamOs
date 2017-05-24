@@ -518,24 +518,12 @@ size_t strnlen(const char * s, size_t count)
     return (len < 0) ? 0 : (size_t) len;
 }
 
-#include "debug.h"
-
 int strcmp(const char * s1, const char * s2)
 {
     int ret = 0;
-    while (!(ret = *s1 - *s2) && *s2)
-    {
-        ++s1, ++s2;
-    }
-    if (ret < 0)
-    {
-        ret = -1;
-    }
-    else if (ret > 0)
-    {
-        ret = 1;
-    }
-    return ret;
+    const char * s1t = s1, * s2t = s2;
+    for (; !(ret = *s1t - *s2t) && *s2t; ++s1t, ++s2t);
+    return (ret < 0) ? -1 : (ret > 0) ? 1 : 0;
 }
 
 char * strcat(char * dst, const char * src)
