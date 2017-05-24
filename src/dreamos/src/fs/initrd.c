@@ -68,24 +68,22 @@ uint32_t initfs_init()
 
 DIR * initfs_opendir(const char * path)
 {
+    DIR * pdir = NULL;
     initrd_file_t * module_var = fs_headers;
     if (!strcmp(path, "/") || path[0] == '\0')
     {
-        DIR * pdir = kmalloc(sizeof(DIR));
+        pdir = kmalloc(sizeof(DIR));
         strcpy(pdir->path, path);
         pdir->handle = 0x01;
         pdir->cur_entry = 0x00;
         pdir->entry.d_ino = 0x00;
         strcpy(pdir->entry.d_name, module_var[0].fileName);
-        return pdir;
     }
     else
     {
-#if DEBUG
-        printf("Sono una dummy_opendir, ti piaccio? path: %s\n", path);
-#endif
-        return NULL;
+        dbg_print("No OpenDir function has been set.");
     }
+    return pdir;
 }
 
 dirent_t * initrd_readdir(DIR * dirp)
@@ -102,10 +100,6 @@ dirent_t * initrd_readdir(DIR * dirp)
         dirp->cur_entry++;
 //        dbg_print("Placeholder for future readdir of initrd Number of files: %d\n", dirp->cur_entry);
         return &(dirp->entry);
-    }
-    else
-    {
-        return NULL;
     }
     return NULL;
 }
