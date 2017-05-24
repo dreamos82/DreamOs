@@ -131,29 +131,29 @@ int32_t get_mountpoint_id(const char * path)
 
 char * get_relative_path(uint32_t mp_id, const char * path)
 {
-    // Prepare the variables.
-    int rel_size = 0;
-    int j = 0;
-    char * relative_path = NULL;
+    // Get the size of the path.
+    size_t path_size = strlen(path);
+    // Get the size of the mount-point.
+    size_t mnpt_size = strlen(mountpoint_list[mp_id].mountpoint);
     // Get the size of the relative path.
-    rel_size = strlen(path) - strlen(mountpoint_list[mp_id].mountpoint);
-    if (rel_size > 0)
+    size_t rltv_size = path_size - mnpt_size;
+    // Create a new string for storing the relative path.
+    char * rltv_path = kmalloc(rltv_size * sizeof(char));
+    // Copy the relative path.
+    if (rltv_size > 0)
     {
-        int mp_size = 0;
-        relative_path = kmalloc(rel_size * sizeof(char));
-        mp_size = strlen(mountpoint_list[mp_id].mountpoint);
-        while (j < rel_size)
+        size_t i;
+        for (i = 0; i < rltv_size; ++i)
         {
-            relative_path[j] = path[mp_size + j];
-            j++;
+            rltv_path[i] = path[mnpt_size + i];
         }
-        relative_path[j] = '\0';
+        rltv_path[i] = '\0';
     }
     else
     {
-        strcpy(relative_path, path);
+        strcpy(rltv_path, path);
     }
-    return relative_path;
+    return rltv_path;
 }
 
 int get_absolute_path(char * path)
