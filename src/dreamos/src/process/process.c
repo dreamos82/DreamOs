@@ -41,20 +41,20 @@ void process_exit();
 extern void _create_process(int (*)(void *), void *, uint32_t *, process_t *);
 
 process_t * kernel_create_process(int (* fn)(void *),
-                                char * name,
-                                void * arg,
-                                uint32_t * stack)
+                                  char * name,
+                                  void * arg,
+                                  uint32_t * stack)
 {
-    if (get_active_processs() + 1 > MAX_THREADS)
+    if (get_active_process() + 1 > MAX_THREADS)
     {
         return NULL;
     }
-    // Most processs don't want to deal with stack size.
-    uint32_t * stack_ptr = stack;
+    // Most process don't want to deal with stack size.
+    uint32_t * stack_base_address = stack;
     if (stack == NULL)
     {
-        stack_ptr = kmalloc(DEFAULT_STACK_SIZE);
-        stack = (uint32_t *) (((char *) stack_ptr) +
+        stack_base_address = kmalloc(DEFAULT_STACK_SIZE);
+        stack = (uint32_t *) (((char *) stack_base_address) +
                               DEFAULT_STACK_SIZE
                               - sizeof(uint32_t) * 3);
     }
@@ -69,7 +69,7 @@ process_t * kernel_create_process(int (* fn)(void *),
     // Set the top address of the stack.
     process->regs.esp = (uint32_t) stack;
     // Set the base address of the stack.
-    process->regs.ebp = 0;
+    process->regs.ebp = (uint32_t) stack_base_address;
     // Enable the interrupts.
     process->regs.eflags = EFLAG_IF;
     // Set the exit status to 0.
@@ -79,7 +79,6 @@ process_t * kernel_create_process(int (* fn)(void *),
     // Set the name of the process.
     memset(process->name, '\0', 50);
     strcpy(process->name, name);
-    process->stack_ptr = stack_ptr;
     dbg_print("\nRunning process %s with id %d and flags %d\n",
               process->name,
               process->id,
@@ -101,7 +100,7 @@ void process_exit()
               current->regs.eflags);
     current->exit = 1;
     // Free the space occupied by the stack.
-    kfree(current->stack_ptr);
+    kfree((uint32_t *) current->regs.ebp);
     // Free the space occupied by the structure of the process.
     kfree(current);
     while (TRUE);

@@ -24,7 +24,7 @@
 
 #include "shell.h"
 
-#define MAX_TEST 14
+#define MAX_TEST 15
 
 void aalogo(int argc, char ** argv);
 

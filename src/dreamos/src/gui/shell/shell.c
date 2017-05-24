@@ -75,7 +75,6 @@ command_t shell_cmd[MAX_NUM_COM] = {
 int shell(void * args)
 {
     (void) args;
-    dbg_print("\nNewShell\n");
     int i = 0;
     video_set_color(BRIGHT_BLUE);
     printf(LNG_WELCOME);

@@ -64,12 +64,14 @@ void * kmalloc(size_t size)
     {
         // Check if the current element of the heap has not been used, and its
         // length is greater than the required size.
+        /*
         if ((cur_header->used == 0) && (cur_header->size >= size))
         {
             split_chunk(cur_header, size);
             cur_header->used = true;
             return (void *) ((uint32_t) cur_header + sizeof(chunk_t));
         }
+         */
         // Set the previous element.
         prev_header = cur_header;
         // Move to the next element.
@@ -106,5 +108,6 @@ void kfree(void * ptr)
     chunk_t * header = (chunk_t *) ((uint32_t) ptr - sizeof(chunk_t));
     assert(header && "Cannot find the header of the chunk.");
     header->used = false;
-    glue_chunk(header);
+    //glue_chunk(header);
+    free_chunk(header);
 }

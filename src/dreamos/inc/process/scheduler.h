@@ -57,6 +57,6 @@ void schedule();
 void switch_process(struct process_list ** current,
                     struct process_list * next);
 
-size_t get_active_processs();
+size_t get_active_process();
 
 #endif

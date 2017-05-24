@@ -27,9 +27,13 @@
 #include "video.h"
 #include "irqflags.h"
 
-uint32_t stack_loc = PAGING_STACK_ADDR;
+// The top address of the stack.
 uint32_t stack_max = PAGING_STACK_ADDR;
+// The current position on the stack.
+uint32_t stack_loc = PAGING_STACK_ADDR;
+// The location where data is stored when paging is not enabled.
 uint32_t location;
+// Flag used to determine if paging is enabled.
 bool_t paging_enabled = false;
 
 void kernel_init_paging(uint32_t start)
@@ -44,16 +48,17 @@ uint32_t kernel_alloc_page()
     {
         return location += PAGE_SIZE;
     }
-
     // Quick sanity check.
     if (stack_loc == PAGING_STACK_ADDR)
+    {
         kernel_panic("Error:out of memory.");
-
-    // Pop off the stack.
+    }
+    // Now we are going to pop off the stack. First we have to move the entry
+    // point on the stack.
     stack_loc -= sizeof(uint32_t);
-    uint32_t * stack = (uint32_t *) stack_loc;
-
-    return *stack;
+    // Then we get the 32bit pointer to that stack location.
+    uint32_t * stack_ptr = (uint32_t *) stack_loc;
+    return (*stack_ptr);
 }
 
 void kernel_free_page(uint32_t p)
@@ -73,8 +78,10 @@ void kernel_free_page(uint32_t p)
     else
     {
         // Else we have space on the stack, so push.
-        uint32_t * stack = (uint32_t *) stack_loc;
-        *stack = p;
+        uint32_t * stack_ptr = (uint32_t *) stack_loc;
+        // Save on that position of the stack the given pointer.
+        (*stack_ptr) = p;
+        // Increase the stack location.
         stack_loc += sizeof(uint32_t);
     }
 }

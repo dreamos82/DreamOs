@@ -21,6 +21,7 @@ chunk_t * create_chunk(const uint32_t start, const size_t size)
     new_chunk->next = NULL;
     new_chunk->size = size;
     new_chunk->used = true;
+    dbg_print("Create chunk %4d;\n", new_chunk->id);
     return new_chunk;
 }
 
@@ -36,6 +37,7 @@ void alloc_chunk(const uint32_t start, const size_t size)
 
 void free_chunk(chunk_t * chunk)
 {
+    dbg_print("Free chunk   %4d;\n", chunk->id);
     assert(chunk && "Received null chunk.");
     if (chunk->prev == NULL)
     {
@@ -57,8 +59,9 @@ void free_chunk(chunk_t * chunk)
 
 void split_chunk(chunk_t * chunk, uint32_t len)
 {
-    // In order to split a chunk, once we split we need to know that there will be enough
-    // space in the new chunk to store the chunk header, otherwise it just isn't worthwhile.
+    // In order to split a chunk, once we split we need to know that there will
+    // be enough space in the new chunk to store the chunk header,
+    // otherwise it just isn't worthwhile.
     if (chunk->size - len > sizeof(chunk_t))
     {
         chunk_t * newchunk = (chunk_t *) ((uint32_t) chunk + chunk->size);
@@ -69,35 +72,39 @@ void split_chunk(chunk_t * chunk, uint32_t len)
 
         chunk->next = newchunk;
         chunk->size = len;
+
+        dbg_print("Split chunk  %p and create %p;\n", chunk, newchunk);
     }
 }
 
 void glue_chunk(chunk_t * chunk)
 {
-    if (chunk->next)
+    dbg_print("Glue chunk   %p;\n", chunk);
+    chunk_t * next = chunk->next;
+    if (next)
     {
-        if (!chunk->next->used)
+        if (!next->used)
         {
-            dbg_print("Glue next\n");
-            dbg_print("Update length\n");
-            chunk->size = chunk->size + chunk->next->size;
-            dbg_print("Update chunk->next->next->prev\n");
-            chunk->next->next->prev = chunk;
-            dbg_print("Update chunk->next\n");
-            chunk->next = chunk->next->next;
-            dbg_print("Done next...\n");
+            chunk->size = chunk->size + next->size;
+            if (next->next)
+            {
+                next->next->prev = chunk;
+            }
+            chunk->next = next->next;
         }
     }
-    if (chunk->prev)
+    chunk_t * prev = chunk->prev;
+    if (prev)
     {
-        if (chunk->prev->used == 0)
+        if (!prev->used)
         {
-            dbg_print("Glue prev\n");
-            chunk->prev->size = chunk->prev->size + chunk->size;
-            chunk->prev->next = chunk->next;
-            chunk->next->prev = chunk->prev;
-            chunk = chunk->prev;
-            dbg_print("Done prev...\n");
+            prev->size = prev->size + chunk->size;
+            prev->next = chunk->next;
+            if (chunk->next)
+            {
+                chunk->next->prev = prev;
+            }
+            chunk = prev;
         }
     }
     if (chunk->next == NULL)

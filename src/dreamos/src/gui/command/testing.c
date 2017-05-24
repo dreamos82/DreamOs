@@ -27,7 +27,7 @@ void try_strtok()
     char * p;
 
     printf("Stringa completa: %s\n"
-               "Stringa spezzata: \n", s);
+                   "Stringa spezzata: \n", s);
 
     p = strtok(s, " ");
     while (p != NULL)
@@ -82,8 +82,8 @@ void do_fault()
     prova = (int *) 0xa0000000;
     *prova = 10;
     printf(
-        "Contenuto della locazione 0xa0000000 dopo l'intervento dell'handler: %d\n",
-        *prova);
+            "Contenuto della locazione 0xa0000000 dopo l'intervento dell'handler: %d\n",
+            *prova);
 }
 
 void try_printmem(void)
@@ -93,7 +93,7 @@ void try_printmem(void)
 
 #ifdef LATEST
 void try_newheap(){
-    #ifdef NEW_HEAP_TEST
+#ifdef NEW_HEAP_TEST
     unsigned int testA;
     unsigned int testB;
     unsigned int testC;
@@ -114,7 +114,7 @@ void try_newheap(){
     n_free(testA);
     n_free(testD);
     printf("DONE\n");
-    #endif
+#endif
 }
 #endif
 
@@ -183,8 +183,8 @@ void try_syscall()
     {
         __asm__(
         "movl %0, %%ecx\n"
-            "movl $0x0, %%eax\n"
-            "int $80\n"
+                "movl $0x0, %%eax\n"
+                "int $80\n"
         : : "g"(i)
         );
     }
@@ -274,14 +274,14 @@ void try_process()
     // Disable the IRQs.
     irq_disable();
     process_t * process1 = kernel_create_process(task_test_1,
-                                              "task_test_1",
-                                              "task_test_1",
-                                              0);
+                                                 "task_test_1",
+                                                 "task_test_1",
+                                                 0);
     printf("Task 1, pid: %d\n", process1->id);
     process_t * process2 = kernel_create_process(task_test_2,
-                                              "task_test_2",
-                                              "task_test_2",
-                                              0);
+                                                 "task_test_2",
+                                                 "task_test_2",
+                                                 0);
     printf("Task 2, pid: %d\n", process2->id);
     // Re-Enable the IRQs.
     irq_enable();
@@ -305,9 +305,9 @@ void try_process_sleep()
     for (; i < 5; ++i)
     {
         kernel_create_process(sleeping_process,
-                             "sleeping_process",
-                             "sleeping_process",
-                             0);
+                              "sleeping_process",
+                              "sleeping_process",
+                              0);
     }
     // Re-Enable the IRQs.
     irq_enable();
@@ -340,4 +340,20 @@ void try_queue()
     }
     printf("\n");
     queue_destroy(queue);
+}
+
+void try_stress_heap()
+{
+    dbg_print("Starting allocation...\n");
+    print_heap();
+    const uint32_t max_element = 100;
+    for (uint32_t i = 0; i < max_element; ++i)
+    {
+        uint32_t * data = kmalloc(sizeof(uint32_t));
+        (*data) = i;
+        printf("%d\n", (*data));
+        kfree(data);
+    }
+    dbg_print("Done\n");
+    print_heap();
 }

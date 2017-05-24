@@ -82,8 +82,6 @@ typedef struct process
     __volatile__ uint32_t exit;
     /// Pointer to the node of the scheduler list of processs.
     listnode_t * self;
-    /// Pointer to the begin of the stack.
-    unsigned int * stack_ptr;
 } process_t;
 
 // If stack is 0 a default one is created

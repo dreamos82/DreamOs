@@ -47,3 +47,5 @@ void try_process();
 void try_process_sleep();
 
 void try_queue();
+
+void try_stress_heap();

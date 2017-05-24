@@ -51,19 +51,17 @@
 
 unsigned int * current_page_table;
 extern unsigned int end;
-multiboot_info_t * boot_informations;
 char * module_start;
 unsigned int module_end;
 elf_t kernel_elf;
 
-asmlinkage void _start(struct multiboot_info * boot_info)
+asmlinkage void _start(multiboot_info_t * boot_informations)
 {
-    boot_informations = boot_info;
-    main_loop(boot_info);
+    main_loop(boot_informations);
     while (1);
 }
 
-int main_loop(struct multiboot_info * boot_info)
+int main_loop(multiboot_info_t * boot_informations)
 {
     // Initialize the video.
     video_init();
@@ -87,13 +85,13 @@ int main_loop(struct multiboot_info * boot_info)
     video_print_ok();
 
     // -------------------------------------------------------------------------
-    module_start = (char *) *((unsigned int *) boot_info->mods_addr);
-    module_end = *((unsigned int *) (boot_info->mods_addr + 4));
+    module_start = (char *) *((unsigned int *) boot_informations->mods_addr);
+    module_end = *((unsigned int *) (boot_informations->mods_addr + 4));
 
     // -------------------------------------------------------------------------
     // Initialize paging.
     video_puts(LNG_INIT_MEMORY);
-    kernel_init_paging(boot_info->mem_upper);
+    kernel_init_paging(boot_informations->mem_upper);
     video_print_ok();
 
     // -------------------------------------------------------------------------
@@ -118,9 +116,9 @@ int main_loop(struct multiboot_info * boot_info)
     kernel_init_heap();
     video_print_ok();
     // Initialize the memory.
-    kernel_map_memory(boot_info);
-    printf(" * Memory (lower) : %lu kb \n", boot_info->mem_lower);
-    printf(" * Memory (upper) : %lu Mb \n", boot_info->mem_upper / 1024);
+    kernel_map_memory(boot_informations);
+    printf(" * Memory (lower) : %lu kb \n", boot_informations->mem_lower);
+    printf(" * Memory (upper) : %lu Mb \n", boot_informations->mem_upper / 1024);
 
     // -------------------------------------------------------------------------
     // Alloc and fill CPUID structure.
@@ -134,12 +132,12 @@ int main_loop(struct multiboot_info * boot_info)
     vfs_init();
     video_print_ok();
     initfs_init();
-    if (boot_info->mods_count > 0)
+    if (boot_informations->mods_count > 0)
     {
-        printf("Found n. %lu Modules\n", boot_info->mods_count);
+        printf("Found n. %lu Modules\n", boot_informations->mods_count);
     }
     // Get the kernel image from the boot info
-    kernel_elf = elf_from_multiboot(boot_info);
+    kernel_elf = elf_from_multiboot(boot_informations);
 
     // -------------------------------------------------------------------------
     // Initialize the scheduler.

@@ -102,7 +102,7 @@ void map(uint32_t va, uint32_t pa, uint32_t flags)
     {
         // The page table holding this page has not been created yet.
         page_directory[pt_idx] =
-            kernel_alloc_page() | PAGE_PRESENT | PAGE_WRITE;
+                kernel_alloc_page() | PAGE_PRESENT | PAGE_WRITE;
         init_area(&page_tables[pt_idx * 1024]);
     }
 
@@ -110,29 +110,28 @@ void map(uint32_t va, uint32_t pa, uint32_t flags)
     page_tables[virtual_page] = (pa & PAGE_MASK) | flags;
 }
 
-void unmap(uint32_t va)
+void unmap(uint32_t virtual_address)
 {
-    uint32_t virtual_page = va / PAGE_SIZE;
-
+    // Get the position of the virtual page.
+    uint32_t virtual_page = virtual_address / PAGE_SIZE;
+    // Clear the virtual page.
     page_tables[virtual_page] = 0;
     // Inform the CPU that we have invalidated a page mapping.
-    __asm__ __volatile__ ("invlpg (%0)" : : "a" (va));
+    __asm__ __volatile__ ("invlpg (%0)" : : "a" (virtual_address));
 }
 
-char get_mapping(uint32_t va, uint32_t * pa)
+char get_mapping(uint32_t virtual_address, uint32_t * physical_address)
 {
-    uint32_t virtual_page = va / PAGE_SIZE;
+    // Get the position of the virtual page.
+    uint32_t virtual_page = virtual_address / PAGE_SIZE;
     uint32_t pt_idx = PAGE_DIR_IDX(virtual_page);
-
-    // Find the appropriate page table for 'va'.
-    if (page_directory[pt_idx] == 0)
-        return 0;
-
-    if (page_tables[virtual_page] != 0)
+    // Find the appropriate page table for the virtual address.
+    if ((page_directory[pt_idx] != 0) && (page_tables[virtual_page] != 0))
     {
-        if (pa)
-            *pa = page_tables[virtual_page] & PAGE_MASK;
-
+        if (physical_address)
+        {
+            (*physical_address) = page_tables[virtual_page] & PAGE_MASK;
+        }
         return 1;
     }
     return 0;

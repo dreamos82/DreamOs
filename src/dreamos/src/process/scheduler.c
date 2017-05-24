@@ -110,7 +110,6 @@ void schedule()
     // Search the first process which has completed.
     while (ready_queue->process->exit == 1)
     {
-        dbg_print("Deactivating process '%s'.\n", ready_queue->process->name);
         // Store the next process pointed by the completed process.
         process_list_t * next = ready_queue->next;
         // Deactivate the completed process.
@@ -136,7 +135,7 @@ void schedule()
     switch_process(&current_process, new_process);
 }
 
-size_t get_active_processs()
+size_t get_active_process()
 {
     return list_size(process_list);
 }
