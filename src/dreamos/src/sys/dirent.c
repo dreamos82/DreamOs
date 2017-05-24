@@ -48,8 +48,9 @@ DIR * opendir(const char * path)
     if (mountpoint_list[mp_id].dir_op.opendir_f != NULL)
     {
         // Get the relative path.
-        char * rel_path = get_relative_path((uint32_t) mp_id, path);
-        DIR * pdir = mountpoint_list[mp_id].dir_op.opendir_f(rel_path);
+        char * relative_path = get_relative_path((uint32_t) mp_id, path);
+        DIR * pdir = mountpoint_list[mp_id].dir_op.opendir_f(relative_path);
+        kfree(relative_path);
         if (pdir != NULL)
         {
             pdir->handle = mp_id;
@@ -70,20 +71,12 @@ DIR * opendir(const char * path)
   */
 dirent_t * readdir(DIR * dirp)
 {
-    if (dirp == NULL)
+    if (dirp != NULL)
     {
-        dbg_print("NULL dirp\n");
-        return NULL;
-    }
-//    dbg_print("Handle: %d\n", dirp->handle);
-    if (mountpoint_list[dirp->handle].dir_op.readdir_f != NULL)
-    {
-//        dbg_print("Trovata readdir\n");
-        return mountpoint_list[dirp->handle].dir_op.readdir_f(dirp);
-    }
-    else
-    {
-//        dbg_print("No readdir - No party\n");
+        if (mountpoint_list[dirp->handle].dir_op.readdir_f != NULL)
+        {
+            return mountpoint_list[dirp->handle].dir_op.readdir_f(dirp);
+        }
     }
     return NULL;
 }
@@ -97,7 +90,10 @@ dirent_t * readdir(DIR * dirp)
 int closedir(DIR * dirp)
 {
     //dbg_print("Closing directory\n");
-    kfree(dirp);
+    if (dirp != NULL)
+    {
+        kfree(dirp);
+    }
     return 0;
 }
 
