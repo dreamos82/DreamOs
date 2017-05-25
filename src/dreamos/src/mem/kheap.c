@@ -37,16 +37,18 @@ void print_heap()
     uint32_t count = 0;
     chunk_t * current = first_chunk;
     dbg_print("# -------------------------------------------\n");
-    dbg_print("[%-4s][%-6s][%-12s][%-6s][%-6s]\n", "ID", "STATUS", "SIZE", "PREV",
-              "NEXT");
+    dbg_print("[%-4s][%-6s][%-12s][%-6s][%-6s][%-12s][%-12s]\n",
+              "ID", "STATUS", "SIZE", "PREV", "NEXT", "START", "END");
     while (current)
     {
-        dbg_print(" %4d  %6s  %12d  %6d  %6d\n",
+        dbg_print(" %4d  %6s  %12d  %6d  %6d  %12d  %12d\n",
                   current->id,
                   ((current->used ? "USED" : "FREE")),
                   current->size,
                   ((current->prev) ? current->prev->id : 0),
-                  ((current->next) ? current->next->id : 0));
+                  ((current->next) ? current->next->id : 0),
+                  ((uint32_t) current) - HEAP_START,
+                  ((uint32_t) current) + current->size - HEAP_START);
         // Move to the next chunk.
         current = current->next;
         // Increment the counter.
