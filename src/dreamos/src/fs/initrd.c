@@ -16,23 +16,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <stdio.h>
-#include <initrd.h>
-#include <string.h>
-#include <vfs.h>
+#include "stdio.h"
+#include "initrd.h"
+#include "string.h"
+#include "vfs.h"
 #include "debug.h"
 #include "shell.h"
-
-#ifdef LEGACY
-
-#include <kheap.h>
-
-#endif
-#ifdef LATEST
-#include <heap.h>
-#endif
-
-#include <fcntl.h>
+#include "kheap.h"
+#include "fcntl.h"
 
 char * module_start;
 initrd_t * fs_specs;
@@ -78,6 +69,13 @@ DIR * initfs_opendir(const char * path)
         pdir->cur_entry = 0x00;
         pdir->entry.d_ino = 0x00;
         strcpy(pdir->entry.d_name, module_var[0].fileName);
+        for (uint32_t i = 0; i < MAX_FILES; ++i)
+        {
+            dbg_print("[%d] uid:%3d name:%s\n",
+                      i,
+                      module_var[i].uid,
+                      module_var[i].fileName);
+        }
     }
     else
     {
@@ -89,16 +87,13 @@ DIR * initfs_opendir(const char * path)
 dirent_t * initrd_readdir(DIR * dirp)
 {
     initrd_file_t * fs_type;
-//    dbg_print("%d nfiles\n", nfiles);
     if (dirp->cur_entry < fs_specs->nfiles)
     {
         fs_type = (initrd_file_t *) (module_start + sizeof(initrd_t));
         dirp->entry.d_ino = dirp->cur_entry;
         dirp->entry.d_type = fs_type[dirp->cur_entry].file_type;
         strcpy(dirp->entry.d_name, fs_type[dirp->cur_entry].fileName);
-//        dbg_print("%s\n", dirp->entry.d_name);
         dirp->cur_entry++;
-//        dbg_print("Placeholder for future readdir of initrd Number of files: %d\n", dirp->cur_entry);
         return &(dirp->entry);
     }
     return NULL;
@@ -106,39 +101,38 @@ dirent_t * initrd_readdir(DIR * dirp)
 
 int initfs_open(const char * path, int flags, ...)
 {
-    initrd_file_t * module_var;
-    module_var = fs_headers;
+    initrd_file_t * module_var = fs_headers;
+    // If we have reached the maximum number of descriptors, just try to find
+    // a non-used one.
     if (cur_irdfd >= MAX_INITRD_DESCRIPTORS)
     {
-        uint32_t i = 0;
+        // Reset the current ird file descriptor.
         cur_irdfd = 0;
-        while (ird_descriptors[i].file_descriptor != -1 &&
-               i < MAX_INITRD_DESCRIPTORS)
+        while ((ird_descriptors[cur_irdfd].file_descriptor != -1) &&
+               (cur_irdfd < MAX_INITRD_DESCRIPTORS))
         {
-            i++;
+            ++cur_irdfd;
         }
-        cur_irdfd = i;
     }
-    uint32_t it = 0;
-    while (it < fs_specs->nfiles)
+    for (uint32_t it = 0; it < fs_specs->nfiles; ++it)
     {
-        if (!strcmp(path, module_var[it].fileName))
+        // Discard the headers which has a different name.
+        if (strcmp(path, module_var[it].fileName)) continue;
+        // However, if the name is the same, but the file type is different,
+        // stop the function and return failure value.
+        if ((module_var[it].file_type == FS_DIRECTORY) ||
+            (module_var[it].file_type == FS_MOUNTPOINT))
         {
-            // Wrong file type.
-            if (module_var[it].file_type == FS_DIRECTORY ||
-                module_var[it].file_type == FS_MOUNTPOINT)
-            {
-                return -1;
-            }
-            ird_descriptors[cur_irdfd].file_descriptor = it;
-            ird_descriptors[cur_irdfd].cur_pos = 0;
-            if (flags & O_APPEND)
-            {
-                ird_descriptors[cur_irdfd].cur_pos = module_var[it].length;
-            }
-            return cur_irdfd++;
+            return -1;
         }
-        ++it;
+        // Otherwise, if the file is correct, update
+        ird_descriptors[cur_irdfd].file_descriptor = it;
+        ird_descriptors[cur_irdfd].cur_pos = 0;
+        if (flags & O_APPEND)
+        {
+            ird_descriptors[cur_irdfd].cur_pos = module_var[it].length;
+        }
+        return cur_irdfd++;
     }
     if (flags & O_CREAT)
     {
