@@ -24,60 +24,90 @@
 #include <sys/stat.h>
 #include <stdint.h>
 
-#define FILENAME_LENGTH 64
-#define MAX_FILES 32
-#define MAX_INITRD_DESCRIPTORS _SC_OPEN_MAX
+#define FILENAME_LENGTH         64
+#define MAX_FILES               32
+#define MAX_INITRD_DESCRIPTORS  _SC_OPEN_MAX
 
-/*! \struct initrd_t
-    \brief Contiene il numero dei files contenuti nel filesystem initrd.
- */
+/// @brief Contains the number of files inside the initrd filesystem.
 typedef struct initrd_t
 {
-    uint32_t nfiles; /*!< Numero Files letti*/
+    /// Number of readed files.
+    uint32_t nfiles;
 } initrd_t;
 
-/*! \struct initrd_file_t 
-    \brief Contiene le informazioni relative ai singoli files contenuti in initrd
- */
+/// @brief Information concerning a file.
 typedef struct initrd_file_t
 {
-    int magic; /*!< Numero usato come delimitatore da settare a 0xBF*/
-    char fileName[FILENAME_LENGTH]; /*!< Nome del file*/
+    /// Number used as delimiter, it must be set to 0xBF.
+    int magic;
+    /// The name of the file.
+    char fileName[FILENAME_LENGTH];
+    /// The type of the file.
     short int file_type;
-    int uid; /*!< User id del proprietario del file */
-    unsigned int offset; /*!< indirizzo relativo di partenza */
-    unsigned int length; /*!< Dimensione del File */
+    /// The uid of the owner.
+    int uid;
+    /// Offset of the starting address.
+    unsigned int offset;
+    /// Dimension of the file.
+    unsigned int length;
 } initrd_file_t;
 
-/*! \struct initrd_fd 
-    \brief File Descriptor relativo ai files aperti.
- */
+/// @brief Descriptor linked to open files.
 typedef struct initrd_fd
 {
-    int file_descriptor; /*!< id del file aperto all'interno del file system (posizione nel vettore dei files */
-    int cur_pos; /*!< Posizione attuale all'interno del file, per operazioni di lettura/scrittura*/
+    /// Id of the open file inside the file system. More precisely, its index
+    /// inside the vector of files.
+    int file_descriptor;
+    /// The current position inside the file. Used for writing/reading
+    /// opeations.
+    int cur_pos;
 } initrd_fd;
 
 extern initrd_t * fs_specs;
 extern initrd_file_t * fs_headers;
 extern unsigned int fs_end;
 
-void dummy();
-
+/// Initializes the initrd file system.
 uint32_t initfs_init();
 
-DIR * initfs_opendir(const char *);
+/// Opens a directory at the given path.
+/// @param path The path where the directory resides.
+/// @return Structure used to access the directory.
+DIR * initfs_opendir(const char * path);
 
-dirent_t * initrd_readdir(DIR *);
+/// Moves the position of the currently readed entry inside the directory.
+/// @param dirp The directory handler.
+/// @return A pointer to the next entry inside the directory.
+dirent_t * initrd_readdir(DIR * dirp);
 
-int initfs_open(const char *, int, ...);
+/// @brief Open the file at the given path and returns its file descriptor.
+/// @param path  The path to the file.
+/// @param flags The flags used to determine the behavior of the function.
+/// @return The file descriptor of the opened file, otherwise returns -1.
+int initfs_open(const char * path, int flags, ...);
 
-ssize_t initfs_read(int, char *, size_t);
+/// @brief Reads from the file identified by the file descriptor.
+/// @param fildes   The file descriptor of the file.
+/// @param buf      Buffer where the read content must be placed.
+/// @param nbyte    The number of bytes to read.
+/// @return The number of red bytes.
+ssize_t initfs_read(int fildes, char * buf, size_t nbyte);
 
-int initrd_stat(const char *, stat_t *);
+/// @brief Retrieves information concerning the file at the given position.
+/// @param path The path where the file resides.
+/// @param stat The structure where the information are stored.
+/// @return 0 if success.
+int initrd_stat(const char * path, stat_t * stat);
 
-ssize_t initrd_write(int, const void *, size_t);
+/// @brief Writes the given content inside the file.
+/// @param fildes   The file descriptor of the file.
+/// @param buf      The content to write.
+/// @param nbyte    The number of bytes to write.
+/// @return The number of written bytes.
+ssize_t initrd_write(int fildes, const void * buf, size_t nbyte);
 
-int initrd_close(int);
+/// @brief Closes the given file.
+/// @param fildes The file descriptor of the file.
+int initrd_close(int fildes);
 
 #endif

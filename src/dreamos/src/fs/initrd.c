@@ -32,11 +32,6 @@ initrd_fd ird_descriptors[MAX_INITRD_DESCRIPTORS];
 unsigned int fs_end;
 unsigned int cur_irdfd;
 
-void dummy()
-{
-    dbg_print("Qui solo per una prova\n");
-}
-
 uint32_t initfs_init()
 {
     int i = 0;
@@ -182,7 +177,7 @@ ssize_t initfs_read(int fildes, char * buf, size_t nbyte)
     return nbyte;
 }
 
-int initrd_stat(const char * path, stat_t * buf)
+int initrd_stat(const char * path, stat_t * stat)
 {
     int i;
     initrd_file_t * module_var;
@@ -192,8 +187,8 @@ int initrd_stat(const char * path, stat_t * buf)
     {
         if (!strcmp(path, module_var[i].fileName))
         {
-            buf->st_uid = module_var[i].uid;
-            buf->st_size = module_var[i].length;
+            stat->st_uid = module_var[i].uid;
+            stat->st_size = module_var[i].length;
             break;
         }
         i++;
