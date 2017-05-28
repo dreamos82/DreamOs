@@ -55,13 +55,7 @@ char * module_start;
 unsigned int module_end;
 elf_t kernel_elf;
 
-asmlinkage void _start(multiboot_info_t * boot_informations)
-{
-    main_loop(boot_informations);
-    while (1);
-}
-
-int main_loop(multiboot_info_t * boot_informations)
+int kmain(multiboot_info_t * boot_informations)
 {
     // Initialize the video.
     video_init();
@@ -118,7 +112,8 @@ int main_loop(multiboot_info_t * boot_informations)
     // Initialize the memory.
     kernel_map_memory(boot_informations);
     printf(" * Memory (lower) : %lu kb \n", boot_informations->mem_lower);
-    printf(" * Memory (upper) : %lu Mb \n", boot_informations->mem_upper / 1024);
+    printf(" * Memory (upper) : %lu Mb \n",
+           boot_informations->mem_upper / 1024);
 
     // -------------------------------------------------------------------------
     // Alloc and fill CPUID structure.

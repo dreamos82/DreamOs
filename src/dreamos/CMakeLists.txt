@@ -193,7 +193,7 @@ add_custom_command(
         TARGET DreamOs
         POST_BUILD
         COMMAND nasm
-        -f elf ${CMAKE_CURRENT_SOURCE_DIR}/multicatcher.s
+        -f elf ${CMAKE_CURRENT_SOURCE_DIR}/boot.s
         -o ${CMAKE_CURRENT_BINARY_DIR}/bl.img
 )
 

@@ -33,9 +33,7 @@
 extern char * module_start;
 extern unsigned int module_end;
 
-asmlinkage void _start(multiboot_info_t * boot_informations);
-
-int main_loop(multiboot_info_t * boot_informations);
+int kmain(multiboot_info_t * boot_informations);
 
 #define DREAMOS_VER "DreamOS ver 0.3 - trunk"
 #define SITEURL "www.dreamos.org"
