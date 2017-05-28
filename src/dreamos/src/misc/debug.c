@@ -60,12 +60,12 @@ void dbg_print(const char * msg, ...)
 void print_reg(register_t * reg)
 {
     dbg_print("Registers dump:\n");
-    dbg_print("eax 0x%x ebx 0x%x 0x%ecx 0x%x %edx 0x%x\n", reg->eax, reg->ebx,
-              reg->ecx, reg->edx);
-    dbg_print("edi 0x%x esi 0x%x %ebp 0x%x %esp 0x%x\n", reg->edi, reg->esi,
-              reg->ebp, reg->esp);
-    dbg_print("eip 0x%x cs 0x%x ss 0x%x eflags 0x%x useresp 0x%x\n", reg->eip,
-              reg->ss, reg->eflags, reg->useresp);
+    dbg_print("eax 0x%-9x ebx 0x%-9x ecx 0x%-9x edx    0x%-9x\n",
+              reg->eax, reg->ebx, reg->ecx, reg->edx);
+    dbg_print("edi 0x%-9x esi 0x%-9x ebp 0x%-9x esp    0x%-9x\n",
+              reg->edi, reg->esi, reg->ebp, reg->esp);
+    dbg_print("eip 0x%-9x cs  0x%-9x ss  0x%-9x eflags 0x%-9x useresp 0x%-9x\n",
+              reg->eip, reg->ss, reg->eflags, reg->useresp);
 }
 
 void print_reg16(register16_t * reg)
