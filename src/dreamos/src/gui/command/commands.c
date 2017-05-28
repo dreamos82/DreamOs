@@ -488,33 +488,32 @@ void ls(int argc, char ** argv)
             printf("Total: %d\n", j);
         }
     }
+    printf("\n");
 }
 
 void more(int argc, char ** argv)
 {
-    if (argc == 1)
-        printf("Usage:\n\t more filename\nfor read a file\n");
+    if (argc == 2)
+    {
+        // Try to open the file.
+        int fd = open(argv[1], O_RDONLY, 42);
+        if (fd > -1)
+        {
+            char c;
+            // Put on the standard output the characters.
+            while (read(fd, &c, 1)) putchar(c);
+            putchar('\n');
+            putchar('\n');
+            close(fd);
+        }
+        else
+        {
+            printf("%s: cannot find the file.\n\n", argv[1]);
+        }
+    }
     else
     {
-        if (argc < 3)
-        {
-            int i;
-            char buf;
-            //printf("File to open: %s\n", argv[1]);
-            i = open(argv[1], O_RDONLY, 42);
-            if (i > -1)
-            {
-                int j = 0;
-                while (read(i, &buf, 1) != (int) NULL)
-                {
-                    putchar(buf);
-                    j++;
-                }
-                putchar('\n');
-                close(i);
-            }
-        }
-        else printf("too many arguments\n");
+        printf("Usage: more file\n\n");
     }
 }
 
