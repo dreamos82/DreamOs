@@ -21,51 +21,67 @@
  * Prima versione: 25/11/2007
  */
 
-#include <syscall.h>
-#include <video.h>
+#include "syscall.h"
+#include "video.h"
 #include "irqflags.h"
+#include "assert.h"
+#include "kernel.h"
 
-void (* syscall_table[SYSCALL_NUMBER])(int *) = {sysputch};
+#define SYSCALL_NUMBER 3
 
-void sysputch(int * args)
+/// @brief The dignature of a function call.
+typedef void (* SystemCall)();
+
+/// @brief The list of function call.
+SystemCall syscalls[SYSCALL_NUMBER];
+
+/// @brief Wrapper for video_clear.
+void syscall_video_clear()
+{
+    video_clear();
+}
+
+/// @brief Wrapper for video_putc.
+void syscall_video_putc(int * args)
 {
     video_putc((char) args[0]);
 }
 
-void syscall_init()
+/// @brief Wrapper for video_puts.
+void syscall_video_puts(int * args)
 {
-    int i = 0;
-    while (i < SYSCALL_NUMBER)
-    {
-        syscall_table[i] = 0;
-        i++;
-    }
-    syscall_table[0] = sysputch;
+    video_puts((const char *) args[0]);
 }
 
-/*
- * Gestore principale
- */
+void syscall_init()
+{
+    // Initialize the list of function calls.
+    for (uint32_t it = 0; it < SYSCALL_NUMBER; ++it)
+    {
+        syscalls[it] = NULL;
+    }
+    // Set the function calls.
+    syscalls[0] = syscall_video_clear;
+    syscalls[1] = syscall_video_putc;
+    syscalls[2] = syscall_video_puts;
+}
+
 void syscall_handler()
 {
-    int eax = 0;
-    int ebx = 0, ecx = 0, edx = 0;
-    int arguments[3] = {0, 0, 0};
-
     // Disable the IRQs.
     irq_disable();
-
-    __asm__ ("movl %%eax, %0\n\t"
-        "movl %%ecx, %1\n\t"
-        "movl %%ebx, %2\n\t"
-        "movl %%edx, %3\n\t"
-    : "=r" (eax), "=r" (ecx), "=r" (ebx), "=r" (edx));
-
-    arguments[0] = ecx;
-    arguments[1] = ebx;
-    arguments[2] = edx;
-
-    (*syscall_table[eax])(arguments);
+    // Retrieve the parameters.
+    register_t regs;
+    __asm__("movl %%eax, %0\n\t"
+            "movl %%ecx, %1\n\t"
+            "movl %%ebx, %2\n\t"
+            "movl %%edx, %3\n\t"
+    : "=r"(regs.eax), "=r"(regs.ecx), "=r"(regs.ebx), "=r"(regs.edx));
+    // Check that the systemcall number is correct.
+    assert(regs.eax < SYSCALL_NUMBER);
+    // Call the systemcall.
+    uint32_t arguments[3] = {regs.ecx, regs.ebx, regs.edx};
+    (syscalls[regs.eax])(arguments);
 
     // Re-Enable the IRQs.
     irq_enable();

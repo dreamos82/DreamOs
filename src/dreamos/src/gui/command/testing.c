@@ -176,20 +176,20 @@ void try_ocreat()
 
 void try_syscall()
 {
-    int i;
-    int var = -100;
-    printf("Trying sysputch:\n");
-    for (i = 'A'; i <= 'Z'; i++)
+    printf("-- SystemCall Test 1 --\n");
+    for (uint32_t c = 'A'; c <= 'Z'; c++)
     {
-        __asm__(
-        "movl %0, %%ecx\n"
-                "movl $0x0, %%eax\n"
-                "int $80\n"
-        : : "g"(i)
-        );
+        __asm__("movl   %0, %%ecx\n"
+                "movl   $1, %%eax\n"
+                "int    $80\n" : : "r"(c));
     }
-    printf("And before ending try to print a -100: %d\n", var);
-    printf("\n");
+    printf("\n\n");
+    printf("-- SystemCall Test 2 --\n");
+    char * test_string = "This is a test string!\n";
+    __asm__("movl   %0, %%ecx\n"
+            "movl   $2, %%eax\n"
+            "int    $80\n" : : "r"(test_string));
+    printf("\n\n");
 }
 
 void show_fd()

@@ -20,15 +20,10 @@
  * Autore Lisa Vitolo
  * Prima versione: 25/11/2007
  */
-#ifndef _SYSCALL_H_
-#define _SYSCALL_H_
+#pragma once
 
-#define SYSCALL_NUMBER 1
-
-void syscall_handler();
-
-void sysputch();
-
+/// @brief Initialize the system calls.
 void syscall_init();
 
-#endif
+/// @brief Handler for the system calls.
+void syscall_handler();
