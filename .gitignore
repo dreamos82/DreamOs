@@ -8,4 +8,5 @@ src/dreamos/src/utils/
 utils/initfscp
 cmake-build-*
 build
+doc/html
 .idea
