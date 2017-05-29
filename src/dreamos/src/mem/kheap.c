@@ -19,11 +19,10 @@
 //
 // Based on JamesM's kernel developement tutorials.
 //
-#include <kheap.h>
-#include <paging.h>
-#include <vm.h>
-#include <debug.h>
-#include <string.h>
+
+#include "kheap.h"
+#include "debug.h"
+#include "string.h"
 #include "assert.h"
 
 void kernel_init_heap()

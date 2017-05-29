@@ -16,10 +16,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <timer.h>
-#include <stdint.h>
-#include <pic8259.h>
-#include <port_io.h>
+#include "timer.h"
+#include "stdint.h"
+#include "pic8259.h"
+#include "port_io.h"
 #include "irqflags.h"
 
 /// This will keep track of how many ticks the system has been running for.

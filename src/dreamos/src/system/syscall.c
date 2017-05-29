@@ -73,9 +73,9 @@ void syscall_handler()
     // Retrieve the parameters.
     register_t regs;
     __asm__("movl %%eax, %0\n\t"
-            "movl %%ecx, %1\n\t"
-            "movl %%ebx, %2\n\t"
-            "movl %%edx, %3\n\t"
+        "movl %%ecx, %1\n\t"
+        "movl %%ebx, %2\n\t"
+        "movl %%edx, %3\n\t"
     : "=r"(regs.eax), "=r"(regs.ecx), "=r"(regs.ebx), "=r"(regs.edx));
     // Check that the systemcall number is correct.
     assert(regs.eax < SYSCALL_NUMBER);

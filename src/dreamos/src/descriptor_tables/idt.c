@@ -22,9 +22,9 @@
  * Contiene le definizioni di alcuni tipi di dato :D
  */
 
-#include <idt.h>
-#include <isr.h>
-#include <descriptor_tables.h>
+#include "idt.h"
+#include "isr.h"
+#include "descriptor_tables.h"
 
 // Lets us access our ASM functions from our C code.
 extern void idt_flush(uint32_t idt_pointer);

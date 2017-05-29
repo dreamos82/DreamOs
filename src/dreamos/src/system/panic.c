@@ -20,10 +20,9 @@
 // Based on JamesM's kernel developement tutorials.
 //
 
-#include <panic.h>
-#include <elf.h>
-#include <stdio.h>
-#include <stdint.h>
+#include "panic.h"
+#include "elf.h"
+#include "stdio.h"
 
 static void print_stack_trace();
 

@@ -23,12 +23,10 @@
  * first version: 16/06/2009
  */
 
-#include <mouse.h>
-#include <video.h>
-#include <port_io.h>
-#include <isr.h>
-#include <debug.h>
-#include <language.h>
+#include "mouse.h"
+#include "video.h"
+#include "port_io.h"
+#include "isr.h"
 
 static uint8_t mouse_cycle = 0;
 static int8_t mouse_bytes[3];

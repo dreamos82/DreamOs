@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <stdint.h>
+#include "stdint.h"
 
 typedef struct mutex_t
 {

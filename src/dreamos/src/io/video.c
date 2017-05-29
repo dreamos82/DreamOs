@@ -25,10 +25,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <video.h>
-#include <debug.h>
-#include <stdio.h>
-#include <stdbool.h>
+#include "video.h"
+#include "debug.h"
+#include "stdbool.h"
 
 #define SCREEN_HEIGHT   25
 #define SCREEN_WIDTH    80

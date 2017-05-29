@@ -31,11 +31,10 @@
 // SUCH DAMAGE.
 // 
 
-#ifndef STRING_H
-#define STRING_H
+#pragma once
 
-#include <stddef.h>
-#include <list.h>
+#include "stddef.h"
+#include "list.h"
 
 char * strncpy(char * dest, const char * source, size_t n);
 
@@ -150,5 +149,3 @@ void int_to_str(char * buffer, unsigned int num, unsigned int base);
 void _knntos(char *, int, int);
 
 char * replace_char(char * str, char find, char replace);
-
-#endif

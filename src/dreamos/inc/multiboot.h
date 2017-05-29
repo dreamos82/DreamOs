@@ -17,8 +17,8 @@
 
 /* Do not inc here in boot.S. */
 
-#ifndef _MULTIBOOT_H
-#define _MULTIBOOT_H
+#pragma once
+
 /* Types. */
 
 /* The Multiboot header. */
@@ -91,4 +91,3 @@ typedef struct memory_map
     unsigned long length_high;
     unsigned long type;
 } memory_map_t;
-#endif

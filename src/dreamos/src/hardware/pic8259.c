@@ -16,18 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <pic8259.h>
-#include <isr.h>
-#include <video.h>
-#include <port_io.h>
-#include <stdio.h>
-#include <keyboard.h>
-#include <timer.h>
-#include <bitops.h>
-#include <paging.h>
-#include <mouse.h>
-#include <language.h>
-#include <descriptor_tables.h>
+#include "pic8259.h"
+#include "isr.h"
+#include "video.h"
+#include "port_io.h"
+#include "stdio.h"
+#include "keyboard.h"
+#include "timer.h"
+#include "bitops.h"
+#include "paging.h"
+#include "mouse.h"
+#include "language.h"
+#include "descriptor_tables.h"
 #include "irqflags.h"
 
 byte_t master_cur_mask;
@@ -117,7 +117,8 @@ int pic8259_irq_enable(irq_type_t irq)
             cur_mask = inportb(MASTER_PORT_1);
             outportb(MASTER_PORT_1, (new_mask & cur_mask));
             master_cur_mask = (new_mask & cur_mask);
-        } else
+        }
+        else
         {
             irq -= 8;
             new_mask = ~(1 << irq);
@@ -140,7 +141,8 @@ int pic8259_irq_disable(irq_type_t irq)
             cur_mask = inportb(MASTER_PORT_1);
             cur_mask |= (1 << irq);
             outportb(MASTER_PORT_1, cur_mask & 0xFF);
-        } else
+        }
+        else
         {
             irq = irq - 8;
             cur_mask = inportb(SLAVE_PORT_1);
@@ -165,21 +167,23 @@ int pic8259_irq_get_current()
     return find_first_bit(cur_irq);
 }
 
-void pic8259_irq_install_handler(uint32_t irq_number, interrupt_handler_t handler)
+void
+pic8259_irq_install_handler(uint32_t irq_number, interrupt_handler_t handler)
 {
     if (irq_number >= IRQ_NUM)
     {
         return;
     }
 
-    irq_struct_t *tmpHandler;
+    irq_struct_t * tmpHandler;
     tmpHandler = shared_irq_handlers[irq_number];
     if (shared_irq_handlers[irq_number] == NULL)
     {
         shared_irq_handlers[irq_number] = (irq_struct_t *) kernel_alloc_page();
         shared_irq_handlers[irq_number]->next = NULL;
         shared_irq_handlers[irq_number]->handler = handler;
-    } else
+    }
+    else
     {
         while (tmpHandler->next != NULL)
         {

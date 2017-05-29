@@ -15,15 +15,15 @@
  * along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#ifndef _VFS_H
-#define _VFS_H
 
-#include <dirent.h>
-#include <stddef.h>
-#include <unistd.h>
+#pragma once
+
+#include "dirent.h"
+#include "stddef.h"
+#include "unistd.h"
 #include "stdint.h"
-#include <language.h>
-#include <stat.h>
+#include "language.h"
+#include "stat.h"
 
 #define MAX_MOUNTPOINT 10
 #define MAX_FD _SC_OPEN_MAX
@@ -124,6 +124,3 @@ int open_dir(char *);
 int get_absolute_path(char * path);
 
 void vfs_init();
-
-#endif
-

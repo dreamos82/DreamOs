@@ -16,20 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <vfs.h>
-#include <fcntl.h>
-#include <string.h>
-#include <debug.h>
+#include "vfs.h"
+#include "fcntl.h"
+#include "string.h"
+#include "debug.h"
 #include "kheap.h"
-
-#ifdef LEGACY
-
-#endif
-#ifdef LATEST
-#include <heap.h>
-#endif
-
-#include <shell.h>
+#include "shell.h"
 
 /**
   * @author Ivan Gualandri
@@ -84,7 +76,7 @@ int open(const char * path, int oflags, mode_t mode)
         return -1;
     }
     fd_list[current_fd].fs_spec_id =
-            mountpoint_list[mp_id].operations.open(new_path, oflags, mode);
+        mountpoint_list[mp_id].operations.open(new_path, oflags, mode);
     if (fd_list[current_fd].fs_spec_id == -1)
     {
         dbg_print("No file's Found\n");

@@ -22,8 +22,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _KERNEL_H
-#define _KERNEL_H
+#pragma once
 
 #include "multiboot.h"
 #include "stdint.h"
@@ -61,5 +60,3 @@ typedef struct register16_t
     uint16_t ss;
     uint16_t eflags;
 } register16_t;
-
-#endif

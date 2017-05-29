@@ -22,8 +22,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __CLOCK_H
-#define __CLOCK_H
+#pragma once
 
 /// Used to store time values.
 typedef unsigned int time_t;
@@ -71,5 +70,3 @@ char * get_month_lng();
 char * get_day_lng();
 
 time_t time(time_t * timer);
-
-#endif

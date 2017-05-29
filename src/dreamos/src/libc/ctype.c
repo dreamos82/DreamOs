@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include<ctype.h>
+#include "ctype.h"
 
 /// Distance from a uppercase character to the correspondent lowercase in ASCII.
 #define OFFSET 32

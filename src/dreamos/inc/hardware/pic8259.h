@@ -16,11 +16,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _PIC8259_H
-#define _PIC8259_H
+#pragma once
 
-#include <stddef.h>
-#include <idt.h>
+#include "stddef.h"
+#include "idt.h"
 
 #define MASTER_PORT     0x20
 #define SLAVE_PORT      0xA0
@@ -113,6 +112,5 @@ int pic8259_irq_get_current();
 /// @version 1.0
 /// @param irq_number   Number of IRQ to serve (from 0 to 16).
 /// @param handler      Function to add.
-void pic8259_irq_install_handler(uint32_t irq_number, interrupt_handler_t handler);
-
-#endif
+void
+pic8259_irq_install_handler(uint32_t irq_number, interrupt_handler_t handler);

@@ -2,9 +2,9 @@
 
 #pragma once
 
-#include <stdint.h>
-#include <gdt.h>
-#include <idt.h>
+#include "stdint.h"
+#include "gdt.h"
+#include "idt.h"
 
 /// Access flags, determines what ring this segment can be used in.
 typedef enum __attribute__ ((__packed__)) gdt_access_option_t

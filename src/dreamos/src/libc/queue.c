@@ -1,9 +1,9 @@
 /// @file   queue.c
 
-#include <queue.h>
-#include <kheap.h>
-#include <string.h>
-#include <stdio.h>
+#include "queue.h"
+#include "kheap.h"
+#include "string.h"
+#include "stdio.h"
 
 queue_t queue_create(size_t data_size)
 {

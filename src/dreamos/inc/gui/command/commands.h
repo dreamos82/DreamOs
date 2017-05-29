@@ -78,5 +78,6 @@ struct devel
 {
     char cmd_testname[CMD_LEN];
     char cmd_description[DESC_LEN];
+
     void (* func)(void);
 };

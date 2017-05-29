@@ -1,7 +1,6 @@
 /// @file   limits.h
 
-#ifndef _LIBC_LIMITS_H_
-#define _LIBC_LIMITS_H_
+#pragma once
 
 /// Number of bits in a `char'.
 #define CHAR_BIT    8
@@ -27,5 +26,3 @@
 /// Minimum and maximum values a `signed long int' can hold.
 #define LONG_MAX    2147483647L
 #define LONG_MIN    (-LONG_MAX - 1L)
-
-#endif

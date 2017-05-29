@@ -20,12 +20,11 @@
 // Based on JamesM's kernel developement tutorials.
 //
 
-#ifndef SCHEDULER_H
-#define SCHEDULER_H
+#pragma once
 
-#include <process.h>
-#include <stdint.h>
-#include <list.h>
+#include "process.h"
+#include "stdint.h"
+#include "list.h"
 
 #define MAX_THREADS 9
 
@@ -58,5 +57,3 @@ void switch_process(struct process_list ** current,
                     struct process_list * next);
 
 size_t get_active_process();
-
-#endif

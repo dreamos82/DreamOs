@@ -20,11 +20,10 @@
 // Based on JamesM's kernel developement tutorials.
 //
 
-#ifndef ELF_H
-#define ELF_H
+#pragma once
 
-#include <multiboot.h>
-#include <stdint.h>
+#include "multiboot.h"
+#include "stdint.h"
 
 #define ELF32_ST_TYPE(i) ((i)&0xf)
 
@@ -65,5 +64,3 @@ elf_t elf_from_multiboot(struct multiboot_info * mb);
 
 // Looks up a symbol by address.
 const char * elf_lookup_symbol(uint32_t addr, elf_t * elf);
-
-#endif

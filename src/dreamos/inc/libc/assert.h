@@ -2,9 +2,9 @@
 
 #pragma once
 
-#include <stdarg.h>
-#include <stdio.h>
-#include <panic.h>
+#include "stdarg.h"
+#include "stdio.h"
+#include "panic.h"
 
 static void __assert_fail(const char * assertion,
                           const char * file,

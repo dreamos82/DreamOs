@@ -21,9 +21,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef COMMON_H
-#define COMMON_H
+#pragma once
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
-
-#endif

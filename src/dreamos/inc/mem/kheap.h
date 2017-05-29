@@ -22,8 +22,8 @@
 
 #pragma once
 
-#include <stdint.h>
-#include <stddef.h>
+#include "stdint.h"
+#include "stddef.h"
 #include "chunk.h"
 
 #define HEAP_START 0xD0000000

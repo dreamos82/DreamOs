@@ -22,8 +22,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _UTSNAME_H
-#define _UTSNAME_H
+#pragma once
 
 #define SYS_LEN 257
 
@@ -37,5 +36,3 @@ typedef struct utsname_t
 } utsname_t;
 
 int uname(utsname_t *);
-
-#endif

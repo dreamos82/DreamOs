@@ -24,27 +24,22 @@
 
 #include "kernel.h"
 #include "version.h"
-
-#include <elf.h>
-
-#include <video.h>
-#include <pic8259.h>
-#include <cpuid.h>
-#include <stdio.h>
-#include <port_io.h>
-#include <paging.h>
-#include <language.h>
-#include <shell.h>
-#include <syscall.h>
-#include <kheap.h>
-#include <vfs.h>
-#include <initrd.h>
-#include <fdc.h>
-#include <process.h>
-#include <scheduler.h>
-#include <vm.h>
-#include <descriptor_tables.h>
-#include "debug.h"
+#include "video.h"
+#include "language.h"
+#include "elf.h"
+#include "syscall.h"
+#include "paging.h"
+#include "descriptor_tables.h"
+#include "pic8259.h"
+#include "vm.h"
+#include "kheap.h"
+#include "stdio.h"
+#include "cpuid.h"
+#include "vfs.h"
+#include "initrd.h"
+#include "scheduler.h"
+#include "fdc.h"
+#include "shell.h"
 
 char * module_start;
 unsigned int module_end;

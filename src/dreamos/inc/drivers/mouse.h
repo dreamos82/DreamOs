@@ -23,8 +23,7 @@
   * first version: 16/06/2009
   */
 
-#ifndef _MOUSE_H_
-#define _MOUSE_H_
+#pragma once
 
 /// The mouse starts sending automatic packets when the mouse moves or is
 /// clicked.
@@ -62,5 +61,3 @@ unsigned char mouse_read();
 
 /// @brief The mouse handler.
 void mouse_isr(void);
-
-#endif /* _MOUSE_H_ */

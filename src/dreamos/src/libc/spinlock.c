@@ -1,6 +1,6 @@
 /// @file   spinlock.c
 
-#include <spinlock.h>
+#include "spinlock.h"
 
 bool_t spinlock_init(spinlock_t * spinlock)
 {

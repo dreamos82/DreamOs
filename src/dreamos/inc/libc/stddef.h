@@ -22,8 +22,7 @@
  * Contiene le definizioni di alcuni tipi di dato :D
  */
 
-#ifndef __STDDEF__H
-#define __STDDEF__H
+#pragma once
 
 #ifndef NULL
 #define NULL ((void*)0)
@@ -59,5 +58,3 @@ typedef unsigned int off_t;
 typedef unsigned int mode_t;
 
 typedef int pid_t;
-
-#endif

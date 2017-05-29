@@ -20,11 +20,11 @@
 // Based on JamesM's kernel developement tutorials.
 //
 
-#include <process.h>
-#include <kheap.h>
-#include <scheduler.h>
-#include <string.h>
-#include <debug.h>
+#include "process.h"
+#include "kheap.h"
+#include "scheduler.h"
+#include "string.h"
+#include "debug.h"
 
 #define DEFAULT_STACK_SIZE 0x100000
 

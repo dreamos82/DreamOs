@@ -22,9 +22,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-
-#include <debug.h>
-#include <stdio.h>
+#include "debug.h"
+#include "stdio.h"
 
 #define SERIAL_BOCHS    (0x00E9)
 #define SERIAL_COM1     (0x03F8)

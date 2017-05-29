@@ -1,7 +1,7 @@
 /// @file   generic_tree.c
 
-#include <generic_tree.h>
-#include <kheap.h>
+#include "generic_tree.h"
+#include "kheap.h"
 
 gtree_t * tree_create()
 {

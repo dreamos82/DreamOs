@@ -16,13 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef INITRD_H
-#define INITRD_H
+#pragma once
 
-#include <dirent.h>
-#include <unistd.h>
-#include <sys/stat.h>
-#include <stdint.h>
+#include "dirent.h"
+#include "unistd.h"
+#include "stat.h"
+#include "stdint.h"
 
 #define FILENAME_LENGTH         64
 #define MAX_FILES               32
@@ -109,5 +108,3 @@ ssize_t initrd_write(int fildes, const void * buf, size_t nbyte);
 /// @brief Closes the given file.
 /// @param fildes The file descriptor of the file.
 int initrd_close(int fildes);
-
-#endif

@@ -22,9 +22,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <sys/utsname.h>
-#include <string.h>
-#include <version.h>
+#include "utsname.h"
+#include "string.h"
+#include "version.h"
 
 int uname(utsname_t * os_infos)
 {

@@ -1,7 +1,7 @@
 /// @file   list.c
 
-#include <list.h>
-#include <kheap.h>
+#include "list.h"
+#include "kheap.h"
 
 list_t * list_create()
 {

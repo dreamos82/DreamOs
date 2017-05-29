@@ -23,11 +23,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _KEYBOARD_H_
-#define _KEYBOARD_H_
+#pragma once
 
-#include <stdbool.h>
-#include <stdint.h>
+#include "stdbool.h"
+#include "stdint.h"
 
 #define BUFSIZE         256
 
@@ -66,5 +65,3 @@ bool_t keyboard_is_ctrl_pressed();
 
 /// @brief Get shift status.
 bool_t keyboard_is_shifted();
-
-#endif

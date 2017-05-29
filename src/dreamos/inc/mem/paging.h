@@ -20,12 +20,11 @@
 // Based on JamesM's kernel developement tutorials.
 //
 
-#ifndef PAGING_H
-#define PAGING_H
+#pragma once
 
-#include <multiboot.h>
-#include <stdint.h>
-#include <stdbool.h>
+#include "multiboot.h"
+#include "stdint.h"
+#include "stdbool.h"
 #include "kernel.h"
 
 #define PAGING_STACK_ADDR 0xFF000000
@@ -50,5 +49,3 @@ void kernel_free_page(uint32_t p);
 void kernel_map_memory(struct multiboot_info * info);
 
 void page_fault_handler(register_t * reg);
-
-#endif

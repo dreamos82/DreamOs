@@ -16,10 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _FCNTL_H
-#define _FCNTL_H
+#pragma once
 
-#include <stddef.h>
+#include "stddef.h"
 
 #define O_RDONLY    0x00
 #define O_WRONLY    0x01
@@ -34,5 +33,3 @@ int creat(const char *, mode_t);
 int fcntl(int, int, ...);
 
 int open(const char * path, int oflags, mode_t mode);
-
-#endif

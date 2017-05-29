@@ -16,10 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef __UNISTD_H
-#define __UNISTD_H
+#pragma once
 
-#include <stddef.h>
+#include "stddef.h"
 
 #define _SC_OPEN_MAX 4
 
@@ -28,6 +27,3 @@ ssize_t read(int, void *, size_t);
 ssize_t write(int fildes, const void * buf, size_t nbyte);
 
 int close(int);
-
-
-#endif

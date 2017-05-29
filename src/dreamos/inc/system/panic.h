@@ -20,9 +20,6 @@
 // Based on JamesM's kernel developement tutorials.
 //
 
-#ifndef PANIC_H
-#define PANIC_H
+#pragma once
 
 void kernel_panic(const char * msg);
-
-#endif

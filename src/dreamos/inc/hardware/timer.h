@@ -16,8 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _8253_H
-#define _8253_H
+#pragma once
 
 #define PIT_COMREG      0x43
 #define PIT_DATAREG0    0x40
@@ -35,5 +34,3 @@ void timer_handler();
 void timer_install();
 
 void sleep(const unsigned int);
-
-#endif

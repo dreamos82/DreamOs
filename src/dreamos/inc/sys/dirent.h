@@ -16,10 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _DIRENT_H
-#define _DIRENT_H
+#pragma once
 
-#include <stddef.h>
+#include "stddef.h"
 
 #define NAME_MAX 30
 
@@ -60,5 +59,3 @@ void seekdir(DIR *, long int);
 long int telldir(DIR *);
 
 DIR * fake_opendir(const char *);
-
-#endif

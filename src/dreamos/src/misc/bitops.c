@@ -16,8 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <video.h>
-#include <bitops.h>
+#include "video.h"
+#include "bitops.h"
 
 int find_first_bit(unsigned short int irq_mask)
 {

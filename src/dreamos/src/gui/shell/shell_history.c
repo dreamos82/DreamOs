@@ -2,7 +2,6 @@
 /// @date   apr 01 2017
 
 #include "shell_history.h"
-#include "keyboard.h"
 #include "string.h"
 #include "video.h"
 #include "stdio.h"

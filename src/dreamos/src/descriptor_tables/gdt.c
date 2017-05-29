@@ -22,8 +22,8 @@
  * Contiene le definizioni di alcuni tipi di dato :D
  */
 
-#include <gdt.h>
-#include <descriptor_tables.h>
+#include "gdt.h"
+#include "descriptor_tables.h"
 
 // Lets us access our ASM functions from our C code.
 extern void gdt_flush(uint32_t idt_pointer);

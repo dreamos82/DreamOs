@@ -1,8 +1,10 @@
-#ifndef _DEBUG_H
-#define _DEBUG_H
+/// @file debug.h
+/// @brief Contains debugging primitives.
 
-#include <port_io.h>
-#include <kernel.h>
+#pragma once
+
+#include "port_io.h"
+#include "kernel.h"
 
 /******************************
  *		Debug Macros
@@ -75,5 +77,3 @@ void dbg_print(const char * msg, ...);
 void print_reg(register_t * reg);
 
 void print_reg16(register16_t * reg);
-
-#endif /* ! _DEBUG_H */

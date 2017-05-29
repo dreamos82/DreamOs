@@ -16,10 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <unistd.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <vfs.h>
+#include "unistd.h"
+#include "stdio.h"
+#include "fcntl.h"
+#include "vfs.h"
 
 //file_descriptor_t fd_list[_SC_OPEN_MAX];
 

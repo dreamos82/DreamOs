@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include <stdbool.h>
-#include <stddef.h>
+#include "stdbool.h"
+#include "stddef.h"
 
 typedef struct queue_node_t
 {

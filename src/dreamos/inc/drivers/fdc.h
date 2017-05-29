@@ -23,6 +23,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#pragma once
+
 enum FdcRegisters
 {
     STATUS_REGISTER_A = 0x3F0, // read-only

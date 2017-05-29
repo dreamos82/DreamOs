@@ -20,9 +20,9 @@
 // Based on JamesM's kernel developement tutorials.
 //
 
-#include <paging.h>
-#include <vm.h>
-#include <panic.h>
+#include "paging.h"
+#include "vm.h"
+#include "panic.h"
 #include "debug.h"
 #include "video.h"
 #include "irqflags.h"

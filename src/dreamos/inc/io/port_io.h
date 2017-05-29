@@ -23,10 +23,9 @@
  *  Byte I/O on ports prototypes
  ****************************************************************************/
 
-#ifndef _IO_H
-#define _IO_H
+#pragma once
 
-#include <stdint.h>
+#include "stdint.h"
 
 /// @brief Used for reading from the I/O ports.
 /// @param port The input port.
@@ -57,5 +56,3 @@ void outports(const uint16_t _port, const uint16_t _data);
 /// @param port The output port.
 /// @param data The data to write.
 void outportl(const uint16_t _port, const uint32_t _data);
-
-#endif

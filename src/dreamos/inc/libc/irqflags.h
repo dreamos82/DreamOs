@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include <stddef.h>
-#include <stdint.h>
+#include "stddef.h"
+#include "stdint.h"
 
 /// @brief Enable IRQs.
 inline static void irq_enable()

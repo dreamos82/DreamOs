@@ -31,16 +31,12 @@
 // SUCH DAMAGE.
 //
 
-#include <string.h>
-#include <ctype.h>
-#include <kheap.h>
+#include "string.h"
+#include "ctype.h"
+#include "kheap.h"
 #include "stdio.h"
 
 #define KERNEL 1
-
-#ifndef KERNEL
-#include <ctype.h>
-#endif
 
 char * strncpy(char * dest, const char * source, size_t n)
 {
@@ -471,7 +467,7 @@ void * memcpy(void * _dst, const void * _src, size_t num)
 void * memccpy(void * dst, const void * src, int c, size_t n)
 {
     while (n && (*((char *) (dst = (char *) dst + 1) - 1) =
-                         *((char *) (src = (char *) src + 1) - 1)) != (char) c)
+                     *((char *) (src = (char *) src + 1) - 1)) != (char) c)
         n--;
 
     return n ? dst : NULL;

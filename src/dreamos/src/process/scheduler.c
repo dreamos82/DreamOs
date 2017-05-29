@@ -20,10 +20,9 @@
 // Based on JamesM's kernel developement tutorials.
 //
 
-#include <scheduler.h>
-#include <string.h>
-#include <kheap.h>
-#include <debug.h>
+#include "scheduler.h"
+#include "string.h"
+#include "kheap.h"
 
 process_list_t * ready_queue = NULL;
 process_list_t * current_process = NULL;

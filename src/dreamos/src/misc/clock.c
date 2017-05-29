@@ -20,11 +20,11 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#include <clock.h>
-#include <port_io.h>
-#include <language.h>
-#include <stddef.h>
-#include <limits.h>
+
+#include "clock.h"
+#include "port_io.h"
+#include "language.h"
+#include "stddef.h"
 
 time_t get_second()
 {

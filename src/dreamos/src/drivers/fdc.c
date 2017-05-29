@@ -23,11 +23,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <fdc.h>
-#include <video.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <port_io.h>
+#include "fdc.h"
+#include "video.h"
+#include "port_io.h"
 
 void fdc_disable_motor()
 {

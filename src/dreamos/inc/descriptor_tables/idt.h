@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <stdint.h>
+#include "stdint.h"
 
 /// The maximum dimension of the IDT.
 #define IDT_SIZE 256

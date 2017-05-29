@@ -20,8 +20,8 @@
 // Based on JamesM's kernel developement tutorials.
 //
 
-#include <elf.h>
-#include <string.h>
+#include "elf.h"
+#include "string.h"
 
 elf_t elf_from_multiboot(struct multiboot_info * mb)
 {

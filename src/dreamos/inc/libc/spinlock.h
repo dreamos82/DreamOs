@@ -2,11 +2,11 @@
 
 #pragma once
 
-#include <stdatomic.h>
-#include <stddef.h>
-#include <scheduler.h>
-#include <debug.h>
-#include <irqflags.h>
+#include "stdatomic.h"
+#include "stddef.h"
+#include "scheduler.h"
+#include "debug.h"
+#include "irqflags.h"
 
 /// @brief Spinlock structure.
 typedef struct spinlock_t

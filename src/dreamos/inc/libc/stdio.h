@@ -23,11 +23,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _STDIO_H
-#define _STDIO_H
+#pragma once
 
-#include <stdarg.h>
-#include <stddef.h>
+#include "stdarg.h"
+#include "stddef.h"
 
 #define MAX_DIGITS_IN_INTEGER 11
 
@@ -64,5 +63,3 @@ int vsprintf(char * str, const char * fmt, va_list args);
 
 /// @brief Write formatted output to the string str.
 int sprintf(char * str, const char * fmt, ...);
-
-#endif

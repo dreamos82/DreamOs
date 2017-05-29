@@ -1,7 +1,7 @@
 /// @file   mutex.c
 
-#include <mutex.h>
-#include <debug.h>
+#include "mutex.h"
+#include "debug.h"
 
 void mutex_lock(mutex_t * mutex,
                 uint32_t owner)

@@ -1,7 +1,6 @@
 /// @file   descriptor_tables.c
 
-#include <descriptor_tables.h>
-#include "pic8259.h"
+#include "descriptor_tables.h"
 
 interrupt_handler_t IntTable[IDT_SIZE];
 

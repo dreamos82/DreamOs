@@ -16,12 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <shell_login.h>
-#include <stdio.h>
-#include <vfs.h>
-#include <fcntl.h>
-#include <string.h>
-#include <debug.h>
+#include "shell_login.h"
+#include "stdio.h"
+#include "vfs.h"
+#include "fcntl.h"
+#include "string.h"
+#include "debug.h"
 #include "video.h"
 #include "keyboard.h"
 

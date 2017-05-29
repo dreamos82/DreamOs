@@ -21,9 +21,8 @@
  * Email: syn.shainer@gmail.com
  */
 
-#include <cpuid.h>
-#include <kheap.h>
-#include <string.h>
+#include "cpuid.h"
+#include "string.h"
 
 void get_cpuid(cpuinfo_t * cpuinfo)
 {

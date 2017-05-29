@@ -20,14 +20,12 @@
 // Based on JamesM's kernel developement tutorials.
 //
 
-#include <vm.h>
-#include <paging.h>
-#include <idt.h>
-#include <isr.h>
-#include <panic.h>
-#include <string.h>
-#include <stdio.h>
-#include <descriptor_tables.h>
+#include "vm.h"
+#include "paging.h"
+#include "idt.h"
+#include "isr.h"
+#include "string.h"
+#include "descriptor_tables.h"
 
 uint32_t * page_directory = (uint32_t *) PAGE_DIR_VIRTUAL_ADDR;
 uint32_t * page_tables = (uint32_t *) PAGE_TABLE_VIRTUAL_ADDR;
@@ -102,7 +100,7 @@ void map(uint32_t va, uint32_t pa, uint32_t flags)
     {
         // The page table holding this page has not been created yet.
         page_directory[pt_idx] =
-                kernel_alloc_page() | PAGE_PRESENT | PAGE_WRITE;
+            kernel_alloc_page() | PAGE_PRESENT | PAGE_WRITE;
         init_area(&page_tables[pt_idx * 1024]);
     }
 

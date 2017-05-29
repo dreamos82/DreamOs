@@ -22,10 +22,9 @@
  * Contiene le definizioni di alcuni tipi di dato :D
  */
 
-#ifndef _HANDLERS_H
-#define _HANDLERS_H
+#pragma once
 
-#include <pic8259.h>
+#include "pic8259.h"
 
 #define DIVIDE_ERROR            0
 #define DEBUG_EXC               1
@@ -111,5 +110,3 @@ extern void global_exception(int n, int error);
 extern void interrupt_handler(unsigned int esp);
 
 extern void reserved_exception();
-
-#endif

@@ -15,21 +15,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _LANGUAGE_H_
-#define _LANGUAGE_H_
+#pragma once
 
 #ifdef IT
 
-    #include <it.h>
+    #include "it.h"
 
 #elif EN
 
-    #include <en.h>
+    #include "en.h"
 
 #else
 
-    #include <en.h>
-
-#endif
+    #include "en.h"
 
 #endif

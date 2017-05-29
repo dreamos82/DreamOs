@@ -16,19 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <dirent.h>
-#include <string.h>
-#include <vfs.h>
+#include "dirent.h"
+#include "string.h"
+#include "vfs.h"
 #include "debug.h"
-
-#ifdef LEGACY
-
-#include <kheap.h>
-
-#endif
-#ifdef LATEST
-#include <heap.h>
-#endif
+#include "kheap.h"
 
 /**
   * @author Ivan Gualandri

@@ -22,10 +22,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _VIDEO_H
-#define _VIDEO_H
+#pragma once
 
-#include <stdint.h>
+#include "stdint.h"
 
 typedef enum video_color_t
 {
@@ -130,5 +129,3 @@ void video_print_ok();
 
 /// @brief Prints [FAIL] at the current row and column 60.
 void video_print_fail();
-
-#endif /* _VIDEO_H */

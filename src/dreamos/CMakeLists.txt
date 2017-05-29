@@ -8,8 +8,8 @@ set(PROJECT_NAME DreamOs)
 
 # ------------------------------------------------------------------------------
 # Add the BOCHS debug option.
-option(ENABLE_BOCHS_DEBUG   "Enable the bosh debug" OFF)
-option(ENABLE_QEMU_DEBUG    "Enable the qemu debug" OFF)
+option(ENABLE_BOCHS_DEBUG "Enable the bosh debug" OFF)
+option(ENABLE_QEMU_DEBUG "Enable the qemu debug" OFF)
 
 # ------------------------------------------------------------------------------
 # Add the memory option.

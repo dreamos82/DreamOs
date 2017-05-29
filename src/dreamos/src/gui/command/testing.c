@@ -1,22 +1,19 @@
 #include "testing.h"
 #include "commands.h"
-#include <kernel.h>
-#include <video.h>
-#include <stdio.h>
-#include <string.h>
-#include <keyboard.h>
-#include <vfs.h>
-#include <fcntl.h>
-#include <initrd.h>
-#include <process.h>
-#include <vm.h>
-#include <timer.h>
-#include <queue.h>
-#include <mutex.h>
-#include <scheduler.h>
-#include <spinlock.h>
+#include "kernel.h"
+#include "video.h"
+#include "stdio.h"
+#include "string.h"
+#include "keyboard.h"
+#include "vfs.h"
+#include "fcntl.h"
+#include "initrd.h"
+#include "process.h"
+#include "vm.h"
+#include "timer.h"
+#include "queue.h"
+#include "spinlock.h"
 #include "kheap.h"
-#include "shell_login.h"
 
 char * module_start;
 file_descriptor_t fd_list[_SC_OPEN_MAX];
@@ -27,7 +24,7 @@ void try_strtok()
     char * p;
 
     printf("Stringa completa: %s\n"
-                   "Stringa spezzata: \n", s);
+               "Stringa spezzata: \n", s);
 
     p = strtok(s, " ");
     while (p != NULL)
@@ -82,8 +79,8 @@ void do_fault()
     prova = (int *) 0xa0000000;
     *prova = 10;
     printf(
-            "Contenuto della locazione 0xa0000000 dopo l'intervento dell'handler: %d\n",
-            *prova);
+        "Contenuto della locazione 0xa0000000 dopo l'intervento dell'handler: %d\n",
+        *prova);
 }
 
 void try_printmem(void)
@@ -180,15 +177,15 @@ void try_syscall()
     for (uint32_t c = 'A'; c <= 'Z'; c++)
     {
         __asm__("movl   %0, %%ecx\n"
-                "movl   $1, %%eax\n"
-                "int    $80\n" : : "r"(c));
+            "movl   $1, %%eax\n"
+            "int    $80\n" : : "r"(c));
     }
     printf("\n\n");
     printf("-- SystemCall Test 2 --\n");
     char * test_string = "This is a test string!\n";
     __asm__("movl   %0, %%ecx\n"
-            "movl   $2, %%eax\n"
-            "int    $80\n" : : "r"(test_string));
+        "movl   $2, %%eax\n"
+        "int    $80\n" : : "r"(test_string));
     printf("\n\n");
 }
 

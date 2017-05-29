@@ -20,12 +20,11 @@
 // Based on JamesM's kernel developement tutorials.
 //
 
-#ifndef THREAD_H
-#define THREAD_H
+#pragma once
 
-#include <stdint.h>
-#include <stddef.h>
-#include <list.h>
+#include "stdint.h"
+#include "stddef.h"
+#include "list.h"
 
 struct process_list;
 
@@ -86,8 +85,6 @@ typedef struct process
 
 // If stack is 0 a default one is created
 process_t * kernel_create_process(int (* fn)(void *),
-                                char * name,
-                                void * arg,
-                                uint32_t * stack);
-
-#endif
+                                  char * name,
+                                  void * arg,
+                                  uint32_t * stack);

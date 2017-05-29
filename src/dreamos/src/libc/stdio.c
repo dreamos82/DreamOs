@@ -23,11 +23,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <stdio.h>
-#include <video.h>
-#include <ctype.h>
-#include <string.h>
-#include <keyboard.h>
+#include "stdio.h"
+#include "video.h"
+#include "ctype.h"
+#include "string.h"
+#include "keyboard.h"
 
 #define LEFT    1
 #define RIGHT   0

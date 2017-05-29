@@ -20,10 +20,9 @@
 // Based on JamesM's kernel developement tutorials.
 //
 
-#ifndef VM_H
-#define VM_H
+#pragma once
 
-#include <stdint.h>
+#include "stdint.h"
 
 #define PAGE_SIZE 0x1000
 
@@ -69,5 +68,3 @@ char get_mapping(uint32_t virtual_address, uint32_t * physical_address);
 /// @brief Enable paging, turn off PSE bit first as it was turned on by the
 /// assembly header when kernel was loading. Then enable PG Bit in cr0.
 void kernel_enable_paging();
-
-#endif

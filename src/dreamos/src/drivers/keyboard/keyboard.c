@@ -23,12 +23,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <keyboard.h>
-#include <video.h>
-#include <stdio.h>
-#include <port_io.h>
-#include <pic8259.h>
-#include <dreamos/inc/misc/debug.h>
+#include "keyboard.h"
+#include "video.h"
+#include "stdio.h"
+#include "port_io.h"
+#include "pic8259.h"
 #include "shell_history.h"
 #include "keymap.h"
 #include "bitops.h"

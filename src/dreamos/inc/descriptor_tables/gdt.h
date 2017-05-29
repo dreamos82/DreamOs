@@ -21,9 +21,10 @@
  * Prima versione: 27/10/2003
  * Contiene le definizioni di alcuni tipi di dato :D
  */
+
 #pragma once
 
-#include <stdint.h>
+#include "stdint.h"
 
 /// The maximum dimension of the GDT.
 #define GDT_SIZE 10

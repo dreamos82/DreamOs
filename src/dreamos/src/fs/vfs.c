@@ -16,22 +16,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <video.h>
-#include <vfs.h>
+#include "video.h"
+#include "vfs.h"
 #include "debug.h"
-
-#ifdef LEGACY
-
-#include <kheap.h>
-
-#endif
-#ifdef LATEST
-#include <heap.h>
-#endif
-
-#include <string.h>
-#include <initrd.h>
-#include <shell.h>
+#include "kheap.h"
+#include "string.h"
+#include "initrd.h"
+#include "shell.h"
 
 struct mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 file_descriptor_t fd_list[_SC_OPEN_MAX];

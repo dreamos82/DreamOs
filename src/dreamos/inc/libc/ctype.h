@@ -21,8 +21,7 @@
  * Data: 26 gennaio 2006
  */
 
-#ifndef __CTYPE_H
-#define __CTYPE_H
+#pragma once
 
 /// @brief Check if the given value is a digit.
 int isdigit(int c);
@@ -50,5 +49,3 @@ int toupper(int c);
 
 /// @brief Check if the given value is a whitespace.
 int isspace(int c);
-
-#endif

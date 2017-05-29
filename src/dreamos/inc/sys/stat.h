@@ -16,10 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _STAT_H
-#define _STAT_H
+#pragma once
 
-#include <stddef.h>
+#include "stddef.h"
 #include "clock.h"
 
 /// @brief Data structure which contains information about a file.
@@ -50,5 +49,3 @@ typedef struct stat_t
 /// @param buf  A structure where data about the file will be stored.
 /// @return Returns a negative value on failure.
 int stat(const char * path, stat_t * buf);
-
-#endif

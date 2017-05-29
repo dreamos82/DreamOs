@@ -21,11 +21,10 @@
  * June 2007
  */
 
-#ifndef _CPUID_H
-#define _CPUID_H
+#pragma once
 
-#include <stddef.h>
-#include <stdint.h>
+#include "stddef.h"
+#include "stdint.h"
 #include "kernel.h"
 
 #define ECX_FLAGS_SIZE 24
@@ -82,6 +81,3 @@ char * cpuid_brand_index(register_t *);
 
 /// @brief Brand string is contained in EAX, EBX, ECX and EDX.
 char * cpuid_brand_string(register_t *);
-
-#endif
-

@@ -16,10 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <vfs.h>
-#include <stdio.h>
-#include <shell.h>
-#include <string.h>
+#include "vfs.h"
+#include "stdio.h"
+#include "shell.h"
+#include "string.h"
 #include "kheap.h"
 
 int stat(const char * path, stat_t * buf)

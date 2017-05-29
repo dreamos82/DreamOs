@@ -21,11 +21,11 @@
  * Prima versione: 19/05/2007
  */
 
-#include <isr.h>
-#include <port_io.h>
-#include <scheduler.h>
-#include <descriptor_tables.h>
-#include <debug.h>
+#include "isr.h"
+#include "port_io.h"
+#include "scheduler.h"
+#include "descriptor_tables.h"
+#include "debug.h"
 #include "stdio.h"
 #include "irqflags.h"
 
