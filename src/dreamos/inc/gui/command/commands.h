@@ -26,9 +26,9 @@
 
 #define MAX_TEST 15
 
-void aalogo(int argc, char ** argv);
+void print_logo();
 
-void logo(int argc, char ** argv);
+void aalogo(int argc, char ** argv);
 
 void help(int argc, char ** argv);
 

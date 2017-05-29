@@ -19,9 +19,27 @@
  * Author: Osiris
  * osiris@katamail.com
  */
+#pragma once
 
-#define VERSION "0"
-#define PATCHLEVEL "3"
-#define EXTRAVERSION "-trunk"
-#define NAME "DreamOS"
-#define REV_NUM "-hfab65e5"
+/// The name of the operating system
+#define OS_NAME "DreamOS"
+
+/// The site of the operating system
+#define OS_SITEURL "www.dreamos.org"
+
+/// Major version of the operating system
+#define OS_MAJOR_VERSION 0
+
+/// Minor version of the operating system
+#define OS_MINOR_VERSION 3
+
+/// Micro version of the operating system
+#define OS_MICRO_VERSION 0
+
+#define OS_STR_HELPER(x) #x
+#define OS_STR(x) OS_STR_HELPER(x)
+/// Complete version of the operating system
+#define OS_VERSION \
+	OS_STR(OS_MAJOR_VERSION) "." \
+	OS_STR(OS_MINOR_VERSION) "." \
+	OS_STR(OS_MICRO_VERSION)

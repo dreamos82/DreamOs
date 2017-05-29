@@ -22,8 +22,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "kernel.h"
+#include "version.h"
+
 #include <elf.h>
-#include <kernel.h>
+
 #include <video.h>
 #include <pic8259.h>
 #include <cpuid.h>
@@ -43,14 +46,6 @@
 #include <descriptor_tables.h>
 #include "debug.h"
 
-#ifdef BOCHS_DEBUG
-
-#include <debug.h>
-
-#endif
-
-unsigned int * current_page_table;
-extern unsigned int end;
 char * module_start;
 unsigned int module_end;
 elf_t kernel_elf;
@@ -63,11 +58,11 @@ int kmain(multiboot_info_t * boot_informations)
     // -------------------------------------------------------------------------
     // Show DreamOs version.
     video_set_color(BRIGHT_GREEN);
-    video_puts(DREAMOS_VER);
+    video_puts(OS_NAME" "OS_VERSION);
     video_set_color(WHITE);
     video_puts(LNG_SITE);
     video_set_color(BRIGHT_BLUE);
-    video_puts(SITEURL);
+    video_puts(OS_SITEURL);
     video_puts("\n");
     video_set_color(WHITE);
     video_puts("\n");

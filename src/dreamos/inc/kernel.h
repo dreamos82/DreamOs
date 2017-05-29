@@ -28,15 +28,10 @@
 #include "multiboot.h"
 #include "stdint.h"
 
-#define asmlinkage __attribute__((regparm(0)))
-
 extern char * module_start;
 extern unsigned int module_end;
 
 int kmain(multiboot_info_t * boot_informations);
-
-#define DREAMOS_VER "DreamOS ver 0.3 - trunk"
-#define SITEURL "www.dreamos.org"
 
 // Register structs for interrupt/exception
 typedef struct register_t

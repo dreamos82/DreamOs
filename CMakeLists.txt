@@ -109,7 +109,6 @@ add_custom_target(qemu
                                  -k it
                                  -kernel src/dreamos/dreamos.img
         DEPENDS DreamOs
-        DEPENDS grub
         DEPENDS initfs
         )
 

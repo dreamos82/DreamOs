@@ -194,7 +194,7 @@ add_custom_command(
         POST_BUILD
         COMMAND nasm
         -f elf ${CMAKE_CURRENT_SOURCE_DIR}/boot.s
-        -o ${CMAKE_CURRENT_BINARY_DIR}/bl.img
+        -o ${CMAKE_CURRENT_BINARY_DIR}/bootloader.img
 )
 
 add_custom_command(
@@ -205,7 +205,7 @@ add_custom_command(
         --oformat elf32-i386
         --output=${CMAKE_CURRENT_BINARY_DIR}/kernel.bin
         --script=${CMAKE_CURRENT_SOURCE_DIR}/kernel.lds
-        ${CMAKE_CURRENT_BINARY_DIR}/bl.img
+        ${CMAKE_CURRENT_BINARY_DIR}/bootloader.img
         ${CMAKE_CURRENT_BINARY_DIR}/libDreamOs.a
         -Ttext 0x100000
         -Map ${CMAKE_CURRENT_BINARY_DIR}/kernel.map
