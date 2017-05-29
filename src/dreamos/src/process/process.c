@@ -45,7 +45,9 @@ process_t * kernel_create_process(int (* fn)(void *),
                                   void * arg,
                                   uint32_t * stack)
 {
-    if (get_active_process() + 1 > MAX_THREADS)
+    // Checks if by activating a new process we exceed the number of maximum
+    // active processes
+    if (get_active_process() + 1 > MAX_PROCESSES)
     {
         return NULL;
     }

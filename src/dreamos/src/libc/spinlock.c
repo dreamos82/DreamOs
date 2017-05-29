@@ -11,7 +11,7 @@ bool_t spinlock_init(spinlock_t * spinlock)
     dbg_print("Initialize spinlock...\n");
     atomic_set(&spinlock->queue, 0);
     atomic_set(&spinlock->dequeue, 1);
-    spinlock->owner = MAX_THREADS;
+    spinlock->owner = MAX_PROCESSES;
     spinlock->counter = 0;
     return true;
 }
@@ -22,7 +22,7 @@ bool_t spinlock_destroy(spinlock_t * spinlock)
     {
         return false;
     }
-    spinlock->owner = MAX_THREADS;
+    spinlock->owner = MAX_PROCESSES;
     spinlock->counter = 0;
     return true;
 }
@@ -62,7 +62,7 @@ bool_t spinlock_unlock(spinlock_t * spinlock)
     spinlock->counter--;
     if (!spinlock->counter)
     {
-        spinlock->owner = MAX_THREADS;
+        spinlock->owner = MAX_PROCESSES;
         atomic_inc(&spinlock->dequeue);
     }
     process_t * current_process = kernel_get_current_process();

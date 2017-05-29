@@ -26,9 +26,7 @@
 #include "stdint.h"
 #include "list.h"
 
-#define MAX_THREADS 9
-
-#define LLIST 0
+#define MAX_PROCESSES 9
 
 typedef struct process_list
 {

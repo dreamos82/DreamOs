@@ -29,7 +29,7 @@
 
 #define SYSCALL_NUMBER 3
 
-/// @brief The dignature of a function call.
+/// @brief The signature of a function call.
 typedef void (* SystemCall)();
 
 /// @brief The list of function call.
