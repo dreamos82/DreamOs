@@ -86,34 +86,54 @@ void split_chunk(chunk_t * chunk, uint32_t len)
 
 void glue_chunk(chunk_t * chunk)
 {
-    dbg_print("Glue chunk   %p;\n", chunk);
-    chunk_t * next = chunk->next;
-    if (next)
-    {
-        if (!next->used)
-        {
-            chunk->size = chunk->size + next->size;
-            if (next->next)
-            {
-                next->next->prev = chunk;
-            }
-            chunk->next = next->next;
-        }
-    }
+    // -------------------------------------------------------------------------
+    // Glue previous free chunks.
     chunk_t * prev = chunk->prev;
     if (prev)
     {
         if (!prev->used)
         {
-            prev->size = prev->size + chunk->size;
-            prev->next = chunk->next;
-            if (chunk->next)
+            uint32_t size = 0;
+            chunk_t * it = chunk;
+            while (it)
             {
-                chunk->next->prev = prev;
+                size += it->size;
+                if (it->prev == NULL) break;
+                if (it->prev->used) break;
+                it = it->prev;
             }
-            chunk = prev;
+            if (it)
+            {
+                it->next = chunk->next;
+                it->size = size;
+                chunk = it;
+            }
         }
     }
+    // -------------------------------------------------------------------------
+    // Glue subsequents free chunks.
+    chunk_t * next = chunk->next;
+    if (next)
+    {
+        if (!next->used)
+        {
+            uint32_t size = 0;
+            chunk_t * it = chunk;
+            while (it)
+            {
+                size += it->size;
+                if (it->next == NULL) break;
+                if (it->next->used) break;
+                it = it->next;
+            }
+            if (it)
+            {
+                chunk->size = size;
+                chunk->next = it->next;
+            }
+        }
+    }
+    // If the glued chunk has nothing after, we can freely free it.
     if (chunk->next == NULL)
     {
         free_chunk(chunk);
