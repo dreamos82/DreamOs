@@ -62,36 +62,25 @@ void * kmalloc(size_t size)
     size += sizeof(chunk_t);
     // Initialize a pointer which will point to the current header to the
     // begin of the heap.
-    chunk_t * cur_header = first_chunk;
-    chunk_t * prev_header = NULL;
+    chunk_t * last_chunk = first_chunk;
     // Iterate through the headers.
-    while (cur_header)
+    while (last_chunk)
     {
-        // Check if the current element of the heap has not been used, and its
-        // length is greater than the required size.
-        /*
-        if ((cur_header->used == 0) && (cur_header->size >= size))
-        {
-            split_chunk(cur_header, size);
-            cur_header->used = true;
-            return (void *) ((uint32_t) cur_header + sizeof(chunk_t));
-        }
-         */
-        // Set the previous element.
-        prev_header = cur_header;
+        // Check if there is a next header.
+        if (!last_chunk->next) break;
         // Move to the next element.
-        cur_header = cur_header->next;
+        last_chunk = last_chunk->next;
     }
     // If I've not found a suitable header, create a new one.
     uint32_t chunk_start = HEAP_START;
-    if (prev_header)
+    if (last_chunk)
     {
-        chunk_start = (uint32_t) prev_header + prev_header->size;
+        chunk_start = (uint32_t) last_chunk + last_chunk->size;
     }
     // Allocate the memory for a new chunk.
     chunk_t * new_chunk = create_chunk(chunk_start, size);
     // Insert the chunk after the previous one.
-    insert_chunk_after(new_chunk, prev_header);
+    insert_chunk_after(new_chunk, last_chunk);
     // If there is no first chunk set, use the new one.
     if (first_chunk == NULL)
     {
@@ -113,6 +102,5 @@ void kfree(void * ptr)
     chunk_t * header = (chunk_t *) ((uint32_t) ptr - sizeof(chunk_t));
     assert(header && "Cannot find the header of the chunk.");
     header->used = false;
-    //glue_chunk(header);
-    free_chunk(header);
+    glue_chunk(header);
 }
