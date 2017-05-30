@@ -71,9 +71,8 @@ process_t * kernel_create_process(int (* function)(void *),
     if (stack == NULL)
     {
         stack_base_address = kmalloc(DEFAULT_STACK_SIZE);
-        stack = (uint32_t *) (((char *) stack_base_address) +
-                              DEFAULT_STACK_SIZE
-                              - sizeof(uint32_t) * 3);
+        stack = (uint32_t *) ((char *) stack_base_address
+                              + DEFAULT_STACK_SIZE);
     }
     // Create the process.
     process_t * process = kmalloc(sizeof(process_t));
