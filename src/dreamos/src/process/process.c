@@ -36,11 +36,26 @@ uint32_t process_get_id(void)
     return ++tid;
 }
 
-void process_exit();
+/// @brief Executed when a process terminates.
+void process_exit()
+{
+    // Get the exit value of the process.
+    uint32_t exit_value = 0;
+    __asm__("movl %%eax, %0" : "=r" (exit_value));
+    process_t * current = kernel_get_current_process();
+    dbg_print("\nProcess %d exited with value %d, flags %d\n",
+              current->id,
+              exit_value,
+              current->regs.eflags);
+    current->exit = 1;
+    // Free the space occupied by the stack.
+    kfree((uint32_t *) current->regs.ebp);
+    // Free the space occupied by the structure of the process.
+    kfree(current);
+    while (TRUE);
+}
 
-extern void _create_process(int (*)(void *), void *, uint32_t *, process_t *);
-
-process_t * kernel_create_process(int (* fn)(void *),
+process_t * kernel_create_process(int (* function)(void *),
                                   char * name,
                                   void * arg,
                                   uint32_t * stack)
@@ -66,7 +81,7 @@ process_t * kernel_create_process(int (* fn)(void *),
 
     *(--stack) = (uint32_t) arg;
     *(--stack) = (uint32_t) &process_exit;
-    *(--stack) = (uint32_t) fn;
+    *(--stack) = (uint32_t) function;
 
     // Set the top address of the stack.
     process->regs.esp = (uint32_t) stack;
@@ -88,22 +103,4 @@ process_t * kernel_create_process(int (* fn)(void *),
     // Activate the process.
     kernel_activate_process(process);
     return process;
-}
-
-void process_exit()
-{
-    // Get the exit value of the process.
-    uint32_t exit_value = 0;
-    __asm__("movl %%eax, %0" : "=r" (exit_value));
-    process_t * current = kernel_get_current_process();
-    dbg_print("\nProcess %d exited with value %d, flags %d\n",
-              current->id,
-              exit_value,
-              current->regs.eflags);
-    current->exit = 1;
-    // Free the space occupied by the stack.
-    kfree((uint32_t *) current->regs.ebp);
-    // Free the space occupied by the structure of the process.
-    kfree(current);
-    while (TRUE);
 }
