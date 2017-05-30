@@ -45,7 +45,14 @@ void free_chunk(chunk_t * chunk)
     }
     else
     {
-        chunk->prev->next = NULL;
+        if (chunk->next != NULL)
+        {
+            chunk->prev->next = chunk->next;
+        }
+        else
+        {
+            chunk->prev->next = NULL;
+        }
     }
     uint32_t size = chunk->size;
     for (uint32_t it = (uint32_t) chunk; it <= size; it += PAGE_SIZE)
