@@ -66,7 +66,7 @@ process_t * kernel_create_process(int (* function)(void *),
     {
         return NULL;
     }
-    // Most process don't want to deal with stack size.
+    // If a pre-existing stack has not been provided, create a new one.
     uint32_t * stack_base_address = stack;
     if (stack == NULL)
     {
@@ -74,14 +74,14 @@ process_t * kernel_create_process(int (* function)(void *),
         stack = (uint32_t *) ((char *) stack_base_address
                               + DEFAULT_STACK_SIZE);
     }
-    // Create the process.
-    process_t * process = kmalloc(sizeof(process_t));
-    memset(process, 0, sizeof(process_t));
-
+    // Store inside the stack the arguments of the function, the function
+    // called when the process terminates and the function itself.
     *(--stack) = (uint32_t) arg;
     *(--stack) = (uint32_t) &process_exit;
     *(--stack) = (uint32_t) function;
-
+    // Create the process.
+    process_t * process = kmalloc(sizeof(process_t));
+    memset(process, 0, sizeof(process_t));
     // Set the top address of the stack.
     process->regs.esp = (uint32_t) stack;
     // Set the base address of the stack.
