@@ -107,7 +107,7 @@ void schedule()
         return;
     }
     // Search the first process which has completed.
-    while (ready_queue->process->exit == 1)
+    while (ready_queue->process->state == PROCESS_ZOMBIE)
     {
         // Store the next process pointed by the completed process.
         process_list_t * next = ready_queue->next;

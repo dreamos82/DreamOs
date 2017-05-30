@@ -47,7 +47,8 @@ void process_exit()
               current->id,
               exit_value,
               current->regs.eflags);
-    current->exit = 1;
+    // Set the state of the process to zombie.
+    current->state = PROCESS_ZOMBIE;
     // Free the space occupied by the stack.
     kfree((uint32_t *) current->stack);
     // Free the space occupied by the structure of the process.
@@ -86,12 +87,12 @@ process_t * kernel_create_process(int (* function)(void *),
     process->regs.ebp = (uint32_t) ebp;
     // Enable the interrupts.
     process->regs.eflags = EFLAG_IF;
-    // Set the exit status to 0.
-    process->exit = 0;
     // Set the id of the process.
     process->id = process_get_id();
     // Store the beginning of the stack.
     process->stack = stack;
+    // Set the state of the process as running.
+    process->state = PROCESS_RUNNING;
     // Set the name of the process.
     memset(process->name, '\0', 50);
     strcpy(process->name, name);

@@ -26,6 +26,12 @@
 #include "stddef.h"
 #include "list.h"
 
+#define PROCESS_RUNNING            0
+#define PROCESS_INTERRUPTIBLE      1
+#define PROCESS_UNINTERRUPTIBLE    2
+#define PROCESS_ZOMBIE             4
+#define PROCESS_STOPPED            8
+
 struct process_list;
 
 enum eflags_list
@@ -77,10 +83,10 @@ typedef struct process
     pid_t id;
     /// The command executed by the process.
     char name[50];
-    /// The exit flag. When set to 1, the scheduler will deactivate the process.
-    __volatile__ uint32_t exit;
     /// Pointer to the stack.
     void * stack;
+    /// The state of the process.
+    __volatile__ uint32_t state;
     /// Pointer to the node of the scheduler list of processs.
     listnode_t * self;
 } process_t;
