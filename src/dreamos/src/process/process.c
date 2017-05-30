@@ -49,16 +49,16 @@ void process_exit()
               current->regs.eflags);
     current->exit = 1;
     // Free the space occupied by the stack.
-    kfree((uint32_t *) current->regs.ebp);
+    kfree((uint32_t *) current->stack);
     // Free the space occupied by the structure of the process.
     kfree(current);
+    // Process waits to be remove from the scheduler.
     while (TRUE);
 }
 
 process_t * kernel_create_process(int (* function)(void *),
                                   char * name,
-                                  void * arg,
-                                  uint32_t * stack)
+                                  void * arg)
 {
     // Checks if by activating a new process we exceed the number of maximum
     // active processes
@@ -66,32 +66,32 @@ process_t * kernel_create_process(int (* function)(void *),
     {
         return NULL;
     }
-    // If a pre-existing stack has not been provided, create a new one.
-    uint32_t * stack_base_address = stack;
-    if (stack == NULL)
-    {
-        stack_base_address = kmalloc(DEFAULT_STACK_SIZE);
-        stack = (uint32_t *) ((char *) stack_base_address
-                              + DEFAULT_STACK_SIZE);
-    }
+    // Create a new stack.
+    uint32_t * stack = kmalloc(DEFAULT_STACK_SIZE);
+    // Set the base address of the stack.
+    uint32_t * ebp = (uint32_t *) ((char *) stack + DEFAULT_STACK_SIZE);
+    // Create a pointer to keep track of the top of the stack.
+    uint32_t * esp = ebp;
     // Store inside the stack the arguments of the function, the function
     // called when the process terminates and the function itself.
-    *(--stack) = (uint32_t) arg;
-    *(--stack) = (uint32_t) &process_exit;
-    *(--stack) = (uint32_t) function;
+    *(--esp) = (uint32_t) arg;
+    *(--esp) = (uint32_t) &process_exit;
+    *(--esp) = (uint32_t) function;
     // Create the process.
     process_t * process = kmalloc(sizeof(process_t));
     memset(process, 0, sizeof(process_t));
     // Set the top address of the stack.
-    process->regs.esp = (uint32_t) stack;
+    process->regs.esp = (uint32_t) esp;
     // Set the base address of the stack.
-    process->regs.ebp = (uint32_t) stack_base_address;
+    process->regs.ebp = (uint32_t) ebp;
     // Enable the interrupts.
     process->regs.eflags = EFLAG_IF;
     // Set the exit status to 0.
     process->exit = 0;
     // Set the id of the process.
     process->id = process_get_id();
+    // Store the beginning of the stack.
+    process->stack = stack;
     // Set the name of the process.
     memset(process->name, '\0', 50);
     strcpy(process->name, name);

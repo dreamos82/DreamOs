@@ -136,6 +136,6 @@ int kmain(multiboot_info_t * boot_informations)
     // Initialize the shell.
     video_puts(LNG_INIT_SHELL);
     video_print_ok();
-    kernel_create_process(shell, "Shell", "Shell", 0);
+    kernel_create_process(shell, "Shell", "Shell");
     return 0;
 }

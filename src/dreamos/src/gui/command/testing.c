@@ -272,13 +272,11 @@ void try_process()
     irq_disable();
     process_t * process1 = kernel_create_process(task_test_1,
                                                  "task_test_1",
-                                                 "task_test_1",
-                                                 0);
+                                                 "task_test_1");
     printf("Task 1, pid: %d\n", process1->id);
     process_t * process2 = kernel_create_process(task_test_2,
                                                  "task_test_2",
-                                                 "task_test_2",
-                                                 0);
+                                                 "task_test_2");
     printf("Task 2, pid: %d\n", process2->id);
     // Re-Enable the IRQs.
     irq_enable();
@@ -303,8 +301,7 @@ void try_process_sleep()
     {
         kernel_create_process(sleeping_process,
                               "sleeping_process",
-                              "sleeping_process",
-                              0);
+                              "sleeping_process");
     }
     // Re-Enable the IRQs.
     irq_enable();

@@ -79,6 +79,8 @@ typedef struct process
     char name[50];
     /// The exit flag. When set to 1, the scheduler will deactivate the process.
     __volatile__ uint32_t exit;
+    /// Pointer to the stack.
+    void * stack;
     /// Pointer to the node of the scheduler list of processs.
     listnode_t * self;
 } process_t;
@@ -87,9 +89,7 @@ typedef struct process
 /// @param fn    The function which has to be performed by the new process.
 /// @param name  The name of the process.
 /// @param arg   The arguments of the process.
-/// @param stack The stack which the process has to use.
 /// @return A pointer to the newly created process.
 process_t * kernel_create_process(int (* function)(void *),
                                   char * name,
-                                  void * arg,
-                                  uint32_t * stack);
+                                  void * arg);
