@@ -1,30 +1,27 @@
-/*
- * Dreamos
- * handlers.h
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
-
-/*
- * Autore Ivan Gualandri
- * Prima versione: 27/10/2003
- * Contiene le definizioni di alcuni tipi di dato :D
- */
+/// @file   isr.h
+/// @brief  Data structures concerning the Interrupt Service Routines (ISRs).
+/// @author Ivan Gualandri
+/// @date   Oct 27 2003
+/// @copyright
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+/// This program is distributed in the hope that it will be useful, but
+/// WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+/// You should have received a copy of the GNU General Public License
+/// along with this program; if not, write to the Free Software Foundation,
+/// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #pragma once
 
 #include "pic8259.h"
+
+/// @defgroup exceptions Exception Conditions
+/// @brief Each description classifies the exception as a fault, trap, or abort
+/// @{
 
 #define DIVIDE_ERROR            0
 #define DEBUG_EXC               1
@@ -47,53 +44,7 @@
 #define MACHINE_CHECK           18
 #define SIMD_FP_EXC             19
 
-#if 0
-#define EXCEPTION(n)\
-__asm__("   INT_"#n": \
-                pusha; \
-                pushl $"#n"; \
-                call *(IntTable+(4*"#n")); \
-                add $4, %esp; \
-                popa; \
-                iret;")
-
-#define EXCEPTION_EC(n)\
-__asm__("   INT_"#n": \
-                nop; \
-                xchgl %eax, (%esp); \
-                pushl %ecx; \
-                pushl %edx; \
-                movl $0x10, %edx; \
-                movw %dx, %ds; \
-                movw %dx, %es; \
-                movw %dx, %fs; \
-                pushl %eax; \
-                pushl $"#n"; \
-                call *(IntTable+(4*"#n")); \
-                add $8, %esp; \
-                popl %edx; \
-                popl %ecx; \
-                popl %eax; \
-                iret;")
-
-#define SYSCALL(n)\
-__asm__("   INT_"#n": \
-                pusha; \
-                call syscall_handler; \
-                popa; \
-                iret;")
-
-#define IRQ(n)\
-__asm__("   INT_"#n": \
-                pusha; \
-                movl %esp, %eax; \
-                pushl %eax; \
-                call _irqinterrupt; \
-                popl %eax; \
-                movl %eax, %esp; \
-                popa; \
-                iret;")
-#endif
+/// @}
 
 /// List of shared IRQs.
 extern irq_struct_t * shared_irq_handlers[IRQ_NUM];
@@ -107,6 +58,8 @@ void init_isr();
 /// @author Ivan Gualandri
 extern void global_exception(int n, int error);
 
+/// @brief Main function used to handle interrupts.
 extern void interrupt_handler(unsigned int esp);
 
+/// @brief Function called when a reserved exception occurs.
 extern void reserved_exception();

@@ -1,4 +1,19 @@
 /// @file   descriptor_tables.h
+/// @brief  Data structures concerning descriptor tables.
+/// @author Ivan Gualandri
+/// @date   Oct 27 2003
+/// @copyright
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+/// This program is distributed in the hope that it will be useful, but
+/// WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+/// You should have received a copy of the GNU General Public License
+/// along with this program; if not, write to the Free Software Foundation,
+/// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #pragma once
 
@@ -26,11 +41,17 @@ typedef enum __attribute__ ((__packed__)) gdt_granularity_option_t
 /// Array of interrupt handler functions.
 extern interrupt_handler_t IntTable[IDT_SIZE];
 
-/// @brief Questa funzione aggiunge un handler di interruzione alla tabella per che contiene le funzioni di gestione chiamate dalle eccezioni/interruzioni della IDT
+/// @brief Questa funzione aggiunge un handler di interruzione alla tabella
+/// per che contiene le funzioni di gestione chiamate dalle
+/// eccezioni/interruzioni della IDT.
 /// @param i        Posizione all'interno del vettore.
 /// @param handler  Funzione da aggiungere.
 void kernel_add_interrupt_function_table(int i,
                                          interrupt_handler_t handler);
+
+/// @defgroup interrupts Interrupt Functions
+/// @brief This is the list of interrupt functions.
+/// @{
 
 /// @brief #DE Divide Error
 extern void INT_0();
@@ -127,3 +148,5 @@ extern void INT_47();
 extern void INT_48();
 
 extern void INT_80();
+
+/// @}
