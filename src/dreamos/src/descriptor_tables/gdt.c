@@ -23,7 +23,7 @@
 
 /// @brief This will be a function in gdt.s. We use this to properly
 /// reload the new segment registers
-/// @param _gdt_pointer
+/// @param _gdt_pointer addresss of the gdt.
 extern void gdt_flush(uint32_t _gdt_pointer);
 
 /// The GDT itself.

@@ -22,30 +22,30 @@
 /// Access flags, determines what ring this segment can be used in.
 typedef enum gdt_access_option_t
 {
-    PRESENT = 0x80,
-    KERNEL = 0x00,
-    USER = 0x03,
-    CODE = 0x10,
-    DATA = 0x10,
+    KERNEL = 0x00,  ///< Identifies a kernel segnment.
+    USER = 0x03,    ///< Identifies a user segnment.
+    CODE = 0x10,    ///< Identifies a code segnment.
+    DATA = 0x10,    ///< Identifies a data segnment.
+    PRESENT = 0x80, ///< Segment is present.
 } __attribute__ ((__packed__)) gdt_access_option_t;
 
 /// Options for the second option.
 typedef enum gdt_granularity_option_t
 {
-    GRANULARITY = 0x80,
-    SZBITS = 0x40
+    GRANULARITY = 0x80, ///< GRANULARITY
+    SZBITS = 0x40       ///< SZBITS
 } __attribute__ ((__packed__)) gdt_granularity_option_t;
 
 /// @brief Struttura dati che rappresenta un descrittore della GDT.
 typedef struct gdt_descriptor_t
 {
-    /// Primi 16 bit del limite (20 bit in totale)
+    /// The lower 16 bits of the limit.
     uint16_t limit_low;
     /// The lower 16 bits of the base.
     uint16_t base_low;
     /// The next 8 bits of the base.
     uint8_t base_middle;
-    /// Type (4bit) - S (1) bit -DPL (2 bit) - P(1 bit).
+    /// Access flags, determine what ring this segment can be used in.
     uint8_t access;
     /// SegLimit_hi(4 bit) AVL(1 bit) L(1 bit) D/B(1 bit) G(1bit)
     uint8_t granularity;

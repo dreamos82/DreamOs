@@ -38,8 +38,9 @@
 // difference is that for interrupt gates, interrupts are automatically
 // disabled upon entry and reenabled upon IRET which restores the saved EFLAGS.
 
-// An interrupt handler. It is a pointer to a function which takes a pointer
-// to a structure containing register values.
+/// @brief An interrupt handler.
+/// @details It is a pointer to a function which takes a pointer to a
+/// structure containing register values.
 typedef void (* interrupt_handler_t)();
 
 /// @brief This structure describes one interrupt gate.
@@ -69,10 +70,10 @@ typedef struct idt_pointer_t
 /// @brief Initialise the interrupt descriptor table.
 void init_idt();
 
-/// @brief Questa funzione si occupa di aggiungere un nuovo segmento alla IDT.
+/// @brief Use this function to set an entry in the IDT.
 /// @author Ivan Gualandri
 /// @param index    Indice della IDT.
-/// @param base     Puntatore alla funzione che gestira' l'interrupt/Eccezione
+/// @param handler  Puntatore alla funzione che gestira' l'interrupt/Eccezione
 /// @param options  Le opzioni del descrittore (PRESENT,NOTPRESENT,KERNEL,USER)
 /// @param seg_sel  Il selettore del segmento della GDT.
 void idt_set_gate(uint8_t index,
