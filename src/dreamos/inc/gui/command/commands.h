@@ -1,24 +1,19 @@
-/*
- * DreamOS
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
-
- * Autrice: Lisa
- * Febbraio 2006
- * Prototipi di funzione e variabili globali per la shell
- */
+/// @file   commands.h
+/// @brief  Prototypes of functions for the Shell.
+/// @author Lisa
+/// @date   Feb 2006
+/// @copyright
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+/// This program is distributed in the hope that it will be useful, but
+/// WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+/// You should have received a copy of the GNU General Public License
+/// along with this program; if not, write to the Free Software Foundation,
+/// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #pragma once
 
@@ -74,10 +69,13 @@ void showpid(int argc, char ** argv);
 
 void heapdump(int argc, char ** argv);
 
-struct devel
+/// @brief Define a fucntion used to test functionalities.
+typedef struct development_function_t
 {
+    /// The name of the test.
     char cmd_testname[CMD_LEN];
+    /// A description of the test.
     char cmd_description[DESC_LEN];
-
+    /// A pointer to the function.
     void (* func)(void);
-};
+} development_function_t;
