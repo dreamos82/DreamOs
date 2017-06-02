@@ -19,8 +19,22 @@
 
 #include "stdint.h"
 
-/// The maximum dimension of the GDT.
-#define GDT_SIZE 10
+/// Access flags, determines what ring this segment can be used in.
+typedef enum gdt_access_option_t
+{
+    PRESENT = 0x80,
+    KERNEL = 0x00,
+    USER = 0x03,
+    CODE = 0x10,
+    DATA = 0x10,
+} __attribute__ ((__packed__)) gdt_access_option_t;
+
+/// Options for the second option.
+typedef enum gdt_granularity_option_t
+{
+    GRANULARITY = 0x80,
+    SZBITS = 0x40
+} __attribute__ ((__packed__)) gdt_granularity_option_t;
 
 /// @brief Struttura dati che rappresenta un descrittore della GDT.
 typedef struct gdt_descriptor_t
@@ -32,9 +46,9 @@ typedef struct gdt_descriptor_t
     /// The next 8 bits of the base.
     uint8_t base_middle;
     /// Type (4bit) - S (1) bit -DPL (2 bit) - P(1 bit).
-    uint8_t options_1;
+    uint8_t access;
     /// SegLimit_hi(4 bit) AVL(1 bit) L(1 bit) D/B(1 bit) G(1bit)
-    uint8_t options_2;
+    uint8_t granularity;
     /// The last 8 bits of the base.
     uint8_t base_high;
 } __attribute__((packed)) gdt_descriptor_t;
@@ -49,16 +63,21 @@ typedef struct gdt_pointer_t
 } __attribute__((packed)) gdt_pointer_t;
 
 /// @brief Initialise the GDT.
+/// @details This will setup the special GDT
+/// pointer, set up the first 3 entries in our GDT, and then
+/// finally call gdt_flush() in our assembler file in order
+/// to tell the processor where the new GDT is and update the
+/// new segment registers.
 void init_gdt();
 
 /// @brief Sets the value of one GDT entry.
 /// @param index    The index inside the GDT.
 /// @param base     Memory address where the segment we are defining starts.
 /// @param limit    The memory address which determines the end of the segnment.
-/// @param option_1 Type (4bit) - S (1) bit -DPL (2 bit) - P(1 bit)
-/// @param option_2 SegLimit_hi(4 bit) AVL(1 bit) L(1 bit) D/B(1 bit) G(1bit)
+/// @param _access  Type (4bit) - S (1) bit -DPL (2 bit) - P(1 bit)
+/// @param _granul  SegLimit_hi(4 bit) AVL(1 bit) L(1 bit) D/B(1 bit) G(1bit)
 void gdt_set_gate(uint8_t index,
                   uint32_t base,
                   uint32_t limit,
-                  uint8_t option_1,
-                  uint8_t option_2);
+                  uint8_t _access,
+                  uint8_t _granul);

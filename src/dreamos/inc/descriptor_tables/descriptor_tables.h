@@ -21,23 +21,6 @@
 #include "gdt.h"
 #include "idt.h"
 
-/// Access flags, determines what ring this segment can be used in.
-typedef enum __attribute__ ((__packed__)) gdt_access_option_t
-{
-    PRESENT = 0x80,
-    KERNEL = 0x00,
-    USER = 0x03,
-    CODE = 0x10,
-    DATA = 0x10,
-} gdt_access_option_t;
-
-/// Options for the second option.
-typedef enum __attribute__ ((__packed__)) gdt_granularity_option_t
-{
-    GRANULARITY = 0x80,
-    SZBITS = 0x40
-} gdt_granularity_option_t;
-
 /// Array of interrupt handler functions.
 extern interrupt_handler_t IntTable[IDT_SIZE];
 
