@@ -33,12 +33,16 @@ typedef struct spinlock_irq_save_t
     uint8_t flags;
 } spinlock_irq_save_t;
 
+/// @brief Initialie the spinlock.
 bool_t spinlock_init(spinlock_t * spinlock);
 
+/// @brief Destroy the spinlock and free the memory.
 bool_t spinlock_destroy(spinlock_t * spinlock);
 
+/// @brief Try to lock the spinlock.
 bool_t spinlock_lock(spinlock_t * spinlock);
 
+/// @brief Try to unlock the spinlock.
 bool_t spinlock_unlock(spinlock_t * spinlock);
 
 bool_t spinlock_irq_save_init(spinlock_irq_save_t * spinlock);

@@ -1,3 +1,5 @@
+/// @file   stdatomic.h
+
 #pragma once
 
 #include "compiler.h"

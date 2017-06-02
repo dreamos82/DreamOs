@@ -1,6 +1,5 @@
-// ordered_array.h -- Interface for creating, inserting and deleting
-//                    from ordered arrays.
-//                    Written for JamesM's kernel development tutorials.
+/// @file   ordered_array.h
+/// @brief  Interface for creating, inserting and deleting from ordered arrays.
 
 #pragma once
 

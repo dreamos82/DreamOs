@@ -19,7 +19,7 @@
 #include "elf.h"
 #include "string.h"
 
-elf_t elf_from_multiboot(struct multiboot_info * mb)
+elf_t elf_from_multiboot(multiboot_info_t * mb)
 {
     elf_t elf;
     elf_section_header_t * sh = (elf_section_header_t *) mb->u.elf_sec.addr;

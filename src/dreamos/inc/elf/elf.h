@@ -73,7 +73,7 @@ typedef struct elf_t
 /// containing the symbol information.
 /// @param mb The input multiboot structure.
 /// @return Elf structure containing the symbol information.
-elf_t elf_from_multiboot(struct multiboot_info * mb);
+elf_t elf_from_multiboot(multiboot_info_t * mb);
 
 //
 /// @brief Looks up a symbol by address.
