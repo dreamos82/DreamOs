@@ -1,4 +1,4 @@
-/// @file   elf.h
+/// @file   elf.c
 /// @brief  Function for multiboot support.
 /// @details Based on JamesM's kernel developement tutorials.
 /// @author Dario Casalinuovo

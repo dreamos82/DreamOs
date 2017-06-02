@@ -1,4 +1,4 @@
-/// @file   video.h
+/// @file   video.c
 /// @brief  Video functions and costants.
 /// @details Scrolling features and hexadecimal support added by shainer
 /// video_get_line() and video_print_ok developed by ^Inuyasha^
