@@ -23,25 +23,45 @@
 /// @brief Each description classifies the exception as a fault, trap, or abort
 /// @{
 
+/// Divide error.
 #define DIVIDE_ERROR            0
+/// Single-Byte Interrupt (usually used for debugger breakpoint)
 #define DEBUG_EXC               1
+/// Non-Maskable Interrupt
 #define NMI_INTERRUPT           2
+/// Breakpoint Exception
 #define BREAKPOINT              3
+/// OverFlow
 #define OVERFLOW                4
+/// Bound check
 #define BOUND_RANGE_EXCEED      5
+/// Invalid Opcode
 #define INVALID_OPCODE          6
+/// Device Not Available
 #define DEV_NOT_AVL             7
+/// Double Fault
 #define DOUBLE_FAULT            8
+/// Coprocessor Segment Overrun
 #define COPROC_SEG_OVERRUN      9
+/// Invalid TSS
 #define INVALID_TSS             10
+/// Segment Not Present
 #define SEGMENT_NOT_PRESENT     11
+/// Stack-Segment Fault
 #define STACK_SEGMENT_FAULT     12
+/// General Protection Fault
 #define GENERAL_PROTECTION      13
+/// Page Fault
 #define PAGE_FAULT              14
+/// Intel Reserved
 #define INT_RSV                 15
+/// Floating Point
 #define FLOATING_POINT_ERR      16
+/// Alignment Check
 #define ALIGNMENT_CHECK         17
+/// Machine Check
 #define MACHINE_CHECK           18
+/// Simd Floating Point
 #define SIMD_FP_EXC             19
 
 /// @}
