@@ -18,38 +18,37 @@
 #include "keyboard.h"
 #include "video.h"
 #include "stdio.h"
-#include "port_io.h"
 #include "pic8259.h"
 #include "shell_history.h"
 #include "keymap.h"
 #include "bitops.h"
+#include "port_io.h"
 
 /// A macro from Ivan to update buffer indexes.
-#define STEP(x) ((x) == BUFSIZE-1 ? 0 : x+1)
+#define STEP(x) (((x) == BUFSIZE - 1) ? 0 : (x + 1))
 
 /// Circular Buffer where the pressed keys are stored.
 static int circular_buffer[BUFSIZE];
-///
+/// Index inside the buffer...
 static int buf_r = 0;
-///
+/// Index inside the buffer...
 static int buf_w = 0;
 /// Tracks the state of the leds.
 static uint8_t ledstate = 0;
 /// The shadow option is active.
 static bool_t shadow = false;
-
+/// Keep track of the last tab.
 extern unsigned int last_tab;
-
-// ------------------------------------
-#define KBD_LEFT_SHIFT      1
-#define KBD_RIGHT_SHIFT     2
-#define KBD_CAPS_LOCK       4
-#define KBD_NUM_LOCK        8
-#define KBD_SCROLL_LOCK     16
-#define KBD_LEFT_CONTROL    32
-#define KBD_RIGHT_CONTROL   64
+/// The flags concerning the keyboard.
 static uint32_t keyboard_flags = 0;
-// ------------------------------------
+
+#define KBD_LEFT_SHIFT      1   ///< Flag which identifies the left shift.
+#define KBD_RIGHT_SHIFT     2   ///< Flag which identifies the right shift.
+#define KBD_CAPS_LOCK       4   ///< Flag which identifies the caps lock.
+#define KBD_NUM_LOCK        8   ///< Flag which identifies the num lock.
+#define KBD_SCROLL_LOCK     16  ///< Flag which identifies the scroll lock.
+#define KBD_LEFT_CONTROL    32  ///< Flag which identifies the left control.
+#define KBD_RIGHT_CONTROL   64  ///< Flag which identifies the right control.
 
 void keyboard_install()
 {

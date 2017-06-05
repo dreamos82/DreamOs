@@ -20,6 +20,7 @@
 #include "stdbool.h"
 #include "stdint.h"
 
+/// @brief The dimension of the circular buffer used to store video history.
 #define BUFSIZE         256
 
 /// @brief Function used to install the keyboard.
