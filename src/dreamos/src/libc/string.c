@@ -733,7 +733,7 @@ char * list2str(list_t * list, const char * delim)
     size_t ret_len = 256;
     while (list_size(list) > 0)
     {
-        char * temp = list_pop(list)->val;
+        char * temp = list_pop(list)->value;
         size_t len_temp = strlen(temp);
         if (len + len_temp + 1 + 1 > ret_len)
         {

@@ -7,14 +7,16 @@
 #include "stdint.h"
 #include "stddef.h"
 
-typedef struct listnode
+/// @brief Represent the node of a list.
+typedef struct listnode_t
 {
-    void * val;
-    struct listnode * prev;
-    struct listnode * next;
+    void * value;
+    struct listnode_t * prev;
+    struct listnode_t * next;
 } listnode_t;
 
-typedef struct list
+/// @brief Represent the list.
+typedef struct list_t
 {
     listnode_t * head;
     listnode_t * tail;
@@ -30,10 +32,10 @@ list_t * list_create();
 size_t list_size(list_t * list);
 
 /// @brief Insert a value at the front of list.
-listnode_t * list_insert_front(list_t * list, void * val);
+listnode_t * list_insert_front(list_t * list, void * value);
 
 /// @brief Insert a value at the back of list.
-listnode_t * list_insert_back(list_t * list, void * val);
+listnode_t * list_insert_back(list_t * list, void * value);
 
 /// @brief Given a listnode, remove it from lis.
 void * list_remove_node(list_t * list, listnode_t * node);
@@ -45,14 +47,14 @@ void * list_remove_front(list_t * list);
 void * list_remove_back(list_t * list);
 
 /// @brief Insert after tail of list(same as insert back).
-void list_push(list_t * list, void * val);
+void list_push(list_t * list, void * value);
 
 /// @brief Remove and return tail of list(user is responsible for freeing the
 /// returned node and the value).
 listnode_t * list_pop(list_t * list);
 
 /// @brief Insert before head of list(same as insert front).
-void list_enqueue(list_t * list, void * val);
+void list_enqueue(list_t * list, void * value);
 
 /// @brief Remove and return tail of list(same as list_pop).
 listnode_t * list_dequeue(list_t * list);
@@ -69,7 +71,7 @@ void listnode_destroy(listnode_t * node);
 
 /// @brief Does the list contain a value (Return -1 if list element is not
 /// found).
-int list_contain(list_t * list, void * val);
+int list_contain(list_t * list, void * value);
 
 listnode_t * list_get_node_by_index(list_t * list, size_t index);
 

@@ -701,7 +701,7 @@ void ps(int argc, char ** argv)
         listnode_t * node = list_get_node_by_index(process_list, i);
         if (node)
         {
-            process_t * process = node->val;
+            process_t * process = node->value;
             if (process)
             {
                 printf("%-6d", process->id);
