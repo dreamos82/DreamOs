@@ -131,7 +131,7 @@ void * list_peek_back(list_t * list)
 int list_contain(list_t * list, void * value)
 {
     int idx = 0;
-    foreach(listnode, list)
+    listnode_foreach(listnode, list)
     {
         if (listnode->value == value)
             return idx;
@@ -147,7 +147,7 @@ listnode_t * list_get_node_by_index(list_t * list, size_t index)
         return NULL;
     }
     size_t curr = 0;
-    foreach(listnode, list)
+    listnode_foreach(listnode, list)
     {
         if (index == curr) return listnode;
         curr++;

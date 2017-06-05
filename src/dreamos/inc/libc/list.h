@@ -10,20 +10,28 @@
 /// @brief Represent the node of a list.
 typedef struct listnode_t
 {
+    /// A pointer to the value.
     void * value;
+    /// The previous node.
     struct listnode_t * prev;
+    /// The next node.
     struct listnode_t * next;
 } listnode_t;
 
 /// @brief Represent the list.
 typedef struct list_t
 {
+    /// The first element of the list.
     listnode_t * head;
+    /// The last element of the list.
     listnode_t * tail;
+    /// The size of the list.
     size_t size;
 } list_t;
 
-#define foreach(t, list) for(listnode_t * t = list->head; t != NULL; t = t->next)
+/// @brief Macro used to iterate through a list.
+#define listnode_foreach(t, list) \
+    for(listnode_t * t = list->head; t != NULL; t = t->next)
 
 /// @brief Create a list and set head, tail to NULL, and size to 0.
 list_t * list_create();
@@ -65,14 +73,18 @@ void * list_peek_front(list_t * list);
 /// @brief Get the value of the last element but not remove it.
 void * list_peek_back(list_t * list);
 
+/// @brief Destory a list.
 void list_destroy(list_t * list);
 
+/// @brief Destroy a node of the list.
 void listnode_destroy(listnode_t * node);
 
 /// @brief Does the list contain a value (Return -1 if list element is not
 /// found).
 int list_contain(list_t * list, void * value);
 
+/// @brief Returns the node at the given index.
 listnode_t * list_get_node_by_index(list_t * list, size_t index);
 
+/// @brief Removes a node from the list at the given index.
 void * list_remove_by_index(list_t * list, size_t index);

@@ -52,7 +52,7 @@ gtreenode_t * tree_find_parent_recur(gtree_t * tree,
         *child_index = idx;
         return subroot;
     }
-    foreach(child, subroot->children)
+    listnode_foreach(child, subroot->children)
     {
         gtreenode_t * ret = tree_find_parent_recur(tree,
                                                    remove_node,
@@ -87,7 +87,7 @@ void tree2list_recur(gtreenode_t * subroot, list_t * list)
 {
     if (subroot == NULL)
         return;
-    foreach(child, subroot->children)
+    listnode_foreach(child, subroot->children)
     {
         gtreenode_t * curr_treenode = (gtreenode_t *) child->value;
         void * curr_val = curr_treenode->value;
@@ -114,7 +114,7 @@ void tree2array_recur(gtreenode_t * subroot, void ** array, int * size)
     void * curr_val = (void *) subroot->value;
     array[*size] = curr_val;
     *size = *size + 1;
-    foreach(child, subroot->children)
+    listnode_foreach(child, subroot->children)
     {
         tree2array_recur(child->value, array, size);
     }
