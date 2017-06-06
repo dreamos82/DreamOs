@@ -146,12 +146,12 @@ void interrupt_handler(unsigned int esp)
     }
     if (irq_num <= 8 && irq_num != 2)
     {
-        outportb(MASTER_PORT, EOI);
+        outportb(MASTER_PORT_COMMAND, EOI);
     }
     else if (irq_num <= 16 || irq_num == 2)
     {
-        outportb(SLAVE_PORT, EOI);
-        outportb(MASTER_PORT, EOI);
+        outportb(SLAVE_PORT_COMMAND, EOI);
+        outportb(MASTER_PORT_COMMAND, EOI);
     }
     // Call the scheduler.
     schedule();

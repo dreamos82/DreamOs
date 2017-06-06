@@ -53,9 +53,9 @@ static uint32_t keyboard_flags = 0;
 void keyboard_install()
 {
     // Install the IRQ.
-    pic8259_irq_install_handler(KEYBOARD, keyboard_isr);
+    pic8259_irq_install_handler(IRQ_KEYBOARD, keyboard_isr);
     // Enable the IRq.
-    pic8259_irq_enable(KEYBOARD);
+    pic8259_irq_enable(IRQ_KEYBOARD);
 }
 
 void keyboard_isr()
@@ -150,7 +150,7 @@ void keyboard_isr()
                 video_new_line();
                 video_set_cursor_auto();
                 last_tab = 0;
-                outportb(MASTER_PORT, EOI);
+                outportb(MASTER_PORT_COMMAND, EOI);
                 break;
             case KEY_TAB:
                 if (STEP(buf_w) == buf_r)
@@ -226,7 +226,7 @@ void keyboard_isr()
                 break;
         }
     }
-    outportb(MASTER_PORT, EOI);
+    outportb(MASTER_PORT_COMMAND, EOI);
     return;
 }
 

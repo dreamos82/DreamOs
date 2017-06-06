@@ -21,20 +21,32 @@
 #include "stdint.h"
 #include "kernel.h"
 
+/// Dimension of the exc flags.
 #define ECX_FLAGS_SIZE 24
+/// Dimension of the edx flags.
 #define EDX_FLAGS_SIZE 32
 
 /// @brief Contains the information concerning the CPU.
 typedef struct cpuinfo_t
 {
+    /// The name of the vendor.
     char cpu_vendor[13];
+    /// The type of the CPU.
     char * cpu_type;
+    /// The family of the CPU.
     uint32_t cpu_family;
+    /// The model of the CPU.
     uint32_t cpu_model;
+    /// Identifier for individual cores when the CPU is interrogated by the
+    /// CPUID instruction.
     uint32_t apic_id;
+    /// Ecx flags.
     uint32_t cpuid_ecx_flags[ECX_FLAGS_SIZE];
+    /// Edx flags.
     uint32_t cpuid_edx_flags[EDX_FLAGS_SIZE];
+    /// TODO: Check meaning!
     int is_brand_string;
+    /// TODO: Check meaning!
     char * brand_string;
 } cpuinfo_t;
 

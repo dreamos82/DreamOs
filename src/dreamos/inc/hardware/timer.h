@@ -1,5 +1,5 @@
 /// @file   timer.h
-/// @brief  Timer definitions.
+/// @brief  Programmable Interval Timer (PIT) definitions.
 /// @author shainer <shainer@debianclan.org>
 /// @date   Jun 2007
 /// @copyright
@@ -17,9 +17,33 @@
 
 #pragma once
 
-#define PIT_COMREG      0x43
+
+/// @defgroup picregs Programmable Interval Timer Registers
+/// @brief The list of registers used to set the PIT.
+/// @{
+
+/// @brief Channel 0 data port (read/write)
 #define PIT_DATAREG0    0x40
+/// @brief Channel 1 data port (read/write)
+#define PIT_DATAREG1    0x41
+/// @brief Channel 2 data port (read/write)
+#define PIT_DATAREG2    0x42
+/// @brief Mode/Command register (write only, a read is ignored)
+#define PIT_COMREG      0x43
+
+/// @}
+
+/// @brief Frequency divider value (1.193182 MHz)
 #define PIT_DIVISOR     1193180
+
+/// @brief Command used to configure the PIT.
+/// @details
+/// 0x36 = 00110110B
+/// Channel         |  00 | Select Channel 0
+/// Access mode     |  11 | lobyte/hibyte
+/// Operating mode  | 011 | Mode 3 (square wave generator)
+/// BCD/Binary mode |   0 | 16-bit binary
+#define PIT_CONFIGURATION   0x36
 
 /// @brief Handles the timer.
 /// @details In this case, it's very simple: We

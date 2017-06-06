@@ -47,7 +47,7 @@ void mouse_install()
     mouse_read();
 
     // Setup the mouse handler.
-    pic8259_irq_install_handler(MOUSE, mouse_isr);
+    pic8259_irq_install_handler(IRQ_MOUSE, mouse_isr);
 
     mouse_enable();
 }
@@ -55,7 +55,7 @@ void mouse_install()
 void mouse_enable()
 {
     // Enable the mouse interrupts.
-    pic8259_irq_enable(MOUSE);
+    pic8259_irq_enable(IRQ_MOUSE);
     // Disable the mouse.
     mouse_write(MOUSE_ENABLE_PACKET);
     // Acknowledge.
@@ -65,7 +65,7 @@ void mouse_enable()
 void mouse_disable()
 {
     // Disable the mouse interrupts.
-    pic8259_irq_disable(MOUSE);
+    pic8259_irq_disable(IRQ_MOUSE);
     // Disable the mouse.
     mouse_write(MOUSE_DISABLE_PACKET);
     // Acknowledge.

@@ -19,6 +19,10 @@
 
 #include "stdint.h"
 
+/// @defgroup keyboardcodes Keyboard Codes
+/// @brief This is the list of keyboard codes.
+/// @{
+
 #define KEY_ESCAPE          0x01    ///< Escape character.
 #define KEY_ONE             0x02    ///< 1
 #define KEY_TWO             0x03    ///< 2
@@ -122,6 +126,8 @@
 #define KEY_RIGHT_ARROW     0xe04d  ///< Right Arrow  57421
 #define KEY_DOWN_ARROW      0xe050  ///< Down Arrow   57424
 #define CODE_BREAK          0x80    ///< Code break code
+
+/// @}
 
 #define NUM_LED         0x45    ///< Num Pad Led
 #define SCROLL_LED      0x46    ///< Scroll Lock Led

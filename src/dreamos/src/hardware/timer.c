@@ -22,18 +22,20 @@
 #include "irqflags.h"
 
 /// This will keep track of how many ticks the system has been running for.
-__volatile__ uint32_t timer_ticks = 0;
+static __volatile__ uint32_t timer_ticks = 0;
 /// This will keep track of how many seconds the system has been running for.
-__volatile__ uint32_t timer_seconds = 0;
+static __volatile__ uint32_t timer_seconds = 0;
 /// The number of ticks for a second.
-uint32_t ticks_seconds = 100;
+static uint32_t ticks_seconds = 100;
 
+/// @brief Allows to set the timer phase to the given frequency.
+/// @param hz The frequency to set.
 void timer_phase(const uint32_t hz)
 {
-    uint32_t divisor = PIT_DIVISOR / hz;       // Calculate our divisor.
+    uint32_t divisor = PIT_DIVISOR / hz;      // Calculate our divisor.
     // Disable the IRQs.
     irq_disable();
-    outportb(PIT_COMREG, 0x36);             // Set our command byte 0x36.
+    outportb(PIT_COMREG, PIT_CONFIGURATION);  // Set our command byte 0x36.
     outportb(PIT_DATAREG0, divisor & 0xFF);   // Set low byte of divisor.
     outportb(PIT_DATAREG0, divisor >> 8);     // Set high byte of divisor.
     // Re-Enable the IRQs.
@@ -56,9 +58,9 @@ void timer_install()
     // Set the timer phase.
     timer_phase(100);
     // Installs 'timer_handler' to IRQ0.
-    pic8259_irq_install_handler(TIMER, timer_handler);
+    pic8259_irq_install_handler(IRQ_TIMER, timer_handler);
     // Enable the IRQ of the itemer.
-    pic8259_irq_enable(TIMER);
+    pic8259_irq_enable(IRQ_TIMER);
 }
 
 void sleep(const unsigned int seconds)
