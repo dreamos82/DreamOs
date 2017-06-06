@@ -16,6 +16,7 @@
 /// along with this program; if not, write to the Free Software Foundation,
 /// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
+#include <dreamos/inc/misc/debug.h>
 #include "elf.h"
 #include "string.h"
 
@@ -23,22 +24,30 @@ elf_t elf_from_multiboot(multiboot_info_t * mb)
 {
     elf_t elf;
     elf_section_header_t * sh = (elf_section_header_t *) mb->u.elf_sec.addr;
-
-    uint32_t shstrtab = sh[mb->u.elf_sec.shndx].addr;
-    for (unsigned long i = 0; i < mb->u.elf_sec.num; i++)
+    if (sh)
     {
-        const char * name = (const char *) (shstrtab + sh[i].name);
-        if (!strcmp(name, ".strtab"))
+        dbg_print("%s\n", sh[mb->u.elf_sec.shndx].name);
+        uint32_t shstrtab = sh[mb->u.elf_sec.shndx].addr;
+        for (unsigned long i = 0; i < mb->u.elf_sec.num; i++)
         {
-            elf.strtab = (const char *) sh[i].addr;
-            elf.strtabsz = sh[i].size;
-        }
+            const char * name = (const char *) (shstrtab + sh[i].name);
 
-        if (!strcmp(name, ".symtab"))
-        {
-            elf.symtab = (elf_symbol_t *) sh[i].addr;
-            elf.symtabsz = sh[i].size;
+            if (!strcmp(name, ".strtab"))
+            {
+                elf.strtab = (const char *) sh[i].addr;
+                elf.strtabsz = sh[i].size;
+            }
+
+            if (!strcmp(name, ".symtab"))
+            {
+                elf.symtab = (elf_symbol_t *) sh[i].addr;
+                elf.symtabsz = sh[i].size;
+            }
         }
+    }
+    else
+    {
+        dbg_print("Error: while loading the elf_section_header_t\n");
     }
     return elf;
 }
@@ -47,7 +56,7 @@ const char * elf_lookup_symbol(uint32_t address, elf_t * elf)
 {
     for (uint32_t i = 0; i < (elf->symtabsz / sizeof(elf_symbol_t)); i++)
     {
-        if (ELF32_ST_TYPE(elf->symtab[i].info) != 0x2)
+        if (ELF32_ST_TYPE(elf->symtab[i].type) != 0x2)
             continue;
 
         if ((address >= elf->symtab[i].value) &&

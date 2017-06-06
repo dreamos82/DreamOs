@@ -1,7 +1,6 @@
 /// @file   mouse.c
 /// @brief  Driver for *PS2* Mouses.
-/// @author sDT, Osiris
-/// @contributor finarfin
+/// @author sDT, Osiris, finarfin
 /// @date   Jun 16 2009
 /// @copyright
 /// This program is free software; you can redistribute it and/or modify
