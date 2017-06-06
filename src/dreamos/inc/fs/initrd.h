@@ -22,8 +22,11 @@
 #include "stat.h"
 #include "stdint.h"
 
+/// The maximum length of a file name.
 #define FILENAME_LENGTH         64
+/// The maximum number of files.
 #define MAX_FILES               32
+/// The maximum number of file descriptors.
 #define MAX_INITRD_DESCRIPTORS  _SC_OPEN_MAX
 
 /// @brief Contains the number of files inside the initrd filesystem.
@@ -61,8 +64,11 @@ typedef struct initrd_fd
     int cur_pos;
 } initrd_fd;
 
+/// @brief TODO: Check meaning!
 extern initrd_t * fs_specs;
+/// @brief TODO: Check meaning!
 extern initrd_file_t * fs_headers;
+/// @brief TODO: Check meaning!
 extern unsigned int fs_end;
 
 /// Initializes the initrd file system.

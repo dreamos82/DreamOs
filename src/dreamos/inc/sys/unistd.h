@@ -19,10 +19,24 @@
 
 #include "stddef.h"
 
+/// Maximum number of opened file.
 #define _SC_OPEN_MAX 4
 
-ssize_t read(int, void *, size_t);
+/// @brief Read a line from the file pointed by the file descriptor.
+/// @param fildes   The file descriptor.
+/// @param buf      The buffer.
+/// @param nbyte    The number of bytes to read.
+/// @return The number of read characters.
+ssize_t read(int fildes, void * buf, size_t nbyte);
 
+/// @brief Write the the buffer inside the file.
+/// @param fildes   The file descriptor.
+/// @param buf      The buffer to write.
+/// @param nbyte    The number of bytes to write.
+/// @return The number of written bytes.
 ssize_t write(int fildes, const void * buf, size_t nbyte);
 
-int close(int);
+/// @brief Close the file pointed by the file descriptor.
+/// @param fildes The file descriptor.
+/// @return The result of the operation.
+int close(int fildes);

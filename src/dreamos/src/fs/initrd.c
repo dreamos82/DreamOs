@@ -25,10 +25,14 @@
 #include "fcntl.h"
 
 char * module_start;
+
 initrd_t * fs_specs;
 initrd_file_t * fs_headers;
-initrd_fd ird_descriptors[MAX_INITRD_DESCRIPTORS];
 unsigned int fs_end;
+
+/// The list of file descriptors.
+initrd_fd ird_descriptors[MAX_INITRD_DESCRIPTORS];
+/// The currently opened file descriptor.
 unsigned int cur_irdfd;
 
 uint32_t initfs_init()

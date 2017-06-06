@@ -23,14 +23,14 @@
 #include "kheap.h"
 #include "shell.h"
 
-int open(const char * path, int oflags, mode_t mode)
+int open(const char * pathname, int oflags, mode_t mode)
 {
     // Allocate a variable for the path.
     char new_path[CURPATH_LEN];
     // Initialize the path variable.
     memset(new_path, '\0', CURPATH_LEN);
     // Copy the path to the working variable.
-    strcpy(new_path, path);
+    strcpy(new_path, pathname);
     // If the first character is not the '/' then get the absolute path.
     if (new_path[0] != '/')
     {

@@ -24,11 +24,16 @@
 #include "language.h"
 #include "stat.h"
 
+/// The maximum number of mount points.
 #define MAX_MOUNTPOINT 10
+/// The maximum number of file descriptors.
 #define MAX_FD _SC_OPEN_MAX
 
+/// Identifies a file.
 #define FS_FILE         0x01
+/// Identifies a directory.
 #define FS_DIRECTORY    0x02
+/// Identifies a mount point.
 #define FS_MOUNTPOINT   0x03
 
 /// @brief Set of functions used to perform operations on directories.
@@ -103,8 +108,11 @@ typedef struct file_descriptor_t
     int flags_mask;
 } file_descriptor_t;
 
+/// The currently opened file descriptor.
 extern int current_fd;
+/// The list of file descriptors.
 extern file_descriptor_t fd_list[_SC_OPEN_MAX];
+/// The list of mount points.
 extern mountpoint_t mountpoint_list[MAX_MOUNTPOINT];
 
 /// @brief Initialize the Virtual File System (VFS).
