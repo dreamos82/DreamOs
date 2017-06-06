@@ -9,12 +9,14 @@
 /// @brief Standard structure for atomic operations.
 typedef struct atomic_t
 {
+    /// @brief The counter associated to the atomic.
     volatile int32_t counter;
 } atomic_t;
 
 /// @brief At declaration, initialize an atomic_t to i.
 #define ATOMIC_INIT(i)  { (i) }
 
+/// @brief The prefix used to lock.
 #define LOCK_PREFIX "\n\tlock; "
 
 inline static int32_t atomic_set_and_test(atomic_t * v, int32_t i)

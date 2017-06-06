@@ -34,11 +34,11 @@
 
 #define KERNEL 1
 
-char * strncpy(char * dest, const char * source, size_t n)
+char * strncpy(char * destination, const char * source, size_t num)
 {
-    char * start = dest;
-    while (n && (*dest++ = *source++)) n--;
-    if (n) while (--n) *dest++ = '\0';
+    char * start = destination;
+    while (num && (*destination++ = *source++)) num--;
+    if (num) while (--num) *destination++ = '\0';
     return start;
 }
 
@@ -74,16 +74,6 @@ int strnicmp(const char * s1, const char * s2, size_t n)
     } while (--n && f && (f == l));
 
     return f - l;
-}
-
-int strcasecmp(const char * s1, const char * s2)
-{
-    return stricmp(s1, s2);
-}
-
-int strncasecmp(const char * s1, const char * s2, size_t n)
-{
-    return strnicmp(s1, s2, n);
 }
 
 char * strchr(const char * s, int ch)
@@ -539,7 +529,7 @@ char * strset(char * s, int c)
  * It can be bettered
  */
 
-char * strtok(char * s, const char * delim)
+char * strtok(char * str, const char * delim)
 {
     const char * spanp;
     int c, sc;
@@ -547,11 +537,11 @@ char * strtok(char * s, const char * delim)
     static char * last;
 
 
-    if (s == NULL && (s = last) == NULL)
+    if (str == NULL && (str = last) == NULL)
         return (NULL);
 
     cont:
-    c = *s++;
+    c = *str++;
     for (spanp = delim; (sc = *spanp++) != 0;)
     {
         if (c == sc)
@@ -563,21 +553,21 @@ char * strtok(char * s, const char * delim)
         last = NULL;
         return (NULL);
     }
-    tok = s - 1;
+    tok = str - 1;
 
     for (;;)
     {
-        c = *s++;
+        c = *str++;
         spanp = delim;
         do
         {
             if ((sc = *spanp++) == c)
             {
                 if (c == 0)
-                    s = NULL;
+                    str = NULL;
                 else
-                    s[-1] = 0;
-                last = s;
+                    str[-1] = 0;
+                last = str;
                 return (tok);
             }
         } while (sc != 0);

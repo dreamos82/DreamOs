@@ -20,9 +20,11 @@
 #include "stdarg.h"
 #include "stddef.h"
 
+/// The maximum number of digits of an integer.
 #define MAX_DIGITS_IN_INTEGER 11
 
 #ifndef EOF
+/// Define the End-Of-File.
 #define EOF (-1)
 #endif
 

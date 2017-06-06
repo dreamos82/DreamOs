@@ -32,38 +32,45 @@
 #include "stddef.h"
 #include "list.h"
 
-char * strncpy(char * dest, const char * source, size_t n);
+/// @brief Copies the first num characters of source to destination.
+char * strncpy(char * destination, const char * source, size_t num);
 
+/// @brief Compares up to n characters of s1 to those of s2.
 int strncmp(const char * s1, const char * s2, size_t n);
 
+/// @brief Case insensitive string compare.
 int stricmp(const char * s1, const char * s2);
 
+/// @brief Case-insensitively compare up to n characters of s1 to those of s2.
 int strnicmp(const char * s1, const char * s2, size_t n);
 
+/// @brief Returns a pointer to the first occurrence of ch in str.
 char * strchr(const char * s, int ch);
 
+/// @brief Returns a pointer to the last occurrence of ch in str.
 char * strrchr(const char * s, int ch);
 
+/// @brief Returns a pointer to the first occurrence of s2 in s1, or NULL if
+/// s2 is not part of s1.
 char * strstr(const char * s1, const char * s2);
 
+/// @brief Returns the length of the initial portion of string which consists
+/// only of characters that are part of control.
 size_t strspn(const char * string, const char * control);
 
+/// @brief Calculates the length of the initial segment of string which
+/// consists entirely of characters not in control.
 size_t strcspn(const char * string, const char * control);
 
+/// @brief Finds the first character in the string string that matches any
+/// character specified in control.
 char * strpbrk(const char * string, const char * control);
 
-int strcasecmp(const char * s1, const char * s2);
-
-int strncasecmp(const char * s1, const char * s2, size_t n);
-
-int strcoll(const char * s1, const char * s2);
-
+/// @brief Make a copy of the given string.
 char * strdup(const char * s);
 
-char * strlwr(char * s);
-
-char * strupr(char * s);
-
+/// @brief Appends the string pointed to, by s2 to the end of the string
+/// pointed to, by s1 up to n characters long.
 char * strncat(char * s1, const char * s2, size_t n);
 
 char * strnset(char * s, int c, size_t n);
@@ -72,21 +79,19 @@ char * strset(char * s, int c);
 
 char * strrev(char * s);
 
-char * strtok(char * string, const char * control);
+/// @brief Breaks string str into a series of tokens separated by delim.
+char * strtok(char * str, const char * delim);
 
 char * strtok_r(char * string, const char * control, char ** lasts);
 
-char * strerror(int errnum);
-
-char * strsignal(int signum);
-
+/// @brief Another function to copy n characters from str2 to str1.
 void * memmove(void * dst, const void * src, size_t n);
 
-void * memchr(const void * buf, int ch, size_t n);
+/// @brief Searches for the first occurrence of the character c (an unsigned
+/// char) in the first n bytes of the string pointed to, by the argument str.
+void * memchr(const void * str, int c, size_t n);
 
 void * memccpy(void * dst, const void * src, int c, size_t n);
-
-int memicmp(const void * buf1, const void * buf2, size_t n);
 
 // Intrinsic functions
 
@@ -97,7 +102,8 @@ int memicmp(const void * buf1, const void * buf2, size_t n);
 /// @return Pointer to the destination.
 void * memcpy(void * _dst, const void * _src, size_t num);
 
-int memcmp(const void *, const void *, size_t);
+/// @brief Compares the first n bytes of str1 and str2.
+int memcmp(const void * str1, const void * str2, size_t n);
 
 /// @brief Sets the first num bytes of the block of memory pointed by ptr
 ///         to the specified value.
