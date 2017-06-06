@@ -232,7 +232,7 @@ void move_cursor_left(void)
 
 void move_cursor_right(void)
 {
-    if (cmd_cursor_index < shell_lowe_bound_x)
+    if (cmd_cursor_index < shell_lower_bound_x)
     {
         ++cmd_cursor_index;
     }

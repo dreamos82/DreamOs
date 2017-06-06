@@ -22,7 +22,9 @@
 #include "debug.h"
 #include "stdbool.h"
 
+/// The height of the screen.
 #define SCREEN_HEIGHT   25
+/// The width of the screen.
 #define SCREEN_WIDTH    80
 
 /// @brief Structure used to hold information about the screen.

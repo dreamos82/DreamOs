@@ -19,24 +19,25 @@
 
 #include "stdint.h"
 
+/// @brief A set of colors.
 typedef enum video_color_t
 {
-    BLACK,          ///< 0
-    BLUE,           ///< 1
-    GREEN,          ///< 2
-    CYAN,           ///< 3
-    RED,            ///< 4
-    MAGENTA,        ///< 5
-    BROWN,          ///< 6
-    GREY,           ///< 7
-    DARK_GREY,      ///< 8
-    BRIGHT_BLUE,    ///< 9
-    BRIGHT_GREEN,   ///< 10
-    BRIGHT_CYAN,    ///< 11
-    BRIGHT_RED,     ///< 12
-    BRIGHT_MAGENTA, ///< 13
-    YELLOW,         ///< 14
-    WHITE,          ///< 15
+    BLACK,          ///< 0  : Black
+    BLUE,           ///< 1  : Blue
+    GREEN,          ///< 2  : Green
+    CYAN,           ///< 3  : Cyan
+    RED,            ///< 4  : Red
+    MAGENTA,        ///< 5  : Magenta
+    BROWN,          ///< 6  : Brown
+    GREY,           ///< 7  : Grey
+    DARK_GREY,      ///< 8  : Dark Grey
+    BRIGHT_BLUE,    ///< 9  : Bright Blue
+    BRIGHT_GREEN,   ///< 10 : Bright Green
+    BRIGHT_CYAN,    ///< 11 : Bright Cyan
+    BRIGHT_RED,     ///< 12 : Bright Red
+    BRIGHT_MAGENTA, ///< 13 : Bright Magenta
+    YELLOW,         ///< 14 : Yellow
+    WHITE,          ///< 15 : White
 } video_color_t;
 
 /// @brief Initialize the video.
@@ -84,9 +85,6 @@ uint32_t video_get_column();
 /// @brief Get the current row number.
 uint32_t video_get_line();
 
-// -----------------------------------------------------------------------------
-// Functions concerning video scrolling.
-
 /// @brief The whole screen is shifted up by one line. Used when the cursor
 /// reaches the last position of the screen.
 void video_shift_one_line();
@@ -109,14 +107,15 @@ void video_scroll_down();
 uint32_t lower_bound_x;
 /// Determines the lower-bound on the y axis for the video.
 uint32_t lower_bound_y;
-
+/// Determines the current position of the shell cursor on the x axis.
 uint32_t shell_current_x;
+/// Determines the current position of the shell cursor on the y axis.
 uint32_t shell_current_y;
-uint32_t shell_lowe_bound_x;
-uint32_t shell_lowe_bound_y;
+/// Determines the lower-bound on the x axis for the shell.
+uint32_t shell_lower_bound_x;
+/// Determines the lower-bound on the y axis for the shell.
+uint32_t shell_lower_bound_y;
 
-// -----------------------------------------------------------------------------
-// Support functions.
 /// @brief Prints [OK] at the current row and column 60.
 void video_print_ok();
 
