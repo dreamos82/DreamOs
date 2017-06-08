@@ -19,7 +19,9 @@
 #include "string.h"
 #include "kheap.h"
 
+/// @brief Pointer to the ready queue.
 process_list_t * ready_queue = NULL;
+/// @brief Pointer to the current active process inside the ready queue.
 process_list_t * current_process = NULL;
 list_t * process_list;
 

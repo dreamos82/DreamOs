@@ -76,7 +76,7 @@ void kernel_init_vm()
 
     init_area(&page_tables[pt_idx * 1024]);
 
-    paging_enabled = true;
+    kernel_activate_paging();
 }
 
 void kernel_switch_page_directory(page_directory_t * page_dir)
@@ -130,15 +130,3 @@ char get_mapping(uint32_t virtual_address, uint32_t * physical_address)
     return 0;
 }
 
-void kernel_enable_paging()
-{
-    uint32_t cr4;
-    __asm__ __volatile__("mov %%cr4, %0" : "=r"(cr4));
-    CLEAR_PSEBIT(cr4);
-    __asm__ __volatile__("mov %0, %%cr4"::"r"(cr4));
-
-    uint32_t cr0;
-    __asm__ __volatile__("mov %%cr0, %0" : "=r"(cr0));
-    SET_PGBIT(cr0);
-    __asm__ __volatile__("mov %0, %%cr0"::"r"(cr0));
-}

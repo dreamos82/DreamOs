@@ -21,15 +21,20 @@
 #include "stddef.h"
 #include "chunk.h"
 
+/// The starting address of the heap.
 #define HEAP_START 0xD0000000
+/// The end address of the heap.
 #define HEAP_END   0xFFBFF000
 
+/// The maximum address of the heap.
 uint32_t heap_max;
+/// A pointer to the first chunk.
 chunk_t * first_chunk;
 
 /// @brief Initialize the heap.
 void kernel_init_heap();
 
+/// @brief Print the heap as a debug message.
 void print_heap();
 
 /// @brief Returns a pointer to a chunk of memory.

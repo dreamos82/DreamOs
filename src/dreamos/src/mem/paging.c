@@ -37,6 +37,24 @@ void kernel_init_paging(uint32_t start)
     location = (start + PAGE_SIZE) & PAGE_MASK;
 }
 
+void kernel_enable_paging()
+{
+    uint32_t cr4;
+    __asm__ __volatile__("mov %%cr4, %0" : "=r"(cr4));
+    CLEAR_PSEBIT(cr4);
+    __asm__ __volatile__("mov %0, %%cr4"::"r"(cr4));
+
+    uint32_t cr0;
+    __asm__ __volatile__("mov %%cr0, %0" : "=r"(cr0));
+    SET_PGBIT(cr0);
+    __asm__ __volatile__("mov %0, %%cr0"::"r"(cr0));
+}
+
+void kernel_activate_paging()
+{
+    paging_enabled = true;
+}
+
 uint32_t kernel_alloc_page()
 {
     if (!paging_enabled)

@@ -22,6 +22,7 @@
 #include "string.h"
 #include "debug.h"
 
+/// The default dimension of the stack of a process.
 #define DEFAULT_STACK_SIZE 0x100000
 
 /// @brief Returns a non-decreasing unique process id.

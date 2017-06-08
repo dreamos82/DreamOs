@@ -17,15 +17,21 @@
 
 #pragma once
 
+/// Maximum length of the string used by utsname.
 #define SYS_LEN 257
 
+/// @brief Holds information concerning the machine and the os.
 typedef struct utsname_t
 {
+    /// The name of the system.
     char sysname[SYS_LEN];
+    /// The name of the node.
     char nodename[SYS_LEN];
-
+    /// The version of the OS.
     char version[SYS_LEN];
+    /// The name of the machine.
     char machine[SYS_LEN];
 } utsname_t;
 
-int uname(utsname_t *);
+/// @brief Sets the values of os_infos.
+int uname(utsname_t * os_infos);

@@ -22,20 +22,23 @@
 #include "stdbool.h"
 #include "kernel.h"
 
+/// @brief Initial address of the stack.
 #define PAGING_STACK_ADDR 0xFF000000
 
 // Error code interpretation.
-#define ERR_PRESENT     0x1
-#define ERR_RW          0x2
-#define ERR_USER        0x4
-#define ERR_RESERVED    0x8
-#define ERR_INST        0x10
-
-#define SUPERVISOR 0
-
-extern bool_t paging_enabled;
+#define ERR_PRESENT     0x1     ///< Page present.
+#define ERR_RW          0x2     ///< Page is read only.
+#define ERR_USER        0x4     ///< Page is read only.
+#define ERR_RESERVED    0x8     ///< Overwrote reserved bits.
+#define ERR_INST        0x10    ///< Instruction fetch.
 
 void kernel_init_paging(uint32_t start);
+
+/// @brief Enable paging, turn off PSE bit first as it was turned on by the
+/// assembly header when kernel was loading. Then enable PG Bit in cr0.
+void kernel_enable_paging();
+
+void kernel_activate_paging();
 
 uint32_t kernel_alloc_page();
 
