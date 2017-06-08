@@ -31,12 +31,12 @@
 /// @brief Writes the given character to the standard output (stdout).
 void putchar(int character);
 
-/// @brief Returns the next character from the standard input (stdin).
-int getchar(void);
-
 /// @brief Writes the string pointed by str to the standard output (stdout)
 /// and appends a newline character ('\n').
-int puts(char * str);
+void puts(char * str);
+
+/// @brief Returns the next character from the standard input (stdin).
+int getchar(void);
 
 /// @brief Reads characters from the standard input (stdin) and stores them
 /// as a C string into str until a newline character or the end-of-file is

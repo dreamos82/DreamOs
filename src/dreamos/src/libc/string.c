@@ -523,12 +523,6 @@ char * strset(char * s, int c)
     return start;
 }
 
-/* Written by shainer.
- * Separate a string in token according to the delimiter
- * If str is NULL, the scanning will continue for the previous string
- * It can be bettered
- */
-
 char * strtok(char * str, const char * delim)
 {
     const char * spanp;
@@ -575,9 +569,6 @@ char * strtok(char * str, const char * delim)
 
 }
 
-/*
- * Compare n characters of s2 and s1
- */
 int _kstrncmp(const char * s1, const char * s2, size_t num)
 {
     // If the number of characters that has to be checked is equal to zero,
@@ -687,12 +678,9 @@ char * strsep(char ** stringp, const char * delim)
     }
 }
 
-/*
-   Split a string into list of strings
-   */
 list_t * str_split(const char * str,
                    const char * delim,
-                   unsigned int * numtokens)
+                   unsigned int * num)
 {
     list_t * ret_list = list_create();
     char * s = strdup(str);
@@ -706,15 +694,12 @@ list_t * str_split(const char * str,
             continue;
         }
         list_push(ret_list, strdup(token));
-        if (numtokens) (*numtokens)++;
+        if (num) (*num)++;
     }
     kfree(s);
     return ret_list;
 }
 
-/*
- * Reconstruct the string with tokens and delimiters
- * */
 char * list2str(list_t * list, const char * delim)
 {
     char * ret = kmalloc(256);

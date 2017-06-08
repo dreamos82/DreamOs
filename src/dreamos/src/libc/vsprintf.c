@@ -31,23 +31,28 @@
 #include "string.h"
 #include "ctype.h"
 
+/// Determines the type of kernel.
 #define KERNEL 1
 
 #ifdef KERNEL
+/// Determines if the kernel supports floating point values.
 #define NOFLOAT
 #endif
 
-#define ZEROPAD 1               // Pad with zero
-#define SIGN    2               // Unsigned/signed long
-#define PLUS    4               // Show plus
-#define SPACE   8               // Space if plus
-#define LEFT    16              // Left justified
-#define SPECIAL 32              // 0x
-#define LARGE   64              // Use 'ABCDEF' instead of 'abcdef'
+#define ZEROPAD 1               ///< Pad with zero
+#define SIGN    2               ///< Unsigned/signed long
+#define PLUS    4               ///< Show plus
+#define SPACE   8               ///< Space if plus
+#define LEFT    16              ///< Left justified
+#define SPECIAL 32              ///< 0x
+#define LARGE   64              ///< Use 'ABCDEF' instead of 'abcdef'
 
+/// The list of digits.
 static char * digits = "0123456789abcdefghijklmnopqrstuvwxyz";
+/// The list of uppercase digits.
 static char * upper_digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+/// @brief Returns the index of the first non-integer character.
 static int skip_atoi(const char ** s)
 {
     int i = 0;

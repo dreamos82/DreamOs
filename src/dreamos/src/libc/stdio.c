@@ -21,19 +21,14 @@
 #include "string.h"
 #include "keyboard.h"
 
-#define LEFT    1
-#define RIGHT   0
-
-char * VIDEO_RAM = (char *) 0xb8000;
-char * VIDEO_PTRZ = (char *) 0xb8000;
-char VIDEO_CLRZ = 0x7;
-
-int last_Xz = 0;
-int last_Yz = 0;
-
 void putchar(int character)
 {
     video_putc(character);
+}
+
+void puts(char * str)
+{
+    video_puts(str);
 }
 
 int getchar(void)
@@ -41,24 +36,6 @@ int getchar(void)
     int tmpchar;
     while ((tmpchar = keyboard_getc()) == -1);
     return tmpchar;
-}
-
-int puts(char * str)
-{
-    while ((*str) != 0)
-    {
-        if (last_Xz && last_Yz)
-        {
-            video_scroll_down();
-        }
-        *(VIDEO_PTRZ++) = (*str);
-        *(VIDEO_PTRZ++) = VIDEO_CLRZ;
-        video_shift_one_line();
-        video_set_cursor_auto();
-        ++str;
-    }
-    video_new_line();
-    return 1;
 }
 
 char * gets(char * str)

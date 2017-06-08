@@ -15,17 +15,17 @@
 /// 3. Neither the name of the project nor the names of its contributors
 ///    may be used to endorse or promote products derived from this software
 ///    without specific prior written permission.
-/// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-/// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+/// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+/// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 /// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-/// ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-/// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-/// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-/// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-/// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-/// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-/// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-/// SUCH DAMAGE.
+/// ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+/// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+/// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+/// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+/// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+/// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+/// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+/// POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
@@ -73,15 +73,19 @@ char * strdup(const char * s);
 /// pointed to, by s1 up to n characters long.
 char * strncat(char * s1, const char * s2, size_t n);
 
+/// @brief Fill the string s with the character c, to the given length n.
 char * strnset(char * s, int c, size_t n);
 
+/// @brief Fill the string s with the character c.
 char * strset(char * s, int c);
 
+/// @brief Reverse the string s.
 char * strrev(char * s);
 
-/// @brief Breaks string str into a series of tokens separated by delim.
+/// @brief TODO: Check behaviour!
 char * strtok(char * str, const char * delim);
 
+/// @brief TODO: Check behaviour!
 char * strtok_r(char * string, const char * control, char ** lasts);
 
 /// @brief Another function to copy n characters from str2 to str1.
@@ -91,9 +95,9 @@ void * memmove(void * dst, const void * src, size_t n);
 /// char) in the first n bytes of the string pointed to, by the argument str.
 void * memchr(const void * str, int c, size_t n);
 
+/// @brief Copies the first n bytes from memory area src to memory area dest,
+/// stopping when the character c is found.
 void * memccpy(void * dst, const void * src, int c, size_t n);
-
-// Intrinsic functions
 
 /// @brief Copy a block of memory, handling overlap.
 /// @param _dst Pointer to the destination.
@@ -113,31 +117,43 @@ int memcmp(const void * str1, const void * str2, size_t n);
 /// @return The same ptr.
 void * memset(void * ptr, int value, size_t num);
 
-char * strcpy(char *, const char *);
+/// @brief Copy the string src into the array dst.
+char * strcpy(char * dst, const char * src);
 
-char * strcat(char *, const char *);
+/// @brief Appends a copy of the string src to the string dst.
+char * strcat(char * dst, const char * src);
 
-int strcmp(const char *, const char *);
+/// @brief Checks if the two strings are equal.
+int strcmp(const char * s1, const char * s2);
 
-size_t strlen(const char *);
+/// @brief Returns the lenght of the string s.
+size_t strlen(const char * s);
 
+/// @brief Returns the number of characters inside s, excluding the
+/// terminating null byte ('\0'), but at most count.
 size_t strnlen(const char * s, size_t count);
 
-// Written by shainer
+/// @brief Separate a string in token according to the delimiter.
+/// If str is NULL, the scanning will continue for the previous string.
+/// It can be bettered.
+char * strtok(char * str, const char * delim);
 
-char * strtok(char *, const char *);
-
+/// @brief Compare num characters of s2 and s1.
 int _kstrncmp(const char * s1, const char * s2, size_t num);
 
+/// @brief Removes the whitespaces in from of str.
 char * trim(char * str);
 
+/// @brief Create a copy of str.
 char * strdup(const char * src);
 
+/// @brief Separate stringp based on delim.
 char * strsep(char ** stringp, const char * delim);
 
-list_t *
-str_split(const char * str, const char * delim, unsigned int * numtokens);
+/// @brief Split a string into list of strings.
+list_t * str_split(const char * str, const char * delim, unsigned int * num);
 
+/// @brief Reconstruct a string from list using delim as delimiter.
 char * list2str(list_t * list, const char * delim);
 
 /// @brief Move the number "num" into a string.
@@ -148,6 +164,8 @@ char * list2str(list_t * list, const char * delim);
 /// @param base     The base used to convert.
 void int_to_str(char * buffer, unsigned int num, unsigned int base);
 
-void _knntos(char *, int, int);
+/// @brief Transforms num into a string.
+void _knntos(char * buffer, int num, int base);
 
+/// @brief Replaces the occurences of find with replace inside str.
 char * replace_char(char * str, char find, char replace);
