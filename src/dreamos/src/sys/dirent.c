@@ -21,13 +21,6 @@
 #include "debug.h"
 #include "kheap.h"
 
-/**
-  * @author Ivan Gualandri
-  * @param char* path percorso del file da aprire
-  * @return DIR* puntatore alla cartella aperta se esiste, NULL altrimenti
-  *
-  * Dato un path contenente una cartella viene aperta se presente, e si torna il puntatore a DIR*
-  */
 DIR * opendir(const char * path)
 {
     // Get the mount point id.
@@ -52,32 +45,6 @@ DIR * opendir(const char * path)
     return NULL;
 }
 
-/**
-  * @author Ivan Gualandri
-  * @param DIR* dirp la cartella aperta
-  * @return Struttura dati contenente il prossimo elemento della cartella.
-  * 
-  * ad ogni chiamata su dirp torna il successivo elemento presente in quel path. Se non ve ne sono piu torna NULL
-  *  
-  */
-dirent_t * readdir(DIR * dirp)
-{
-    if (dirp != NULL)
-    {
-        if (mountpoint_list[dirp->handle].dir_op.readdir_f != NULL)
-        {
-            return mountpoint_list[dirp->handle].dir_op.readdir_f(dirp);
-        }
-    }
-    return NULL;
-}
-
-/**
-  * @author Ivan Gualandri
-  * @param DIR* dirp
-  *
-  * Dato un puntatore a DIR lo chiude liberando le strutture dati.
-  */
 int closedir(DIR * dirp)
 {
     //dbg_print("Closing directory\n");
@@ -88,9 +55,14 @@ int closedir(DIR * dirp)
     return 0;
 }
 
-DIR * fake_opendir(const char * path)
+dirent_t * readdir(DIR * dirp)
 {
-    dbg_print("One day, when i will grow up, i could open that path: %s\n",
-              path);
+    if (dirp != NULL)
+    {
+        if (mountpoint_list[dirp->handle].dir_op.readdir_f != NULL)
+        {
+            return mountpoint_list[dirp->handle].dir_op.readdir_f(dirp);
+        }
+    }
     return NULL;
 }
