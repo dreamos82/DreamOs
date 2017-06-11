@@ -18,7 +18,9 @@
 #include "debug.h"
 #include "stdio.h"
 
+/// Serial port for BOCHS.
 #define SERIAL_BOCHS    (0x00E9)
+/// Serial port for QEMU.
 #define SERIAL_COM1     (0x03F8)
 
 void dbg_print(const char * msg, ...)

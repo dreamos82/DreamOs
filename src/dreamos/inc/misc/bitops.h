@@ -20,7 +20,8 @@
 #include "stdint.h"
 #include "stdbool.h"
 
-int find_first_bit(unsigned short int);
+/// @brief Finds the first bit set in the given irq mask.
+int find_first_bit(unsigned short int irq_mask);
 
 /// @brief Check if the passed value has the given flag set.
 /// @param flags The value to check.
