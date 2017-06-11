@@ -1,5 +1,17 @@
 /// @file   shell_history.c
-/// @date   apr 01 2017
+/// @brief  Functions used to move through the history of the shell.
+/// @copyright
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+/// This program is distributed in the hope that it will be useful, but
+/// WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+/// You should have received a copy of the GNU General Public License
+/// along with this program; if not, write to the Free Software Foundation,
+/// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "shell_history.h"
 #include "string.h"
@@ -7,7 +19,9 @@
 #include "stdio.h"
 #include "keymap.h"
 
+/// Allows to easily reset the index to the maximum.
 #define RESET_MAX(A)   A = HST_LEN - 1
+/// Allows to easily reset the index the the minimum position.
 #define RESET_MIN(A)   A = free_slots
 
 /// The command history.
@@ -29,7 +43,6 @@ void history_init(void)
     }
 }
 
-// Saves cmd_pass string to history buffer (lastcmd)
 void history_push(char * command)
 {
     int prev_index = write_index + 1;
@@ -92,7 +105,7 @@ void history_start(const int key)
     cmd_cursor_index = strlen(cmd);
 }
 
-void history_print(int argc, char ** argv)
+void cmd_show_history(int argc, char ** argv)
 {
     (void) argc;
     (void) argv;

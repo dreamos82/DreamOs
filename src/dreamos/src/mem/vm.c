@@ -1,24 +1,19 @@
-/*
- * Copyright (c), Dario Casalinuovo
- * 
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
-
-//
-// Based on JamesM's kernel developement tutorials.
-//
+/// @file   vm.c
+/// @brief  Functions used to manage the virtual memory.
+/// @author Dario Casalinuovo
+/// @date   Oct 27 2003
+/// @copyright
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+/// This program is distributed in the hope that it will be useful, but
+/// WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+/// You should have received a copy of the GNU General Public License
+/// along with this program; if not, write to the Free Software Foundation,
+/// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "vm.h"
 #include "paging.h"
@@ -27,13 +22,15 @@
 #include "string.h"
 #include "descriptor_tables.h"
 
-uint32_t * page_directory = (uint32_t *) PAGE_DIR_VIRTUAL_ADDR;
-uint32_t * page_tables = (uint32_t *) PAGE_TABLE_VIRTUAL_ADDR;
+/// Pointer to the beginning of the page directory.
+static uint32_t * page_directory = (uint32_t *) PAGE_DIR_VIRTUAL_ADDR;
+/// Pointer to the beginning of the page tables.
+static uint32_t * page_tables = (uint32_t *) PAGE_TABLE_VIRTUAL_ADDR;
 
+/// Pointer to the current directory.
 page_directory_t * current_page_dir;
 
-uint32_t fault = 0;
-
+/// @brief Initialize the given area.
 void init_area(void * area)
 {
     memset(area, 0, PAGE_SIZE);
@@ -81,7 +78,7 @@ void kernel_init_vm()
 
     init_area(&page_tables[pt_idx * 1024]);
 
-    paging_enabled = true;
+    kernel_activate_paging();
 }
 
 void kernel_switch_page_directory(page_directory_t * page_dir)
@@ -135,15 +132,3 @@ char get_mapping(uint32_t virtual_address, uint32_t * physical_address)
     return 0;
 }
 
-void kernel_enable_paging()
-{
-    uint32_t cr4;
-    __asm__ __volatile__("mov %%cr4, %0" : "=r"(cr4));
-    CLEAR_PSEBIT(cr4);
-    __asm__ __volatile__("mov %0, %%cr4"::"r"(cr4));
-
-    uint32_t cr0;
-    __asm__ __volatile__("mov %%cr0, %0" : "=r"(cr0));
-    SET_PGBIT(cr0);
-    __asm__ __volatile__("mov %0, %%cr0"::"r"(cr0));
-}

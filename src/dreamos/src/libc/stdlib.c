@@ -3,6 +3,7 @@
 #include "stdlib.h"
 #include "kheap.h"
 
+/// Used to align the memory.
 #define ALIGN(x) \
     (((x) + (sizeof(size_t) - 1)) & ~(sizeof(size_t) - 1))
 
@@ -23,6 +24,7 @@ void * calloc(size_t element_number, size_t element_size)
     return ptr;
 }
 
+/// Seed used to generate random numbers.
 int rseed = 0;
 
 inline void srand(int x)

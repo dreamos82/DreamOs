@@ -1,27 +1,19 @@
-/***************************************************************************
- *            stdio.c
- *
- *  Sat Mar 31 07:47:55 2007
- *  Copyright  2007  shainer
- *  Email : shainer@debianclan.org
- *  Stdio library
- * ***************************************************************************/
-
-/*
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
+/// @file   stdio.c
+/// @brief  Standard I/0 functions.
+/// @author shainer <shainer@debianclan.org>
+/// @date   Mar 31 2007
+/// @copyright
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+/// This program is distributed in the hope that it will be useful, but
+/// WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+/// You should have received a copy of the GNU General Public License
+/// along with this program; if not, write to the Free Software Foundation,
+/// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "stdio.h"
 #include "video.h"
@@ -29,19 +21,14 @@
 #include "string.h"
 #include "keyboard.h"
 
-#define LEFT    1
-#define RIGHT   0
-
-char * VIDEO_RAM = (char *) 0xb8000;
-char * VIDEO_PTRZ = (char *) 0xb8000;
-char VIDEO_CLRZ = 0x7;
-
-int last_Xz = 0;
-int last_Yz = 0;
-
 void putchar(int character)
 {
     video_putc(character);
+}
+
+void puts(char * str)
+{
+    video_puts(str);
 }
 
 int getchar(void)
@@ -49,24 +36,6 @@ int getchar(void)
     int tmpchar;
     while ((tmpchar = keyboard_getc()) == -1);
     return tmpchar;
-}
-
-int puts(char * str)
-{
-    while ((*str) != 0)
-    {
-        if (last_Xz && last_Yz)
-        {
-            video_scroll_down();
-        }
-        *(VIDEO_PTRZ++) = (*str);
-        *(VIDEO_PTRZ++) = VIDEO_CLRZ;
-        video_shift_one_line();
-        video_set_cursor_auto();
-        ++str;
-    }
-    video_new_line();
-    return 1;
 }
 
 char * gets(char * str)

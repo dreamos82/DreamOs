@@ -1,25 +1,19 @@
-/*
- * Dreamos
- * handlers.c
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
-
-/*
- * Autore Ivan Gualandri
- * Prima versione: 19/05/2007
- */
+/// @file   gdt.c
+/// @brief  Functions which manage the Interrupt Service Routines (ISRs).
+/// @author Ivan Gualandri
+/// @date   Oct 27 2003
+/// @copyright
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+/// This program is distributed in the hope that it will be useful, but
+/// WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+/// You should have received a copy of the GNU General Public License
+/// along with this program; if not, write to the Free Software Foundation,
+/// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "isr.h"
 #include "port_io.h"
@@ -152,12 +146,12 @@ void interrupt_handler(unsigned int esp)
     }
     if (irq_num <= 8 && irq_num != 2)
     {
-        outportb(MASTER_PORT, EOI);
+        outportb(MASTER_PORT_COMMAND, EOI);
     }
     else if (irq_num <= 16 || irq_num == 2)
     {
-        outportb(SLAVE_PORT, EOI);
-        outportb(MASTER_PORT, EOI);
+        outportb(SLAVE_PORT_COMMAND, EOI);
+        outportb(MASTER_PORT_COMMAND, EOI);
     }
     // Call the scheduler.
     schedule();

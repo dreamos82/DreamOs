@@ -1,70 +1,61 @@
-/***************************************************************************
- *            keyboard.c
- *
- *  Sat Mar 31 07:47:55 2007
- *  Copyright  2007  shainer
- *  Email : shainer@debianclan.org
- *  Keyboard handling
- * ***************************************************************************/
-
-/*
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
+/// @file   keyboard.c
+/// @brief  Keyboard handling.
+/// @author shainer <shainer@debianclan.org>
+/// @date   Mar 31 2007
+/// @copyright
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+/// This program is distributed in the hope that it will be useful, but
+/// WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+/// You should have received a copy of the GNU General Public License
+/// along with this program; if not, write to the Free Software Foundation,
+/// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "keyboard.h"
 #include "video.h"
 #include "stdio.h"
-#include "port_io.h"
 #include "pic8259.h"
 #include "shell_history.h"
 #include "keymap.h"
 #include "bitops.h"
+#include "port_io.h"
 
 /// A macro from Ivan to update buffer indexes.
-#define STEP(x) ((x) == BUFSIZE-1 ? 0 : x+1)
+#define STEP(x) (((x) == BUFSIZE - 1) ? 0 : (x + 1))
 
 /// Circular Buffer where the pressed keys are stored.
 static int circular_buffer[BUFSIZE];
-///
+/// Index inside the buffer...
 static int buf_r = 0;
-///
+/// Index inside the buffer...
 static int buf_w = 0;
 /// Tracks the state of the leds.
 static uint8_t ledstate = 0;
 /// The shadow option is active.
 static bool_t shadow = false;
-
+/// Keep track of the last tab.
 extern unsigned int last_tab;
-
-// ------------------------------------
-#define KBD_LEFT_SHIFT      1
-#define KBD_RIGHT_SHIFT     2
-#define KBD_CAPS_LOCK       4
-#define KBD_NUM_LOCK        8
-#define KBD_SCROLL_LOCK     16
-#define KBD_LEFT_CONTROL    32
-#define KBD_RIGHT_CONTROL   64
+/// The flags concerning the keyboard.
 static uint32_t keyboard_flags = 0;
-// ------------------------------------
+
+#define KBD_LEFT_SHIFT      1   ///< Flag which identifies the left shift.
+#define KBD_RIGHT_SHIFT     2   ///< Flag which identifies the right shift.
+#define KBD_CAPS_LOCK       4   ///< Flag which identifies the caps lock.
+#define KBD_NUM_LOCK        8   ///< Flag which identifies the num lock.
+#define KBD_SCROLL_LOCK     16  ///< Flag which identifies the scroll lock.
+#define KBD_LEFT_CONTROL    32  ///< Flag which identifies the left control.
+#define KBD_RIGHT_CONTROL   64  ///< Flag which identifies the right control.
 
 void keyboard_install()
 {
     // Install the IRQ.
-    pic8259_irq_install_handler(KEYBOARD, keyboard_isr);
+    pic8259_irq_install_handler(IRQ_KEYBOARD, keyboard_isr);
     // Enable the IRq.
-    pic8259_irq_enable(KEYBOARD);
+    pic8259_irq_enable(IRQ_KEYBOARD);
 }
 
 void keyboard_isr()
@@ -159,7 +150,7 @@ void keyboard_isr()
                 video_new_line();
                 video_set_cursor_auto();
                 last_tab = 0;
-                outportb(MASTER_PORT, EOI);
+                outportb(MASTER_PORT_COMMAND, EOI);
                 break;
             case KEY_TAB:
                 if (STEP(buf_w) == buf_r)
@@ -235,7 +226,7 @@ void keyboard_isr()
                 break;
         }
     }
-    outportb(MASTER_PORT, EOI);
+    outportb(MASTER_PORT_COMMAND, EOI);
     return;
 }
 

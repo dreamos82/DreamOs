@@ -1,20 +1,19 @@
-/*
- * Dreamos
- * 8253.h
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
+/// @file   timer.c
+/// @brief  Timer implementation.
+/// @author shainer <shainer@debianclan.org>
+/// @date   Jun 2007
+/// @copyright
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+/// This program is distributed in the hope that it will be useful, but
+/// WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+/// You should have received a copy of the GNU General Public License
+/// along with this program; if not, write to the Free Software Foundation,
+/// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "timer.h"
 #include "stdint.h"
@@ -23,18 +22,20 @@
 #include "irqflags.h"
 
 /// This will keep track of how many ticks the system has been running for.
-__volatile__ uint32_t timer_ticks = 0;
+static __volatile__ uint32_t timer_ticks = 0;
 /// This will keep track of how many seconds the system has been running for.
-__volatile__ uint32_t timer_seconds = 0;
+static __volatile__ uint32_t timer_seconds = 0;
 /// The number of ticks for a second.
-uint32_t ticks_seconds = 100;
+static uint32_t ticks_seconds = 100;
 
+/// @brief Allows to set the timer phase to the given frequency.
+/// @param hz The frequency to set.
 void timer_phase(const uint32_t hz)
 {
-    uint32_t divisor = PIT_DIVISOR / hz;       // Calculate our divisor.
+    uint32_t divisor = PIT_DIVISOR / hz;      // Calculate our divisor.
     // Disable the IRQs.
     irq_disable();
-    outportb(PIT_COMREG, 0x36);             // Set our command byte 0x36.
+    outportb(PIT_COMREG, PIT_CONFIGURATION);  // Set our command byte 0x36.
     outportb(PIT_DATAREG0, divisor & 0xFF);   // Set low byte of divisor.
     outportb(PIT_DATAREG0, divisor >> 8);     // Set high byte of divisor.
     // Re-Enable the IRQs.
@@ -57,9 +58,9 @@ void timer_install()
     // Set the timer phase.
     timer_phase(100);
     // Installs 'timer_handler' to IRQ0.
-    pic8259_irq_install_handler(TIMER, timer_handler);
+    pic8259_irq_install_handler(IRQ_TIMER, timer_handler);
     // Enable the IRQ of the itemer.
-    pic8259_irq_enable(TIMER);
+    pic8259_irq_enable(IRQ_TIMER);
 }
 
 void sleep(const unsigned int seconds)

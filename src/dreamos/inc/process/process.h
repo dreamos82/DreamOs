@@ -1,24 +1,19 @@
-/*
- * Copyright (c), Dario Casalinuovo
- * 
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
-
-//
-// Based on JamesM's kernel developement tutorials.
-//
+/// @file   process.h
+/// @brief  Process data structures and functions.
+/// @author Dario Casalinuovo
+/// @date   Oct 27 2003
+/// @copyright
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+/// This program is distributed in the hope that it will be useful, but
+/// WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+/// You should have received a copy of the GNU General Public License
+/// along with this program; if not, write to the Free Software Foundation,
+/// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #pragma once
 
@@ -26,14 +21,13 @@
 #include "stddef.h"
 #include "list.h"
 
-#define PROCESS_RUNNING            0
-#define PROCESS_INTERRUPTIBLE      1
-#define PROCESS_UNINTERRUPTIBLE    2
-#define PROCESS_ZOMBIE             4
-#define PROCESS_STOPPED            8
+#define PROCESS_RUNNING            0 ///< The process is running.
+#define PROCESS_INTERRUPTIBLE      1 ///< The process is interruptible.
+#define PROCESS_UNINTERRUPTIBLE    2 ///< The process is uninterruptible.
+#define PROCESS_ZOMBIE             4 ///< The process is zombie.
+#define PROCESS_STOPPED            8 ///< The process is stopped.
 
-struct process_list;
-
+/// @brief Defines the list of flags of a process.
 enum eflags_list
 {
     EFLAG_CF = (1 << 0),    ///< 0  Carry flag
@@ -75,7 +69,7 @@ typedef struct context_t
 } context_t;
 
 /// @brief Holds information about a process.
-typedef struct process
+typedef struct process_t
 {
     /// The registers of the process.
     context_t regs;
@@ -92,9 +86,9 @@ typedef struct process
 } process_t;
 
 /// @brief Function used to create a new process.
-/// @param fn    The function which has to be performed by the new process.
-/// @param name  The name of the process.
-/// @param arg   The arguments of the process.
+/// @param function The function which has to be performed by the new process.
+/// @param name     The name of the process.
+/// @param arg      The arguments of the process.
 /// @return A pointer to the newly created process.
 process_t * kernel_create_process(int (* function)(void *),
                                   char * name,

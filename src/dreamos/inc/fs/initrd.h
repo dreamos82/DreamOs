@@ -1,20 +1,19 @@
-/*
- * Dreamos
- * initrd.h
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
+/// @file   initrd.h
+/// @brief  Headers of functions for initrd filesystem.
+/// @author Ivan Gualandri
+/// @date   Mar 31 2007
+/// @copyright
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+/// This program is distributed in the hope that it will be useful, but
+/// WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+/// You should have received a copy of the GNU General Public License
+/// along with this program; if not, write to the Free Software Foundation,
+/// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #pragma once
 
@@ -23,8 +22,11 @@
 #include "stat.h"
 #include "stdint.h"
 
+/// The maximum length of a file name.
 #define FILENAME_LENGTH         64
+/// The maximum number of files.
 #define MAX_FILES               32
+/// The maximum number of file descriptors.
 #define MAX_INITRD_DESCRIPTORS  _SC_OPEN_MAX
 
 /// @brief Contains the number of files inside the initrd filesystem.
@@ -62,8 +64,11 @@ typedef struct initrd_fd
     int cur_pos;
 } initrd_fd;
 
+/// @brief TODO: Check meaning!
 extern initrd_t * fs_specs;
+/// @brief TODO: Check meaning!
 extern initrd_file_t * fs_headers;
+/// @brief TODO: Check meaning!
 extern unsigned int fs_end;
 
 /// Initializes the initrd file system.

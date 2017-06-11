@@ -1,20 +1,19 @@
-/*
- * Dreamos
- * pic8259.h
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
+/// @file   pic8259.c
+/// @brief  pic8259 definitions.
+/// @author shainer <shainer@debianclan.org>
+/// @date   Jun 2007
+/// @copyright
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+/// This program is distributed in the hope that it will be useful, but
+/// WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+/// You should have received a copy of the GNU General Public License
+/// along with this program; if not, write to the Free Software Foundation,
+/// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "pic8259.h"
 #include "isr.h"
@@ -30,9 +29,10 @@
 #include "descriptor_tables.h"
 #include "irqflags.h"
 
-byte_t master_cur_mask;
-
-byte_t slave_cur_mask;
+/// The current mask of the master.
+static byte_t master_cur_mask;
+/// The current mask of the slave.
+static byte_t slave_cur_mask;
 
 void pic8259_init_irq()
 {
@@ -44,20 +44,20 @@ void pic8259_init_irq()
     slave_cur_mask = 0xFF;
 
     // Inizializzo i 2 processori pic con ICw1 ICW2 ICW3 e ICW4
-    outportb(MASTER_PORT, ICW_1);
-    outportb(SLAVE_PORT, ICW_1);
+    outportb(MASTER_PORT_COMMAND, ICW_1);
+    outportb(SLAVE_PORT_COMMAND, ICW_1);
 
-    outportb(MASTER_PORT_1, ICW_2_M);
-    outportb(SLAVE_PORT_1, ICW_2_S);
+    outportb(MASTER_PORT_DATA, ICW_2_M);
+    outportb(SLAVE_PORT_DATA, ICW_2_S);
 
-    outportb(MASTER_PORT_1, ICW_3_M);
-    outportb(SLAVE_PORT_1, ICW_3_S);
+    outportb(MASTER_PORT_DATA, ICW_3_M);
+    outportb(SLAVE_PORT_DATA, ICW_3_S);
 
-    outportb(MASTER_PORT_1, ICW_4);
-    outportb(SLAVE_PORT_1, ICW_4);
+    outportb(MASTER_PORT_DATA, ICW_4);
+    outportb(SLAVE_PORT_DATA, ICW_4);
 
-    outportb(MASTER_PORT_1, master_cur_mask);
-    outportb(SLAVE_PORT_1, slave_cur_mask);
+    outportb(MASTER_PORT_DATA, master_cur_mask);
+    outportb(SLAVE_PORT_DATA, slave_cur_mask);
 
     // Registers the interrupt functions inside the IDT.
     idt_set_gate(32, INT_32, PRESENT | KERNEL, 0x8);
@@ -81,7 +81,7 @@ void pic8259_init_irq()
     {
         shared_irq_handlers[i] = NULL;
     }
-    pic8259_irq_enable(TO_SLAVE_PIC);
+    pic8259_irq_enable(IRQ_TO_SLAVE_PIC);
 
     // Install the keyboard.
     printf(" * "LNG_KEYBOARD_SETUP);
@@ -98,14 +98,14 @@ void pic8259_init_irq()
     timer_install();
     video_print_ok();
 
-    outportb(0xFF, MASTER_PORT_1);
-    outportb(0xFF, SLAVE_PORT_1);
+    outportb(0xFF, MASTER_PORT_DATA);
+    outportb(0xFF, SLAVE_PORT_DATA);
 
     // Re-Enable the IRQs.
     irq_enable();
 }
 
-int pic8259_irq_enable(irq_type_t irq)
+int pic8259_irq_enable(uint32_t irq)
 {
     byte_t cur_mask;
     byte_t new_mask;
@@ -114,16 +114,16 @@ int pic8259_irq_enable(irq_type_t irq)
         if (irq < 8)
         {
             new_mask = ~(1 << irq);
-            cur_mask = inportb(MASTER_PORT_1);
-            outportb(MASTER_PORT_1, (new_mask & cur_mask));
+            cur_mask = inportb(MASTER_PORT_DATA);
+            outportb(MASTER_PORT_DATA, (new_mask & cur_mask));
             master_cur_mask = (new_mask & cur_mask);
         }
         else
         {
             irq -= 8;
             new_mask = ~(1 << irq);
-            cur_mask = inportb(SLAVE_PORT_1);
-            outportb(SLAVE_PORT_1, (new_mask & cur_mask));
+            cur_mask = inportb(SLAVE_PORT_DATA);
+            outportb(SLAVE_PORT_DATA, (new_mask & cur_mask));
             slave_cur_mask = (new_mask & cur_mask);
         }
         return 0;
@@ -131,23 +131,23 @@ int pic8259_irq_enable(irq_type_t irq)
     return -1;
 }
 
-int pic8259_irq_disable(irq_type_t irq)
+int pic8259_irq_disable(uint32_t irq)
 {
     byte_t cur_mask;
     if (irq < 15)
     {
         if (irq < 8)
         {
-            cur_mask = inportb(MASTER_PORT_1);
+            cur_mask = inportb(MASTER_PORT_DATA);
             cur_mask |= (1 << irq);
-            outportb(MASTER_PORT_1, cur_mask & 0xFF);
+            outportb(MASTER_PORT_DATA, cur_mask & 0xFF);
         }
         else
         {
             irq = irq - 8;
-            cur_mask = inportb(SLAVE_PORT_1);
+            cur_mask = inportb(SLAVE_PORT_DATA);
             cur_mask |= (1 << irq);
-            outportb(SLAVE_PORT_1, cur_mask & 0xFF);
+            outportb(SLAVE_PORT_DATA, cur_mask & 0xFF);
         }
         return 0;
     }
@@ -156,12 +156,12 @@ int pic8259_irq_disable(irq_type_t irq)
 
 int pic8259_irq_get_current()
 {
-    outportb(MASTER_PORT, GET_IRR_STATUS);
-    int cur_irq = inportb(MASTER_PORT);
+    outportb(MASTER_PORT_COMMAND, PIC_READ_ISR);
+    int cur_irq = inportb(MASTER_PORT_COMMAND);
     if (cur_irq == 4)
     {
-        outportb(SLAVE_PORT, GET_IRR_STATUS);
-        cur_irq = inportb(SLAVE_PORT);
+        outportb(SLAVE_PORT_COMMAND, PIC_READ_ISR);
+        cur_irq = inportb(SLAVE_PORT_COMMAND);
         return 8 + find_first_bit(cur_irq);
     }
     return find_first_bit(cur_irq);

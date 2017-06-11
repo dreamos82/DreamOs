@@ -1,20 +1,19 @@
-/*
- * Dreamos
- * shell.c
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
+/// @file   shell.c
+/// @brief  Implement shell functions.
+/// @author Lisa
+/// @date   Feb 2006
+/// @copyright
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+/// This program is distributed in the hope that it will be useful, but
+/// WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+/// You should have received a copy of the GNU General Public License
+/// along with this program; if not, write to the Free Software Foundation,
+/// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "commands.h"
 #include "stddef.h"
@@ -27,10 +26,14 @@
 #include "shell_login.h"
 #include "shell_history.h"
 
+/// @brief Prints the prompt.
 void shell_print_prompt();
 
+/// @brief Gets the inserted command.
 void shell_get_command();
 
+/// @brief Gets the options from the command.
+/// @param command The executed command.
 void shell_get_options(char * command);
 
 /// The current user.
@@ -44,33 +47,33 @@ int argc = 1;
 /// The vector of arguments.
 char ** argv;
 
+/// @brief List of valid commands.
 command_t shell_cmd[MAX_NUM_COM] = {
-    {"aalogo",   aalogo,        "Show an ascii art logo"},
-    {"clear",    clear,         "Clear the screen"},
-    {"poweroff", poweroff,      "Turn off the machine"},
-    {"uname",    uname_cmd,     "Print kernel version, try uname --help for more info"},
-    {"credits",  credits,       "Show DreamOS credits"},
-    {"sleep",    sleep_cmd,     "Pause DreamOS for a particular number of seconds"},
-    {"cpuid",    cpuid,         "Show cpu identification informations"},
-    {"date",     date,          "Show date and time"},
-    {"echo",     echo,          "Print some lines of text"},
-    {"help",     help,          "See the 'help' list to learn the DreamOS commands now available"},
-    {"drv_load", drv_load,      "Tool to load and kill drivers"},
-    {"ls",       ls,            "Tool for listing dir - not complete-"},
-    {"cd",       cd,            "Change dir - not complete-"},
-    {"whoami",   whoami,        "Show the current user name"},
-    {"tester",   tester,        "Try some functions, 'tester --help' for more info'"},
-    {"pwd",      pwd,           "Print current working directory"},
-    {"more",     more,          "Read content of a file"},
-    {"newfile",  newfile,       "Create a new file"},
-    {"ps",       ps,            "Show task list"},
-    {"clear",    clear,         "Clears the screen"},
-    {"showpid",  showpid,       "Shows the PID of the shell"},
-    {"heapdump", heapdump,      "Shows the heap status"},
-    {"history",  history_print, "Shows the shell history"}
+    {"logo",     cmd_logo,         "Show an ascii art logo"},
+    {"clear",    cmd_clear,        "Clear the screen"},
+    {"echo",     cmd_echo,         "Print some lines of text"},
+    {"poweroff", cmd_poweroff,     "Turn off the machine"},
+    {"uname",    cmd_uname,        "Print kernel version, try uname --help for more info"},
+    {"credits",  cmd_credits,      "Show DreamOS credits"},
+    {"sleep",    cmd_sleep,        "Pause DreamOS for a particular number of seconds"},
+    {"cpuid",    cmd_cpuid,        "Show cpu identification informations"},
+    {"help",     cmd_help,         "See the 'help' list to learn the DreamOS commands now available"},
+    {"ls",       cmd_ls,           "Tool for listing dir - not complete-"},
+    {"cd",       cmd_cd,           "Change dir - not complete-"},
+    {"whoami",   cmd_whoami,       "Show the current user name"},
+    {"tester",   cmd_tester,       "Try some functions, 'tester --help' for more info'"},
+    {"pwd",      cmd_pwd,          "Print current working directory"},
+    {"more",     cmd_more,         "Read content of a file"},
+    {"newfile",  cmd_newfile,      "Create a new file"},
+    {"ps",       cmd_ps,           "Show task list"},
+    {"date",     cmd_date,         "Show date and time"},
+    {"clear",    cmd_clear,        "Clears the screen"},
+    {"showpid",  cmd_showpid,      "Shows the PID of the shell"},
+    {"heapdump", cmd_heapdump,     "Shows the heap status"},
+    {"history",  cmd_show_history, "Shows the shell history"},
+    {"drv_load", drv_load,         "Tool to load and kill drivers"}
 };
 
-/* corpo della shell */
 int shell(void * args)
 {
     (void) args;
@@ -84,7 +87,7 @@ int shell(void * args)
     memset(current_user.cur_path, '\0', CURPATH_LEN);
 
     video_clear();
-    aalogo(1, NULL);
+    cmd_logo(1, NULL);
     printf("\n\n\n\n");
 
     strcpy(current_user.cur_path, "/");
@@ -234,7 +237,7 @@ void move_cursor_left(void)
 
 void move_cursor_right(void)
 {
-    if (cmd_cursor_index < shell_lowe_bound_x)
+    if (cmd_cursor_index < shell_lower_bound_x)
     {
         ++cmd_cursor_index;
     }

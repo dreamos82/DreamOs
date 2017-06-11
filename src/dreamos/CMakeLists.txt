@@ -120,9 +120,9 @@ include_directories(
         inc/system
         inc/process
         inc/elf
-        inc/gui
-        inc/gui/shell
-        inc/gui/command
+        inc/ui
+        inc/ui/shell
+        inc/ui/command
 )
 
 # ------------------------------------------------------------------------------
@@ -178,11 +178,11 @@ set(SOURCE_FILES
         src/system/panic.c
         src/system/syscall.c
         src/kernel.c
-        src/gui/command/testing.c
-        src/gui/command/commands.c
-        src/gui/shell/shell.c
-        src/gui/shell/shell_login.c
-        src/gui/shell/shell_history.c
+        src/ui/command/testing.c
+        src/ui/command/commands.c
+        src/ui/shell/shell.c
+        src/ui/shell/shell_login.c
+        src/ui/shell/shell_history.c
         )
 
 # ------------------------------------------------------------------------------

@@ -1,3 +1,20 @@
+/// @file   testing.c
+/// @brief  Commands used to test OS functionalities.
+/// @author Lisa
+/// @date   Feb 2006
+/// @copyright
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+/// This program is distributed in the hope that it will be useful, but
+/// WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+/// You should have received a copy of the GNU General Public License
+/// along with this program; if not, write to the Free Software Foundation,
+/// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
 #include "testing.h"
 #include "commands.h"
 #include "kernel.h"
@@ -241,8 +258,10 @@ void try_mapaddress()
     //free (tmp);
 }
 
-spinlock_t spinlock;
+/// Spinlock used in a test.
+static spinlock_t spinlock;
 
+/// @brief Function used to test the spinlock.
 int task_test_1(void * args)
 {
     (void) args;
@@ -253,6 +272,7 @@ int task_test_1(void * args)
     return 0;
 }
 
+/// @brief Function used to test the spinlock.
 int task_test_2(void * args)
 {
     (void) args;
@@ -284,6 +304,7 @@ void try_process()
     spinlock_unlock(&spinlock);
 }
 
+/// @brief Function used to test background processes.
 int sleeping_process(void * args)
 {
     (void) args;

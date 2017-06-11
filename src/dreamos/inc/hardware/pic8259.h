@@ -1,72 +1,101 @@
-/*
- * Dreamos
- * pic8259.h
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
+/// @file   pic8259.h
+/// @brief  pic8259 definitions.
+/// @author shainer <shainer@debianclan.org>
+/// @date   Jun 2007
+/// @copyright
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+/// This program is distributed in the hope that it will be useful, but
+/// WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+/// You should have received a copy of the GNU General Public License
+/// along with this program; if not, write to the Free Software Foundation,
+/// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #pragma once
 
 #include "stddef.h"
 #include "idt.h"
 
-#define MASTER_PORT     0x20
-#define SLAVE_PORT      0xA0
-
-#define MASTER_PORT_1   0x21
-#define SLAVE_PORT_1    0xA1
-
+/// End-of-interrupt command code.
+#define EOI                 0x20
+/// IO base address for master PIC.
+#define MASTER_PORT_COMMAND 0x20
+/// I/O address for data to master.
+#define MASTER_PORT_DATA    (MASTER_PORT_COMMAND + 1)
+/// IO base address for slave PIC.
+#define SLAVE_PORT_COMMAND  0xA0
+/// I/O address for data to slave.
+#define SLAVE_PORT_DATA     (SLAVE_PORT_COMMAND + 1)
+/// TODO: Check meaning!
 #define ICW_1           0x11
-
+/// TODO: Check meaning!
 #define ICW_2_M         0x20
+/// TODO: Check meaning!
 #define ICW_2_S         0x28
-
+/// TODO: Check meaning!
 #define ICW_3_M         0x04
+/// TODO: Check meaning!
 #define ICW_3_S         0x02
-
+/// TODO: Check meaning!
 #define ICW_4           0x01
-
-#define GET_IRR_STATUS  0x0b
-
-#define EOI             0x20
-
+/// OCW3 irq ready next CMD read.
+#define PIC_READ_IRR                0x0A
+/// OCW3 irq service next CMD read.
+#define PIC_READ_ISR                0x0B
+/// The total number of IRQs.
 #define IRQ_NUM         16
 
-extern byte_t master_cur_mask;
+/// @defgroup irqs Interrupt Requests (IRQs)
+/// @brief This is the list of interrupt requests.
+/// @{
 
-extern byte_t slave_cur_mask;
+/// @brief System timer.
+#define IRQ_TIMER           0
+/// @brief Keyboard controller.
+#define IRQ_KEYBOARD        1
+/// @brief cascaded signals from IRQs 8–15 (any devices configured to use IRQ
+/// 2 will actually be using IRQ 9)
+#define IRQ_TO_SLAVE_PIC    2
+/// @brief Serial port controller for serial port 2 (and 4).
+#define IRQ_COM2_4          3
+/// @brief Serial port controller for serial port 1 (and 3).
+#define IRQ_COM1_3          4
+/// @brief Parallel port 2 and 3 (or sound card).
+#define IRQ_LPT2            5
+/// @brief Floppy disk controller.
+#define IRQ_FLOPPY          6
+/// @brief Parallel port 1.
+#define IRQ_LPT1            7
+/// @brief Real-time clock (RTC)
+#define IRQ_REAL_TIME_CLOCK 8
+/// @brief Advanced Configuration and Power Interface (ACPI)
+/// system control interrupt on Intel chipsets.[1] Other chipset
+/// manufacturers might use another interrupt for this purpose, or make it
+/// available for the use of peripherals (any devices configured to use IRQ
+/// 2 will actually be using IRQ 9)
+#define IRQ_AVAILABLE_1     9
+/// @brief The Interrupt is left open for the use of
+/// peripherals (open interrupt/available, SCSI or NIC)
+#define IRQ_AVAILABLE_2     10
+/// @brief The Interrupt is left open for the use of
+/// peripherals (open interrupt/available, SCSI or NIC)
+#define IRQ_AVAILABLE_3     11
+/// @brief Mouse on PS/2 connector.
+#define IRQ_MOUSE           12
+/// @brief CPU co-processor or integrated floating point unit
+/// or inter-processor interrupt (use depends on OS)
+#define IRQ_MATH_CPU        13
+/// @brief primary ATA channel (ATA interface usually serves
+/// hard disk drives and CD drives)
+#define IRQ_FIRST_HD        14
+/// @brief secondary ATA channel
+#define IRQ_SECOND_HD       15
 
-/// @brief Types of irq.
-typedef enum __attribute__ ((__packed__)) irq_type_t
-{
-    TIMER,
-    KEYBOARD,
-    TO_SLAVE_PIC,
-    COM2_4,
-    COM1_3,
-    LPT2,
-    FLOPPY,
-    LPT1,
-    REAL_TIME_CLOCK,
-    AVAILABLE_1,
-    AVAILABLE_2,
-    AVAILABLE_3,
-    MOUSE,
-    MATH_CPU,
-    FIRST_HD,
-    SECOND_HD
-} irq_type_t;
+/// @}
 
 /// @brief Struttura dati per gestire gli IRQ  condivisi
 typedef struct irq_struct_t
@@ -90,7 +119,7 @@ void pic8259_init_irq();
 /// @version 1.0
 /// @param irq number of irq to enable.
 /// @return 0 if all OK, -1 on errors
-int pic8259_irq_enable(irq_type_t irq);
+int pic8259_irq_enable(uint32_t irq);
 
 /// @brief This function, disable irqs on the pic.
 /// @details This function provide a tool for enabling irq from the pic
@@ -99,7 +128,7 @@ int pic8259_irq_enable(irq_type_t irq);
 /// @version 1.0
 /// @param irq number of irq to enable.
 /// @return 0 if all OK, -1 on errors
-int pic8259_irq_disable(irq_type_t irq);
+int pic8259_irq_disable(uint32_t irq);
 
 /// @brief This Function return the number of current IRQ Request.
 /// @author Ivan Gualandri

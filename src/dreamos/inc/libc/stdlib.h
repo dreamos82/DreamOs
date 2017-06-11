@@ -4,20 +4,18 @@
 
 #include "stddef.h"
 
-/// Determines the minimum value between the two.
-#define min(x, y)  (((y) < (x)) ? (y) : (x))
-
-/// Determines the maximum value between the two.
-#define max(x, y)  (((y) > (x)) ? (y) : (x))
-
+/// @brief Malloc based on the number of elements.
 void * calloc(size_t element_number, size_t element_size);
 
+/// @brief Allows to set the seed of the random value generator.
 void srand(int x);
 
 #ifndef MS_RAND
 
+/// The maximum value of the random.
 #define RAND_MAX ((1U << 31) - 1)
 
+/// @brief Generates a random value.
 int rand();
 
 #else /* MS rand */

@@ -1,27 +1,19 @@
-/*
- * Dreamos
- * mouse.c
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
-
-/*
- * Driver for *PS2* Mouses.
- * Authors DT, Osiris
- * Contributor: finarfin
- * first version: 16/06/2009
- */
+/// @file   mouse.c
+/// @brief  Driver for *PS2* Mouses.
+/// @author sDT, Osiris, finarfin
+/// @date   Jun 16 2009
+/// @copyright
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+/// This program is distributed in the hope that it will be useful, but
+/// WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+/// You should have received a copy of the GNU General Public License
+/// along with this program; if not, write to the Free Software Foundation,
+/// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "mouse.h"
 #include "video.h"
@@ -55,7 +47,7 @@ void mouse_install()
     mouse_read();
 
     // Setup the mouse handler.
-    pic8259_irq_install_handler(MOUSE, mouse_isr);
+    pic8259_irq_install_handler(IRQ_MOUSE, mouse_isr);
 
     mouse_enable();
 }
@@ -63,7 +55,7 @@ void mouse_install()
 void mouse_enable()
 {
     // Enable the mouse interrupts.
-    pic8259_irq_enable(MOUSE);
+    pic8259_irq_enable(IRQ_MOUSE);
     // Disable the mouse.
     mouse_write(MOUSE_ENABLE_PACKET);
     // Acknowledge.
@@ -73,7 +65,7 @@ void mouse_enable()
 void mouse_disable()
 {
     // Disable the mouse interrupts.
-    pic8259_irq_disable(MOUSE);
+    pic8259_irq_disable(IRQ_MOUSE);
     // Disable the mouse.
     mouse_write(MOUSE_DISABLE_PACKET);
     // Acknowledge.

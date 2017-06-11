@@ -1,35 +1,31 @@
-//
-// string.c
-//
-// String routines
-//
-// Copyright (C) 2002 Michael Ringgaard. All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-//
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. Neither the name of the project nor the names of its contributors
-//    may be used to endorse or promote products derived from this software
-//    without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-// SUCH DAMAGE.
-//
+/// @file   string.c
+/// @brief  String routines.
+/// @author Michael Ringgaard
+/// @date   2002
+/// @copyright
+/// Copyright (C) 2002 Michael Ringgaard. All rights reserved.
+/// Redistribution and use in source and binary forms, with or without
+/// modification, are permitted provided that the following conditions
+/// are met:
+/// 1. Redistributions of source code must retain the above copyright
+///    notice, this list of conditions and the following disclaimer.
+/// 2. Redistributions in binary form must reproduce the above copyright
+///    notice, this list of conditions and the following disclaimer in the
+///    documentation and/or other materials provided with the distribution.
+/// 3. Neither the name of the project nor the names of its contributors
+///    may be used to endorse or promote products derived from this software
+///    without specific prior written permission.
+/// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+/// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+/// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+/// ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+/// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+/// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+/// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+/// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+/// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+/// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+/// SUCH DAMAGE.
 
 #include "string.h"
 #include "ctype.h"
@@ -38,11 +34,11 @@
 
 #define KERNEL 1
 
-char * strncpy(char * dest, const char * source, size_t n)
+char * strncpy(char * destination, const char * source, size_t num)
 {
-    char * start = dest;
-    while (n && (*dest++ = *source++)) n--;
-    if (n) while (--n) *dest++ = '\0';
+    char * start = destination;
+    while (num && (*destination++ = *source++)) num--;
+    if (num) while (--num) *destination++ = '\0';
     return start;
 }
 
@@ -78,16 +74,6 @@ int strnicmp(const char * s1, const char * s2, size_t n)
     } while (--n && f && (f == l));
 
     return f - l;
-}
-
-int strcasecmp(const char * s1, const char * s2)
-{
-    return stricmp(s1, s2);
-}
-
-int strncasecmp(const char * s1, const char * s2, size_t n)
-{
-    return strnicmp(s1, s2, n);
 }
 
 char * strchr(const char * s, int ch)
@@ -537,13 +523,7 @@ char * strset(char * s, int c)
     return start;
 }
 
-/* Written by shainer.
- * Separate a string in token according to the delimiter
- * If str is NULL, the scanning will continue for the previous string
- * It can be bettered
- */
-
-char * strtok(char * s, const char * delim)
+char * strtok(char * str, const char * delim)
 {
     const char * spanp;
     int c, sc;
@@ -551,11 +531,11 @@ char * strtok(char * s, const char * delim)
     static char * last;
 
 
-    if (s == NULL && (s = last) == NULL)
+    if (str == NULL && (str = last) == NULL)
         return (NULL);
 
     cont:
-    c = *s++;
+    c = *str++;
     for (spanp = delim; (sc = *spanp++) != 0;)
     {
         if (c == sc)
@@ -567,21 +547,21 @@ char * strtok(char * s, const char * delim)
         last = NULL;
         return (NULL);
     }
-    tok = s - 1;
+    tok = str - 1;
 
     for (;;)
     {
-        c = *s++;
+        c = *str++;
         spanp = delim;
         do
         {
             if ((sc = *spanp++) == c)
             {
                 if (c == 0)
-                    s = NULL;
+                    str = NULL;
                 else
-                    s[-1] = 0;
-                last = s;
+                    str[-1] = 0;
+                last = str;
                 return (tok);
             }
         } while (sc != 0);
@@ -589,9 +569,6 @@ char * strtok(char * s, const char * delim)
 
 }
 
-/*
- * Compare n characters of s2 and s1
- */
 int _kstrncmp(const char * s1, const char * s2, size_t num)
 {
     // If the number of characters that has to be checked is equal to zero,
@@ -701,12 +678,9 @@ char * strsep(char ** stringp, const char * delim)
     }
 }
 
-/*
-   Split a string into list of strings
-   */
 list_t * str_split(const char * str,
                    const char * delim,
-                   unsigned int * numtokens)
+                   unsigned int * num)
 {
     list_t * ret_list = list_create();
     char * s = strdup(str);
@@ -720,15 +694,12 @@ list_t * str_split(const char * str,
             continue;
         }
         list_push(ret_list, strdup(token));
-        if (numtokens) (*numtokens)++;
+        if (num) (*num)++;
     }
     kfree(s);
     return ret_list;
 }
 
-/*
- * Reconstruct the string with tokens and delimiters
- * */
 char * list2str(list_t * list, const char * delim)
 {
     char * ret = kmalloc(256);
@@ -737,7 +708,7 @@ char * list2str(list_t * list, const char * delim)
     size_t ret_len = 256;
     while (list_size(list) > 0)
     {
-        char * temp = list_pop(list)->val;
+        char * temp = list_pop(list)->value;
         size_t len_temp = strlen(temp);
         if (len + len_temp + 1 + 1 > ret_len)
         {

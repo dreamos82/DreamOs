@@ -1,24 +1,19 @@
-/*
- * Copyright (c), Dario Casalinuovo
- * 
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
-
-//
-// Based on JamesM's kernel developement tutorials.
-//
+/// @file   paging.c
+/// @brief  Functions used to manage paging.
+/// @author Dario Casalinuovo
+/// @date   Oct 27 2003
+/// @copyright
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
+/// This program is distributed in the hope that it will be useful, but
+/// WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+/// You should have received a copy of the GNU General Public License
+/// along with this program; if not, write to the Free Software Foundation,
+/// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "paging.h"
 #include "vm.h"
@@ -27,19 +22,37 @@
 #include "video.h"
 #include "irqflags.h"
 
-// The top address of the stack.
-uint32_t stack_max = PAGING_STACK_ADDR;
-// The current position on the stack.
-uint32_t stack_loc = PAGING_STACK_ADDR;
-// The location where data is stored when paging is not enabled.
-uint32_t location;
-// Flag used to determine if paging is enabled.
-bool_t paging_enabled = false;
+/// The top address of the stack.
+static uint32_t stack_max = PAGING_STACK_ADDR;
+/// The current position on the stack.
+static uint32_t stack_loc = PAGING_STACK_ADDR;
+/// The location where data is stored when paging is not enabled.
+static uint32_t location;
+/// Flag used to determine if paging is enabled.
+static bool_t paging_enabled = false;
 
 void kernel_init_paging(uint32_t start)
 {
     // Ensure the initial page allocation location is page-aligned.
     location = (start + PAGE_SIZE) & PAGE_MASK;
+}
+
+void kernel_enable_paging()
+{
+    uint32_t cr4;
+    __asm__ __volatile__("mov %%cr4, %0" : "=r"(cr4));
+    CLEAR_PSEBIT(cr4);
+    __asm__ __volatile__("mov %0, %%cr4"::"r"(cr4));
+
+    uint32_t cr0;
+    __asm__ __volatile__("mov %%cr0, %0" : "=r"(cr0));
+    SET_PGBIT(cr0);
+    __asm__ __volatile__("mov %0, %%cr0"::"r"(cr0));
+}
+
+void kernel_activate_paging()
+{
+    paging_enabled = true;
 }
 
 uint32_t kernel_alloc_page()
@@ -61,17 +74,17 @@ uint32_t kernel_alloc_page()
     return (*stack_ptr);
 }
 
-void kernel_free_page(uint32_t p)
+void kernel_free_page(uint32_t page)
 {
     // Ignore any page under "location", as it may contain important data initialised
     // at boot (like paging structures!)
-    if (p < location) return;
+    if (page < location) return;
 
     // If we've run out of space on the stack...
     if (stack_max <= stack_loc)
     {
         // Map the page we're currently freeing at the top of the free page stack.
-        map(stack_max, p, PAGE_PRESENT | PAGE_WRITE);
+        map(stack_max, page, PAGE_PRESENT | PAGE_WRITE);
         // Increase the free page stack's size by one page.
         stack_max += 4096;
     }
@@ -80,20 +93,20 @@ void kernel_free_page(uint32_t p)
         // Else we have space on the stack, so push.
         uint32_t * stack_ptr = (uint32_t *) stack_loc;
         // Save on that position of the stack the given pointer.
-        (*stack_ptr) = p;
+        (*stack_ptr) = page;
         // Increase the stack location.
         stack_loc += sizeof(uint32_t);
     }
 }
 
-void kernel_map_memory(struct multiboot_info * info)
+void kernel_map_memory(multiboot_info_t * info)
 {
-    // Find all the usable areas of memory and inform the physical memory manager about them.
-    uint32_t i = info->mmap_addr;
-    while (i < info->mmap_addr + info->mmap_length)
+    // Find all the usable areas of memory and inform the physical memory
+    // manager about them.
+    uint32_t addr = info->mmap_addr;
+    while (addr < (info->mmap_addr + info->mmap_length))
     {
-        memory_map_t * me = (memory_map_t *) i;
-
+        memory_map_t * me = (memory_map_t *) addr;
         // Does this entry specify usable RAM?
         if (me->type == 1)
         {
@@ -109,7 +122,7 @@ void kernel_map_memory(struct multiboot_info * info)
         // The multiboot specification is strange in this respect
         // - the size member does not inc "size" itself in its calculations,
         // so we must add sizeof (uint32_t).
-        i += me->size + sizeof(uint32_t);
+        addr += me->size + sizeof(uint32_t);
     }
 }
 
@@ -133,11 +146,11 @@ void page_fault_handler(register_t * reg)
     // Gather fault info and print to screen
     uint32_t faulting_addr;
     asm volatile("mov %%cr2, %0" : "=r" (faulting_addr));
-    uint32_t present = reg->err_code & ERR_PRESENT;
-    uint32_t rw = reg->err_code & ERR_RW;
-    uint32_t user = reg->err_code & ERR_USER;
-    uint32_t reserved = reg->err_code & ERR_RESERVED;
-    uint32_t inst_fetch = reg->err_code & ERR_INST;
+    uint32_t present = reg->err_code & PAGE_PRESENT;
+    uint32_t rw = reg->err_code & PAGE_WRITE;
+    uint32_t user = reg->err_code & PAGE_USER;
+    uint32_t reserved = reg->err_code & PAGE_RESERVED;
+    uint32_t inst_fetch = reg->err_code & PAGE_INST;
 
     dbg_print("Possible causes: [ ");
     if (!present) dbg_print("Page not present ");

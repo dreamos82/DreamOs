@@ -1,24 +1,29 @@
-// ordered_array.h -- Interface for creating, inserting and deleting
-//                    from ordered arrays.
-//                    Written for JamesM's kernel development tutorials.
+/// @file   ordered_array.h
+/// @brief  Interface for creating, inserting and deleting from ordered arrays.
 
 #pragma once
 
 #include "stdint.h"
 
-/// @brief This array is insertion sorted - it always remains in a sorted state (between calls).
-/// It can store anything that can be cast to a void* -- so a uint32_t, or any pointer.
+/// @brief This array is insertion sorted - it always remains in a sorted
+/// state (between calls). It can store anything that can be cast to a void*
+/// -- so a uint32_t, or any pointer.
 typedef void * array_type_t;
 
 /// @brief A predicate should return nonzero if the first argument is less
 /// than the second. Else it should return zero.
 typedef int8_t (* lessthan_predicate_t)(array_type_t, array_type_t);
 
-typedef struct
+/// @brief Structure which holds information concerning an ordered array.
+typedef struct ordered_array_t
 {
+    /// Pointer to the array.
     array_type_t * array;
+    /// The size of the array.
     uint32_t size;
+    /// The maximum size of the array.
     uint32_t max_size;
+    /// Ordering fucntion.
     lessthan_predicate_t less_than;
 } ordered_array_t;
 
@@ -29,6 +34,7 @@ int8_t standard_lessthan_predicate(array_type_t a, array_type_t b);
 ordered_array_t create_ordered_array(uint32_t max_size,
                                      lessthan_predicate_t less_than);
 
+/// @brief Set the ordered array.
 ordered_array_t place_ordered_array(void * addr,
                                     uint32_t max_size,
                                     lessthan_predicate_t less_than);
