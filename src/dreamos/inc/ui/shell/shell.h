@@ -19,13 +19,12 @@
 
 #include "stdint.h"
 
-#define CREDENTIALS_LENGTH  50
-#define CMD_LEN             256
-#define DESC_LEN            256
-#define CURPATH_LEN         256
-#define MAX_NUM_COM         50
-#define DEF_COM             18
-#define HST_LEN             10
+#define CREDENTIALS_LENGTH  50  ///< Maximum length of credentials.
+#define CMD_LEN             256 ///< Maximum length of commands.
+#define DESC_LEN            256 ///< Maximum length of descriptions.
+#define CURPATH_LEN         256 ///< Maximum length of current path.
+#define MAX_NUM_COM         50  ///< Maximum number of saved commands.
+#define HST_LEN             10  ///< Maximum length of history.
 
 /// Pointer to the function of a commmand.
 typedef void (* CommandFunction)(int argc, char ** argv);
@@ -66,6 +65,8 @@ extern uint32_t cmd_cursor_index;
 /// @brief The shell.
 int shell(void *);
 
+/// @brief Moves the cursor left.
 void move_cursor_left(void);
 
+/// @brief Moves the cursor right.
 void move_cursor_right(void);

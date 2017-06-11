@@ -19,7 +19,9 @@
 #include "stdio.h"
 #include "keymap.h"
 
+/// Allows to easily reset the index to the maximum.
 #define RESET_MAX(A)   A = HST_LEN - 1
+/// Allows to easily reset the index the the minimum position.
 #define RESET_MIN(A)   A = free_slots
 
 /// The command history.
@@ -103,7 +105,7 @@ void history_start(const int key)
     cmd_cursor_index = strlen(cmd);
 }
 
-void history_print(int argc, char ** argv)
+void cmd_show_history(int argc, char ** argv)
 {
     (void) argc;
     (void) argv;

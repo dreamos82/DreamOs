@@ -17,34 +17,50 @@
 
 #pragma once
 
+/// @brief Tries the string tokenizer.
 void try_strtok();
 
+/// @brief Tries the malloc.
 void try_kmalloc();
 
-void try_printmem(void);
+/// @brief Prints the memory.
+void try_printmem();
 
+/// @brief Tries the fault handling.
 void do_fault();
 
+/// @brief Shows the list of files.
 void try_module();
 
+/// @brief Try to open a file.
 void try_open();
 
+/// @brief Try to create a file.
 void try_ocreat();
 
+/// @brief Try the system calls.
 void try_syscall();
 
+/// @brief Shows the filesystem.
 void show_fd();
 
+/// @brief Tries the stat function.
 void test_stat();
 
+/// @brief Tries the shadow option of the keyboard.
 void try_shadow();
 
+/// @brief Tries to map addresses.
 void try_mapaddress();
 
+/// @brief Tries the lock features.
 void try_process();
 
+/// @brief Creates some background processes.
 void try_process_sleep();
 
+/// @brief Tries the queue.
 void try_queue();
 
+/// @brief Stresses the heap.
 void try_stress_heap();

@@ -33,28 +33,39 @@ int kmain(multiboot_info_t * boot_informations);
 /// Register structs for interrupt/exception
 typedef struct register_t
 {
-    uint32_t ds;
-    uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
-    uint32_t int_no, err_code;
-    uint32_t eip, cs, eflags, useresp, ss;
+    uint32_t ds;        ///< Data Segment.
+    uint32_t edi;       ///< 32-bit destination register.
+    uint32_t esi;       ///< 32-bit source register.
+    uint32_t ebp;       ///< 32-bit base pointer register.
+    uint32_t esp;       ///< 32-bit stack pointer register.
+    uint32_t ebx;       ///< 32-bit base register.
+    uint32_t edx;       ///< 32-bit data register.
+    uint32_t ecx;       ///< 32-bit counter.
+    uint32_t eax;       ///< 32-bit accumulator register.
+    uint32_t int_no;    ///< Interrupt number.
+    uint32_t err_code;  ///< Error code.
+    uint32_t eip;       ///< Instruction Pointer Register
+    uint32_t cs;        ///< Code Segment.
+    uint32_t eflags;    ///< 32-bit flag register.
+    uint32_t useresp;   ///< TODO: Check meaning!
+    uint32_t ss;        ///< Stack Segment.
 } register_t;
 
 /// Register structs for bios service
 typedef struct register16_t
 {
-    uint16_t di;
-    uint16_t si;
-    uint16_t bp;
-    uint16_t sp;
-    uint16_t bx;
-    uint16_t dx;
-    uint16_t cx;
-    uint16_t ax;
-
-    uint16_t ds;
-    uint16_t es;
-    uint16_t fs;
-    uint16_t gs;
-    uint16_t ss;
-    uint16_t eflags;
+    uint16_t di;    ///< Destination Index.
+    uint16_t si;    ///< Source Index.
+    uint16_t bp;    ///< Base Pointer.
+    uint16_t sp;    ///< Stack Pointer.
+    uint16_t bx;    ///< Also known as the base register.
+    uint16_t dx;    ///< Also known as the data register.
+    uint16_t cx;    ///< Also known as the count register.
+    uint16_t ax;    ///< Is the primary accumulator.
+    uint16_t ds;    ///< Data Segment.
+    uint16_t es;    ///< Extra Segment determined by the programmer
+    uint16_t fs;    ///< FS and GS have no hardware-assigned uses
+    uint16_t gs;    ///< FS and GS have no hardware-assigned uses
+    uint16_t ss;    ///< Stack Segment.
+    uint16_t eflags;///< 32-bit flag register.
 } register16_t;

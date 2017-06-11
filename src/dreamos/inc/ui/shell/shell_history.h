@@ -25,6 +25,3 @@ void history_push(char * command);
 
 /// @brief Give the key allows to navigate through the history.
 void history_start(const int key);
-
-/// @brief Prints the history.
-void history_print(int argc, char ** argv);

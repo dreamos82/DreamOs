@@ -21,6 +21,7 @@
 #include "assert.h"
 #include "kernel.h"
 
+/// The total number of system calls.
 #define SYSCALL_NUMBER 3
 
 /// @brief The signature of a function call.

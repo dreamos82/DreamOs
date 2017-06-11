@@ -258,8 +258,10 @@ void try_mapaddress()
     //free (tmp);
 }
 
-spinlock_t spinlock;
+/// Spinlock used in a test.
+static spinlock_t spinlock;
 
+/// @brief Function used to test the spinlock.
 int task_test_1(void * args)
 {
     (void) args;
@@ -270,6 +272,7 @@ int task_test_1(void * args)
     return 0;
 }
 
+/// @brief Function used to test the spinlock.
 int task_test_2(void * args)
 {
     (void) args;
@@ -301,6 +304,7 @@ void try_process()
     spinlock_unlock(&spinlock);
 }
 
+/// @brief Function used to test background processes.
 int sleeping_process(void * args)
 {
     (void) args;

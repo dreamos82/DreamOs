@@ -19,18 +19,10 @@
 #include "elf.h"
 #include "stdio.h"
 
-static void print_stack_trace();
-
+/// @brief Data structure containg information about the kernel.
 extern elf_t kernel_elf;
 
-void kernel_panic(const char * msg)
-{
-    printf("\nPANIC: %s\n\nWelcome to Kernel Debugging Land...\n\n", msg);
-    print_stack_trace();
-    printf("\n");
-    for (;;);
-}
-
+/// @brief Prints a trace of the stack.
 void print_stack_trace()
 {
     uint32_t * ebp, * eip;
@@ -49,4 +41,12 @@ void print_stack_trace()
         ebp = (uint32_t *) *ebp;
         count++;
     }
+}
+
+void kernel_panic(const char * msg)
+{
+    printf("\nPANIC: %s\n\nWelcome to Kernel Debugging Land...\n\n", msg);
+    print_stack_trace();
+    printf("\n");
+    for (;;);
 }
