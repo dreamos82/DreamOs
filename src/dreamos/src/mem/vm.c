@@ -22,13 +22,15 @@
 #include "string.h"
 #include "descriptor_tables.h"
 
-uint32_t * page_directory = (uint32_t *) PAGE_DIR_VIRTUAL_ADDR;
-uint32_t * page_tables = (uint32_t *) PAGE_TABLE_VIRTUAL_ADDR;
+/// Pointer to the beginning of the page directory.
+static uint32_t * page_directory = (uint32_t *) PAGE_DIR_VIRTUAL_ADDR;
+/// Pointer to the beginning of the page tables.
+static uint32_t * page_tables = (uint32_t *) PAGE_TABLE_VIRTUAL_ADDR;
 
+/// Pointer to the current directory.
 page_directory_t * current_page_dir;
 
-uint32_t fault = 0;
-
+/// @brief Initialize the given area.
 void init_area(void * area)
 {
     memset(area, 0, PAGE_SIZE);

@@ -22,7 +22,8 @@
 #include "vm.h"
 #include "assert.h"
 
-uint32_t chunk_id = 1;
+/// Variable used to generate unique chunk IDs.
+static uint32_t chunk_id = 1;
 
 chunk_t * create_chunk(const uint32_t start, const size_t size)
 {

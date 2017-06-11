@@ -22,14 +22,14 @@
 #include "video.h"
 #include "irqflags.h"
 
-// The top address of the stack.
-uint32_t stack_max = PAGING_STACK_ADDR;
-// The current position on the stack.
-uint32_t stack_loc = PAGING_STACK_ADDR;
-// The location where data is stored when paging is not enabled.
-uint32_t location;
-// Flag used to determine if paging is enabled.
-bool_t paging_enabled = false;
+/// The top address of the stack.
+static uint32_t stack_max = PAGING_STACK_ADDR;
+/// The current position on the stack.
+static uint32_t stack_loc = PAGING_STACK_ADDR;
+/// The location where data is stored when paging is not enabled.
+static uint32_t location;
+/// Flag used to determine if paging is enabled.
+static bool_t paging_enabled = false;
 
 void kernel_init_paging(uint32_t start)
 {
@@ -74,17 +74,17 @@ uint32_t kernel_alloc_page()
     return (*stack_ptr);
 }
 
-void kernel_free_page(uint32_t p)
+void kernel_free_page(uint32_t page)
 {
     // Ignore any page under "location", as it may contain important data initialised
     // at boot (like paging structures!)
-    if (p < location) return;
+    if (page < location) return;
 
     // If we've run out of space on the stack...
     if (stack_max <= stack_loc)
     {
         // Map the page we're currently freeing at the top of the free page stack.
-        map(stack_max, p, PAGE_PRESENT | PAGE_WRITE);
+        map(stack_max, page, PAGE_PRESENT | PAGE_WRITE);
         // Increase the free page stack's size by one page.
         stack_max += 4096;
     }
@@ -93,7 +93,7 @@ void kernel_free_page(uint32_t p)
         // Else we have space on the stack, so push.
         uint32_t * stack_ptr = (uint32_t *) stack_loc;
         // Save on that position of the stack the given pointer.
-        (*stack_ptr) = p;
+        (*stack_ptr) = page;
         // Increase the stack location.
         stack_loc += sizeof(uint32_t);
     }
@@ -101,12 +101,12 @@ void kernel_free_page(uint32_t p)
 
 void kernel_map_memory(multiboot_info_t * info)
 {
-    // Find all the usable areas of memory and inform the physical memory manager about them.
-    uint32_t i = info->mmap_addr;
-    while (i < info->mmap_addr + info->mmap_length)
+    // Find all the usable areas of memory and inform the physical memory
+    // manager about them.
+    uint32_t addr = info->mmap_addr;
+    while (addr < (info->mmap_addr + info->mmap_length))
     {
-        memory_map_t * me = (memory_map_t *) i;
-
+        memory_map_t * me = (memory_map_t *) addr;
         // Does this entry specify usable RAM?
         if (me->type == 1)
         {
@@ -122,7 +122,7 @@ void kernel_map_memory(multiboot_info_t * info)
         // The multiboot specification is strange in this respect
         // - the size member does not inc "size" itself in its calculations,
         // so we must add sizeof (uint32_t).
-        i += me->size + sizeof(uint32_t);
+        addr += me->size + sizeof(uint32_t);
     }
 }
 
@@ -146,11 +146,11 @@ void page_fault_handler(register_t * reg)
     // Gather fault info and print to screen
     uint32_t faulting_addr;
     asm volatile("mov %%cr2, %0" : "=r" (faulting_addr));
-    uint32_t present = reg->err_code & ERR_PRESENT;
-    uint32_t rw = reg->err_code & ERR_RW;
-    uint32_t user = reg->err_code & ERR_USER;
-    uint32_t reserved = reg->err_code & ERR_RESERVED;
-    uint32_t inst_fetch = reg->err_code & ERR_INST;
+    uint32_t present = reg->err_code & PAGE_PRESENT;
+    uint32_t rw = reg->err_code & PAGE_WRITE;
+    uint32_t user = reg->err_code & PAGE_USER;
+    uint32_t reserved = reg->err_code & PAGE_RESERVED;
+    uint32_t inst_fetch = reg->err_code & PAGE_INST;
 
     dbg_print("Possible causes: [ ");
     if (!present) dbg_print("Page not present ");

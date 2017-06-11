@@ -19,22 +19,31 @@
 
 #include "stdint.h"
 
-#define PAGE_SIZE 0x1000
-
+/// @brief Dimension of a page.
+#define PAGE_SIZE               0x1000
+/// @brief Used to ensure that page allocation location is page-aligned.
+#define PAGE_MASK               0xFFFFF000
+/// @brief The desired virtual positions of our page directory.
 #define PAGE_DIR_VIRTUAL_ADDR   0xFFBFF000
+/// @brief The desired virtual positions of our page tables.
 #define PAGE_TABLE_VIRTUAL_ADDR 0xFFC00000
-#define PAGE_DIR_IDX(x) ((uint32_t)x/1024)
-#define PAGE_TABLE_IDX(x) ((uint32_t)x%1024)
+/// @brief Ease the retrieval of indices directories from addresses.
+#define PAGE_DIR_IDX(x)         ((uint32_t)x/1024)
+/// @brief Ease the retrieval of indices of tables from addresses.
+#define PAGE_TABLE_IDX(x)       ((uint32_t)x%1024)
 
-#define PAGE_PRESENT   0x1
-#define PAGE_WRITE     0x2
-#define PAGE_USER      0x4
-#define PAGE_MASK      0xFFFFF000
+#define PAGE_PRESENT     0x1     ///< Page present.
+#define PAGE_WRITE       0x2     ///< Page is read only.
+#define PAGE_USER        0x4     ///< The processor was running in user-mode.
+#define PAGE_RESERVED    0x8     ///< Overwrote reserved bits.
+#define PAGE_INST        0x10    ///< Instruction fetch.
 
-// Paging register manipulation macro
+/// @brief Allows to set a page bit.
 #define SET_PGBIT(cr0)      (cr0 = cr0 | 0x80000000)
+/// @brief Allows to clear a bit from a page.
 #define CLEAR_PSEBIT(cr4)   (cr4 = cr4 & 0xffffffef)
 
+/// @brief Define the type of a page directory.
 typedef uint32_t page_directory_t;
 
 /// @brief Sets up the environment, page directories etc and enables paging.

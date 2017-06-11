@@ -25,25 +25,29 @@
 /// @brief Initial address of the stack.
 #define PAGING_STACK_ADDR 0xFF000000
 
-// Error code interpretation.
-#define ERR_PRESENT     0x1     ///< Page present.
-#define ERR_RW          0x2     ///< Page is read only.
-#define ERR_USER        0x4     ///< Page is read only.
-#define ERR_RESERVED    0x8     ///< Overwrote reserved bits.
-#define ERR_INST        0x10    ///< Instruction fetch.
-
+/// @brief Initialize paging.
+/// @param start Used to determine the initial page allocation location.
 void kernel_init_paging(uint32_t start);
+
+/// @brief Initialize the memory with free pages.
+/// @param info Information retrieve during boot.
+void kernel_map_memory(multiboot_info_t * info);
 
 /// @brief Enable paging, turn off PSE bit first as it was turned on by the
 /// assembly header when kernel was loading. Then enable PG Bit in cr0.
 void kernel_enable_paging();
 
+/// @brief Allows to activate paging.
 void kernel_activate_paging();
 
+/// @brief Allows to allocate a page.
+/// @return A 32bit address to the allocated stack location.
 uint32_t kernel_alloc_page();
 
-void kernel_free_page(uint32_t p);
+/// @brief Frees the given page.
+/// @param page The address of the page that has to be freed.
+void kernel_free_page(uint32_t page);
 
-void kernel_map_memory(multiboot_info_t * info);
-
+/// @brief Fault handling function, called when a fault occurs.
+/// @param reg Pointer to the registers.
 void page_fault_handler(register_t * reg);
