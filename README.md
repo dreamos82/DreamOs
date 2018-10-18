@@ -130,27 +130,6 @@ You can have an available commands list through the command:
 If you find bugs using DreamOS you can report them going to github module page following this link:
 	https://github.com/inuyasha82/DreamOs/issues
 
-Otherwise you can report it to the forum osdev.it:
-
-	http://forum.osdev.it/viewforum.php?f=7
-
 Obviously, first check if the bug isn't already reported!
-
-#### b - How to send a feedback
-
-You can send a report or however tell about your experience with DreamOS to the forum of osdev.it:
-
-	http://forum.osdev.it/
-
-Otherwise you can find us in irc: 
-
-	Server: irc.azzurra.org
-	Chan: #dreamos
-
-DreamOS 2003-2017 by Ivan Gualandri
-
-* http://www.dreamos.org
-* http://www.osdev.it
-* http://www.italialinux.com
 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=italialinux&url=https://github.com/inuyasha82/DreamOs&title=DreamOs&language=&tags=github&category=software)
