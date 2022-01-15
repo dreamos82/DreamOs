@@ -1,6 +1,11 @@
 DreamOS
 ========
 
+Please be aware that the development of this project has been halted, 
+but the good news is that I started a new os from scratch 64 bits this time, with framebuffer... 
+and it is called... **Dreamos64**, 
+you can find it here: https://github.com/dreamos82/Dreamos64
+
 1  What is DreamOS
 -----------------
 
