@@ -6,6 +6,9 @@ but the good news is that I started a new os from scratch 64 bits this time, wit
 and it is called... **Dreamos64**, 
 you can find it here: https://github.com/dreamos82/Dreamos64
 
+Also i created with the collaboration of another person,  a set of notes on how to create an operating system from scratch, they are available here: [https://github.com/dreamportdev/Osdev-Notes](https://github.com/dreamportdev/Osdev-Notes)
+They can be downloaded as a pdf e-book, otherwise they can be purchased as a physical book from lulu: [https://www.lulu.com/search?contributor=Ivan+Gualandri&adult_audience_rating=00](https://www.lulu.com/search?contributor=Ivan+Gualandri&adult_audience_rating=00)
+
 1  What is DreamOS
 -----------------
 
